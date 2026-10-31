@@ -1,44 +1,48 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, Gift, ArrowRight } from 'lucide-react';
+import { Gift, ArrowRight, Tag, Clock } from 'lucide-react';
 
 const SpecialOfferBanner = () => {
   return (
-    <section className="py-12 bg-cream">
+    <section className="py-10 bg-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative rounded-3xl overflow-hidden bg-primary shadow-xl border border-gold/40">
           <div className="grid grid-cols-1 lg:grid-cols-2 items-center">
             {/* Left Content */}
-            <div className="p-8 sm:p-12 lg:p-16 space-y-6 z-10 text-white">
-              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-gold/20 text-gold-light text-xs font-semibold uppercase tracking-wider border border-gold/30">
+            <div className="p-8 sm:p-12 space-y-4 z-10 text-white">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-gold/20 text-gold-light text-[11px] font-bold uppercase tracking-wider border border-gold/30">
                 <Gift className="w-3.5 h-3.5 text-gold" />
-                <span>Special Festive Celebration Offer</span>
+                <span>Festive Celebration Offer</span>
               </div>
 
-              <h3 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
-                Up to <span className="text-gold">30% Off</span> On Pure Bridal & Heirloom Sarees
+              <h3 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
+                Flat <span className="text-gold">30% Off</span> On Bridal Trousseau
               </h3>
 
-              <p className="text-xs sm:text-sm text-stone-200 leading-relaxed max-w-lg">
-                Celebrate your auspicious occasions with hand-embellished zardozi drapes, genuine silver-dipped brocade, and authentic Banarasi silks crafted for generations to cherish.
+              <p className="text-xs sm:text-sm text-stone-200 leading-relaxed max-w-md">
+                Pure zardozi handloom Banarasi & Kanjivaram silks for your wedding and festive moments.
               </p>
 
-              <div className="pt-2 flex flex-wrap items-center gap-4">
+              {/* Promo Code Pill & CTA */}
+              <div className="pt-2 flex flex-wrap items-center gap-3">
+                <div className="inline-flex items-center space-x-2 bg-black/40 px-3.5 py-2.5 rounded-lg border border-gold/40 text-xs">
+                  <Tag className="w-3.5 h-3.5 text-gold" />
+                  <span className="text-stone-300">Code:</span>
+                  <span className="font-bold text-white tracking-widest">SUBHLAGAN30</span>
+                </div>
+
                 <Link
                   to="/shop?isBridal=true"
-                  className="inline-flex items-center space-x-2 px-6 py-3 bg-gold hover:bg-gold-light text-secondary-dark text-xs font-bold uppercase tracking-widest rounded-lg shadow-md transition transform hover:-translate-y-0.5"
+                  className="inline-flex items-center space-x-2 px-5 py-2.5 bg-gold hover:bg-gold-light text-secondary-dark text-xs font-bold uppercase tracking-wider rounded-lg shadow transition"
                 >
-                  <span>Shop Bridal Offers</span>
+                  <span>Claim Offer</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
-                <div className="text-xs text-gold-light font-medium bg-black/30 px-3.5 py-2.5 rounded-lg border border-gold/30">
-                  Use Code: <span className="font-bold text-white tracking-wider">SUBHLAGAN30</span>
-                </div>
               </div>
             </div>
 
             {/* Right Image */}
-            <div className="relative h-64 lg:h-full min-h-[300px] overflow-hidden">
+            <div className="relative h-60 lg:h-full min-h-[260px] overflow-hidden">
               <img
                 src="https://images.unsplash.com/photo-1546804784-896d0dca3805?auto=format&fit=crop&w=1200&q=85"
                 alt="Bridal Saree Special Offer"
@@ -54,4 +58,3 @@ const SpecialOfferBanner = () => {
 };
 
 export default SpecialOfferBanner;
-
