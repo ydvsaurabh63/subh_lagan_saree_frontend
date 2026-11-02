@@ -5,10 +5,46 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
   }
   
   body {
-    @apply bg-cream text-brandText antialiased;
+    @apply bg-cream text-brandText antialiased font-medium;
+    font-weight: 500;
+    color: #1A1616;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Solid weighted headings with royal Indian aesthetic */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    color: #1A1616;
+    letter-spacing: -0.015em;
+  }
+
+  p {
+    font-weight: 500;
+  }
+
+  b, strong {
+    font-weight: 700;
+  }
+
+  button, input, select, textarea {
+    font-family: inherit;
+    font-weight: 600;
+  }
+
+  table th {
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  table td {
+    font-weight: 500;
   }
 
   /* Custom scrollbar */
@@ -39,5 +75,24 @@
   }
   .maroon-gradient {
     background: linear-gradient(135deg, #83273B 0%, #681B2C 50%, #42101E 100%);
+  }
+  
+  /* Weighted typography helpers */
+  .font-weighted-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .font-weighted-kpi {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .font-weighted-sub {
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.02em;
   }
 }

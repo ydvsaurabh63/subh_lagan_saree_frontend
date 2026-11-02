@@ -85,11 +85,11 @@ const ProductCard = ({ product }) => {
         <div>
           {/* Fabric Pill & Rating */}
           <div className="flex items-center justify-between text-[11px] mb-1">
-            <span className="text-gold-dark font-semibold truncate uppercase tracking-wider">
+            <span className="text-gold-dark font-extrabold truncate uppercase tracking-wider text-[11px]">
               {product.fabric}
             </span>
-            <div className="flex items-center text-amber-500 font-bold text-[11px]">
-              <Star className="w-3 h-3 fill-current mr-0.5" />
+            <div className="flex items-center text-amber-500 font-extrabold text-[11px]">
+              <Star className="w-3.5 h-3.5 fill-current mr-0.5" />
               <span>{product.ratings || 4.8}</span>
             </div>
           </div>
@@ -97,7 +97,7 @@ const ProductCard = ({ product }) => {
           {/* Saree Title */}
           <Link
             to={`/product/${product.slug}`}
-            className="block font-serif text-xs sm:text-sm font-semibold text-brandText group-hover:text-primary transition-colors line-clamp-1 mb-2"
+            className="block font-serif text-xs sm:text-sm font-bold text-stone-950 group-hover:text-primary transition-colors line-clamp-1 mb-2 leading-snug"
             title={product.name}
           >
             {product.name}
@@ -105,18 +105,18 @@ const ProductCard = ({ product }) => {
         </div>
 
         {/* Price & Tag */}
-        <div className="pt-1.5 border-t border-stone-100 flex items-center justify-between">
+        <div className="pt-2 border-t border-stone-200/90 flex items-center justify-between">
           <div className="flex items-baseline space-x-1.5">
-            <span className="text-sm font-bold text-primary font-sans">
+            <span className="text-sm font-black text-primary font-sans tracking-tight">
               {formatPrice(product.discountPrice || product.price)}
             </span>
             {product.discountPrice && (
-              <span className="text-[11px] text-stone-400 line-through">
+              <span className="text-[11px] font-bold text-stone-400 line-through">
                 {formatPrice(product.price)}
               </span>
             )}
           </div>
-          <span className="text-[9px] px-1.5 py-0.5 bg-stone-100 text-stone-600 rounded font-medium">
+          <span className="text-[10px] px-2 py-0.5 bg-stone-100 text-stone-800 rounded font-extrabold border border-stone-200">
             COD
           </span>
         </div>

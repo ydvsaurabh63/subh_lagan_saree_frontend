@@ -88,10 +88,10 @@ const Navbar = () => {
                 SL
               </div>
               <div className="text-left">
-                <span className="block font-serif text-lg sm:text-xl font-bold tracking-tight text-primary leading-none group-hover:text-primary-light transition-colors">
+                <span className="block font-serif text-lg sm:text-xl font-extrabold tracking-tight text-primary leading-none group-hover:text-primary-light transition-colors">
                   SUBH LAGAN
                 </span>
-                <span className="block text-[9px] tracking-[0.25em] uppercase text-gold-dark font-medium leading-tight">
+                <span className="block text-[9px] tracking-[0.25em] uppercase text-gold-dark font-extrabold leading-tight">
                   SAREES • HERITAGE
                 </span>
               </div>
@@ -99,7 +99,7 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Navigation Links (Shifted UP into Main Header Row) */}
-          <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8 text-[11px] font-bold uppercase tracking-widest text-stone-700">
+          <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8 text-[11px] font-extrabold uppercase tracking-widest text-stone-900">
             {navLinks.map((link) => {
               const isActive = location.pathname + location.search === link.path;
               return (
@@ -108,7 +108,7 @@ const Navbar = () => {
                   to={link.path}
                   className={`py-1 transition-colors duration-150 relative ${
                     isActive
-                      ? 'text-primary font-bold'
+                      ? 'text-primary font-black'
                       : 'hover:text-primary'
                   }`}
                 >

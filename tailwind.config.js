@@ -29,14 +29,15 @@ export default {
           dark: '#F5E8D3',
         },
         brandText: {
-          DEFAULT: '#292323',
-          muted: '#685F5F',
-          light: '#948B8B',
+          DEFAULT: '#1A1616', // Deep Crisp Black-Burgundy
+          muted: '#4A4343',
+          light: '#6E6464',
         }
       },
       fontFamily: {
         serif: ['"Playfair Display"', 'Georgia', 'serif'],
-        sans: ['"Inter"', 'system-ui', '-apple-system', 'sans-serif'],
+        cinzel: ['"Cinzel"', '"Playfair Display"', 'Georgia', 'serif'],
+        sans: ['"Plus Jakarta Sans"', '"Inter"', 'system-ui', '-apple-system', 'sans-serif'],
       },
       boxShadow: {
         'luxury': '0 10px 30px -5px rgba(104, 27, 44, 0.08), 0 4px 10px -2px rgba(198, 161, 91, 0.05)',

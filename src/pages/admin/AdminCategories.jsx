@@ -104,27 +104,27 @@ const AdminCategories = () => {
     <AdminLayout title="Saree Category Management">
       <div className="space-y-6">
         {/* Top Header */}
-        <div className="flex items-center justify-between bg-white p-4 sm:p-5 rounded-xl border border-stone-200/80 shadow-sm">
+        <div className="flex items-center justify-between bg-white p-4 sm:p-5 rounded-xl border border-stone-200/90 shadow-sm">
           <div>
-            <h3 className="font-serif text-base font-bold text-primary">
+            <h3 className="font-serif text-lg font-extrabold text-primary">
               All Saree Categories ({categories.length})
             </h3>
-            <p className="text-xs text-stone-500">
+            <p className="text-xs text-stone-600 font-bold">
               Categories displayed across the navbar, shop filters, and homepage collections
             </p>
           </div>
           <button
             onClick={handleOpenAdd}
-            className="inline-flex items-center gap-2 bg-primary hover:bg-secondary text-cream font-semibold px-4 py-2.5 rounded-lg text-xs tracking-wider uppercase transition-all shadow-md shrink-0"
+            className="inline-flex items-center gap-2 bg-primary hover:bg-secondary text-cream font-extrabold px-4 py-2.5 rounded-lg text-xs tracking-wider uppercase transition-all shadow-md shrink-0"
           >
-            <Plus className="w-4 h-4 text-gold" />
+            <Plus className="w-4 h-4 text-gold stroke-[3]" />
             Add Category
           </button>
         </div>
 
         {/* Categories Grid */}
         {loading ? (
-          <div className="bg-white rounded-xl border border-stone-200 p-12 text-center text-stone-400">
+          <div className="bg-white rounded-xl border border-stone-200 p-12 text-center text-stone-400 font-bold">
             <div className="w-6 h-6 border-2 border-gold border-t-transparent rounded-full animate-spin mx-auto mb-2" />
             Loading categories...
           </div>
@@ -133,7 +133,7 @@ const AdminCategories = () => {
             {categories.map((cat) => (
               <div
                 key={cat._id}
-                className="bg-white rounded-xl border border-stone-200/80 overflow-hidden shadow-sm hover:shadow-md transition-all group flex flex-col justify-between"
+                className="bg-white rounded-xl border border-stone-200/90 overflow-hidden shadow-sm hover:shadow-md transition-all group flex flex-col justify-between"
               >
                 <div className="relative h-44 overflow-hidden bg-stone-100">
                   <img
@@ -141,24 +141,24 @@ const AdminCategories = () => {
                     alt={cat.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
                   <div className="absolute bottom-3 left-3 right-3 text-white">
-                    <span className="font-mono text-[10px] text-gold uppercase tracking-wider">
+                    <span className="font-mono text-[11px] text-gold uppercase tracking-wider font-extrabold">
                       slug: {cat.slug}
                     </span>
-                    <h4 className="font-serif text-lg font-bold leading-tight">
+                    <h4 className="font-serif text-lg font-extrabold leading-tight">
                       {cat.name}
                     </h4>
                   </div>
                 </div>
 
                 <div className="p-4 flex-1 flex flex-col justify-between">
-                  <p className="text-xs text-stone-600 line-clamp-2 mb-4 leading-relaxed">
+                  <p className="text-xs text-stone-700 font-medium line-clamp-2 mb-4 leading-relaxed">
                     {cat.description || 'Artisanal collection curated by Subh Lagan Sarees.'}
                   </p>
 
                   <div className="pt-3 border-t border-stone-100 flex items-center justify-between text-xs">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded text-[11px] font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-300 uppercase">
                       {cat.status || 'Active'}
                     </span>
                     <div className="flex items-center gap-1">
@@ -290,3 +290,4 @@ const AdminCategories = () => {
 };
 
 export default AdminCategories;
+

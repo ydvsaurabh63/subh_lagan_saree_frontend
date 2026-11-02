@@ -146,15 +146,15 @@ const AdminOrders = () => {
                 className="bg-white rounded-xl border border-stone-200/80 shadow-sm overflow-hidden hover:border-gold/50 transition-all"
               >
                 {/* Order Top Bar */}
-                <div className="bg-stone-50/70 p-4 border-b border-stone-200/80 flex flex-wrap items-center justify-between gap-3 text-xs">
+                <div className="bg-stone-50/80 p-4 border-b border-stone-200/90 flex flex-wrap items-center justify-between gap-3 text-xs">
                   <div className="flex items-center gap-3">
-                    <span className="font-mono font-bold text-sm text-primary tracking-wide">
+                    <span className="font-mono font-extrabold text-sm sm:text-base text-primary tracking-wide">
                       {ord.orderNumber}
                     </span>
-                    <span className="text-stone-400">•</span>
-                    <span className="text-stone-500">{formatDate(ord.createdAt)}</span>
-                    <span className="text-stone-400">•</span>
-                    <span className="inline-flex items-center gap-1 font-semibold text-stone-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                    <span className="text-stone-300">•</span>
+                    <span className="text-stone-600 font-semibold">{formatDate(ord.createdAt)}</span>
+                    <span className="text-stone-300">•</span>
+                    <span className="inline-flex items-center gap-1 font-extrabold text-stone-800 bg-amber-50 px-2.5 py-1 rounded border border-amber-300 text-[11px]">
                       Cash on Delivery (COD)
                     </span>
                   </div>
@@ -162,7 +162,7 @@ const AdminOrders = () => {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setSelectedReceiptOrder(ord)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-stone-300 hover:border-primary text-stone-700 hover:text-primary rounded-lg text-xs font-medium transition-all shadow-2xs"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-stone-300 hover:border-primary text-stone-800 hover:text-primary rounded-lg text-xs font-bold transition-all shadow-xs"
                     >
                       <Printer className="w-3.5 h-3.5" /> Print Invoice
                     </button>
@@ -171,7 +171,7 @@ const AdminOrders = () => {
                       value={ord.orderStatus}
                       disabled={updatingId === ord._id}
                       onChange={(e) => handleStatusChange(ord._id, e.target.value)}
-                      className={`text-xs font-bold py-1.5 px-2.5 rounded-lg border focus:outline-none focus:ring-1 focus:ring-primary ${getStatusBadge(
+                      className={`text-xs font-extrabold py-1.5 px-3 rounded-lg border focus:outline-none focus:ring-1 focus:ring-primary ${getStatusBadge(
                         ord.orderStatus
                       )}`}
                     >
@@ -188,40 +188,40 @@ const AdminOrders = () => {
                 <div className="p-4 sm:p-5 grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
                   {/* Column 1: Customer Contact & Shipping Address */}
                   <div>
-                    <p className="font-semibold text-stone-800 uppercase tracking-wider text-[10px] mb-2 text-gold">
+                    <p className="font-extrabold text-stone-700 uppercase tracking-wider text-[11px] mb-2 text-gold">
                       Customer & Shipping Details
                     </p>
-                    <p className="font-bold text-sm text-stone-900 mb-1">
+                    <p className="font-extrabold text-base text-stone-950 mb-1 leading-snug">
                       {ord.customerDetails?.name}
                     </p>
-                    <div className="space-y-1 text-stone-600">
+                    <div className="space-y-1.5 text-stone-700 font-medium">
                       <p className="flex items-center gap-2">
-                        <Phone className="w-3.5 h-3.5 text-stone-400" />
-                        <span>{ord.customerDetails?.phone}</span>
+                        <Phone className="w-3.5 h-3.5 text-stone-500" />
+                        <span className="font-bold">{ord.customerDetails?.phone}</span>
                         <a
                           href={`https://wa.me/${ord.customerDetails?.phone?.replace(/[^0-9]/g, '')}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-emerald-600 hover:underline inline-flex items-center gap-0.5 font-semibold text-[11px]"
+                          className="text-emerald-700 hover:underline inline-flex items-center gap-0.5 font-extrabold text-[11px] bg-emerald-50 px-2 py-0.5 rounded border border-emerald-300"
                         >
                           <MessageCircle className="w-3 h-3" /> WhatsApp
                         </a>
                       </p>
                       <p className="flex items-center gap-2">
-                        <Mail className="w-3.5 h-3.5 text-stone-400" />
-                        <span>{ord.customerDetails?.email}</span>
+                        <Mail className="w-3.5 h-3.5 text-stone-500" />
+                        <span className="font-semibold">{ord.customerDetails?.email}</span>
                       </p>
                       <div className="flex items-start gap-2 pt-1 border-t border-stone-100 mt-2">
-                        <MapPin className="w-3.5 h-3.5 text-stone-400 shrink-0 mt-0.5" />
-                        <span>
+                        <MapPin className="w-3.5 h-3.5 text-stone-500 shrink-0 mt-0.5" />
+                        <span className="text-stone-800 font-semibold leading-relaxed">
                           {ord.shippingAddress?.houseNo}, {ord.shippingAddress?.street},{' '}
                           {ord.shippingAddress?.city}, {ord.shippingAddress?.state} -{' '}
-                          <strong>{ord.shippingAddress?.pincode}</strong>
+                          <strong className="text-stone-950 font-bold">{ord.shippingAddress?.pincode}</strong>
                         </span>
                       </div>
                       {ord.shippingAddress?.orderNotes && (
-                        <p className="text-[11px] text-amber-800 bg-amber-50 p-2 rounded mt-2 border border-amber-200">
-                          <strong>Note:</strong> {ord.shippingAddress.orderNotes}
+                        <p className="text-xs text-amber-900 bg-amber-50 p-2.5 rounded-lg mt-2 border border-amber-300 font-medium">
+                          <strong className="font-bold">Note:</strong> {ord.shippingAddress.orderNotes}
                         </p>
                       )}
                     </div>
@@ -230,26 +230,26 @@ const AdminOrders = () => {
                   {/* Column 2: Saree Items */}
                   <div className="md:col-span-2 flex flex-col justify-between">
                     <div>
-                      <p className="font-semibold text-stone-800 uppercase tracking-wider text-[10px] mb-2 text-gold">
+                      <p className="font-extrabold text-stone-700 uppercase tracking-wider text-[11px] mb-2 text-gold">
                         Ordered Saree Items ({ord.items?.length || 0})
                       </p>
                       <div className="divide-y divide-stone-100">
                         {ord.items?.map((it, idx) => (
-                          <div key={idx} className="py-2 flex items-center justify-between gap-3">
+                          <div key={idx} className="py-2.5 flex items-center justify-between gap-3">
                             <div className="flex items-center gap-3">
                               <img
                                 src={it.image || 'https://via.placeholder.com/50'}
                                 alt={it.name}
-                                className="w-10 h-12 object-cover rounded border border-stone-200"
+                                className="w-12 h-14 object-cover rounded border border-stone-200"
                               />
                               <div>
-                                <p className="font-semibold text-stone-800">{it.name}</p>
-                                <p className="text-[11px] text-stone-500">
+                                <p className="font-bold text-sm text-stone-950">{it.name}</p>
+                                <p className="text-xs text-stone-600 font-semibold mt-0.5">
                                   Qty: {it.quantity} × {formatPrice(it.price)}
                                 </p>
                               </div>
                             </div>
-                            <div className="font-bold text-stone-900">
+                            <div className="font-extrabold text-sm text-stone-950">
                               {formatPrice(it.price * it.quantity)}
                             </div>
                           </div>
@@ -258,15 +258,15 @@ const AdminOrders = () => {
                     </div>
 
                     {/* Order Financials Footer */}
-                    <div className="pt-3 border-t border-stone-100 flex items-center justify-between text-xs mt-3 bg-stone-50/50 p-2.5 rounded-lg">
-                      <div className="text-stone-500">
+                    <div className="pt-3 border-t border-stone-200 flex items-center justify-between text-xs mt-3 bg-stone-50/70 p-3 rounded-xl border">
+                      <div className="text-stone-700 font-bold">
                         Subtotal: {formatPrice(ord.subtotal)} | Delivery: {ord.shippingCharges === 0 ? 'FREE' : formatPrice(ord.shippingCharges)}
                       </div>
                       <div className="text-right">
-                        <span className="text-[11px] text-stone-500 uppercase mr-2">
+                        <span className="text-xs text-stone-600 uppercase font-bold mr-2">
                           COD Payable:
                         </span>
-                        <span className="font-serif font-bold text-base text-primary">
+                        <span className="font-serif font-extrabold text-lg sm:text-xl text-primary">
                           {formatPrice(ord.totalAmount)}
                         </span>
                       </div>
@@ -434,3 +434,4 @@ const AdminOrders = () => {
 };
 
 export default AdminOrders;
+

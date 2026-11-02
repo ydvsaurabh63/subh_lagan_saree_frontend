@@ -126,137 +126,137 @@ const AdminDashboard = () => {
         {/* 4 Metric KPI Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {/* Revenue */}
-          <div className="bg-white p-5 rounded-xl border border-stone-200/80 shadow-sm hover:shadow-md transition-shadow">
+          <div className="bg-white p-5 rounded-xl border border-stone-200/90 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-semibold uppercase tracking-wider text-stone-500">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-stone-700">
                 Gross COD Sales
               </span>
-              <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center border border-amber-200">
-                <IndianRupee className="w-5 h-5" />
+              <div className="w-10 h-10 rounded-lg bg-amber-50 text-amber-800 flex items-center justify-center border border-amber-300">
+                <IndianRupee className="w-5 h-5 stroke-[2.5]" />
               </div>
             </div>
-            <div className="text-2xl font-bold font-serif text-primary">
+            <div className="text-3xl font-extrabold font-serif text-primary tracking-tight">
               {formatPrice(stats?.totalRevenue || 0)}
             </div>
-            <p className="text-[11px] text-stone-500 mt-1 flex items-center gap-1">
-              <CheckCircle className="w-3 h-3 text-emerald-600" />
-              From {stats?.totalOrders || 0} customer orders
+            <p className="text-xs font-semibold text-stone-600 mt-1.5 flex items-center gap-1">
+              <CheckCircle className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              <span>From <strong className="text-stone-900 font-bold">{stats?.totalOrders || 0}</strong> customer orders</span>
             </p>
           </div>
 
           {/* Orders */}
-          <div className="bg-white p-5 rounded-xl border border-stone-200/80 shadow-sm hover:shadow-md transition-shadow">
+          <div className="bg-white p-5 rounded-xl border border-stone-200/90 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-semibold uppercase tracking-wider text-stone-500">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-stone-700">
                 Total Orders
               </span>
-              <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center border border-blue-200">
-                <Package className="w-5 h-5" />
+              <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-800 flex items-center justify-center border border-blue-300">
+                <Package className="w-5 h-5 stroke-[2.5]" />
               </div>
             </div>
-            <div className="text-2xl font-bold font-serif text-primary">
+            <div className="text-3xl font-extrabold font-serif text-primary tracking-tight">
               {stats?.totalOrders || 0}
             </div>
-            <p className="text-[11px] text-stone-500 mt-1 flex items-center gap-1">
-              <Clock className="w-3 h-3 text-amber-600" />
-              <strong className="text-amber-700">{stats?.pendingOrders || 0} pending</strong> dispatch
+            <p className="text-xs font-semibold text-stone-600 mt-1.5 flex items-center gap-1">
+              <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+              <span><strong className="text-amber-800 font-bold">{stats?.pendingOrders || 0} pending</strong> dispatch</span>
             </p>
           </div>
 
           {/* Products */}
-          <div className="bg-white p-5 rounded-xl border border-stone-200/80 shadow-sm hover:shadow-md transition-shadow">
+          <div className="bg-white p-5 rounded-xl border border-stone-200/90 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-semibold uppercase tracking-wider text-stone-500">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-stone-700">
                 Active Sarees
               </span>
-              <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-200">
-                <ShoppingBag className="w-5 h-5" />
+              <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-800 flex items-center justify-center border border-emerald-300">
+                <ShoppingBag className="w-5 h-5 stroke-[2.5]" />
               </div>
             </div>
-            <div className="text-2xl font-bold font-serif text-primary">
+            <div className="text-3xl font-extrabold font-serif text-primary tracking-tight">
               {stats?.totalProducts || 0}
             </div>
-            <p className="text-[11px] text-stone-500 mt-1 flex items-center gap-1">
+            <p className="text-xs font-semibold text-stone-600 mt-1.5 flex items-center gap-1">
               {stats?.lowStockCount > 0 ? (
-                <span className="text-rose-600 font-semibold flex items-center gap-1">
-                  <AlertTriangle className="w-3 h-3" />
+                <span className="text-rose-700 font-bold flex items-center gap-1">
+                  <AlertTriangle className="w-3.5 h-3.5" />
                   {stats.lowStockCount} sarees low stock
                 </span>
               ) : (
-                <span className="text-emerald-600">All inventories healthy</span>
+                <span className="text-emerald-700 font-bold">All inventories healthy</span>
               )}
             </p>
           </div>
 
           {/* Customers / Leads */}
-          <div className="bg-white p-5 rounded-xl border border-stone-200/80 shadow-sm hover:shadow-md transition-shadow">
+          <div className="bg-white p-5 rounded-xl border border-stone-200/90 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-semibold uppercase tracking-wider text-stone-500">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-stone-700">
                 Enquiries & Leads
               </span>
-              <div className="w-9 h-9 rounded-lg bg-purple-50 text-purple-700 flex items-center justify-center border border-purple-200">
-                <Users className="w-5 h-5" />
+              <div className="w-10 h-10 rounded-lg bg-purple-50 text-purple-800 flex items-center justify-center border border-purple-300">
+                <Users className="w-5 h-5 stroke-[2.5]" />
               </div>
             </div>
-            <div className="text-2xl font-bold font-serif text-primary">
+            <div className="text-3xl font-extrabold font-serif text-primary tracking-tight">
               {stats?.totalEnquiries || 0}
             </div>
-            <p className="text-[11px] text-stone-500 mt-1">
-              <strong className="text-purple-700">{stats?.newEnquiries || 0} new</strong> bridal queries
+            <p className="text-xs font-semibold text-stone-600 mt-1.5">
+              <strong className="text-purple-800 font-bold">{stats?.newEnquiries || 0} new</strong> bridal queries
             </p>
           </div>
         </div>
 
         {/* Order Status Breakdown */}
-        <div className="bg-white p-6 rounded-xl border border-stone-200/80 shadow-sm">
-          <h3 className="font-serif text-base font-bold text-primary mb-4 flex items-center justify-between">
+        <div className="bg-white p-6 rounded-xl border border-stone-200/90 shadow-sm">
+          <h3 className="font-serif text-base font-extrabold text-stone-900 mb-4 flex items-center justify-between">
             <span>Fulfillment Pipeline Status</span>
             <Link
               to="/admin/orders"
-              className="text-xs text-primary hover:text-gold flex items-center gap-1 font-sans font-normal"
+              className="text-xs text-primary hover:text-gold flex items-center gap-1 font-sans font-bold"
             >
-              Manage all orders <ArrowRight className="w-3 h-3" />
+              Manage all orders <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </h3>
 
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-            <div className="p-4 rounded-lg bg-amber-50/70 border border-amber-200 text-center">
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-amber-800">
+            <div className="p-4 rounded-lg bg-amber-50/80 border border-amber-300 text-center">
+              <p className="text-xs font-extrabold uppercase tracking-wider text-amber-900">
                 Placed (New)
               </p>
-              <p className="text-2xl font-bold font-serif text-amber-900 mt-1">
+              <p className="text-2xl font-extrabold font-serif text-amber-950 mt-1">
                 {stats?.ordersByStatus?.Placed || 0}
               </p>
             </div>
-            <div className="p-4 rounded-lg bg-blue-50/70 border border-blue-200 text-center">
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-blue-800">
+            <div className="p-4 rounded-lg bg-blue-50/80 border border-blue-300 text-center">
+              <p className="text-xs font-extrabold uppercase tracking-wider text-blue-900">
                 Processing
               </p>
-              <p className="text-2xl font-bold font-serif text-blue-900 mt-1">
+              <p className="text-2xl font-extrabold font-serif text-blue-950 mt-1">
                 {stats?.ordersByStatus?.Processing || 0}
               </p>
             </div>
-            <div className="p-4 rounded-lg bg-purple-50/70 border border-purple-200 text-center">
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-purple-800">
+            <div className="p-4 rounded-lg bg-purple-50/80 border border-purple-300 text-center">
+              <p className="text-xs font-extrabold uppercase tracking-wider text-purple-900">
                 Shipped
               </p>
-              <p className="text-2xl font-bold font-serif text-purple-900 mt-1">
+              <p className="text-2xl font-extrabold font-serif text-purple-950 mt-1">
                 {stats?.ordersByStatus?.Shipped || 0}
               </p>
             </div>
-            <div className="p-4 rounded-lg bg-emerald-50/70 border border-emerald-200 text-center">
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-emerald-800">
+            <div className="p-4 rounded-lg bg-emerald-50/80 border border-emerald-300 text-center">
+              <p className="text-xs font-extrabold uppercase tracking-wider text-emerald-900">
                 Delivered
               </p>
-              <p className="text-2xl font-bold font-serif text-emerald-900 mt-1">
+              <p className="text-2xl font-extrabold font-serif text-emerald-950 mt-1">
                 {stats?.ordersByStatus?.Delivered || 0}
               </p>
             </div>
-            <div className="p-4 rounded-lg bg-rose-50/70 border border-rose-200 text-center col-span-2 sm:col-span-1">
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-rose-800">
+            <div className="p-4 rounded-lg bg-rose-50/80 border border-rose-300 text-center col-span-2 sm:col-span-1">
+              <p className="text-xs font-extrabold uppercase tracking-wider text-rose-900">
                 Cancelled
               </p>
-              <p className="text-2xl font-bold font-serif text-rose-900 mt-1">
+              <p className="text-2xl font-extrabold font-serif text-rose-950 mt-1">
                 {stats?.ordersByStatus?.Cancelled || 0}
               </p>
             </div>
@@ -319,44 +319,44 @@ const AdminDashboard = () => {
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-stone-50 text-stone-600 uppercase tracking-wider font-semibold border-b border-stone-200">
+              <thead className="bg-stone-50 text-stone-700 uppercase tracking-wider font-extrabold border-b border-stone-200">
                 <tr>
-                  <th className="py-3 px-4">Order ID & Date</th>
-                  <th className="py-3 px-4">Customer</th>
-                  <th className="py-3 px-4">Items</th>
-                  <th className="py-3 px-4">COD Total</th>
-                  <th className="py-3 px-4">Status & Action</th>
+                  <th className="py-3 px-4 font-extrabold">Order ID & Date</th>
+                  <th className="py-3 px-4 font-extrabold">Customer</th>
+                  <th className="py-3 px-4 font-extrabold">Items</th>
+                  <th className="py-3 px-4 font-extrabold">COD Total</th>
+                  <th className="py-3 px-4 font-extrabold">Status & Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-stone-100">
+              <tbody className="divide-y divide-stone-100 font-medium">
                 {stats?.recentOrders && stats.recentOrders.length > 0 ? (
                   stats.recentOrders.map((ord) => (
-                    <tr key={ord._id} className="hover:bg-stone-50/70 transition-colors">
+                    <tr key={ord._id} className="hover:bg-stone-50/80 transition-colors">
                       <td className="py-3.5 px-4">
-                        <span className="font-bold font-mono text-primary text-xs">
+                        <span className="font-extrabold font-mono text-primary text-xs">
                           {ord.orderNumber}
                         </span>
-                        <p className="text-[10px] text-stone-400 mt-0.5">
+                        <p className="text-[11px] text-stone-500 font-semibold mt-0.5">
                           {formatDate(ord.createdAt)}
                         </p>
                       </td>
                       <td className="py-3.5 px-4">
-                        <p className="font-medium text-stone-800">
+                        <p className="font-bold text-stone-900">
                           {ord.customerDetails?.name || 'Customer'}
                         </p>
-                        <p className="text-[10px] text-stone-500">
+                        <p className="text-[11px] text-stone-600 font-medium">
                           {ord.customerDetails?.phone} • {ord.shippingAddress?.city}
                         </p>
                       </td>
                       <td className="py-3.5 px-4">
-                        <span className="text-stone-700">
+                        <span className="text-stone-900 font-bold">
                           {ord.items?.length || 1} saree(s)
                         </span>
-                        <p className="text-[10px] text-stone-400 truncate max-w-[150px]">
+                        <p className="text-[11px] text-stone-600 font-medium truncate max-w-[150px]">
                           {ord.items?.[0]?.name}
                         </p>
                       </td>
-                      <td className="py-3.5 px-4 font-semibold text-primary">
+                      <td className="py-3.5 px-4 font-extrabold text-sm text-primary">
                         {formatPrice(ord.totalAmount)}
                       </td>
                       <td className="py-3.5 px-4">
@@ -365,7 +365,7 @@ const AdminDashboard = () => {
                             value={ord.orderStatus}
                             disabled={updatingOrderId === ord._id}
                             onChange={(e) => handleStatusChange(ord._id, e.target.value)}
-                            className={`text-[11px] font-semibold py-1 px-2 rounded border focus:outline-none focus:ring-1 focus:ring-primary ${getStatusBadge(
+                            className={`text-xs font-bold py-1.5 px-2.5 rounded border focus:outline-none focus:ring-1 focus:ring-primary ${getStatusBadge(
                               ord.orderStatus
                             )}`}
                           >
@@ -396,3 +396,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+

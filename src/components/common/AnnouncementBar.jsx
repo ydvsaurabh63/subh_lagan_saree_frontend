@@ -22,7 +22,7 @@ const AnnouncementBar = () => {
   const Icon = current.icon;
 
   return (
-    <div className="bg-primary-dark text-gold-light py-2 px-4 text-xs font-medium tracking-wide border-b border-gold/20 select-none">
+    <div className="bg-primary-dark text-gold-light py-2 px-4 text-xs font-extrabold tracking-wider border-b border-gold/30 select-none">
       <div className="max-w-7xl mx-auto flex items-center justify-center space-x-2 text-center transition-all duration-500 ease-in-out">
         <Icon className="w-3.5 h-3.5 text-gold animate-pulse flex-shrink-0" />
         <span className="truncate">{current.text}</span>

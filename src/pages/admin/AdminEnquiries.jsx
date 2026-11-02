@@ -65,19 +65,19 @@ const AdminEnquiries = () => {
   return (
     <AdminLayout title="Customer Inquiries & Bridal Leads">
       <div className="space-y-6">
-        <div className="bg-white p-4 sm:p-5 rounded-xl border border-stone-200/80 shadow-sm flex items-center justify-between">
+        <div className="bg-white p-4 sm:p-5 rounded-xl border border-stone-200/90 shadow-sm flex items-center justify-between">
           <div>
-            <h3 className="font-serif text-base font-bold text-primary">
+            <h3 className="font-serif text-lg font-extrabold text-primary">
               Boutique Inquiries ({contacts.length})
             </h3>
-            <p className="text-xs text-stone-500">
+            <p className="text-xs text-stone-600 font-bold">
               Messages submitted from the Contact Us page & wedding consultations
             </p>
           </div>
         </div>
 
         {loading ? (
-          <div className="bg-white rounded-xl border border-stone-200 p-12 text-center text-stone-400">
+          <div className="bg-white rounded-xl border border-stone-200 p-12 text-center text-stone-400 font-bold">
             <div className="w-6 h-6 border-2 border-gold border-t-transparent rounded-full animate-spin mx-auto mb-2" />
             Loading messages...
           </div>
@@ -86,14 +86,14 @@ const AdminEnquiries = () => {
             {contacts.map((c) => (
               <div
                 key={c._id}
-                className="bg-white rounded-xl border border-stone-200/80 p-5 shadow-sm space-y-3"
+                className="bg-white rounded-xl border border-stone-200/90 p-5 shadow-sm space-y-3"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2 border-b border-stone-100 pb-3">
                   <div>
-                    <h4 className="font-bold text-sm text-stone-900">
+                    <h4 className="font-extrabold text-base text-stone-950">
                       {c.name}
                     </h4>
-                    <p className="text-[11px] text-stone-500">
+                    <p className="text-xs text-stone-500 font-semibold mt-0.5">
                       Received on {formatDate(c.createdAt)}
                     </p>
                   </div>
@@ -102,12 +102,12 @@ const AdminEnquiries = () => {
                     <select
                       value={c.status}
                       onChange={(e) => handleStatusChange(c._id, e.target.value)}
-                      className={`text-xs font-semibold py-1 px-2.5 rounded-lg border focus:outline-none ${
+                      className={`text-xs font-extrabold py-1.5 px-3 rounded-lg border focus:outline-none ${
                         c.status === 'new'
-                          ? 'bg-rose-50 text-rose-700 border-rose-300'
+                          ? 'bg-rose-50 text-rose-800 border-rose-300'
                           : c.status === 'read'
-                          ? 'bg-amber-50 text-amber-700 border-amber-300'
-                          : 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                          ? 'bg-amber-50 text-amber-800 border-amber-300'
+                          : 'bg-emerald-50 text-emerald-800 border-emerald-300'
                       }`}
                     >
                       <option value="new">New Inquiry</option>
@@ -127,10 +127,10 @@ const AdminEnquiries = () => {
 
                 {/* Subject & Message */}
                 <div>
-                  <span className="font-semibold text-xs text-primary bg-cream/70 px-2 py-0.5 rounded border border-gold/30">
+                  <span className="font-extrabold text-xs text-primary bg-cream p-1.5 rounded border border-gold/40">
                     Subject: {c.subject}
                   </span>
-                  <p className="text-xs text-stone-700 mt-2 bg-stone-50 p-3 rounded-lg border border-stone-200/60 leading-relaxed">
+                  <p className="text-xs text-stone-800 font-medium mt-2.5 bg-stone-50 p-3 rounded-lg border border-stone-200 leading-relaxed">
                     {c.message}
                   </p>
                 </div>
@@ -175,3 +175,4 @@ const AdminEnquiries = () => {
 };
 
 export default AdminEnquiries;
+

@@ -262,14 +262,14 @@ const HeroBanner = () => {
           <div className="lg:col-span-8 flex flex-col justify-between">
             {/* Header Titles */}
             <div className="space-y-1">
-              <span className="text-[11px] font-bold tracking-[0.25em] uppercase text-gold-dark flex items-center space-x-1.5">
+              <span className="text-[11px] font-extrabold tracking-[0.25em] uppercase text-gold-dark flex items-center space-x-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-gold" />
                 <span>Virtual Saree Runway</span>
               </span>
-              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-brandText tracking-tight">
+              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-black text-stone-950 tracking-tight">
                 Try the Look.
               </h1>
-              <p className="text-xs sm:text-sm text-stone-500 max-w-md">
+              <p className="text-xs sm:text-sm text-stone-700 font-bold max-w-md">
                 Pure handloom sarees & bridal trousseau. Click any model to center the look.
               </p>
             </div>
@@ -391,16 +391,16 @@ const HeroBanner = () => {
           <div className="lg:col-span-4 bg-white rounded-3xl p-6 sm:p-7 border border-gold/40 shadow-xl flex flex-col justify-between">
             <div className="space-y-4">
               {/* Header */}
-              <div className="flex items-center justify-between border-b border-stone-100 pb-3">
+              <div className="flex items-center justify-between border-b border-stone-200 pb-3">
                 <div>
-                  <h3 className="font-serif text-lg font-bold text-brandText">
+                  <h3 className="font-serif text-xl font-extrabold text-stone-950">
                     In this look
                   </h3>
-                  <p className="text-[11px] text-stone-400">
+                  <p className="text-xs text-stone-600 font-bold">
                     {currentLook.tagline}
                   </p>
                 </div>
-                <span className="px-2 py-0.5 bg-gold/20 text-gold-dark text-[10px] font-bold uppercase tracking-wider rounded">
+                <span className="px-2.5 py-1 bg-gold/25 text-gold-dark text-[11px] font-black uppercase tracking-wider rounded border border-gold/40">
                   Look {currentLook.lookNumber}
                 </span>
               </div>
@@ -410,7 +410,7 @@ const HeroBanner = () => {
                 {currentLook.items.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-center space-x-3 p-2.5 rounded-xl border border-stone-100 hover:border-gold/40 hover:bg-cream/30 transition group"
+                    className="flex items-center space-x-3 p-2.5 rounded-xl border border-stone-200 hover:border-gold hover:bg-cream/40 transition group"
                   >
                     {/* Item Thumbnail */}
                     <div className="w-14 h-16 sm:w-16 sm:h-20 rounded-lg overflow-hidden bg-stone-100 border border-stone-200 flex-shrink-0">
@@ -424,29 +424,29 @@ const HeroBanner = () => {
                     {/* Details */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] uppercase tracking-wider font-bold text-gold-dark">
+                        <span className="text-[10px] uppercase tracking-wider font-extrabold text-gold-dark">
                           {item.type}
                         </span>
                         {item.isIncluded && (
-                          <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
+                          <span className="text-[10px] font-black text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
                             FREE
                           </span>
                         )}
                       </div>
 
-                      <h4 className="font-serif text-xs font-semibold text-brandText truncate mt-0.5" title={item.name}>
+                      <h4 className="font-serif text-sm font-bold text-stone-950 truncate mt-0.5" title={item.name}>
                         {item.name}
                       </h4>
-                      <p className="text-[11px] text-stone-400 truncate">
+                      <p className="text-xs text-stone-600 font-medium truncate">
                         {item.detail}
                       </p>
 
-                      <div className="flex items-baseline space-x-1.5 mt-1">
-                        <span className="text-xs font-bold text-primary font-sans">
+                      <div className="flex items-baseline space-x-2 mt-1">
+                        <span className="text-sm font-extrabold text-primary font-sans">
                           {item.price === 0 ? 'Complimentary' : formatPrice(item.price)}
                         </span>
                         {item.originalPrice > item.price && (
-                          <span className="text-[10px] text-stone-400 line-through">
+                          <span className="text-xs text-stone-400 font-bold line-through">
                             {formatPrice(item.originalPrice)}
                           </span>
                         )}
@@ -458,20 +458,20 @@ const HeroBanner = () => {
             </div>
 
             {/* Bottom Actions */}
-            <div className="pt-4 border-t border-stone-100 space-y-3 mt-4">
+            <div className="pt-4 border-t border-stone-200 space-y-3 mt-4">
               {/* Savings Card */}
-              <div className="bg-cream/60 rounded-xl p-3 border border-gold/30 space-y-1 text-xs">
+              <div className="bg-cream/80 rounded-xl p-3.5 border border-gold/40 space-y-1.5 text-xs">
                 <div className="flex justify-between items-center">
-                  <span className="text-stone-600 font-medium">Complete the look:</span>
-                  <span className="text-stone-400 line-through text-[11px] font-sans">
+                  <span className="text-stone-700 font-bold">Complete the look:</span>
+                  <span className="text-stone-500 line-through text-xs font-bold font-sans">
                     {formatPrice(totalOriginalPrice)}
                   </span>
                 </div>
                 <div className="flex justify-between items-baseline">
-                  <span className="text-[11px] font-bold text-emerald-700">
+                  <span className="text-xs font-black text-emerald-800">
                     Bundle & Save {formatPrice(savings)}
                   </span>
-                  <span className="font-serif text-lg font-bold text-primary font-sans">
+                  <span className="font-serif text-xl font-extrabold text-primary font-sans">
                     {formatPrice(totalBundlePrice)}
                   </span>
                 </div>
@@ -480,10 +480,10 @@ const HeroBanner = () => {
               {/* Add full look to bag */}
               <button
                 onClick={handleAddFullLook}
-                className="w-full py-3.5 px-4 bg-primary hover:bg-primary-light text-white text-xs font-bold uppercase tracking-widest rounded-xl shadow-lg hover:shadow-xl transition flex items-center justify-center space-x-2 active:scale-98"
+                className="w-full py-3.5 px-4 bg-primary hover:bg-secondary text-cream rounded-xl text-xs font-extrabold uppercase tracking-widest transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-2 active:scale-98"
               >
                 <span>Add full look to bag</span>
-                <ArrowRight className="w-4 h-4 text-gold" />
+                <ArrowRight className="w-4 h-4 text-gold stroke-[2.5]" />
               </button>
 
               <div className="flex items-center justify-between text-[11px] pt-1">

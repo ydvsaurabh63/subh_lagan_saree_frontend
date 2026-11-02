@@ -190,15 +190,15 @@ const VirtualTryOn = () => {
         
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-gold/20 border border-gold/40 text-gold-dark text-[11px] font-bold uppercase tracking-widest mb-2">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-gold/25 border border-gold/50 text-gold-dark text-[11px] font-black uppercase tracking-widest mb-2">
             <Sparkles className="w-3.5 h-3.5 text-gold animate-spin" />
             <span>AI Virtual Saree Trial Room</span>
           </div>
-          <h2 className="font-serif text-3xl sm:text-4xl font-bold text-primary tracking-tight">
+          <h2 className="font-serif text-3xl sm:text-4xl font-extrabold text-primary tracking-tight">
             See How the Saree Drapes on You.
           </h2>
-          <div className="w-16 h-0.5 bg-gold mx-auto mt-2 mb-3"></div>
-          <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
+          <div className="w-20 h-1 bg-gold mx-auto mt-2 mb-3 rounded-full"></div>
+          <p className="text-xs sm:text-sm text-stone-700 font-bold leading-relaxed">
             Upload your photo or choose an avatar, pick any royal handloom saree, and watch our AI drape the fabric with realistic pleats, pallu, and zari luster.
           </p>
         </div>
