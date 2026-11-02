@@ -189,7 +189,7 @@ const VirtualTryOn = () => {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-10">
+        <div className="text-left max-w-2xl mb-8">
           <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-gold/25 border border-gold/50 text-gold-dark text-[11px] font-black uppercase tracking-widest mb-2">
             <Sparkles className="w-3.5 h-3.5 text-gold animate-spin" />
             <span>AI Virtual Saree Trial Room</span>
@@ -197,7 +197,7 @@ const VirtualTryOn = () => {
           <h2 className="font-serif text-3xl sm:text-4xl font-extrabold text-primary tracking-tight">
             See How the Saree Drapes on You.
           </h2>
-          <div className="w-20 h-1 bg-gold mx-auto mt-2 mb-3 rounded-full"></div>
+          <div className="w-20 h-1 bg-gold mt-2 mb-3 rounded-full"></div>
           <p className="text-xs sm:text-sm text-stone-700 font-bold leading-relaxed">
             Upload your photo or choose an avatar, pick any royal handloom saree, and watch our AI drape the fabric with realistic pleats, pallu, and zari luster.
           </p>
@@ -209,10 +209,10 @@ const VirtualTryOn = () => {
           {/* ========================================================= */}
           {/* LEFT: THE INTERACTIVE MIRROR (BEFORE / AFTER SPLIT SLIDER)*/}
           {/* ========================================================= */}
-          <div className="lg:col-span-7 flex flex-col items-center">
+          <div className="lg:col-span-6 xl:col-span-5 flex flex-col items-start">
             
             {/* Mirror Frame */}
-            <div className="relative w-full max-w-md aspect-[3/4] rounded-2xl overflow-hidden bg-stone-100 border-2 border-gold/50 shadow-2xl flex items-center justify-center group">
+            <div className="relative w-full max-w-md aspect-[3/4] rounded-2xl overflow-hidden bg-stone-100 border-2 border-gold/50 shadow-2xl flex items-center justify-center group self-start">
               
               {/* 1. Underlying Original Photo (Before) */}
               <img
@@ -296,12 +296,12 @@ const VirtualTryOn = () => {
             </div>
 
             {/* Slider Hint */}
-            <p className="text-[11px] text-stone-500 mt-3 text-center flex items-center justify-center space-x-1">
+            <p className="text-[11px] text-stone-500 mt-3 text-left w-full max-w-md flex items-center justify-start space-x-1">
               <span>← Drag split slider to compare Before & Draped Saree →</span>
             </p>
 
             {/* Action Bar Below Mirror */}
-            <div className="flex flex-wrap items-center justify-center gap-3 mt-4">
+            <div className="flex flex-wrap items-center justify-start gap-3 mt-4 w-full max-w-md">
               <button
                 onClick={handleDownload}
                 className="inline-flex items-center space-x-1.5 px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl text-xs font-semibold transition"
@@ -325,7 +325,7 @@ const VirtualTryOn = () => {
           {/* ========================================================= */}
           {/* RIGHT: PHOTO UPLOADER & SAREE SELECTION CONTROLS         */}
           {/* ========================================================= */}
-          <div className="lg:col-span-5 space-y-6">
+          <div className="lg:col-span-6 xl:col-span-7 space-y-6">
             
             {/* Step 1: Upload Your Photo */}
             <div className="space-y-3">
