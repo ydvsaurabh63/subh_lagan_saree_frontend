@@ -3,26 +3,24 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   ChevronLeft,
   ChevronRight,
-  ShoppingBag,
   Sparkles,
-  Check,
   ShieldCheck,
   ArrowRight,
   Eye,
-  Plus,
+  Check,
 } from 'lucide-react';
 import { useCart } from '../../context/CartContext.jsx';
 import { formatPrice } from '../../utils/formatters.js';
 import toast from 'react-hot-toast';
 
-// 5 Curated Royal Saree Looks
+// 5 Curated Royal Saree Looks with Transparent Cutout Models
 const sareeLooks = [
   {
     id: 1,
     lookNumber: '01',
-    lookTitle: 'The Royal Crimson Banarasi',
+    lookTitle: 'Royal Crimson Banarasi',
     tagline: 'Bridal Heritage • Handwoven Katan Silk',
-    modelImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=85',
+    modelImage: '/models/model-1.png',
     sareeSlug: 'royal-crimson-banarasi-katan-silk-saree',
     items: [
       {
@@ -59,9 +57,9 @@ const sareeLooks = [
   {
     id: 2,
     lookNumber: '02',
-    lookTitle: 'The Maharani Emerald Temple',
+    lookTitle: 'Maharani Emerald Temple',
     tagline: 'Temple Korvai • Pure Kanchipuram Weave',
-    modelImage: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=85',
+    modelImage: '/models/model-2.png',
     sareeSlug: 'maharani-emerald-gold-kanjivaram-silk-saree',
     items: [
       {
@@ -98,9 +96,9 @@ const sareeLooks = [
   {
     id: 3,
     lookNumber: '03',
-    lookTitle: 'The Auspicious Heirloom Trousseau',
+    lookTitle: 'Heirloom Red Zardozi Bridal',
     tagline: 'Couture Bridal • Velvet & Zardozi Handwork',
-    modelImage: 'https://images.unsplash.com/photo-1546804784-896d0dca3805?auto=format&fit=crop&w=900&q=85',
+    modelImage: '/models/model-3.png',
     sareeSlug: 'heirloom-red-zardozi-bridal-saree',
     items: [
       {
@@ -137,9 +135,9 @@ const sareeLooks = [
   {
     id: 4,
     lookNumber: '04',
-    lookTitle: 'The Gulabi Paithani Splendor',
+    lookTitle: 'Gulabi Rani Paithani',
     tagline: 'Maharashtrian Heritage • Peacock Pallu',
-    modelImage: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=900&q=85',
+    modelImage: '/models/model-4.png',
     sareeSlug: 'gulabi-rani-pure-paithani-silk-saree',
     items: [
       {
@@ -176,39 +174,39 @@ const sareeLooks = [
   {
     id: 5,
     lookNumber: '05',
-    lookTitle: 'The Midnight Starlight Cocktail',
-    tagline: 'Modern Designer • Georgette & Micro-Sequins',
-    modelImage: 'https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=900&q=85',
-    sareeSlug: 'midnight-navy-sequin-georgette-saree',
+    lookTitle: 'Mustard Gold Chanderi',
+    tagline: 'Festive Handloom • Pure Cotton Silk',
+    modelImage: '/models/model-5.png',
+    sareeSlug: 'mustard-gold-handloom-chanderi-saree',
     items: [
       {
         id: 'saree-5',
         type: 'Saree',
-        name: 'Midnight Navy Sequin Georgette Saree',
-        detail: 'Viscose Georgette • Tone-on-tone Micro Sequins',
-        price: 10999,
-        originalPrice: 13999,
-        image: 'https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=300&q=80',
+        name: 'Mustard Gold Handloom Chanderi Saree',
+        detail: 'Lightweight Cotton Silk • Hand-interwoven Booti',
+        price: 4999,
+        originalPrice: 6499,
+        image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=300&q=80',
         isMain: true,
       },
       {
         id: 'blouse-5',
         type: 'Blouse Piece',
-        name: 'Embellished Designer Bustier Fabric',
-        detail: '0.8M Micro-Sequin Blouse Fabric Included',
+        name: 'Running Cotton Silk Blouse Piece',
+        detail: '0.8M Matching Fabric Included',
         price: 0,
-        originalPrice: 2499,
-        image: 'https://images.unsplash.com/photo-1610030469884-25e2270912f2?auto=format&fit=crop&w=300&q=80',
+        originalPrice: 1499,
+        image: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=300&q=80',
         isIncluded: true,
       },
       {
         id: 'acc-5',
         type: 'Accessory',
-        name: 'Metallic Shimmer Evening Potli',
-        detail: 'Navy Velvet & Crystal Chain Handle',
-        price: 1299,
-        originalPrice: 1799,
-        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=300&q=80',
+        name: 'Gota Patti Festive Latkan Pair',
+        detail: 'Haldi & Mehendi Special Accents',
+        price: 799,
+        originalPrice: 1199,
+        image: 'https://images.unsplash.com/photo-1610030469668-9655519803b0?auto=format&fit=crop&w=300&q=80',
       },
     ],
   },
@@ -234,20 +232,18 @@ const HeroBanner = () => {
     setActiveLookIndex((prev) => (prev === sareeLooks.length - 1 ? 0 : prev + 1));
   };
 
-  // Add full look to bag
   const handleAddFullLook = () => {
-    // Add primary saree
     const mainSaree = currentLook.items.find((it) => it.isMain);
     if (mainSaree) {
       addToCart(
         {
           _id: mainSaree.id,
-          name: `${mainSaree.name} (Complete Look Ensemble)`,
+          name: `${mainSaree.name} (Full Look Ensemble)`,
           price: mainSaree.originalPrice,
           discountPrice: totalBundlePrice,
           images: [mainSaree.image],
           fabric: 'Pure Handloom Silk',
-          color: currentLook.lookTitle.split(' ')[2] || 'Royal',
+          color: currentLook.lookTitle.split(' ')[1] || 'Festive',
         },
         1
       );
@@ -256,44 +252,44 @@ const HeroBanner = () => {
   };
 
   return (
-    <div className="relative bg-[#FAFAFA] border-b border-stone-200 overflow-hidden select-none">
-      <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-10">
+    <div className="relative bg-[#F8F7F4] border-b border-stone-200 overflow-hidden select-none">
+      <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           
           {/* ========================================================= */}
-          {/* LEFT & CENTER: THE VIRTUAL SAREE RUNWAY (MODEL LINEUP)   */}
+          {/* LEFT & CENTER: THE VIRTUAL SAREE RUNWAY (CUTOUT LINEUP)   */}
           {/* ========================================================= */}
           <div className="lg:col-span-8 flex flex-col justify-between">
             {/* Header Titles */}
             <div className="space-y-1">
               <span className="text-[11px] font-bold tracking-[0.25em] uppercase text-gold-dark flex items-center space-x-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-gold" />
-                <span>Subh Lagan Virtual Runway</span>
+                <span>Virtual Saree Runway</span>
               </span>
               <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-brandText tracking-tight">
-                Drape the Look.
+                Try the Look.
               </h1>
               <p className="text-xs sm:text-sm text-stone-500 max-w-md">
-                Interactive bridal trousseau & heirloom styling. Click on any model to inspect the complete ensemble.
+                Pure handloom sarees & bridal trousseau. Click any model to center the look.
               </p>
             </div>
 
-            {/* Models Lineup Stage */}
-            <div className="relative my-6 lg:my-8 flex items-center justify-center min-h-[420px] sm:min-h-[500px] lg:min-h-[540px]">
-              {/* Studio Backdrop Floor Shadow */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-4/5 h-10 bg-stone-300/40 rounded-full blur-xl pointer-events-none"></div>
+            {/* Runway Stage with Floor Ambient Shadow */}
+            <div className="relative my-6 lg:my-8 flex items-center justify-center min-h-[460px] sm:min-h-[520px] lg:min-h-[560px]">
+              {/* Studio Floor Soft Contact Shadows */}
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-4/5 h-12 bg-stone-300/40 rounded-full blur-2xl pointer-events-none"></div>
 
-              {/* 5 Models Horizontal Lineup */}
-              <div className="relative flex items-end justify-center w-full max-w-4xl h-[420px] sm:h-[480px] lg:h-[520px]">
+              {/* Models Lineup (Transparent Cutout Models Standing Directly on Floor) */}
+              <div className="relative flex items-end justify-center w-full max-w-4xl h-[460px] sm:h-[520px] lg:h-[560px]">
                 {sareeLooks.map((look, idx) => {
                   const isActive = idx === activeLookIndex;
-                  const distance = idx - activeLookIndex; // -2, -1, 0, 1, 2
+                  const distance = idx - activeLookIndex;
                   
-                  // Calculate dynamic positioning for 3D depth runway effect
-                  let translateX = `${distance * 110}px`;
+                  // 3D Runway Spacing & Depth
+                  let translateX = `${distance * 125}px`;
                   let zIndex = 20 - Math.abs(distance) * 5;
-                  let scale = isActive ? 1 : 0.82 - Math.abs(distance) * 0.05;
-                  let opacity = isActive ? 1 : Math.max(0.35, 0.75 - Math.abs(distance) * 0.2);
+                  let scale = isActive ? 1.05 : 0.86 - Math.abs(distance) * 0.05;
+                  let opacity = isActive ? 1 : Math.max(0.4, 0.7 - Math.abs(distance) * 0.15);
 
                   return (
                     <div
@@ -304,44 +300,40 @@ const HeroBanner = () => {
                         zIndex,
                         opacity,
                       }}
-                      className="absolute bottom-0 cursor-pointer transition-all duration-500 ease-out flex flex-col items-center group"
+                      className="absolute bottom-2 cursor-pointer transition-all duration-500 ease-out flex flex-col items-center group"
                     >
-                      {/* Active Center Indicator Ring / Badge */}
+                      {/* Active Center Indicator Pill */}
                       {isActive && (
-                        <div className="mb-2 animate-bounce flex items-center space-x-1 px-3 py-1 bg-white/95 backdrop-blur-md rounded-full shadow-md border border-gold/40 text-[10px] font-bold uppercase tracking-wider text-primary">
+                        <div className="mb-2 animate-bounce flex items-center space-x-1.5 px-3 py-1 bg-white/95 backdrop-blur-md rounded-full shadow-lg border border-gold/50 text-[10px] font-bold uppercase tracking-wider text-primary">
                           <Eye className="w-3 h-3 text-gold" />
                           <span>Active Look {look.lookNumber}</span>
                         </div>
                       )}
 
-                      {/* Model Card / Cutout Silhouette */}
-                      <div
-                        className={`relative w-44 sm:w-56 lg:w-60 h-[360px] sm:h-[440px] lg:h-[480px] rounded-2xl overflow-hidden transition-all duration-500 ${
-                          isActive
-                            ? 'ring-4 ring-gold/60 shadow-2xl scale-100'
-                            : 'shadow-lg grayscale-[20%] hover:grayscale-0 hover:opacity-90'
-                        }`}
-                      >
+                      {/* Transparent Standing Model (No bounding card box!) */}
+                      <div className="relative w-48 sm:w-56 lg:w-64 h-[400px] sm:h-[460px] lg:h-[500px] flex items-end justify-center">
+                        {/* Soft Backdrop Spotlight Halo behind active model */}
+                        {isActive && (
+                          <div className="absolute inset-0 -top-6 bg-radial from-gold/15 via-gold/5 to-transparent rounded-full filter blur-xl pointer-events-none -z-10"></div>
+                        )}
+
                         <img
                           src={look.modelImage}
                           alt={look.lookTitle}
-                          className="w-full h-full object-cover object-top"
+                          className={`w-full h-full object-contain object-bottom drop-shadow-[0_15px_25px_rgba(0,0,0,0.18)] transition-all duration-500 ${
+                            isActive
+                              ? 'filter drop-shadow-[0_20px_35px_rgba(104,27,44,0.22)]'
+                              : 'grayscale-[15%] hover:grayscale-0'
+                          }`}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-
-                        {/* Caption on Model */}
-                        <div className="absolute bottom-3 left-3 right-3 text-white">
-                          <span className="text-[10px] uppercase tracking-wider font-semibold text-gold-light">
-                            {look.tagline.split('•')[0]}
-                          </span>
-                          <h4 className="font-serif text-xs sm:text-sm font-bold truncate">
-                            {look.lookTitle}
-                          </h4>
-                        </div>
                       </div>
 
-                      {/* Soft Floor Shadow under Model */}
-                      <div className="w-36 h-4 bg-black/25 rounded-full blur-md -mt-2"></div>
+                      {/* Natural Elliptical Floor Contact Shadow */}
+                      <div
+                        className={`w-36 h-4 bg-stone-900/25 rounded-full blur-md -mt-2 transition-all ${
+                          isActive ? 'scale-110 opacity-70' : 'opacity-40'
+                        }`}
+                      ></div>
                     </div>
                   );
                 })}
@@ -350,7 +342,6 @@ const HeroBanner = () => {
 
             {/* Bottom Scrubber & Navigation Controls */}
             <div className="pt-4 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-              {/* Prev / Next Arrows & Current Look Name */}
               <div className="flex items-center space-x-4">
                 <div className="flex space-x-1.5">
                   <button
@@ -380,7 +371,7 @@ const HeroBanner = () => {
                 </div>
               </div>
 
-              {/* Minimal Scrubber Line Bar */}
+              {/* Minimalist Scrubber Timeline Bar */}
               <div className="flex items-center space-x-2 w-full sm:w-64">
                 <span className="text-[10px] font-mono text-stone-400">01</span>
                 <div className="relative flex-1 h-1.5 bg-stone-200 rounded-full overflow-hidden">
@@ -399,7 +390,7 @@ const HeroBanner = () => {
           {/* ========================================================= */}
           <div className="lg:col-span-4 bg-white rounded-3xl p-6 sm:p-7 border border-gold/40 shadow-xl flex flex-col justify-between">
             <div className="space-y-4">
-              {/* Panel Header */}
+              {/* Header */}
               <div className="flex items-center justify-between border-b border-stone-100 pb-3">
                 <div>
                   <h3 className="font-serif text-lg font-bold text-brandText">
@@ -414,7 +405,7 @@ const HeroBanner = () => {
                 </span>
               </div>
 
-              {/* Items List in this Look */}
+              {/* Items List */}
               <div className="space-y-3.5">
                 {currentLook.items.map((item) => (
                   <div
@@ -430,7 +421,7 @@ const HeroBanner = () => {
                       />
                     </div>
 
-                    {/* Item Details */}
+                    {/* Details */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] uppercase tracking-wider font-bold text-gold-dark">
@@ -466,9 +457,9 @@ const HeroBanner = () => {
               </div>
             </div>
 
-            {/* Bottom Complete the Look Action Card */}
+            {/* Bottom Actions */}
             <div className="pt-4 border-t border-stone-100 space-y-3 mt-4">
-              {/* Savings & Bundle pricing */}
+              {/* Savings Card */}
               <div className="bg-cream/60 rounded-xl p-3 border border-gold/30 space-y-1 text-xs">
                 <div className="flex justify-between items-center">
                   <span className="text-stone-600 font-medium">Complete the look:</span>
@@ -486,7 +477,7 @@ const HeroBanner = () => {
                 </div>
               </div>
 
-              {/* Main CTA: Add full look to bag */}
+              {/* Add full look to bag */}
               <button
                 onClick={handleAddFullLook}
                 className="w-full py-3.5 px-4 bg-primary hover:bg-primary-light text-white text-xs font-bold uppercase tracking-widest rounded-xl shadow-lg hover:shadow-xl transition flex items-center justify-center space-x-2 active:scale-98"
@@ -495,7 +486,6 @@ const HeroBanner = () => {
                 <ArrowRight className="w-4 h-4 text-gold" />
               </button>
 
-              {/* View Saree Product Detail Link */}
               <div className="flex items-center justify-between text-[11px] pt-1">
                 <Link
                   to={`/product/${currentLook.sareeSlug}`}
