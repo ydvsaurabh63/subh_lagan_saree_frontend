@@ -3,9 +3,7 @@ import {
   Upload,
   Sparkles,
   Camera,
-  RotateCcw,
   ShoppingBag,
-  Download,
   Check,
   Sliders,
   ShieldCheck,
@@ -175,15 +173,6 @@ const VirtualTryOn = () => {
     toast.success(`"${selectedSaree.name}" added to Cart!`);
   };
 
-  // Download Trial Photo
-  const handleDownload = () => {
-    const link = document.createElement('a');
-    link.href = selectedSaree.drapedPreview;
-    link.download = `SubhLagan_VirtualTrial_${selectedSaree.slug}.png`;
-    link.click();
-    toast.success('Trial photo downloaded!');
-  };
-
   return (
     <section className="py-14 bg-gradient-to-b from-[#F8F7F4] via-white to-cream/30 border-b border-stone-200 select-none">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -293,32 +282,6 @@ const VirtualTryOn = () => {
                   </div>
                 </div>
               )}
-            </div>
-
-            {/* Slider Hint */}
-            <p className="text-[11px] text-stone-500 mt-3 text-left w-full max-w-md flex items-center justify-start space-x-1">
-              <span>← Drag split slider to compare Before & Draped Saree →</span>
-            </p>
-
-            {/* Action Bar Below Mirror */}
-            <div className="flex flex-wrap items-center justify-start gap-3 mt-4 w-full max-w-md">
-              <button
-                onClick={handleDownload}
-                className="inline-flex items-center space-x-1.5 px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl text-xs font-semibold transition"
-                title="Download this trial look"
-              >
-                <Download className="w-3.5 h-3.5" />
-                <span>Save Trial Photo</span>
-              </button>
-
-              <button
-                onClick={triggerAiDraping}
-                className="inline-flex items-center space-x-1.5 px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl text-xs font-semibold transition"
-                title="Re-run draping alignment"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>Re-Fit Drape</span>
-              </button>
             </div>
           </div>
 
