@@ -121,4 +121,24 @@
   .animate-spin-turntable {
     animation: spin-turntable 28s linear infinite;
   }
+
+  /* Right-to-Left Continuous Marquee Animation */
+  @keyframes marquee-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-marquee-left {
+    display: flex;
+    width: max-content;
+    animation: marquee-left 36s linear infinite;
+  }
+
+  .animate-marquee-left:hover {
+    animation-play-state: paused;
+  }
 }
