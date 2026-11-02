@@ -112,7 +112,7 @@ const AdminLayout = ({ children, title = 'Store Administration' }) => {
                   SUBH LAGAN
                 </h1>
                 <p className="text-[10px] tracking-widest text-cream/80 uppercase font-bold">
-                  Client Control Panel
+                  Admin Panel
                 </p>
               </div>
             </Link>
@@ -131,7 +131,7 @@ const AdminLayout = ({ children, title = 'Store Administration' }) => {
             {/* Section 1: Main Management */}
             <div>
               <p className="px-3 text-[10px] uppercase tracking-widest text-gold font-bold mb-1.5">
-                Website Management
+                Menu
               </p>
               <nav className="space-y-1">
                 {mainNavItems.map((item) => {
@@ -143,7 +143,7 @@ const AdminLayout = ({ children, title = 'Store Administration' }) => {
                       end={item.end}
                       onClick={() => setSidebarOpen(false)}
                       className={({ isActive }) =>
-                        `flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-sm font-bold tracking-wide transition-all ${
+                        `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-bold tracking-wide transition-all ${
                           isActive
                             ? 'bg-gold text-primary font-extrabold shadow-md shadow-gold/20 translate-x-1'
                             : 'text-cream/90 hover:bg-white/10 hover:text-white'
@@ -161,7 +161,7 @@ const AdminLayout = ({ children, title = 'Store Administration' }) => {
             {/* Section 2: Help, Support, Credits */}
             <div className="pt-2 border-t border-gold/15">
               <p className="px-3 text-[10px] uppercase tracking-widest text-gold/80 font-bold mb-1.5">
-                Help & Support
+                Support
               </p>
               <nav className="space-y-1">
                 {secondaryNavItems.map((item, idx) => {
@@ -172,7 +172,7 @@ const AdminLayout = ({ children, title = 'Store Administration' }) => {
                       to={item.to}
                       onClick={() => setSidebarOpen(false)}
                       className={({ isActive }) =>
-                        `flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-sm font-bold tracking-wide transition-all ${
+                        `flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-bold tracking-wide transition-all ${
                           isActive
                             ? 'bg-gold text-primary font-extrabold shadow-md shadow-gold/20 translate-x-1'
                             : 'text-cream/90 hover:bg-white/10 hover:text-white'
@@ -191,32 +191,28 @@ const AdminLayout = ({ children, title = 'Store Administration' }) => {
         </div>
 
         {/* Sidebar Footer */}
-        <div className="p-4 border-t border-gold/20 space-y-3 shrink-0">
+        <div className="p-3 border-t border-gold/20 space-y-2 shrink-0">
           <Link
             to="/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-bold text-cream hover:text-gold hover:bg-white/5 border border-gold/30 transition-all"
+            className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold text-cream hover:text-gold hover:bg-white/5 border border-gold/30 transition-all"
           >
             <span className="flex items-center gap-2">
               <Store className="w-4 h-4 text-gold" />
-              Live Boutique Store
+              Live Store
             </span>
             <ExternalLink className="w-3.5 h-3.5 opacity-80" />
           </Link>
 
-          <div className="flex items-center justify-between px-2 pt-2 border-t border-white/5">
+          <div className="flex items-center justify-between px-2 pt-1 border-t border-white/5">
             <div className="flex items-center gap-2 overflow-hidden">
-              <div className="w-8 h-8 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center text-xs font-bold text-gold shrink-0">
-                {user?.name ? user.name.charAt(0).toUpperCase() : 'B'}
+              <div className="w-7 h-7 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center text-xs font-bold text-gold shrink-0">
+                {user?.name ? user.name.charAt(0).toUpperCase() : 'A'}
               </div>
               <div className="overflow-hidden">
                 <p className="text-xs font-bold text-cream truncate">
-                  {user?.name || 'Boutique Owner (Admin)'}
-                </p>
-                <p className="text-[10px] text-cream/80 flex items-center gap-1 font-bold">
-                  <ShieldCheck className="w-3 h-3 text-emerald-400" />
-                  Store Owner
+                  {user?.name || 'Admin'}
                 </p>
               </div>
             </div>
