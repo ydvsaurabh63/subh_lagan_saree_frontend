@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Sparkles, Truck, ShieldCheck, HeartHandshake } from 'lucide-react';
 
 const announcements = [
-  { icon: Sparkles, text: 'Grand Festive & Wedding Showcase 2026 – Pure Heritage Handloom' },
-  { icon: Truck, text: 'Complimentary Pan-India Delivery on Orders Above ₹1,999' },
-  { icon: ShieldCheck, text: 'Cash on Delivery (COD) Available Across 19,000+ Pincodes' },
-  { icon: HeartHandshake, text: '100% Silk Mark & Authentic Handcrafted Sarees' },
+  { icon: Sparkles, text: 'Festive & Wedding Showcase 2026' },
+  { icon: Truck, text: 'Free Delivery on Orders Above ₹1,999' },
+  { icon: ShieldCheck, text: 'Cash on Delivery (COD) Available' },
+  { icon: HeartHandshake, text: '100% Silk Mark Certified' },
 ];
 
 const AnnouncementBar = () => {

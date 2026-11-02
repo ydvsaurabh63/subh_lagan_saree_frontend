@@ -5,22 +5,22 @@ const testimonials = [
   {
     name: 'Ananya Mehra',
     city: 'New Delhi',
-    saree: 'Royal Crimson Banarasi Katan Silk',
-    quote: 'The kadhwa zari work is breathtaking! Looked so majestic in all my wedding photos.',
+    saree: 'Royal Crimson Banarasi',
+    quote: 'The kadhwa zari work is breathtaking! Looked so majestic.',
     avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80',
   },
   {
     name: 'Divya Venkatesh',
     city: 'Chennai',
-    saree: 'Maharani Emerald Kanjivaram Silk',
-    quote: 'Authentic Korvai temple border and rich pure zari. Fast Cash on Delivery with royal packaging.',
+    saree: 'Maharani Emerald Kanjivaram',
+    quote: 'Authentic Korvai border and rich zari. Fast Cash on Delivery.',
     avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80',
   },
   {
     name: 'Radhika Singhania',
     city: 'Jaipur',
-    saree: 'Blush Rose Organza Saree',
-    quote: 'Delicate scallop border and hand-painted blossoms. Received so many compliments at my sangeet!',
+    saree: 'Blush Rose Organza',
+    quote: 'Delicate scallop border. Received so many compliments!',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
   },
 ];
@@ -34,13 +34,10 @@ const TestimonialSlider = () => {
   const t = testimonials[current];
 
   return (
-    <section className="py-14 bg-cream/60">
+    <section className="py-12 bg-cream/60">
       <div className="max-w-2xl mx-auto px-4 text-center">
-        <span className="text-gold-dark text-[11px] uppercase tracking-[0.25em] font-bold">
-          Customer Love
-        </span>
-        <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary mt-1">
-          Real Brides, Real Drapes
+        <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary">
+          Customer Reviews
         </h2>
         <div className="w-12 h-0.5 bg-gold mx-auto mt-2 mb-6"></div>
 

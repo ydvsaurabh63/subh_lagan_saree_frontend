@@ -12,20 +12,20 @@ const SpecialOfferBanner = () => {
             <div className="p-8 sm:p-12 space-y-4 z-10 text-white">
               <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-gold/20 text-gold-light text-[11px] font-bold uppercase tracking-wider border border-gold/30">
                 <Gift className="w-3.5 h-3.5 text-gold" />
-                <span>Festive Celebration Offer</span>
+                <span>Festive Offer</span>
               </div>
 
               <h3 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
-                Flat <span className="text-gold">30% Off</span> On Bridal Trousseau
+                Flat <span className="text-gold">30% Off</span> Bridal
               </h3>
 
               <p className="text-xs sm:text-sm text-stone-200 leading-relaxed max-w-md">
-                Pure zardozi handloom Banarasi & Kanjivaram silks for your wedding and festive moments.
+                Handcrafted wedding & festive silks.
               </p>
 
               {/* Promo Code Pill & CTA */}
               <div className="pt-2 flex flex-wrap items-center gap-3">
-                <div className="inline-flex items-center space-x-2 bg-black/40 px-3.5 py-2.5 rounded-lg border border-gold/40 text-xs">
+                <div className="inline-flex items-center space-x-2 bg-black/40 px-3.5 py-2 rounded-lg border border-gold/40 text-xs">
                   <Tag className="w-3.5 h-3.5 text-gold" />
                   <span className="text-stone-300">Code:</span>
                   <span className="font-bold text-white tracking-widest">SUBHLAGAN30</span>
@@ -33,9 +33,9 @@ const SpecialOfferBanner = () => {
 
                 <Link
                   to="/shop?isBridal=true"
-                  className="inline-flex items-center space-x-2 px-5 py-2.5 bg-gold hover:bg-gold-light text-secondary-dark text-xs font-bold uppercase tracking-wider rounded-lg shadow transition"
+                  className="inline-flex items-center space-x-2 px-5 py-2 bg-gold hover:bg-gold-light text-secondary-dark text-xs font-bold uppercase tracking-wider rounded-lg shadow transition"
                 >
-                  <span>Claim Offer</span>
+                  <span>Shop</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>

@@ -40,16 +40,13 @@ const ContactUs = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
         <Breadcrumb items={[{ label: 'Contact Boutique' }]} />
 
-        <div className="text-center py-10 max-w-2xl mx-auto">
-          <span className="text-gold-dark text-xs uppercase tracking-[0.25em] font-semibold">
-            We Are At Your Service
-          </span>
-          <h1 className="font-serif text-3xl sm:text-4xl font-bold text-primary mt-1">
-            Connect With Our Saree Stylists
+        <div className="text-center py-8 max-w-xl mx-auto">
+          <h1 className="font-serif text-3xl font-bold text-primary">
+            Contact Us
           </h1>
-          <div className="w-16 h-0.5 bg-gold mx-auto mt-3"></div>
+          <div className="w-16 h-0.5 bg-gold mx-auto mt-2"></div>
           <p className="text-xs sm:text-sm text-stone-600 mt-2">
-            Whether you need bridal trousseau styling advice, custom blouse guidance, or order assistance, our dedicated concierge is here to help.
+            Styling advice, blouse guidance, or order support.
           </p>
         </div>
 

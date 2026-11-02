@@ -5,35 +5,32 @@ const pillars = [
   {
     icon: Award,
     title: 'Silk Mark Certified',
-    subtitle: '100% Pure Handloom Silk',
+    subtitle: 'Handloom Silk',
   },
   {
     icon: Feather,
     title: 'Authentic Pure Zari',
-    subtitle: 'Heirloom Gold & Silver Weaves',
+    subtitle: 'Gold & Silver Weaves',
   },
   {
     icon: ShieldCheck,
     title: 'Cash on Delivery',
-    subtitle: 'Pay at Doorstep Pan-India',
+    subtitle: 'Doorstep Payment',
   },
   {
     icon: RefreshCw,
-    title: '7-Day Easy Exchange',
-    subtitle: 'Hassle-Free Doorstep Pickup',
+    title: '7-Day Exchange',
+    subtitle: 'Doorstep Pickup',
   },
 ];
 
 const WhyChooseUs = () => {
   return (
-    <section className="py-12 bg-white border-y border-stone-200">
+    <section className="py-10 bg-white border-y border-stone-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-xl mx-auto mb-8">
-          <span className="text-gold-dark text-[11px] uppercase tracking-[0.25em] font-bold">
-            The Subh Lagan Promise
-          </span>
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary mt-1">
-            Why Brides Trust Us
+        <div className="text-center max-w-xl mx-auto mb-6">
+          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary">
+            Our Promise
           </h2>
           <div className="w-12 h-0.5 bg-gold mx-auto mt-2"></div>
         </div>

@@ -204,7 +204,7 @@ const Checkout = () => {
             {/* Delivery Address Form */}
             <div className="bg-white p-6 rounded-2xl border border-stone-200/80 shadow-sm space-y-4">
               <h2 className="font-serif text-base font-bold text-primary border-b border-stone-100 pb-2">
-                1. Customer & Delivery Address Details
+                1. Delivery Address
               </h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -217,7 +217,7 @@ const Checkout = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    placeholder="e.g. Priya Sharma"
+                    placeholder="Priya Sharma"
                     required
                     className="w-full text-xs p-2.5 bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-gold focus:bg-white"
                   />
@@ -225,14 +225,14 @@ const Checkout = () => {
 
                 <div>
                   <label className="text-xs font-medium text-stone-600 block mb-1">
-                    Mobile Phone Number *
+                    Phone *
                   </label>
                   <input
                     type="tel"
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    placeholder="10-digit mobile number"
+                    placeholder="Mobile number"
                     required
                     className="w-full text-xs p-2.5 bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-gold focus:bg-white"
                   />
@@ -240,7 +240,7 @@ const Checkout = () => {
 
                 <div className="sm:col-span-2">
                   <label className="text-xs font-medium text-stone-600 block mb-1">
-                    Email Address * (For order confirmation & tracking updates)
+                    Email *
                   </label>
                   <input
                     type="email"
@@ -255,14 +255,14 @@ const Checkout = () => {
 
                 <div>
                   <label className="text-xs font-medium text-stone-600 block mb-1">
-                    Flat / House No. / Building *
+                    House / Building *
                   </label>
                   <input
                     type="text"
                     name="houseNo"
                     value={formData.houseNo}
                     onChange={handleInputChange}
-                    placeholder="e.g. Flat 302, Krishna Heights"
+                    placeholder="Flat / House No."
                     required
                     className="w-full text-xs p-2.5 bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-gold focus:bg-white"
                   />
@@ -270,14 +270,14 @@ const Checkout = () => {
 
                 <div>
                   <label className="text-xs font-medium text-stone-600 block mb-1">
-                    Street Address / Colony / Landmark *
+                    Street / Landmark *
                   </label>
                   <input
                     type="text"
                     name="street"
                     value={formData.street}
                     onChange={handleInputChange}
-                    placeholder="e.g. Opp. City Garden, MG Road"
+                    placeholder="Street / Colony"
                     required
                     className="w-full text-xs p-2.5 bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-gold focus:bg-white"
                   />
@@ -292,7 +292,7 @@ const Checkout = () => {
                     name="city"
                     value={formData.city}
                     onChange={handleInputChange}
-                    placeholder="e.g. Jaipur"
+                    placeholder="Jaipur"
                     required
                     className="w-full text-xs p-2.5 bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-gold focus:bg-white"
                   />
@@ -307,7 +307,7 @@ const Checkout = () => {
                     name="state"
                     value={formData.state}
                     onChange={handleInputChange}
-                    placeholder="e.g. Rajasthan"
+                    placeholder="Rajasthan"
                     required
                     className="w-full text-xs p-2.5 bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-gold focus:bg-white"
                   />
@@ -322,7 +322,7 @@ const Checkout = () => {
                     name="pincode"
                     value={formData.pincode}
                     onChange={handleInputChange}
-                    placeholder="e.g. 302001"
+                    placeholder="302001"
                     required
                     className="w-full text-xs p-2.5 bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-gold focus:bg-white"
                   />
@@ -330,14 +330,14 @@ const Checkout = () => {
 
                 <div>
                   <label className="text-xs font-medium text-stone-600 block mb-1">
-                    Special Delivery Instructions (Optional)
+                    Instructions (Optional)
                   </label>
                   <input
                     type="text"
                     name="notes"
                     value={formData.notes}
                     onChange={handleInputChange}
-                    placeholder="e.g. Call before delivery, deliver after 2 PM"
+                    placeholder="e.g. Call before delivery"
                     className="w-full text-xs p-2.5 bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-gold focus:bg-white"
                   />
                 </div>
@@ -357,11 +357,11 @@ const Checkout = () => {
                   <div className="flex items-center space-x-2">
                     <span className="font-bold text-sm text-primary">Cash on Delivery (COD)</span>
                     <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">
-                      VERIFIED & FREE
+                      FREE
                     </span>
                   </div>
                   <p className="text-xs text-stone-600 mt-1 leading-relaxed">
-                    Pay with exact cash or scan UPI directly at your doorstep when the delivery partner hands over your royal saree parcel. No advance online payment needed!
+                    Pay with cash or UPI directly upon delivery. No advance payment.
                   </p>
                 </div>
               </div>

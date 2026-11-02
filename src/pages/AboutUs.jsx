@@ -9,30 +9,27 @@ const AboutUs = () => {
         <Breadcrumb items={[{ label: 'About Subh Lagan Sarees' }]} />
 
         {/* Hero Section */}
-        <div className="text-center py-12 max-w-3xl mx-auto space-y-4">
-          <span className="text-gold-dark text-xs uppercase tracking-[0.25em] font-semibold">
-            Our Royal Heritage
-          </span>
-          <h1 className="font-serif text-3xl sm:text-5xl font-bold text-primary">
-            Weaving Sacred Moments & Eternal Elegance
+        <div className="text-center py-10 max-w-2xl mx-auto space-y-3">
+          <h1 className="font-serif text-3xl sm:text-4xl font-bold text-primary">
+            Our Heritage
           </h1>
-          <div className="w-20 h-0.5 bg-gold mx-auto"></div>
+          <div className="w-16 h-0.5 bg-gold mx-auto"></div>
           <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
-            Founded with a vision to preserve and elevate India’s priceless textile heritage, Subh Lagan Sarees is a celebration of bridal majesty, handloom purity, and generational craftsmanship.
+            Celebrating bridal elegance, handloom purity, and generational craftsmanship since 1994.
           </p>
         </div>
 
         {/* Story Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center my-12 bg-white rounded-3xl p-8 sm:p-12 border border-gold/30 shadow-luxury">
-          <div className="space-y-4 text-xs sm:text-sm text-stone-600 leading-relaxed">
-            <h2 className="font-serif text-2xl font-bold text-primary">
-              From the Ancient Looms of Varanasi to Your Auspicious Day
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center my-8 bg-white rounded-3xl p-6 sm:p-10 border border-gold/30 shadow-luxury">
+          <div className="space-y-3 text-xs sm:text-sm text-stone-600 leading-relaxed">
+            <h2 className="font-serif text-xl sm:text-2xl font-bold text-primary">
+              Varanasi to Your Auspicious Day
             </h2>
             <p>
-              "Subh Lagan" translates to an auspicious timing—a celestial moment when lives merge in holy celebration. For more than three decades, our family-owned brand has had the honor of adorning thousands of brides across India and the globe.
+              "Subh Lagan" translates to an auspicious timing—a celestial moment of sacred celebration. For over three decades, we have adorned brides across India with authentic handwoven sarees.
             </p>
             <p>
-              Every saree in our boutique is individually handwoven on traditional pit looms. From pure Katan and Kanchipuram silk to featherlight organza and fluid georgettes, each piece takes between 14 to 90 days to create. We use real gold electroplated zari and silk-mark certified yarns, guaranteeing heirloom treasures that mothers pass down to daughters.
+              Every saree is individually handwoven on traditional looms with silk-mark certified yarns and real zari, crafted to last for generations.
             </p>
           </div>
           <div className="aspect-[4/3] rounded-2xl overflow-hidden border border-gold/40 shadow-md">
@@ -45,34 +42,34 @@ const AboutUs = () => {
         </div>
 
         {/* Value Pillars */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-16 text-center">
-          <div className="bg-white p-8 rounded-2xl border border-stone-200 shadow-sm space-y-3">
-            <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto">
-              <Award className="w-6 h-6 text-gold" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 my-10 text-center">
+          <div className="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-2">
+            <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto">
+              <Award className="w-5 h-5 text-gold" />
             </div>
-            <h3 className="font-serif text-base font-bold text-brandText">Silk Mark Certified</h3>
-            <p className="text-xs text-stone-600 leading-relaxed">
-              We pledge 100% pure silk authenticity with no polyester blends, upholding the utmost sacred integrity for weddings.
+            <h3 className="font-serif text-sm font-bold text-brandText">Silk Mark Certified</h3>
+            <p className="text-xs text-stone-600">
+              100% pure silk authenticity with no polyester blends.
             </p>
           </div>
 
-          <div className="bg-white p-8 rounded-2xl border border-stone-200 shadow-sm space-y-3">
-            <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto">
-              <Users className="w-6 h-6 text-gold" />
+          <div className="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-2">
+            <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto">
+              <Users className="w-5 h-5 text-gold" />
             </div>
-            <h3 className="font-serif text-base font-bold text-brandText">350+ Master Weavers</h3>
-            <p className="text-xs text-stone-600 leading-relaxed">
-              Supporting sustainable artisan livelihoods in traditional weaving clusters across Varanasi, Kanchipuram, and Chanderi.
+            <h3 className="font-serif text-sm font-bold text-brandText">350+ Master Weavers</h3>
+            <p className="text-xs text-stone-600">
+              Direct partnership with artisan clusters across Varanasi and Kanchipuram.
             </p>
           </div>
 
-          <div className="bg-white p-8 rounded-2xl border border-stone-200 shadow-sm space-y-3">
-            <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto">
-              <Heart className="w-6 h-6 text-gold" />
+          <div className="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-2">
+            <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto">
+              <Heart className="w-5 h-5 text-gold" />
             </div>
-            <h3 className="font-serif text-base font-bold text-brandText">Direct to Connoisseur</h3>
-            <p className="text-xs text-stone-600 leading-relaxed">
-              By removing traditional middlemen, we deliver bespoke royal bridal sarees with transparent, honest pricing and Cash on Delivery.
+            <h3 className="font-serif text-sm font-bold text-brandText">Direct to Doorstep</h3>
+            <p className="text-xs text-stone-600">
+              Transparent pricing with safe Cash on Delivery pan-India.
             </p>
           </div>
         </div>

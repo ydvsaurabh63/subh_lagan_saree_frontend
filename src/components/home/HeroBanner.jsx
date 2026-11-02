@@ -600,7 +600,7 @@ const HeroBanner = () => {
                 Try the Look.
               </h1>
               <p className="text-xs sm:text-sm text-stone-700 font-bold max-w-md">
-                Pure handloom sarees & bridal trousseau. Drag or tap any saree to spin the 3D runway.
+                Drag or tap to spin the 3D runway.
               </p>
             </div>
 
@@ -812,21 +812,18 @@ const HeroBanner = () => {
             {/* Bottom Actions */}
             <div className="pt-4 border-t border-stone-200 space-y-3 mt-4">
               {/* Savings Card */}
-              <div className="bg-cream/80 rounded-xl p-3.5 border border-gold/40 space-y-1.5 text-xs">
-                <div className="flex justify-between items-center">
-                  <span className="text-stone-700 font-bold">Complete the look:</span>
-                  <span className="text-stone-500 line-through text-xs font-bold font-sans">
+              <div className="bg-cream/80 rounded-xl p-3 border border-gold/40 flex justify-between items-center text-xs">
+                <div>
+                  <span className="text-stone-500 line-through font-sans block text-[11px] font-bold">
                     {formatPrice(totalOriginalPrice)}
                   </span>
-                </div>
-                <div className="flex justify-between items-baseline">
-                  <span className="text-xs font-black text-emerald-800">
-                    Bundle & Save {formatPrice(savings)}
-                  </span>
-                  <span className="font-serif text-xl font-extrabold text-primary font-sans">
+                  <span className="font-serif text-lg font-extrabold text-primary font-sans">
                     {formatPrice(totalBundlePrice)}
                   </span>
                 </div>
+                <span className="text-xs font-black text-emerald-800">
+                  Save {formatPrice(savings)}
+                </span>
               </div>
 
               {/* Add full look to bag */}
@@ -835,7 +832,7 @@ const HeroBanner = () => {
                 className="w-full py-3.5 px-4 bg-primary hover:bg-secondary text-cream rounded-xl text-xs font-extrabold uppercase tracking-widest transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-2 active:scale-98 cursor-pointer"
               >
                 <ShoppingBag className="w-4 h-4 text-gold" />
-                <span>Add full look to bag</span>
+                <span>Add full look</span>
                 <ArrowRight className="w-4 h-4 text-gold stroke-[2.5]" />
               </button>
 
@@ -844,11 +841,11 @@ const HeroBanner = () => {
                   to={`/product/${currentLook.sareeSlug}`}
                   className="text-stone-500 hover:text-primary transition underline font-medium"
                 >
-                  Inspect Saree Spec Sheet
+                  View Saree
                 </Link>
                 <span className="text-stone-400 flex items-center space-x-1">
                   <ShieldCheck className="w-3.5 h-3.5 text-gold" />
-                  <span>COD Available</span>
+                  <span>COD</span>
                 </span>
               </div>
             </div>

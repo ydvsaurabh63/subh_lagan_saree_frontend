@@ -80,10 +80,9 @@ const Home = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/30 to-transparent"></div>
               <div className="relative z-10 text-white">
-                <span className="text-[10px] uppercase tracking-widest text-gold font-bold">Curated Edit</span>
                 <h3 className="font-serif text-xl font-bold">Bridal Trousseau</h3>
                 <span className="inline-flex items-center text-xs text-stone-200 mt-1 font-medium group-hover:text-gold transition">
-                  Shop Edit <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                  Shop <ArrowRight className="w-3.5 h-3.5 ml-1" />
                 </span>
               </div>
             </Link>
@@ -100,10 +99,9 @@ const Home = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/30 to-transparent"></div>
               <div className="relative z-10 text-white">
-                <span className="text-[10px] uppercase tracking-widest text-gold font-bold">Heritage Weave</span>
-                <h3 className="font-serif text-xl font-bold">Royal Banarasi Silks</h3>
+                <h3 className="font-serif text-xl font-bold">Banarasi Silks</h3>
                 <span className="inline-flex items-center text-xs text-stone-200 mt-1 font-medium group-hover:text-gold transition">
-                  Shop Edit <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                  Shop <ArrowRight className="w-3.5 h-3.5 ml-1" />
                 </span>
               </div>
             </Link>
@@ -120,10 +118,9 @@ const Home = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/30 to-transparent"></div>
               <div className="relative z-10 text-white">
-                <span className="text-[10px] uppercase tracking-widest text-gold font-bold">Temple Zari</span>
                 <h3 className="font-serif text-xl font-bold">Pure Kanjivaram</h3>
                 <span className="inline-flex items-center text-xs text-stone-200 mt-1 font-medium group-hover:text-gold transition">
-                  Shop Edit <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                  Shop <ArrowRight className="w-3.5 h-3.5 ml-1" />
                 </span>
               </div>
             </Link>
@@ -135,14 +132,9 @@ const Home = () => {
       <section className="py-12 bg-cream/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
-            <div>
-              <span className="text-gold-dark text-[11px] uppercase tracking-[0.25em] font-bold">
-                Most Cherished
-              </span>
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary mt-0.5">
-                Best Selling Sarees
-              </h2>
-            </div>
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary">
+              Best Sellers
+            </h2>
             <Link
               to="/shop?isBestSeller=true"
               className="inline-flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-primary hover:text-gold-dark transition"
@@ -162,14 +154,9 @@ const Home = () => {
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
-            <div>
-              <span className="text-gold-dark text-[11px] uppercase tracking-[0.25em] font-bold">
-                Bridal Trousseau
-              </span>
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary mt-0.5">
-                Bridal & Wedding Collection
-              </h2>
-            </div>
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary">
+              Bridal Sarees
+            </h2>
             <Link
               to="/shop?isBridal=true"
               className="inline-flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-primary hover:text-gold-dark transition"
@@ -186,14 +173,9 @@ const Home = () => {
       <section className="py-12 bg-cream/30 border-t border-stone-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
-            <div>
-              <span className="text-gold-dark text-[11px] uppercase tracking-[0.25em] font-bold">
-                Fresh From Looms
-              </span>
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary mt-0.5">
-                New Arrivals
-              </h2>
-            </div>
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary">
+              New Arrivals
+            </h2>
             <Link
               to="/shop?isNewArrival=true"
               className="inline-flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-primary hover:text-gold-dark transition"
@@ -210,14 +192,9 @@ const Home = () => {
       <section className="py-12 bg-white border-t border-stone-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
-            <div>
-              <span className="text-gold-dark text-[11px] uppercase tracking-[0.25em] font-bold">
-                Pure Mulberry & Tussar
-              </span>
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary mt-0.5">
-                Silk Sarees Collection
-              </h2>
-            </div>
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary">
+              Silk Sarees
+            </h2>
             <Link
               to="/shop?category=silk-sarees"
               className="inline-flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-primary hover:text-gold-dark transition"
@@ -234,14 +211,9 @@ const Home = () => {
       <section className="py-12 bg-cream/30 border-t border-stone-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
-            <div>
-              <span className="text-gold-dark text-[11px] uppercase tracking-[0.25em] font-bold">
-                Highest Rated
-              </span>
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary mt-0.5">
-                Trending Sarees
-              </h2>
-            </div>
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary">
+              Trending
+            </h2>
             <Link
               to="/shop?sort=rating"
               className="inline-flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-primary hover:text-gold-dark transition"

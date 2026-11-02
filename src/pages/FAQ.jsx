@@ -4,28 +4,28 @@ import { ChevronDown, HelpCircle } from 'lucide-react';
 
 const faqs = [
   {
-    q: 'How does Cash on Delivery (COD) work at Subh Lagan Sarees?',
-    a: 'We offer convenient Cash on Delivery across 19,000+ pincodes in India. You place your order online without entering credit/debit card numbers. Once our logistics executive arrives at your doorstep with the sealed parcel, you simply hand over the exact order amount in cash or scan the courier UPI QR code.',
+    q: 'How does Cash on Delivery (COD) work?',
+    a: 'Order online with zero advance payment. Pay via cash or UPI QR code directly to the courier when your parcel arrives.',
   },
   {
-    q: 'Are all your sarees 100% pure silk and authentic handloom?',
-    a: 'Yes, absolutely. Every Banarasi, Kanjivaram, and pure silk saree sold on Subh Lagan Sarees carries verified Silk Mark standards. We source directly from master handloom weaving clusters in Varanasi, Kanchipuram, and Chanderi.',
+    q: 'Are all sarees 100% pure silk?',
+    a: 'Yes. Every saree is Silk Mark certified and handwoven by master artisans in Varanasi and Kanchipuram.',
   },
   {
-    q: 'Does each saree include a matching blouse piece?',
-    a: 'Yes. Unless specified as pre-stitched, all our standard 5.5-meter sarees include an additional 0.8-meter to 1.0-meter unstitched blouse piece in complementary fabric or heavy matching brocade with zari sleeve borders.',
+    q: 'Is a matching blouse piece included?',
+    a: 'Yes, standard sarees include a matching 0.8m to 1.0m unstitched blouse piece.',
   },
   {
-    q: 'What is the estimated delivery timeframe?',
-    a: 'Metropolitan cities typically receive orders within 3 to 5 business days. Other non-metro and tier-2/3 cities across India take 5 to 7 business days. You will receive real-time SMS and email tracking links upon parcel dispatch.',
+    q: 'What is the delivery timeframe?',
+    a: 'Metros take 3 to 5 business days; other cities take 5 to 7 days. Tracking is sent via SMS & email.',
   },
   {
-    q: 'What is your 7-Day Exchange policy?',
-    a: 'If you wish to exchange your saree for a different color, fabric, or design, contact our concierge within 7 days of package delivery. The saree must remain unused, unstitched, and in its original luxury box with all tags intact.',
+    q: 'What is the 7-Day Exchange policy?',
+    a: 'Contact us within 7 days of delivery. Sarees must be unused, unstitched, and in original packaging.',
   },
   {
-    q: 'How should I store and care for my pure Banarasi & Kanjivaram sarees?',
-    a: 'We recommend dry cleaning only for all pure silk, zari, and embroidered sarees. Store your sarees wrapped in breathable unbleached muslin or cotton cloth rather than plastic. Occasionally refold the saree along different creases to keep the zari threads supple for generations.',
+    q: 'How should I store and care for my sarees?',
+    a: 'Dry clean only. Store wrapped in breathable cotton or muslin cloth.',
   },
 ];
 
@@ -39,19 +39,16 @@ const FAQ = () => {
   return (
     <div className="bg-cream/20 min-h-screen pb-16">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        <Breadcrumb items={[{ label: 'Frequently Asked Questions' }]} />
+        <Breadcrumb items={[{ label: 'FAQs' }]} />
 
-        <div className="text-center py-10 max-w-xl mx-auto">
-          <div className="w-12 h-12 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center text-primary mx-auto mb-3">
-            <HelpCircle className="w-6 h-6 text-gold-dark" />
+        <div className="text-center py-8 max-w-xl mx-auto">
+          <div className="w-10 h-10 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center text-primary mx-auto mb-2">
+            <HelpCircle className="w-5 h-5 text-gold-dark" />
           </div>
-          <span className="text-gold-dark text-xs uppercase tracking-[0.25em] font-semibold">
-            Got Questions?
-          </span>
-          <h1 className="font-serif text-3xl font-bold text-primary mt-1">
+          <h1 className="font-serif text-3xl font-bold text-primary">
             Frequently Asked Questions
           </h1>
-          <div className="w-16 h-0.5 bg-gold mx-auto mt-3"></div>
+          <div className="w-16 h-0.5 bg-gold mx-auto mt-2"></div>
         </div>
 
         <div className="space-y-3 mt-4">

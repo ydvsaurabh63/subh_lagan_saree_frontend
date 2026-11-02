@@ -119,21 +119,18 @@ const Shop = () => {
   return (
     <div className="bg-cream/30 min-h-screen pb-16">
       {/* Header Banner */}
-      <div className="bg-primary-dark text-white py-10 px-4 sm:px-6 lg:px-8 border-b border-gold/30">
+      <div className="bg-primary-dark text-white py-8 px-4 sm:px-6 lg:px-8 border-b border-gold/30">
         <div className="max-w-7xl mx-auto">
-          <Breadcrumb items={[{ label: 'Shop All Sarees' }]} />
+          <Breadcrumb items={[{ label: 'All Sarees' }]} />
           <h1 className="font-serif text-3xl sm:text-4xl font-bold mt-2">
-            The Royal Saree Collection
+            All Sarees
           </h1>
-          <p className="text-xs sm:text-sm text-stone-300 mt-1 max-w-xl">
-            Explore authentic handloom Banarasi, Kanjivaram, pure silks, and couture designer sarees.
-          </p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         {/* Top Control Bar: Search & Active Filters Counter & Sort */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-6 border-b border-stone-200">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 border-b border-stone-200">
           <div className="flex items-center space-x-3 w-full sm:w-auto">
             {/* Mobile Filter Trigger Button */}
             <button
@@ -144,7 +141,7 @@ const Shop = () => {
               <span>Filters</span>
             </button>
             <p className="text-xs text-stone-600 font-medium">
-              Showing <span className="font-bold text-primary">{totalProducts}</span> royal sarees
+              Showing <span className="font-bold text-primary">{totalProducts}</span> sarees
             </p>
           </div>
 

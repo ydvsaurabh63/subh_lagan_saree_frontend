@@ -35,16 +35,16 @@ const NewsletterSection = () => {
           <Mail className="w-5 h-5 text-gold-dark" />
         </div>
         <h2 className="font-serif text-2xl font-bold text-primary">
-          Join the Subh Lagan Circle
+          Newsletter
         </h2>
-        <p className="text-xs text-stone-600 mt-1 mb-6">
-          Get exclusive early previews of our festive drops and bridal trousseau offers.
+        <p className="text-xs text-stone-600 mt-1 mb-5">
+          Subscribe for festive drops and offers.
         </p>
 
         <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
           <input
             type="email"
-            placeholder="Enter your email address..."
+            placeholder="Your email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required

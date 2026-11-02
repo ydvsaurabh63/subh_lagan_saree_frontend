@@ -22,7 +22,7 @@ const Footer = () => {
             </div>
             <div>
               <h4 className="text-white font-serif text-xs font-bold uppercase tracking-wider">100% Handcrafted</h4>
-              <p className="text-[11px] text-stone-400">Authentic silk mark certified</p>
+              <p className="text-[11px] text-stone-400">Silk Mark certified</p>
             </div>
           </div>
 
@@ -32,7 +32,7 @@ const Footer = () => {
             </div>
             <div>
               <h4 className="text-white font-serif text-xs font-bold uppercase tracking-wider">Free Shipping</h4>
-              <p className="text-[11px] text-stone-400">Pan-India on orders &gt; ₹1,999</p>
+              <p className="text-[11px] text-stone-400">Orders &gt; ₹1,999</p>
             </div>
           </div>
 
@@ -42,7 +42,7 @@ const Footer = () => {
             </div>
             <div>
               <h4 className="text-white font-serif text-xs font-bold uppercase tracking-wider">Cash On Delivery</h4>
-              <p className="text-[11px] text-stone-400">Doorstep payment verification</p>
+              <p className="text-[11px] text-stone-400">Doorstep payment</p>
             </div>
           </div>
 
@@ -52,7 +52,7 @@ const Footer = () => {
             </div>
             <div>
               <h4 className="text-white font-serif text-xs font-bold uppercase tracking-wider">7-Day Exchange</h4>
-              <p className="text-[11px] text-stone-400">Hassle-free doorstep pickup</p>
+              <p className="text-[11px] text-stone-400">Doorstep pickup</p>
             </div>
           </div>
         </div>
@@ -72,7 +72,7 @@ const Footer = () => {
               </span>
             </div>
             <p className="text-xs leading-relaxed text-stone-400 max-w-sm">
-              Handcrafted royal Banarasi, Kanjivaram, and pure silk sarees woven with authentic zari for Indian celebrations.
+              Authentic Banarasi, Kanjivaram, and pure silk sarees.
             </p>
             <div className="pt-1 text-xs space-y-1.5 text-stone-400">
               <div className="flex items-center space-x-2">

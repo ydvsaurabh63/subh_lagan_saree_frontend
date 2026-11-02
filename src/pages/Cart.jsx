@@ -26,8 +26,8 @@ const Cart = () => {
           <Breadcrumb items={[{ label: 'Shopping Cart' }]} />
           <EmptyState
             icon={ShoppingBag}
-            title="Your Saree Cart is Empty"
-            description="Explore our magnificent collection of handwoven Banarasi, Kanjivaram, and pure silk sarees to adorn your celebrations."
+            title="Cart is Empty"
+            description="Explore our handwoven sarees to adorn your celebrations."
             buttonText="Explore Sarees"
             buttonLink="/shop"
           />
@@ -39,17 +39,17 @@ const Cart = () => {
   return (
     <div className="bg-cream/20 min-h-screen pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-        <Breadcrumb items={[{ label: 'Shopping Cart' }]} />
+        <Breadcrumb items={[{ label: 'Cart' }]} />
 
         <div className="flex flex-col sm:flex-row items-baseline justify-between pb-4 border-b border-stone-200 mt-2">
           <h1 className="font-serif text-2xl sm:text-3xl font-bold text-primary">
-            Shopping Cart ({totalQuantity} {totalQuantity === 1 ? 'Saree' : 'Sarees'})
+            Cart ({totalQuantity})
           </h1>
           <button
             onClick={clearCart}
             className="text-xs text-stone-500 hover:text-rose-600 transition underline mt-2 sm:mt-0"
           >
-            Clear All Sarees
+            Clear Cart
           </button>
         </div>
 
@@ -59,8 +59,8 @@ const Cart = () => {
             <Truck className="w-4 h-4 text-gold flex-shrink-0" />
             <span>
               {isFreeDelivery
-                ? 'Congratulations! You unlocked Free Pan-India Delivery!'
-                : `Add ${formatPrice(amountNeededForFreeDelivery)} more to unlock Free Pan-India Delivery`}
+                ? 'Free Pan-India Delivery Unlocked'
+                : `Add ${formatPrice(amountNeededForFreeDelivery)} for Free Delivery`}
             </span>
           </div>
           <div className="w-full h-2 bg-stone-100 rounded-full overflow-hidden">
@@ -132,14 +132,14 @@ const Cart = () => {
                 onClick={() => navigate('/checkout')}
                 className="w-full py-3.5 px-4 bg-primary hover:bg-primary-light text-white text-xs font-bold uppercase tracking-widest rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center space-x-2"
               >
-                <span>Proceed to Checkout</span>
+                <span>Checkout</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
               <div className="bg-cream/60 rounded-xl p-3 border border-gold/30 text-[11px] text-stone-600 flex items-start space-x-2">
                 <ShieldCheck className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
                 <span>
-                  Safe & hassle-free Cash on Delivery order placement. No advance payment required!
+                  Cash on Delivery. No advance payment required.
                 </span>
               </div>
             </div>

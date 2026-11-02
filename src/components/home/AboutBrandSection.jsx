@@ -53,15 +53,12 @@ const AboutBrandSection = () => {
           {/* Text & Visual Metrics */}
           <div className="space-y-6">
             <div>
-              <span className="text-gold-dark text-[11px] uppercase tracking-[0.25em] font-bold">
-                The Heritage Story
-              </span>
-              <h2 className="font-serif text-2xl sm:text-4xl font-bold text-primary mt-1 leading-tight">
-                Crafting Auspicious Bridal Memories Since 1994
+              <h2 className="font-serif text-2xl sm:text-4xl font-bold text-primary leading-tight">
+                Heritage Since 1994
               </h2>
-              <div className="w-12 h-0.5 bg-gold mt-2 mb-4"></div>
+              <div className="w-12 h-0.5 bg-gold mt-2 mb-3"></div>
               <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
-                Born in the historic handloom clusters of Varanasi and Kanchipuram, Subh Lagan Sarees brings centuries of pure silk artistry directly to your doorstep with Cash on Delivery.
+                Centuries of pure silk artistry directly to your doorstep with Cash on Delivery.
               </p>
             </div>
 
@@ -91,7 +88,7 @@ const AboutBrandSection = () => {
                 to="/about"
                 className="inline-flex items-center space-x-2 px-5 py-2.5 bg-primary hover:bg-primary-light text-white text-xs font-semibold uppercase tracking-wider rounded-lg shadow transition"
               >
-                <span>Read Full Story</span>
+                <span>Our Story</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>

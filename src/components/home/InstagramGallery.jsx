@@ -12,19 +12,16 @@ const instaPosts = [
 
 const InstagramGallery = () => {
   return (
-    <section className="py-16 bg-cream/40">
+    <section className="py-12 bg-cream/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-xl mx-auto mb-10">
+        <div className="text-center max-w-xl mx-auto mb-8">
           <div className="flex items-center justify-center space-x-2 text-primary font-bold text-xs uppercase tracking-widest mb-1">
             <Instagram className="w-4 h-4 text-gold" />
             <span>@SubhLaganSarees</span>
           </div>
           <h2 className="font-serif text-2xl sm:text-3xl font-bold text-brandText">
-            Styled by You • On Instagram
+            Instagram
           </h2>
-          <p className="text-xs text-stone-500 mt-2">
-            Tag us in your #SubhLaganBride and festive saree moments to be featured.
-          </p>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
