@@ -3,10 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   ChevronLeft,
   ChevronRight,
-  Sparkles,
   ShieldCheck,
   ArrowRight,
-  Eye,
   ShoppingBag,
 } from 'lucide-react';
 import { useCart } from '../../context/CartContext.jsx';
@@ -467,8 +465,8 @@ const HeroBanner = () => {
     if (!isDragging) return;
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const deltaX = clientX - dragStartX;
-    // Slower, smooth & controlled 3D rotation drag: 1px drag = 0.16 deg rotation
-    setCurrentRotation(dragStartRotation + deltaX * 0.16);
+    // Rotate in 3D: 1px drag = 0.35 deg rotation
+    setCurrentRotation(dragStartRotation + deltaX * 0.35);
   };
 
   const handlePointerUp = () => {
@@ -508,7 +506,7 @@ const HeroBanner = () => {
   const turntableWidth = isMobile ? 380 : isTablet ? 590 : 760;
   const turntableScaleY = isMobile ? 0.24 : isTablet ? 0.22 : 0.20;
   const turntableHeight = Math.round(turntableWidth * turntableScaleY);
-  const turntableBottomOffset = isMobile ? 12 : isTablet ? 16 : 20;
+  const turntableBottomOffset = isMobile ? 44 : isTablet ? 52 : 58;
 
   // 3D Circular Orbit calculations: all 10 models rotate in a real 3D circle
   const getModelStyle = (idx) => {
@@ -542,7 +540,7 @@ const HeroBanner = () => {
       opacity,
       transition: isDragging
         ? 'none'
-        : 'transform 1.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.2s ease-out',
+        : 'transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.75s ease-out',
     };
   };
 
@@ -557,10 +555,6 @@ const HeroBanner = () => {
           <div className="lg:col-span-8 flex flex-col justify-between">
             {/* Header Titles */}
             <div className="space-y-1">
-              <span className="text-[11px] font-extrabold tracking-[0.25em] uppercase text-gold-dark flex items-center space-x-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-gold" />
-                <span>Virtual Saree Runway</span>
-              </span>
               <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-black text-stone-950 tracking-tight">
                 Try the Look.
               </h1>
@@ -581,7 +575,7 @@ const HeroBanner = () => {
               onMouseLeave={handlePointerUp}
             >
               {/* Studio Floor Soft Contact Shadows */}
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-4/5 h-12 bg-stone-300/40 rounded-full blur-2xl pointer-events-none"></div>
+              <div className="absolute bottom-12 sm:bottom-16 left-1/2 -translate-x-1/2 w-4/5 h-12 bg-stone-300/40 rounded-full blur-2xl pointer-events-none"></div>
 
               {/* 3D Circular Turntable Floor Platform (encapsulates all models inside the circle) */}
               <div
@@ -634,16 +628,8 @@ const HeroBanner = () => {
                         handleSelectModel(idx);
                       }}
                       style={style}
-                      className="absolute bottom-2 cursor-pointer flex flex-col items-center group"
+                      className="absolute bottom-10 sm:bottom-14 cursor-pointer flex flex-col items-center group"
                     >
-                      {/* Active Center Indicator Pill */}
-                      {isActive && (
-                        <div className="mb-2 flex items-center space-x-1.5 px-3 py-1 bg-white/95 backdrop-blur-md rounded-full shadow-lg border border-gold/50 text-[10px] font-bold uppercase tracking-wider text-primary">
-                          <Eye className="w-3 h-3 text-gold" />
-                          <span>Active Look {look.lookNumber}</span>
-                        </div>
-                      )}
-
                       {/* Transparent Standing Model (Authentic Full-Length Saree in 3D Circle) */}
                       <div className="relative w-48 sm:w-56 lg:w-64 h-[400px] sm:h-[460px] lg:h-[500px] flex items-end justify-center">
                         {/* Soft Backdrop Spotlight Halo behind active model */}
@@ -675,57 +661,23 @@ const HeroBanner = () => {
               </div>
             </div>
 
-            {/* Bottom Scrubber & Navigation Controls */}
-            <div className="pt-4 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center space-x-4">
-                <div className="flex space-x-1.5">
-                  <button
-                    onClick={handlePrev}
-                    className="p-2 rounded-full border border-stone-300 hover:border-gold hover:bg-white text-stone-700 transition active:scale-95 shadow-sm"
-                    aria-label="Previous Look"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={handleNext}
-                    className="p-2 rounded-full border border-stone-300 hover:border-gold hover:bg-white text-stone-700 transition active:scale-95 shadow-sm"
-                    aria-label="Next Look"
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
-
-                <div className="text-xs">
-                  <span className="font-serif font-bold text-primary">
-                    {currentLook.lookNumber} / 10
-                  </span>
-                  <span className="text-stone-400 mx-2">•</span>
-                  <span className="font-semibold text-brandText">
-                    {currentLook.lookTitle}
-                  </span>
-                </div>
-              </div>
-
-              {/* Minimalist Scrubber Timeline Bar with Smooth Slow Transition */}
-              <div className="flex items-center space-x-2 w-full sm:w-72">
-                <span className="text-[10px] font-mono text-stone-400">01</span>
-                <div
-                  onClick={(e) => {
-                    const rect = e.currentTarget.getBoundingClientRect();
-                    const clickX = e.clientX - rect.left;
-                    const pct = Math.max(0, Math.min(1, clickX / rect.width));
-                    const targetIdx = Math.min(count - 1, Math.floor(pct * count));
-                    handleSelectModel(targetIdx);
-                  }}
-                  className="relative flex-1 h-2 bg-stone-200 hover:bg-stone-300 cursor-pointer rounded-full overflow-hidden flex items-center transition-colors"
-                  title="Click to glide smoothly to any look"
+            {/* Bottom Navigation Controls */}
+            <div className="pt-2 flex items-center justify-start">
+              <div className="flex space-x-2">
+                <button
+                  onClick={handlePrev}
+                  className="p-2.5 rounded-full border border-stone-300 hover:border-gold hover:bg-white text-stone-700 transition active:scale-95 shadow-sm"
+                  aria-label="Previous Look"
                 >
-                  <div
-                    className="h-full bg-primary transition-all duration-700 ease-out rounded-full shadow-sm"
-                    style={{ width: `${((activeLookIndex + 1) / sareeLooks.length) * 100}%` }}
-                  ></div>
-                </div>
-                <span className="text-[10px] font-mono text-stone-400">10</span>
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={handleNext}
+                  className="p-2.5 rounded-full border border-stone-300 hover:border-gold hover:bg-white text-stone-700 transition active:scale-95 shadow-sm"
+                  aria-label="Next Look"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
               </div>
             </div>
           </div>
