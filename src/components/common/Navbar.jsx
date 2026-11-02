@@ -11,6 +11,7 @@ import {
   LogOut,
   Package,
   UserCheck,
+  ShieldCheck,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { useCart } from '../../context/CartContext.jsx';
@@ -162,6 +163,16 @@ const Navbar = () => {
                         <p className="font-semibold text-brandText truncate">{user?.name}</p>
                         <p className="text-xs text-stone-500 truncate">{user?.email}</p>
                       </div>
+                      {user?.role === 'admin' && (
+                        <Link
+                          to="/admin"
+                          onClick={() => setUserDropdownOpen(false)}
+                          className="flex items-center space-x-2 px-3 py-2 mx-2 my-1.5 bg-primary/10 hover:bg-primary text-primary hover:text-white transition rounded-lg text-xs font-bold shadow-xs"
+                        >
+                          <ShieldCheck className="w-4 h-4 text-gold" />
+                          <span>Admin Control Panel</span>
+                        </Link>
+                      )}
                       <Link
                         to="/profile"
                         onClick={() => setUserDropdownOpen(false)}
@@ -288,6 +299,16 @@ const Navbar = () => {
           <div className="border-t border-stone-100 pt-3">
             {isAuthenticated ? (
               <div className="space-y-2">
+                {user?.role === 'admin' && (
+                  <Link
+                    to="/admin"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block px-3 py-2 text-xs font-bold text-cream bg-primary rounded-md flex items-center gap-2"
+                  >
+                    <ShieldCheck className="w-4 h-4 text-gold" />
+                    Admin Control Panel
+                  </Link>
+                )}
                 <Link
                   to="/profile"
                   onClick={() => setMobileMenuOpen(false)}

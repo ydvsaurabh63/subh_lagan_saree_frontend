@@ -10,8 +10,9 @@ import AnnouncementBar from './components/common/AnnouncementBar.jsx';
 import Navbar from './components/common/Navbar.jsx';
 import Footer from './components/common/Footer.jsx';
 import ProtectedRoute from './components/common/ProtectedRoute.jsx';
+import AdminRoute from './components/common/AdminRoute.jsx';
 
-// Pages
+// Customer Pages
 import Home from './pages/Home.jsx';
 import Shop from './pages/Shop.jsx';
 import ProductDetail from './pages/ProductDetail.jsx';
@@ -33,6 +34,14 @@ import PrivacyPolicy from './pages/PrivacyPolicy.jsx';
 import TermsConditions from './pages/TermsConditions.jsx';
 import NotFound from './pages/NotFound.jsx';
 
+// Admin Dashboard Pages
+import AdminDashboard from './pages/admin/AdminDashboard.jsx';
+import AdminProducts from './pages/admin/AdminProducts.jsx';
+import AdminOrders from './pages/admin/AdminOrders.jsx';
+import AdminCategories from './pages/admin/AdminCategories.jsx';
+import AdminEnquiries from './pages/admin/AdminEnquiries.jsx';
+import AdminSubscribers from './pages/admin/AdminSubscribers.jsx';
+
 // Scroll to top automatically on route change
 function ScrollToTop() {
   const { pathname, search } = useLocation();
@@ -40,6 +49,102 @@ function ScrollToTop() {
     window.scrollTo(0, 0);
   }, [pathname, search]);
   return null;
+}
+
+function AppShell() {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
+  return (
+    <div className={`min-h-screen flex flex-col ${isAdminRoute ? 'bg-[#FDFBF7]' : 'bg-cream/30 text-brandText selection:bg-gold/30 selection:text-primary'}`}>
+      {!isAdminRoute && <AnnouncementBar />}
+      {!isAdminRoute && <Navbar />}
+      <main className="flex-1">
+        <Routes>
+          {/* Customer Facing Routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/product/:identifier" element={<ProductDetail />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order-success" element={<OrderSuccess />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/shipping-policy" element={<ShippingPolicy />} />
+          <Route path="/return-policy" element={<ReturnPolicy />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-conditions" element={<TermsConditions />} />
+
+          {/* Client / Admin Control Panel Routes */}
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/products"
+            element={
+              <AdminRoute>
+                <AdminProducts />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/orders"
+            element={
+              <AdminRoute>
+                <AdminOrders />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/categories"
+            element={
+              <AdminRoute>
+                <AdminCategories />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/enquiries"
+            element={
+              <AdminRoute>
+                <AdminEnquiries />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/subscribers"
+            element={
+              <AdminRoute>
+                <AdminSubscribers />
+              </AdminRoute>
+            }
+          />
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+      {!isAdminRoute && <Footer />}
+    </div>
+  );
 }
 
 function App() {
@@ -74,42 +179,7 @@ function App() {
                 },
               }}
             />
-            <div className="min-h-screen flex flex-col bg-cream/30 text-brandText selection:bg-gold/30 selection:text-primary">
-              <AnnouncementBar />
-              <Navbar />
-              <main className="flex-1">
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/shop" element={<Shop />} />
-                  <Route path="/product/:identifier" element={<ProductDetail />} />
-                  <Route path="/cart" element={<Cart />} />
-                  <Route path="/checkout" element={<Checkout />} />
-                  <Route path="/order-success" element={<OrderSuccess />} />
-                  <Route path="/wishlist" element={<Wishlist />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
-                  <Route path="/forgot-password" element={<ForgotPassword />} />
-                  <Route path="/reset-password" element={<ResetPassword />} />
-                  <Route
-                    path="/profile"
-                    element={
-                      <ProtectedRoute>
-                        <Profile />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route path="/about" element={<AboutUs />} />
-                  <Route path="/contact" element={<ContactUs />} />
-                  <Route path="/faq" element={<FAQ />} />
-                  <Route path="/shipping-policy" element={<ShippingPolicy />} />
-                  <Route path="/return-policy" element={<ReturnPolicy />} />
-                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                  <Route path="/terms-conditions" element={<TermsConditions />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </main>
-              <Footer />
-            </div>
+            <AppShell />
           </WishlistProvider>
         </CartProvider>
       </AuthProvider>

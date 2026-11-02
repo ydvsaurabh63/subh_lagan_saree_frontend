@@ -22,13 +22,22 @@ const Login = () => {
     const result = await login(email, password);
     setLoading(false);
     if (result?.success) {
-      navigate(redirectPath, { replace: true });
+      if (email.toLowerCase().includes('admin')) {
+        navigate('/admin', { replace: true });
+      } else {
+        navigate(redirectPath, { replace: true });
+      }
     }
   };
 
   const handleUseDemo = () => {
     setEmail('customer@subhlagansarees.com');
     setPassword('password123');
+  };
+
+  const handleUseAdmin = () => {
+    setEmail('admin@subhlagansarees.com');
+    setPassword('admin123');
   };
 
   return (
@@ -53,18 +62,33 @@ const Login = () => {
           </div>
 
           {/* Quick Demo Credentials Autofill Banner */}
-          <div className="bg-amber-50/80 border border-amber-300 rounded-xl p-3 text-xs text-amber-900 flex items-center justify-between">
-            <div>
-              <p className="font-semibold text-amber-950">Demo Credentials:</p>
-              <p className="text-[11px] text-amber-800">customer@subhlagansarees.com / password123</p>
+          <div className="bg-amber-50/80 border border-amber-300 rounded-xl p-3 text-xs text-amber-900 space-y-2">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-semibold text-amber-950">Customer Demo:</p>
+                <p className="text-[11px] text-amber-800">customer@subhlagansarees.com / password123</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleUseDemo}
+                className="px-2.5 py-1 bg-gold hover:bg-gold-dark text-white rounded text-[11px] font-semibold transition shadow-xs"
+              >
+                Fill Customer
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={handleUseDemo}
-              className="px-2.5 py-1 bg-gold hover:bg-gold-dark text-white rounded text-[11px] font-semibold transition"
-            >
-              Fill Demo
-            </button>
+            <div className="flex items-center justify-between pt-2 border-t border-amber-200">
+              <div>
+                <p className="font-semibold text-primary">Admin / Owner Demo:</p>
+                <p className="text-[11px] text-stone-600">admin@subhlagansarees.com / admin123</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleUseAdmin}
+                className="px-2.5 py-1 bg-primary hover:bg-secondary text-cream rounded text-[11px] font-semibold transition shadow-xs"
+              >
+                Fill Admin
+              </button>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4 text-xs">

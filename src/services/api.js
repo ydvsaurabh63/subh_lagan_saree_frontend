@@ -105,5 +105,23 @@ export const newsletterApi = {
   subscribe: (email) => api.post('/newsletter', { email }),
 };
 
+// Admin Management APIs
+export const adminApi = {
+  getStats: () => api.get('/admin/stats'),
+  getOrders: (params) => api.get('/orders/admin/all', { params }),
+  updateOrderStatus: (id, status) => api.put(`/orders/admin/${id}/status`, { status }),
+  deleteOrder: (id) => api.delete(`/orders/admin/${id}`),
+  createProduct: (data) => api.post('/products', data),
+  updateProduct: (id, data) => api.put(`/products/${id}`, data),
+  deleteProduct: (id) => api.delete(`/products/${id}`),
+  createCategory: (data) => api.post('/categories', data),
+  updateCategory: (id, data) => api.put(`/categories/${id}`, data),
+  deleteCategory: (id) => api.delete(`/categories/${id}`),
+  getContacts: () => api.get('/contact/admin/all'),
+  updateContactStatus: (id, status) => api.put(`/contact/admin/${id}/status`, { status }),
+  deleteContact: (id) => api.delete(`/contact/admin/${id}`),
+  getSubscribers: () => api.get('/newsletter/admin/all'),
+};
+
 export default api;
 
