@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   ChevronLeft,
@@ -7,13 +7,14 @@ import {
   ShieldCheck,
   ArrowRight,
   Eye,
-  Check,
+  RotateCw,
+  ShoppingBag,
 } from 'lucide-react';
 import { useCart } from '../../context/CartContext.jsx';
 import { formatPrice } from '../../utils/formatters.js';
 import toast from 'react-hot-toast';
 
-// 5 Curated Royal Saree Looks with Transparent Cutout Models
+// 5 Curated Royal Indian Saree Looks with Transparent Cutout Full-Length Models
 const sareeLooks = [
   {
     id: 1,
@@ -174,39 +175,39 @@ const sareeLooks = [
   {
     id: 5,
     lookNumber: '05',
-    lookTitle: 'Mustard Gold Chanderi',
-    tagline: 'Festive Handloom • Pure Cotton Silk',
+    lookTitle: 'Royal Sapphire Brocade',
+    tagline: 'Varanasi Zari Heritage • Pure Silk Brocade',
     modelImage: '/models/model-5.png',
     sareeSlug: 'mustard-gold-handloom-chanderi-saree',
     items: [
       {
         id: 'saree-5',
         type: 'Saree',
-        name: 'Mustard Gold Handloom Chanderi Saree',
-        detail: 'Lightweight Cotton Silk • Hand-interwoven Booti',
-        price: 4999,
-        originalPrice: 6499,
-        image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=300&q=80',
+        name: 'Royal Sapphire Blue Brocade Silk Saree',
+        detail: 'Pure Mulberry Silk • Antique Gold Zari Brocade',
+        price: 21999,
+        originalPrice: 26999,
+        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=300&q=80',
         isMain: true,
       },
       {
         id: 'blouse-5',
         type: 'Blouse Piece',
-        name: 'Running Cotton Silk Blouse Piece',
-        detail: '0.8M Matching Fabric Included',
+        name: 'Contrast Gold Brocade Blouse Piece',
+        detail: '0.8M Unstitched Pure Brocade Included',
         price: 0,
-        originalPrice: 1499,
-        image: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=300&q=80',
+        originalPrice: 2499,
+        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=300&q=80',
         isIncluded: true,
       },
       {
         id: 'acc-5',
         type: 'Accessory',
-        name: 'Gota Patti Festive Latkan Pair',
-        detail: 'Haldi & Mehendi Special Accents',
-        price: 799,
-        originalPrice: 1199,
-        image: 'https://images.unsplash.com/photo-1610030469668-9655519803b0?auto=format&fit=crop&w=300&q=80',
+        name: 'Handcrafted Zari Latkan Tassels',
+        detail: 'Antique Gold Beaded Accents',
+        price: 899,
+        originalPrice: 1299,
+        image: 'https://images.unsplash.com/photo-1546804784-896d0dca3805?auto=format&fit=crop&w=300&q=80',
       },
     ],
   },
@@ -214,14 +215,28 @@ const sareeLooks = [
 
 const HeroBanner = () => {
   const [activeLookIndex, setActiveLookIndex] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1200
+  );
+  const [touchStartX, setTouchStartX] = useState(null);
+
   const { addToCart } = useCart();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const currentLook = sareeLooks[activeLookIndex];
 
   // Calculate ensemble total
   const totalBundlePrice = currentLook.items.reduce((acc, it) => acc + it.price, 0);
-  const totalOriginalPrice = currentLook.items.reduce((acc, it) => acc + (it.originalPrice || it.price), 0);
+  const totalOriginalPrice = currentLook.items.reduce(
+    (acc, it) => acc + (it.originalPrice || it.price),
+    0
+  );
   const savings = totalOriginalPrice - totalBundlePrice;
 
   const handlePrev = () => {
@@ -230,6 +245,22 @@ const HeroBanner = () => {
 
   const handleNext = () => {
     setActiveLookIndex((prev) => (prev === sareeLooks.length - 1 ? 0 : prev + 1));
+  };
+
+  const handleTouchStart = (e) => {
+    setTouchStartX(e.touches ? e.touches[0].clientX : e.clientX);
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX === null) return;
+    const endX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+    const diff = endX - touchStartX;
+    if (diff > 45) {
+      handlePrev();
+    } else if (diff < -45) {
+      handleNext();
+    }
+    setTouchStartX(null);
   };
 
   const handleAddFullLook = () => {
@@ -251,13 +282,40 @@ const HeroBanner = () => {
     }
   };
 
+  // 3D Circular Orbit calculations
+  const getModelStyle = (idx) => {
+    const count = sareeLooks.length;
+    let offset = (idx - activeLookIndex) % count;
+    if (offset > count / 2) offset -= count;
+    if (offset < -count / 2) offset += count;
+
+    const absOffset = Math.abs(offset);
+    const isCenter = offset === 0;
+
+    // Responsive horizontal distance
+    const spacing = windowWidth < 640 ? 75 : windowWidth < 1024 ? 120 : 160;
+    const translateX = offset * spacing;
+
+    // 3D Depth Scale, Opacity, and Z-Index
+    const scale = isCenter ? 1.08 : absOffset === 1 ? 0.88 : 0.74;
+    const opacity = isCenter ? 1 : absOffset === 1 ? 0.82 : 0.45;
+    const zIndex = isCenter ? 40 : absOffset === 1 ? 25 : 10;
+    const rotateY = -offset * 10; // inward curve toward center
+
+    return {
+      transform: `translateX(${translateX}px) scale(${scale}) rotateY(${rotateY}deg)`,
+      zIndex,
+      opacity,
+    };
+  };
+
   return (
     <div className="relative bg-[#F8F7F4] border-b border-stone-200 overflow-hidden select-none">
-      <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+      <div className="max-w-[1550px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           
           {/* ========================================================= */}
-          {/* LEFT & CENTER: THE VIRTUAL SAREE RUNWAY (CUTOUT LINEUP)   */}
+          {/* LEFT & CENTER: THE VIRTUAL SAREE RUNWAY (CIRCULAR ORBIT)   */}
           {/* ========================================================= */}
           <div className="lg:col-span-8 flex flex-col justify-between">
             {/* Header Titles */}
@@ -270,51 +328,90 @@ const HeroBanner = () => {
                 Try the Look.
               </h1>
               <p className="text-xs sm:text-sm text-stone-700 font-bold max-w-md">
-                Pure handloom sarees & bridal trousseau. Click any model to center the look.
+                Pure handloom sarees & bridal trousseau. Click any model or tap rotate to center the look.
               </p>
             </div>
 
-            {/* Runway Stage with Floor Ambient Shadow */}
-            <div className="relative my-6 lg:my-8 flex items-center justify-center min-h-[460px] sm:min-h-[520px] lg:min-h-[560px]">
+            {/* Runway Stage with Floor Ambient Shadow and Circular Turntable */}
+            <div
+              className="relative my-6 lg:my-8 flex items-center justify-center min-h-[460px] sm:min-h-[520px] lg:min-h-[560px] cursor-grab active:cursor-grabbing"
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+              onMouseDown={handleTouchStart}
+              onMouseUp={handleTouchEnd}
+            >
               {/* Studio Floor Soft Contact Shadows */}
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-4/5 h-12 bg-stone-300/40 rounded-full blur-2xl pointer-events-none"></div>
 
-              {/* Models Lineup (Transparent Cutout Models Standing Directly on Floor) */}
+              {/* 3D Circular Turntable Pedestal on Floor beneath center model */}
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-[320px] sm:w-[420px] lg:w-[460px] h-[90px] sm:h-[110px] pointer-events-none flex items-center justify-center">
+                {/* Rotating golden dashed orbit ring */}
+                <div className="absolute inset-0 rounded-full border-2 border-dashed border-gold/60 animate-spin-slow scale-y-[0.32] shadow-[0_0_25px_rgba(198,161,91,0.25)]"></div>
+                {/* Inner golden concentric rim */}
+                <div className="absolute inset-3 rounded-full border border-gold/40 scale-y-[0.32]"></div>
+                {/* Radial spotlight floor glow */}
+                <div className="w-4/5 h-4/5 rounded-full bg-radial from-gold/30 via-gold/10 to-transparent blur-md scale-y-[0.30]"></div>
+                {/* Center contact shadow under model feet */}
+                <div className="w-44 sm:w-52 h-8 bg-stone-900/35 rounded-full blur-md scale-y-[0.32]"></div>
+              </div>
+
+              {/* Floating Circular Rotate Dial beside Center Model */}
+              <div
+                className="absolute left-1/2 top-[46%] -translate-y-1/2 z-50 pointer-events-auto"
+                style={{
+                  transform: 'translate(calc(-50% + 125px), -50%)',
+                }}
+              >
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleNext();
+                  }}
+                  title="Rotate to Next Saree Look"
+                  aria-label="Rotate Saree Look"
+                  className="relative group flex flex-col items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/90 hover:bg-white backdrop-blur-md border-2 border-gold/60 shadow-[0_8px_25px_rgba(104,27,44,0.18)] hover:shadow-[0_12px_32px_rgba(198,161,91,0.4)] transition-all duration-300 active:scale-95 cursor-pointer"
+                >
+                  {/* Subtle golden pulse aura */}
+                  <span className="absolute -inset-1.5 rounded-full border border-gold/40 animate-ping opacity-40 pointer-events-none"></span>
+
+                  {/* Circular Rotating Dashed Ring on Hover */}
+                  <span className="absolute inset-0.5 rounded-full border border-dashed border-gold/50 group-hover:rotate-180 transition-transform duration-700 ease-in-out pointer-events-none"></span>
+
+                  {/* Rotate Icon */}
+                  <RotateCw className="w-5 h-5 text-primary group-hover:rotate-180 transition-transform duration-500 ease-out" />
+                  
+                  <span className="text-[9px] font-black uppercase tracking-wider text-stone-900 mt-0.5 group-hover:text-primary transition-colors">
+                    Rotate
+                  </span>
+                </button>
+              </div>
+
+              {/* Models Lineup (Full Length Saree Cutouts in 3D Circular Orbit) */}
               <div className="relative flex items-end justify-center w-full max-w-4xl h-[460px] sm:h-[520px] lg:h-[560px]">
                 {sareeLooks.map((look, idx) => {
                   const isActive = idx === activeLookIndex;
-                  const distance = idx - activeLookIndex;
-                  
-                  // 3D Runway Spacing & Depth
-                  let translateX = `${distance * 125}px`;
-                  let zIndex = 20 - Math.abs(distance) * 5;
-                  let scale = isActive ? 1.05 : 0.86 - Math.abs(distance) * 0.05;
-                  let opacity = isActive ? 1 : Math.max(0.4, 0.7 - Math.abs(distance) * 0.15);
+                  const style = getModelStyle(idx);
 
                   return (
                     <div
                       key={look.id}
                       onClick={() => setActiveLookIndex(idx)}
-                      style={{
-                        transform: `translateX(${translateX}) scale(${scale})`,
-                        zIndex,
-                        opacity,
-                      }}
+                      style={style}
                       className="absolute bottom-2 cursor-pointer transition-all duration-500 ease-out flex flex-col items-center group"
                     >
                       {/* Active Center Indicator Pill */}
                       {isActive && (
-                        <div className="mb-2 animate-bounce flex items-center space-x-1.5 px-3 py-1 bg-white/95 backdrop-blur-md rounded-full shadow-lg border border-gold/50 text-[10px] font-bold uppercase tracking-wider text-primary">
+                        <div className="mb-2 flex items-center space-x-1.5 px-3 py-1 bg-white/95 backdrop-blur-md rounded-full shadow-lg border border-gold/50 text-[10px] font-bold uppercase tracking-wider text-primary">
                           <Eye className="w-3 h-3 text-gold" />
                           <span>Active Look {look.lookNumber}</span>
                         </div>
                       )}
 
-                      {/* Transparent Standing Model (No bounding card box!) */}
+                      {/* Transparent Standing Model (Authentic Full-Length Saree) */}
                       <div className="relative w-48 sm:w-56 lg:w-64 h-[400px] sm:h-[460px] lg:h-[500px] flex items-end justify-center">
                         {/* Soft Backdrop Spotlight Halo behind active model */}
                         {isActive && (
-                          <div className="absolute inset-0 -top-6 bg-radial from-gold/15 via-gold/5 to-transparent rounded-full filter blur-xl pointer-events-none -z-10"></div>
+                          <div className="absolute inset-0 -top-6 bg-radial from-gold/20 via-gold/5 to-transparent rounded-full filter blur-xl pointer-events-none -z-10"></div>
                         )}
 
                         <img
@@ -323,12 +420,12 @@ const HeroBanner = () => {
                           className={`w-full h-full object-contain object-bottom drop-shadow-[0_15px_25px_rgba(0,0,0,0.18)] transition-all duration-500 ${
                             isActive
                               ? 'filter drop-shadow-[0_20px_35px_rgba(104,27,44,0.22)]'
-                              : 'grayscale-[15%] hover:grayscale-0'
+                              : 'grayscale-[10%] hover:grayscale-0'
                           }`}
                         />
                       </div>
 
-                      {/* Natural Elliptical Floor Contact Shadow */}
+                      {/* Natural Elliptical Floor Contact Shadow under each model */}
                       <div
                         className={`w-36 h-4 bg-stone-900/25 rounded-full blur-md -mt-2 transition-all ${
                           isActive ? 'scale-110 opacity-70' : 'opacity-40'
@@ -371,10 +468,10 @@ const HeroBanner = () => {
                 </div>
               </div>
 
-              {/* Minimalist Scrubber Timeline Bar */}
+              {/* Minimalist Scrubber Timeline Bar with Clickable Segments */}
               <div className="flex items-center space-x-2 w-full sm:w-64">
                 <span className="text-[10px] font-mono text-stone-400">01</span>
-                <div className="relative flex-1 h-1.5 bg-stone-200 rounded-full overflow-hidden">
+                <div className="relative flex-1 h-1.5 bg-stone-200 rounded-full overflow-hidden flex items-center">
                   <div
                     className="h-full bg-primary transition-all duration-300 rounded-full"
                     style={{ width: `${((activeLookIndex + 1) / sareeLooks.length) * 100}%` }}
@@ -480,8 +577,9 @@ const HeroBanner = () => {
               {/* Add full look to bag */}
               <button
                 onClick={handleAddFullLook}
-                className="w-full py-3.5 px-4 bg-primary hover:bg-secondary text-cream rounded-xl text-xs font-extrabold uppercase tracking-widest transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-2 active:scale-98"
+                className="w-full py-3.5 px-4 bg-primary hover:bg-secondary text-cream rounded-xl text-xs font-extrabold uppercase tracking-widest transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-2 active:scale-98 cursor-pointer"
               >
+                <ShoppingBag className="w-4 h-4 text-gold" />
                 <span>Add full look to bag</span>
                 <ArrowRight className="w-4 h-4 text-gold stroke-[2.5]" />
               </button>
