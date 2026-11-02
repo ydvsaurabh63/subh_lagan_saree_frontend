@@ -361,3 +361,4 @@ const FittingRoomPanel = () => {
 };
 
 export default FittingRoomPanel;
+
