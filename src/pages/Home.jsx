@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { productApi, categoryApi } from '../services/api.js';
 
 import HeroBanner from '../components/home/HeroBanner.jsx';
+import VirtualTryOn from '../components/home/VirtualTryOn.jsx';
 import CategoryGrid from '../components/home/CategoryGrid.jsx';
 import SpecialOfferBanner from '../components/home/SpecialOfferBanner.jsx';
 import WhyChooseUs from '../components/home/WhyChooseUs.jsx';
@@ -56,6 +57,9 @@ const Home = () => {
     <div className="space-y-0">
       {/* 1. Hero Carousel */}
       <HeroBanner />
+
+      {/* 2. AI Virtual Saree Trial Room (Try-On Mirror) */}
+      <VirtualTryOn />
 
       {/* 2. Shop By 12 Saree Categories (Visual Circular Grid) */}
       <CategoryGrid categories={categories} />
