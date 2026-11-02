@@ -7,7 +7,6 @@ import {
   ShieldCheck,
   ArrowRight,
   Eye,
-  RotateCw,
   ShoppingBag,
 } from 'lucide-react';
 import { useCart } from '../../context/CartContext.jsx';
@@ -566,7 +565,7 @@ const HeroBanner = () => {
                 Try the Look.
               </h1>
               <p className="text-xs sm:text-sm text-stone-700 font-bold max-w-md">
-                Pure handloom sarees & bridal trousseau. Drag or tap rotate to spin the 3D saree circle.
+                Pure handloom sarees & bridal trousseau. Drag or tap any saree to spin the 3D runway.
               </p>
             </div>
 
@@ -619,37 +618,6 @@ const HeroBanner = () => {
                     bottom: '4px',
                   }}
                 ></div>
-              </div>
-
-              {/* Floating Circular Rotate Dial beside Center Model */}
-              <div
-                className="absolute left-1/2 top-[48%] -translate-y-1/2 z-50 pointer-events-auto"
-                style={{
-                  transform: 'translate(calc(-50% + 125px), -50%)',
-                }}
-              >
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleNext();
-                  }}
-                  title="Rotate Saree Circle"
-                  aria-label="Rotate Saree Circle"
-                  className="relative group flex flex-col items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/90 hover:bg-white backdrop-blur-md border-2 border-gold/60 shadow-[0_8px_25px_rgba(104,27,44,0.18)] hover:shadow-[0_12px_32px_rgba(198,161,91,0.4)] transition-all duration-300 active:scale-95 cursor-pointer"
-                >
-                  {/* Subtle golden pulse aura */}
-                  <span className="absolute -inset-1.5 rounded-full border border-gold/40 animate-ping opacity-40 pointer-events-none"></span>
-
-                  {/* Circular Rotating Dashed Ring on Hover */}
-                  <span className="absolute inset-0.5 rounded-full border border-dashed border-gold/50 group-hover:rotate-180 transition-transform duration-700 ease-in-out pointer-events-none"></span>
-
-                  {/* Rotate Icon */}
-                  <RotateCw className="w-5 h-5 text-primary group-hover:rotate-180 transition-transform duration-500 ease-out" />
-                  
-                  <span className="text-[9px] font-black uppercase tracking-wider text-stone-900 mt-0.5 group-hover:text-primary transition-colors">
-                    Rotate
-                  </span>
-                </button>
               </div>
 
               {/* Models Lineup (All 10 Saree Models Arranged in 3D Orbiting Circle) */}
