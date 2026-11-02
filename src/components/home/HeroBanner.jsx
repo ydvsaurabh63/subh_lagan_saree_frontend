@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   ChevronLeft,
@@ -410,6 +410,12 @@ const HeroBanner = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartX, setDragStartX] = useState(0);
   const [dragStartRotation, setDragStartRotation] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isSnapping, setIsSnapping] = useState(false);
+
+  const snapTimeoutRef = useRef(null);
+  const requestRef = useRef(null);
+  const lastTimeRef = useRef(null);
 
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1200
@@ -429,6 +435,30 @@ const HeroBanner = () => {
   const activeLookIndex = ((Math.round(-currentRotation / 36) % count) + count) % count;
   const currentLook = sareeLooks[activeLookIndex];
 
+  // Slow clockwise 3D rotation (~4.5 deg/sec => 80s for 1 complete revolution)
+  useEffect(() => {
+    const SPEED_DEG_PER_SEC = 4.5;
+
+    const animate = (time) => {
+      if (lastTimeRef.current != null) {
+        const deltaSec = (time - lastTimeRef.current) / 1000;
+        const safeDelta = Math.min(deltaSec, 0.1);
+
+        if (!isDragging && !isHovered && !isSnapping) {
+          // Clockwise rotation: subtract angle so models move clockwise around turntable
+          setCurrentRotation((prev) => prev - SPEED_DEG_PER_SEC * safeDelta);
+        }
+      }
+      lastTimeRef.current = time;
+      requestRef.current = requestAnimationFrame(animate);
+    };
+
+    requestRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+    };
+  }, [isDragging, isHovered, isSnapping]);
+
   // Calculate ensemble total
   const totalBundlePrice = currentLook.items.reduce((acc, it) => acc + it.price, 0);
   const totalOriginalPrice = currentLook.items.reduce(
@@ -437,25 +467,36 @@ const HeroBanner = () => {
   );
   const savings = totalOriginalPrice - totalBundlePrice;
 
+  // Snap to specific angle with smooth easing transition, pausing auto-rotation momentarily
+  const triggerSnap = (targetRotation) => {
+    setIsSnapping(true);
+    setCurrentRotation(targetRotation);
+    if (snapTimeoutRef.current) clearTimeout(snapTimeoutRef.current);
+    snapTimeoutRef.current = setTimeout(() => {
+      setIsSnapping(false);
+    }, 1200);
+  };
+
   // 3D Turntable rotation handlers
   const handlePrev = () => {
-    setCurrentRotation((prev) => Math.round(prev / 36) * 36 + 36);
+    triggerSnap(Math.round(currentRotation / 36) * 36 + 36);
   };
 
   const handleNext = () => {
-    setCurrentRotation((prev) => Math.round(prev / 36) * 36 - 36);
+    triggerSnap(Math.round(currentRotation / 36) * 36 - 36);
   };
 
   const handleSelectModel = (targetIdx) => {
     let diff = (targetIdx - activeLookIndex) % count;
     if (diff > count / 2) diff -= count;
     if (diff < -count / 2) diff += count;
-    setCurrentRotation((prev) => Math.round(prev / 36) * 36 - diff * (360 / count));
+    triggerSnap(Math.round(currentRotation / 36) * 36 - diff * (360 / count));
   };
 
   // Drag / swipe 3D rotation gestures
   const handlePointerDown = (e) => {
     setIsDragging(true);
+    setIsSnapping(false);
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     setDragStartX(clientX);
     setDragStartRotation(currentRotation);
@@ -473,7 +514,7 @@ const HeroBanner = () => {
     if (!isDragging) return;
     setIsDragging(false);
     // Snap cleanly to nearest look (multiple of 36 deg)
-    setCurrentRotation((prev) => Math.round(prev / 36) * 36);
+    triggerSnap(Math.round(currentRotation / 36) * 36);
   };
 
   const handleAddFullLook = () => {
@@ -535,11 +576,11 @@ const HeroBanner = () => {
     const rotateY = (-effAngle * 0.28).toFixed(1);
 
     return {
-      transform: `translate(${Math.round(x)}px, -${Math.round(y)}px) scale(${scale}) rotateY(${rotateY}deg)`,
+      transform: `translate(${x.toFixed(2)}px, -${y.toFixed(2)}px) scale(${scale}) rotateY(${rotateY}deg)`,
       zIndex,
       opacity,
-      transition: isDragging
-        ? 'none'
+      transition: isDragging || !isSnapping
+        ? 'opacity 0.4s ease-out'
         : 'transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.75s ease-out',
     };
   };
@@ -566,13 +607,17 @@ const HeroBanner = () => {
             {/* Runway Stage with Floor Ambient Shadow and Circular Turntable */}
             <div
               className="relative my-6 lg:my-8 flex items-center justify-center min-h-[480px] sm:min-h-[530px] lg:min-h-[580px] cursor-grab active:cursor-grabbing select-none"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => {
+                setIsHovered(false);
+                if (isDragging) setIsDragging(false);
+              }}
               onTouchStart={handlePointerDown}
               onTouchMove={handlePointerMove}
               onTouchEnd={handlePointerUp}
               onMouseDown={handlePointerDown}
               onMouseMove={handlePointerMove}
               onMouseUp={handlePointerUp}
-              onMouseLeave={handlePointerUp}
             >
               {/* Studio Floor Soft Contact Shadows */}
               <div className="absolute bottom-12 sm:bottom-16 left-1/2 -translate-x-1/2 w-4/5 h-12 bg-stone-300/40 rounded-full blur-2xl pointer-events-none"></div>
@@ -596,8 +641,14 @@ const HeroBanner = () => {
                     transform: `scaleY(${turntableScaleY})`,
                   }}
                 >
-                  {/* Rotating golden dashed orbit ring */}
-                  <div className="absolute inset-0 rounded-full border-2 border-dashed border-gold/70 animate-spin-slow shadow-[0_0_35px_rgba(198,161,91,0.25)]"></div>
+                  {/* Rotating golden dashed orbit ring synced to models */}
+                  <div
+                    className="absolute inset-0 rounded-full border-2 border-dashed border-gold/70 shadow-[0_0_35px_rgba(198,161,91,0.25)]"
+                    style={{
+                      transform: `rotate(${-currentRotation}deg)`,
+                      transition: isSnapping ? 'transform 0.75s cubic-bezier(0.16, 1, 0.3, 1)' : 'none',
+                    }}
+                  ></div>
                   {/* Inner golden concentric rim */}
                   <div className="absolute inset-8 sm:inset-12 rounded-full border border-gold/45"></div>
                   {/* Radial spotlight floor glow */}
@@ -685,7 +736,11 @@ const HeroBanner = () => {
           {/* ========================================================= */}
           {/* RIGHT SIDE PANEL: "IN THIS LOOK" (ENSEMBLE BREAKDOWN)     */}
           {/* ========================================================= */}
-          <div className="lg:col-span-4 bg-white rounded-3xl p-6 sm:p-7 border border-gold/40 shadow-xl flex flex-col justify-between">
+          <div
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className="lg:col-span-4 bg-white rounded-3xl p-6 sm:p-7 border border-gold/40 shadow-xl flex flex-col justify-between"
+          >
             <div className="space-y-4">
               {/* Header */}
               <div className="flex items-center justify-between border-b border-stone-200 pb-3">
