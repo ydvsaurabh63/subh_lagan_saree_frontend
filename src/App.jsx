@@ -43,6 +43,10 @@ import AdminOrders from './pages/admin/AdminOrders.jsx';
 import AdminCategories from './pages/admin/AdminCategories.jsx';
 import AdminEnquiries from './pages/admin/AdminEnquiries.jsx';
 import AdminSubscribers from './pages/admin/AdminSubscribers.jsx';
+import AdminTrials from './pages/admin/AdminTrials.jsx';
+import AdminPlayground from './pages/admin/AdminPlayground.jsx';
+import AdminCredits from './pages/admin/AdminCredits.jsx';
+import AdminHelp from './pages/admin/AdminHelp.jsx';
 
 // Scroll to top automatically on route change
 function ScrollToTop() {
@@ -101,6 +105,14 @@ function AppShell() {
             }
           />
           <Route
+            path="/admin/store"
+            element={
+              <AdminRoute>
+                <AdminProducts />
+              </AdminRoute>
+            }
+          />
+          <Route
             path="/admin/products"
             element={
               <AdminRoute>
@@ -109,10 +121,58 @@ function AppShell() {
             }
           />
           <Route
+            path="/admin/sales"
+            element={
+              <AdminRoute>
+                <AdminOrders />
+              </AdminRoute>
+            }
+          />
+          <Route
             path="/admin/orders"
             element={
               <AdminRoute>
                 <AdminOrders />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/trials"
+            element={
+              <AdminRoute>
+                <AdminTrials />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/playground"
+            element={
+              <AdminRoute>
+                <AdminPlayground />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/credits"
+            element={
+              <AdminRoute>
+                <AdminCredits />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/help"
+            element={
+              <AdminRoute>
+                <AdminHelp />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/support"
+            element={
+              <AdminRoute>
+                <AdminEnquiries />
               </AdminRoute>
             }
           />
