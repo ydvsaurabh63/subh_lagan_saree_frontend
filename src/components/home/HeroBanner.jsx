@@ -477,38 +477,58 @@ const HeroBanner = () => {
     }
   };
 
-  // 3D Circular Orbit calculations for 10 looks
+  // Responsive turntable dimensions & 3D focal parameters
+  const isMobile = windowWidth < 640;
+  const isTablet = windowWidth >= 640 && windowWidth < 1024;
+
+  const R = isMobile ? 180 : isTablet ? 280 : 380;
+  const D = isMobile ? 450 : isTablet ? 600 : 700;
+  const maxFloorDepth = isMobile ? 36 : isTablet ? 55 : 70;
+
+  // Turntable dimensions on the floor (encapsulating all models)
+  const turntableWidth = isMobile ? 380 : isTablet ? 580 : 760;
+  const turntableScaleY = isMobile ? 0.24 : isTablet ? 0.22 : 0.20;
+  const turntableHeight = Math.round(turntableWidth * turntableScaleY);
+  const turntableBottomOffset = isMobile ? 12 : isTablet ? 16 : 20;
+
+  // 3D Circular Orbit calculations for all 10 looks standing on/inside the circle
   const getModelStyle = (idx) => {
     const count = sareeLooks.length;
     let offset = (idx - activeLookIndex) % count;
     if (offset > count / 2) offset -= count;
     if (offset < -count / 2) offset += count;
 
-    const absOffset = Math.abs(offset);
     const isCenter = offset === 0;
 
-    // Responsive horizontal distance
-    const spacing = windowWidth < 640 ? 75 : windowWidth < 1024 ? 120 : 155;
-    const translateX = offset * spacing;
+    const angle = (offset * 2 * Math.PI) / count;
+    const x3d = Math.sin(angle) * R;
+    const z3d = Math.cos(angle) * R; // +R at front, -R at back
 
-    // Models further on the back of the circular carousel fade out cleanly
-    if (absOffset > 2) {
-      return {
-        transform: `translateX(${translateX}px) scale(0.6) rotateY(${-offset * 12}deg)`,
-        zIndex: 0,
-        opacity: 0,
-        pointerEvents: 'none',
-      };
-    }
+    // Perspective projection factor
+    const factor = D / (D + (R - z3d));
+    const xScreen = Math.round(x3d * factor);
+    // Depth translateY along the floor ellipse: 0 at front, -maxFloorDepth at back
+    const yScreen = Math.round(((1 - z3d / R) / 2) * maxFloorDepth);
 
-    // 3D Depth Scale, Opacity, and Z-Index
-    const scale = isCenter ? 1.08 : absOffset === 1 ? 0.88 : 0.74;
-    const opacity = isCenter ? 1 : absOffset === 1 ? 0.82 : 0.48;
-    const zIndex = isCenter ? 40 : absOffset === 1 ? 25 : 10;
-    const rotateY = -offset * 10; // inward curve toward center
+    // Scale from 1.08 down to ~0.50
+    const scale = (factor * 1.05).toFixed(2);
+
+    // Depth ratio: 1.0 at front, 0.0 at back
+    const depthRatio = (z3d + R) / (2 * R);
+
+    // Opacity: front is 1.0, sides are 0.9-0.75, back are 0.5-0.4
+    const opacity = isCenter
+      ? 1
+      : Math.max(0.38, +(0.35 + depthRatio * 0.65).toFixed(2));
+
+    // Z-Index: 50 at front, down to 5 at back
+    const zIndex = isCenter ? 50 : Math.round(depthRatio * 42) + 5;
+
+    // Inward facing curve rotation
+    const rotateY = -offset * 12;
 
     return {
-      transform: `translateX(${translateX}px) scale(${scale}) rotateY(${rotateY}deg)`,
+      transform: `translate(${xScreen}px, -${yScreen}px) scale(${scale}) rotateY(${rotateY}deg)`,
       zIndex,
       opacity,
       pointerEvents: 'auto',
@@ -534,13 +554,13 @@ const HeroBanner = () => {
                 Try the Look.
               </h1>
               <p className="text-xs sm:text-sm text-stone-700 font-bold max-w-md">
-                Pure handloom sarees & bridal trousseau. Click any model or tap rotate to center the look.
+                Pure handloom sarees & bridal trousseau. All 10 curated looks arranged in 3D circle. Tap any saree or rotate to inspect.
               </p>
             </div>
 
             {/* Runway Stage with Floor Ambient Shadow and Circular Turntable */}
             <div
-              className="relative my-6 lg:my-8 flex items-center justify-center min-h-[460px] sm:min-h-[520px] lg:min-h-[560px] cursor-grab active:cursor-grabbing"
+              className="relative my-6 lg:my-8 flex items-center justify-center min-h-[480px] sm:min-h-[530px] lg:min-h-[580px] cursor-grab active:cursor-grabbing"
               onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
               onMouseDown={handleTouchStart}
@@ -549,22 +569,41 @@ const HeroBanner = () => {
               {/* Studio Floor Soft Contact Shadows */}
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-4/5 h-12 bg-stone-300/40 rounded-full blur-2xl pointer-events-none"></div>
 
-              {/* 3D Circular Turntable Floor Pedestal (strictly flattened to studio floor perspective) */}
-              <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-[340px] sm:w-[440px] lg:w-[480px] h-[110px] pointer-events-none flex items-center justify-center">
-                {/* Perspective scale wrapper that stays flat forever */}
+              {/* 3D Circular Turntable Floor Platform (encapsulates all models inside the circle) */}
+              <div
+                className="absolute pointer-events-none flex items-center justify-center -translate-x-1/2"
+                style={{
+                  bottom: `${turntableBottomOffset}px`,
+                  left: '50%',
+                  width: `${turntableWidth}px`,
+                  height: `${turntableHeight}px`,
+                }}
+              >
+                {/* 3D Perspective Flattened Local Circle Container */}
                 <div
-                  className="relative w-[340px] sm:w-[420px] lg:w-[460px] h-[340px] sm:h-[420px] flex items-center justify-center"
-                  style={{ transform: 'scaleY(0.24)' }}
+                  className="relative flex items-center justify-center"
+                  style={{
+                    width: `${turntableWidth}px`,
+                    height: `${turntableWidth}px`,
+                    transform: `scaleY(${turntableScaleY})`,
+                  }}
                 >
                   {/* Rotating golden dashed orbit ring */}
-                  <div className="absolute inset-0 rounded-full border-2 border-dashed border-gold/60 animate-spin-slow"></div>
+                  <div className="absolute inset-0 rounded-full border-2 border-dashed border-gold/70 animate-spin-slow shadow-[0_0_35px_rgba(198,161,91,0.25)]"></div>
                   {/* Inner golden concentric rim */}
-                  <div className="absolute inset-6 rounded-full border border-gold/40"></div>
+                  <div className="absolute inset-8 sm:inset-12 rounded-full border border-gold/45"></div>
                   {/* Radial spotlight floor glow */}
                   <div className="w-4/5 h-4/5 rounded-full bg-radial from-gold/30 via-gold/10 to-transparent blur-md"></div>
                 </div>
-                {/* Center contact shadow under model feet */}
-                <div className="absolute bottom-1 w-44 sm:w-56 h-6 bg-stone-900/35 rounded-full blur-md"></div>
+                {/* Soft ambient ground contact shadow */}
+                <div
+                  className="absolute bg-stone-900/25 rounded-full blur-xl"
+                  style={{
+                    width: `${turntableWidth * 0.85}px`,
+                    height: `${turntableHeight * 0.65}px`,
+                    bottom: '4px',
+                  }}
+                ></div>
               </div>
 
               {/* Floating Circular Rotate Dial beside Center Model */}
@@ -598,8 +637,8 @@ const HeroBanner = () => {
                 </button>
               </div>
 
-              {/* Models Lineup (10 Full Length Saree Cutouts in 3D Circular Orbit) */}
-              <div className="relative flex items-end justify-center w-full max-w-4xl h-[460px] sm:h-[520px] lg:h-[560px]">
+              {/* Models Lineup (All 10 Saree Models Arranged Inside the 3D Circle) */}
+              <div className="relative flex items-end justify-center w-full max-w-5xl h-[460px] sm:h-[520px] lg:h-[560px]">
                 {sareeLooks.map((look, idx) => {
                   const isActive = idx === activeLookIndex;
                   const style = getModelStyle(idx);
@@ -619,7 +658,7 @@ const HeroBanner = () => {
                         </div>
                       )}
 
-                      {/* Transparent Standing Model (Authentic Full-Length Saree) */}
+                      {/* Transparent Standing Model (Authentic Full-Length Saree on Circle) */}
                       <div className="relative w-48 sm:w-56 lg:w-64 h-[400px] sm:h-[460px] lg:h-[500px] flex items-end justify-center">
                         {/* Soft Backdrop Spotlight Halo behind active model */}
                         {isActive && (
@@ -637,7 +676,7 @@ const HeroBanner = () => {
                         />
                       </div>
 
-                      {/* Natural Elliptical Floor Contact Shadow under each model */}
+                      {/* Natural Elliptical Floor Contact Shadow under each model on the circle */}
                       <div
                         className={`w-36 h-4 bg-stone-900/25 rounded-full blur-md -mt-2 transition-all ${
                           isActive ? 'scale-110 opacity-70' : 'opacity-40'
