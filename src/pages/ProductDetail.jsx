@@ -5,6 +5,7 @@ import { formatPrice, calculateDiscount } from '../utils/formatters.js';
 import { useCart } from '../context/CartContext.jsx';
 import { useWishlist } from '../context/WishlistContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+import { useTryOn } from '../context/TryOnContext.jsx';
 
 import ProductGallery from '../components/product/ProductGallery.jsx';
 import ReviewCard from '../components/product/ReviewCard.jsx';
@@ -28,6 +29,7 @@ import {
   Palette,
   Award,
   Calendar,
+  Shirt,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -49,6 +51,7 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
   const { isInWishlist, toggleWishlist } = useWishlist();
   const { isAuthenticated } = useAuth();
+  const { tryOnProduct } = useTryOn();
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -266,6 +269,15 @@ const ProductDetail = () => {
                 >
                   <Sparkles className="w-4 h-4" />
                   <span>Buy Now (COD)</span>
+                </button>
+
+                <button
+                  onClick={() => tryOnProduct(product)}
+                  className="py-3 px-4 bg-[#18181b] hover:bg-[#27272a] text-white border-2 border-[#D97706] text-xs font-bold uppercase tracking-wider rounded-lg shadow transition flex items-center justify-center space-x-1.5"
+                  title="Try this Saree in AI Fitting Room"
+                >
+                  <Shirt className="w-4 h-4 text-[#F59E0B]" />
+                  <span>Try It On</span>
                 </button>
 
                 <button

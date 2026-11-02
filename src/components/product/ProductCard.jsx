@@ -1,13 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Star, ShoppingBag, Sparkles } from 'lucide-react';
+import { Heart, Star, ShoppingBag, Sparkles, Shirt } from 'lucide-react';
 import { formatPrice, calculateDiscount } from '../../utils/formatters.js';
 import { useWishlist } from '../../context/WishlistContext.jsx';
 import { useCart } from '../../context/CartContext.jsx';
+import { useTryOn } from '../../context/TryOnContext.jsx';
 
 const ProductCard = ({ product }) => {
   const { isInWishlist, toggleWishlist } = useWishlist();
   const { addToCart } = useCart();
+  const { tryOnProduct } = useTryOn();
 
   if (!product) return null;
 
@@ -25,6 +27,12 @@ const ProductCard = ({ product }) => {
     e.preventDefault();
     e.stopPropagation();
     addToCart(product, 1);
+  };
+
+  const handleTryOnClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    tryOnProduct(product);
   };
 
   return (
@@ -68,6 +76,16 @@ const ProductCard = ({ product }) => {
           title={inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
         >
           <Heart className={`w-3.5 h-3.5 ${inWishlist ? 'fill-current text-white' : ''}`} />
+        </button>
+
+        {/* Try On Button (matching Image 2 amber shirt icon) */}
+        <button
+          onClick={handleTryOnClick}
+          className="absolute top-10 right-2 p-1.5 rounded-full bg-[#D97706] hover:bg-[#b45309] text-white shadow-md transition-all active:scale-90 hover:scale-110 z-10 flex items-center justify-center group/try"
+          title="Try on this saree in Fitting Room"
+          aria-label="Try on saree"
+        >
+          <Shirt className="w-3.5 h-3.5 stroke-[2.2]" />
         </button>
 
         {/* Quick Add To Cart on Hover */}
@@ -116,9 +134,19 @@ const ProductCard = ({ product }) => {
               </span>
             )}
           </div>
-          <span className="text-[10px] px-2 py-0.5 bg-stone-100 text-stone-800 rounded font-extrabold border border-stone-200">
-            COD
-          </span>
+          <div className="flex items-center space-x-1.5">
+            <button
+              onClick={handleTryOnClick}
+              className="text-[10px] px-2 py-0.5 bg-[#D97706]/10 hover:bg-[#D97706] text-[#B45309] hover:text-white rounded font-extrabold border border-[#D97706]/30 transition-all flex items-center space-x-1"
+              title="Try this on in Fitting Room"
+            >
+              <Shirt className="w-3 h-3 stroke-[2.2]" />
+              <span>Try On</span>
+            </button>
+            <span className="text-[10px] px-2 py-0.5 bg-stone-100 text-stone-800 rounded font-extrabold border border-stone-200">
+              COD
+            </span>
+          </div>
         </div>
       </div>
     </div>
