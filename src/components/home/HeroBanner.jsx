@@ -409,11 +409,14 @@ const sareeLooks = [
 ];
 
 const HeroBanner = () => {
-  const [activeLookIndex, setActiveLookIndex] = useState(0);
+  const [currentRotation, setCurrentRotation] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartX, setDragStartX] = useState(0);
+  const [dragStartRotation, setDragStartRotation] = useState(0);
+
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1200
   );
-  const [touchStartX, setTouchStartX] = useState(null);
 
   const { addToCart } = useCart();
   const navigate = useNavigate();
@@ -424,6 +427,9 @@ const HeroBanner = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const count = sareeLooks.length; // 10 looks
+  // Active look index derived from 3D turntable rotation angle
+  const activeLookIndex = ((Math.round(-currentRotation / 36) % count) + count) % count;
   const currentLook = sareeLooks[activeLookIndex];
 
   // Calculate ensemble total
@@ -434,28 +440,43 @@ const HeroBanner = () => {
   );
   const savings = totalOriginalPrice - totalBundlePrice;
 
+  // 3D Turntable rotation handlers
   const handlePrev = () => {
-    setActiveLookIndex((prev) => (prev === 0 ? sareeLooks.length - 1 : prev - 1));
+    setCurrentRotation((prev) => Math.round(prev / 36) * 36 + 36);
   };
 
   const handleNext = () => {
-    setActiveLookIndex((prev) => (prev === sareeLooks.length - 1 ? 0 : prev + 1));
+    setCurrentRotation((prev) => Math.round(prev / 36) * 36 - 36);
   };
 
-  const handleTouchStart = (e) => {
-    setTouchStartX(e.touches ? e.touches[0].clientX : e.clientX);
+  const handleSelectModel = (targetIdx) => {
+    let diff = (targetIdx - activeLookIndex) % count;
+    if (diff > count / 2) diff -= count;
+    if (diff < -count / 2) diff += count;
+    setCurrentRotation((prev) => Math.round(prev / 36) * 36 - diff * (360 / count));
   };
 
-  const handleTouchEnd = (e) => {
-    if (touchStartX === null) return;
-    const endX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
-    const diff = endX - touchStartX;
-    if (diff > 45) {
-      handlePrev();
-    } else if (diff < -45) {
-      handleNext();
-    }
-    setTouchStartX(null);
+  // Drag / swipe 3D rotation gestures
+  const handlePointerDown = (e) => {
+    setIsDragging(true);
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    setDragStartX(clientX);
+    setDragStartRotation(currentRotation);
+  };
+
+  const handlePointerMove = (e) => {
+    if (!isDragging) return;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const deltaX = clientX - dragStartX;
+    // Rotate in 3D: 1px drag = 0.35 deg rotation
+    setCurrentRotation(dragStartRotation + deltaX * 0.35);
+  };
+
+  const handlePointerUp = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    // Snap cleanly to nearest look (multiple of 36 deg)
+    setCurrentRotation((prev) => Math.round(prev / 36) * 36);
   };
 
   const handleAddFullLook = () => {
@@ -481,57 +502,48 @@ const HeroBanner = () => {
   const isMobile = windowWidth < 640;
   const isTablet = windowWidth >= 640 && windowWidth < 1024;
 
-  const R = isMobile ? 180 : isTablet ? 280 : 380;
-  const D = isMobile ? 450 : isTablet ? 600 : 700;
-  const maxFloorDepth = isMobile ? 36 : isTablet ? 55 : 70;
+  const R = isMobile ? 180 : isTablet ? 280 : 370;
+  const maxFloorDepth = isMobile ? 36 : isTablet ? 52 : 68;
 
-  // Turntable dimensions on the floor (encapsulating all models)
-  const turntableWidth = isMobile ? 380 : isTablet ? 580 : 760;
+  // Turntable dimensions on the floor (strictly matching the 3D orbit perimeter)
+  const turntableWidth = isMobile ? 380 : isTablet ? 590 : 760;
   const turntableScaleY = isMobile ? 0.24 : isTablet ? 0.22 : 0.20;
   const turntableHeight = Math.round(turntableWidth * turntableScaleY);
   const turntableBottomOffset = isMobile ? 12 : isTablet ? 16 : 20;
 
-  // 3D Circular Orbit calculations for all 10 looks standing on/inside the circle
+  // 3D Circular Orbit calculations: all 10 models rotate in a real 3D circle
   const getModelStyle = (idx) => {
-    const count = sareeLooks.length;
-    let offset = (idx - activeLookIndex) % count;
-    if (offset > count / 2) offset -= count;
-    if (offset < -count / 2) offset += count;
+    const baseAngle = idx * (360 / count);
+    
+    // Effective angle relative to front camera (0 deg is front center)
+    let effAngle = (baseAngle + currentRotation) % 360;
+    if (effAngle < 0) effAngle += 360;
+    if (effAngle > 180) effAngle -= 360; // range [-180, 180]
 
-    const isCenter = offset === 0;
+    const rad = (effAngle * Math.PI) / 180;
+    const z = Math.cos(rad); // +1 at front, -1 at back
+    const x = Math.sin(rad) * R;
+    const y = ((1 - z) / 2) * maxFloorDepth;
 
-    const angle = (offset * 2 * Math.PI) / count;
-    const x3d = Math.sin(angle) * R;
-    const z3d = Math.cos(angle) * R; // +R at front, -R at back
+    // 3D perspective scale: 1.08 at front, down to 0.58 at back
+    const scale = (0.58 + ((z + 1) / 2) * 0.50).toFixed(3);
+    const depthRatio = (z + 1) / 2;
 
-    // Perspective projection factor
-    const factor = D / (D + (R - z3d));
-    const xScreen = Math.round(x3d * factor);
-    // Depth translateY along the floor ellipse: 0 at front, -maxFloorDepth at back
-    const yScreen = Math.round(((1 - z3d / R) / 2) * maxFloorDepth);
-
-    // Scale from 1.08 down to ~0.50
-    const scale = (factor * 1.05).toFixed(2);
-
-    // Depth ratio: 1.0 at front, 0.0 at back
-    const depthRatio = (z3d + R) / (2 * R);
-
-    // Opacity: front is 1.0, sides are 0.9-0.75, back are 0.5-0.4
+    const isCenter = Math.abs(effAngle) < 18;
     const opacity = isCenter
       ? 1
-      : Math.max(0.38, +(0.35 + depthRatio * 0.65).toFixed(2));
+      : Math.max(0.40, +(0.38 + depthRatio * 0.62).toFixed(2));
 
-    // Z-Index: 50 at front, down to 5 at back
-    const zIndex = isCenter ? 50 : Math.round(depthRatio * 42) + 5;
-
-    // Inward facing curve rotation
-    const rotateY = -offset * 12;
+    const zIndex = isCenter ? 60 : Math.round(depthRatio * 50) + 5;
+    const rotateY = (-effAngle * 0.28).toFixed(1);
 
     return {
-      transform: `translate(${xScreen}px, -${yScreen}px) scale(${scale}) rotateY(${rotateY}deg)`,
+      transform: `translate(${Math.round(x)}px, -${Math.round(y)}px) scale(${scale}) rotateY(${rotateY}deg)`,
       zIndex,
       opacity,
-      pointerEvents: 'auto',
+      transition: isDragging
+        ? 'none'
+        : 'transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.75s ease-out',
     };
   };
 
@@ -554,17 +566,20 @@ const HeroBanner = () => {
                 Try the Look.
               </h1>
               <p className="text-xs sm:text-sm text-stone-700 font-bold max-w-md">
-                Pure handloom sarees & bridal trousseau. All 10 curated looks arranged in 3D circle. Tap any saree or rotate to inspect.
+                Pure handloom sarees & bridal trousseau. Drag or tap rotate to spin the 3D saree circle.
               </p>
             </div>
 
             {/* Runway Stage with Floor Ambient Shadow and Circular Turntable */}
             <div
-              className="relative my-6 lg:my-8 flex items-center justify-center min-h-[480px] sm:min-h-[530px] lg:min-h-[580px] cursor-grab active:cursor-grabbing"
-              onTouchStart={handleTouchStart}
-              onTouchEnd={handleTouchEnd}
-              onMouseDown={handleTouchStart}
-              onMouseUp={handleTouchEnd}
+              className="relative my-6 lg:my-8 flex items-center justify-center min-h-[480px] sm:min-h-[530px] lg:min-h-[580px] cursor-grab active:cursor-grabbing select-none"
+              onTouchStart={handlePointerDown}
+              onTouchMove={handlePointerMove}
+              onTouchEnd={handlePointerUp}
+              onMouseDown={handlePointerDown}
+              onMouseMove={handlePointerMove}
+              onMouseUp={handlePointerUp}
+              onMouseLeave={handlePointerUp}
             >
               {/* Studio Floor Soft Contact Shadows */}
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-4/5 h-12 bg-stone-300/40 rounded-full blur-2xl pointer-events-none"></div>
@@ -618,8 +633,8 @@ const HeroBanner = () => {
                     e.stopPropagation();
                     handleNext();
                   }}
-                  title="Rotate to Next Saree Look"
-                  aria-label="Rotate Saree Look"
+                  title="Rotate Saree Circle"
+                  aria-label="Rotate Saree Circle"
                   className="relative group flex flex-col items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/90 hover:bg-white backdrop-blur-md border-2 border-gold/60 shadow-[0_8px_25px_rgba(104,27,44,0.18)] hover:shadow-[0_12px_32px_rgba(198,161,91,0.4)] transition-all duration-300 active:scale-95 cursor-pointer"
                 >
                   {/* Subtle golden pulse aura */}
@@ -637,7 +652,7 @@ const HeroBanner = () => {
                 </button>
               </div>
 
-              {/* Models Lineup (All 10 Saree Models Arranged Inside the 3D Circle) */}
+              {/* Models Lineup (All 10 Saree Models Arranged in 3D Orbiting Circle) */}
               <div className="relative flex items-end justify-center w-full max-w-5xl h-[460px] sm:h-[520px] lg:h-[560px]">
                 {sareeLooks.map((look, idx) => {
                   const isActive = idx === activeLookIndex;
@@ -646,9 +661,12 @@ const HeroBanner = () => {
                   return (
                     <div
                       key={look.id}
-                      onClick={() => setActiveLookIndex(idx)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSelectModel(idx);
+                      }}
                       style={style}
-                      className="absolute bottom-2 cursor-pointer transition-all duration-500 ease-out flex flex-col items-center group"
+                      className="absolute bottom-2 cursor-pointer flex flex-col items-center group"
                     >
                       {/* Active Center Indicator Pill */}
                       {isActive && (
@@ -658,7 +676,7 @@ const HeroBanner = () => {
                         </div>
                       )}
 
-                      {/* Transparent Standing Model (Authentic Full-Length Saree on Circle) */}
+                      {/* Transparent Standing Model (Authentic Full-Length Saree in 3D Circle) */}
                       <div className="relative w-48 sm:w-56 lg:w-64 h-[400px] sm:h-[460px] lg:h-[500px] flex items-end justify-center">
                         {/* Soft Backdrop Spotlight Halo behind active model */}
                         {isActive && (
@@ -668,6 +686,7 @@ const HeroBanner = () => {
                         <img
                           src={look.modelImage}
                           alt={look.lookTitle}
+                          draggable={false}
                           className={`w-full h-full object-contain object-bottom drop-shadow-[0_15px_25px_rgba(0,0,0,0.18)] transition-all duration-500 ${
                             isActive
                               ? 'filter drop-shadow-[0_20px_35px_rgba(104,27,44,0.22)]'
