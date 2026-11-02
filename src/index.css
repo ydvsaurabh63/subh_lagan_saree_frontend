@@ -108,4 +108,17 @@
   .animate-spin-slow {
     animation: spin-slow 28s linear infinite;
   }
+
+  @keyframes spin-turntable {
+    from {
+      transform: scaleY(0.28) rotate(0deg);
+    }
+    to {
+      transform: scaleY(0.28) rotate(360deg);
+    }
+  }
+
+  .animate-spin-turntable {
+    animation: spin-turntable 28s linear infinite;
+  }
 }

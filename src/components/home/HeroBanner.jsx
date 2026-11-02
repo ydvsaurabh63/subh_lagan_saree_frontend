@@ -14,7 +14,7 @@ import { useCart } from '../../context/CartContext.jsx';
 import { formatPrice } from '../../utils/formatters.js';
 import toast from 'react-hot-toast';
 
-// 5 Curated Royal Indian Saree Looks with Transparent Cutout Full-Length Models
+// 10 Curated Royal Indian Saree Looks with Transparent Cutout Full-Length Models
 const sareeLooks = [
   {
     id: 1,
@@ -178,7 +178,7 @@ const sareeLooks = [
     lookTitle: 'Royal Sapphire Brocade',
     tagline: 'Varanasi Zari Heritage • Pure Silk Brocade',
     modelImage: '/models/model-5.png',
-    sareeSlug: 'mustard-gold-handloom-chanderi-saree',
+    sareeSlug: 'royal-crimson-banarasi-katan-silk-saree',
     items: [
       {
         id: 'saree-5',
@@ -208,6 +208,201 @@ const sareeLooks = [
         price: 899,
         originalPrice: 1299,
         image: 'https://images.unsplash.com/photo-1546804784-896d0dca3805?auto=format&fit=crop&w=300&q=80',
+      },
+    ],
+  },
+  {
+    id: 6,
+    lookNumber: '06',
+    lookTitle: 'Sunshine Yellow Haldi Silk',
+    tagline: 'Festive Haldi • Pure Chanderi Silk Zari',
+    modelImage: '/models/model-6.png',
+    sareeSlug: 'mustard-gold-handloom-chanderi-saree',
+    items: [
+      {
+        id: 'saree-6',
+        type: 'Saree',
+        name: 'Sunshine Yellow Chanderi Silk Saree',
+        detail: 'Lightweight Chanderi Silk • Antique Zari Border',
+        price: 12499,
+        originalPrice: 15999,
+        image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=300&q=80',
+        isMain: true,
+      },
+      {
+        id: 'blouse-6',
+        type: 'Blouse Piece',
+        name: 'Matching Chanderi Silk Blouse Piece',
+        detail: '0.8M Matching Handloom Fabric Included',
+        price: 0,
+        originalPrice: 1899,
+        image: 'https://images.unsplash.com/photo-1610030469668-9655519803b0?auto=format&fit=crop&w=300&q=80',
+        isIncluded: true,
+      },
+      {
+        id: 'acc-6',
+        type: 'Accessory',
+        name: 'Floral Gota Patti Kamarbandh',
+        detail: 'Handcrafted Haldi Festive Accent Belt',
+        price: 1199,
+        originalPrice: 1699,
+        image: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=300&q=80',
+      },
+    ],
+  },
+  {
+    id: 7,
+    lookNumber: '07',
+    lookTitle: 'Royal Plum Purple Kanjivaram',
+    tagline: 'South Indian Royalty • Pure Korvai Silk',
+    modelImage: '/models/model-7.png',
+    sareeSlug: 'maharani-emerald-gold-kanjivaram-silk-saree',
+    items: [
+      {
+        id: 'saree-7',
+        type: 'Saree',
+        name: 'Royal Plum Purple Kanjivaram Silk Saree',
+        detail: 'Pure Mulberry Silk • Magenta & Gold Heavy Pallu',
+        price: 24999,
+        originalPrice: 29999,
+        image: 'https://images.unsplash.com/photo-1610030469668-9655519803b0?auto=format&fit=crop&w=300&q=80',
+        isMain: true,
+      },
+      {
+        id: 'blouse-7',
+        type: 'Blouse Piece',
+        name: 'Heavy Contrast Magenta Zari Blouse',
+        detail: '0.8M Pure Silk with Broad Zari Border',
+        price: 0,
+        originalPrice: 2799,
+        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=300&q=80',
+        isIncluded: true,
+      },
+      {
+        id: 'acc-7',
+        type: 'Accessory',
+        name: 'Temple Antique Gold Bangle Pair',
+        detail: 'South Indian Handcrafted Filigree Work',
+        price: 2199,
+        originalPrice: 2899,
+        image: 'https://images.unsplash.com/photo-1546804784-896d0dca3805?auto=format&fit=crop&w=300&q=80',
+      },
+    ],
+  },
+  {
+    id: 8,
+    lookNumber: '08',
+    lookTitle: 'Pastel Peach Floral Organza',
+    tagline: 'Contemporary Soiree • Scallop Resham Weave',
+    modelImage: '/models/model-8.png',
+    sareeSlug: 'blush-rose-french-organza-saree',
+    items: [
+      {
+        id: 'saree-8',
+        type: 'Saree',
+        name: 'Pastel Peach Floral Organza Silk Saree',
+        detail: 'Sheer Silk Organza • Hand Embroidered Scallop Border',
+        price: 16999,
+        originalPrice: 21000,
+        image: 'https://images.unsplash.com/photo-1609357605051-bd6b7588e1aa?auto=format&fit=crop&w=300&q=80',
+        isMain: true,
+      },
+      {
+        id: 'blouse-8',
+        type: 'Blouse Piece',
+        name: 'Raw Silk Embroidered Blouse Piece',
+        detail: '0.8M Pastel Raw Silk with Pearl Work',
+        price: 0,
+        originalPrice: 2299,
+        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=300&q=80',
+        isIncluded: true,
+      },
+      {
+        id: 'acc-8',
+        type: 'Accessory',
+        name: 'Handcrafted Pearl & Zari Clutch',
+        detail: 'Ivory Raw Silk with Hand-Sewn Pearls',
+        price: 1599,
+        originalPrice: 2199,
+        image: 'https://images.unsplash.com/photo-1546804784-896d0dca3805?auto=format&fit=crop&w=300&q=80',
+      },
+    ],
+  },
+  {
+    id: 9,
+    lookNumber: '09',
+    lookTitle: 'Midnight Black Banarasi Silk',
+    tagline: 'Cocktail Royale • Antique Shikargah Zari',
+    modelImage: '/models/model-9.png',
+    sareeSlug: 'midnight-navy-sequin-georgette-saree',
+    items: [
+      {
+        id: 'saree-9',
+        type: 'Saree',
+        name: 'Midnight Black Banarasi Brocade Silk Saree',
+        detail: 'Pure Katan Silk • Antique Gold Floral Boota Weave',
+        price: 22499,
+        originalPrice: 27500,
+        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=300&q=80',
+        isMain: true,
+      },
+      {
+        id: 'blouse-9',
+        type: 'Blouse Piece',
+        name: 'Antique Gold Tissue Silk Blouse',
+        detail: '0.8M Heavy Metallic Tissue Included',
+        price: 0,
+        originalPrice: 2999,
+        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=300&q=80',
+        isIncluded: true,
+      },
+      {
+        id: 'acc-9',
+        type: 'Accessory',
+        name: 'Velvet Antique Gold Embroidered Potli',
+        detail: 'Black Velvet with Zardozi Embroidery',
+        price: 1799,
+        originalPrice: 2399,
+        image: 'https://images.unsplash.com/photo-1546804784-896d0dca3805?auto=format&fit=crop&w=300&q=80',
+      },
+    ],
+  },
+  {
+    id: 10,
+    lookNumber: '10',
+    lookTitle: 'Peacock Teal Heritage Silk',
+    tagline: 'Auspicious Muhurtham • Pure Mulberry Zari',
+    modelImage: '/models/model-10.png',
+    sareeSlug: 'royal-crimson-banarasi-katan-silk-saree',
+    items: [
+      {
+        id: 'saree-10',
+        type: 'Saree',
+        name: 'Peacock Teal Heritage Mulberry Silk Saree',
+        detail: 'Pure Silk • Intricate Woven Peacock Pallu & Border',
+        price: 23999,
+        originalPrice: 28999,
+        image: 'https://images.unsplash.com/photo-1546804784-896d0dca3805?auto=format&fit=crop&w=300&q=80',
+        isMain: true,
+      },
+      {
+        id: 'blouse-10',
+        type: 'Blouse Piece',
+        name: 'Contrast Brocade Silk Blouse Piece',
+        detail: '0.8M Unstitched Handloom Silk Included',
+        price: 0,
+        originalPrice: 2599,
+        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=300&q=80',
+        isIncluded: true,
+      },
+      {
+        id: 'acc-10',
+        type: 'Accessory',
+        name: 'Peacock Motif Handcrafted Zari Latkan',
+        detail: 'Antique Gold Thread & Beaded Accents',
+        price: 999,
+        originalPrice: 1499,
+        image: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=300&q=80',
       },
     ],
   },
@@ -282,7 +477,7 @@ const HeroBanner = () => {
     }
   };
 
-  // 3D Circular Orbit calculations
+  // 3D Circular Orbit calculations for 10 looks
   const getModelStyle = (idx) => {
     const count = sareeLooks.length;
     let offset = (idx - activeLookIndex) % count;
@@ -293,12 +488,22 @@ const HeroBanner = () => {
     const isCenter = offset === 0;
 
     // Responsive horizontal distance
-    const spacing = windowWidth < 640 ? 75 : windowWidth < 1024 ? 120 : 160;
+    const spacing = windowWidth < 640 ? 75 : windowWidth < 1024 ? 120 : 155;
     const translateX = offset * spacing;
+
+    // Models further on the back of the circular carousel fade out cleanly
+    if (absOffset > 2) {
+      return {
+        transform: `translateX(${translateX}px) scale(0.6) rotateY(${-offset * 12}deg)`,
+        zIndex: 0,
+        opacity: 0,
+        pointerEvents: 'none',
+      };
+    }
 
     // 3D Depth Scale, Opacity, and Z-Index
     const scale = isCenter ? 1.08 : absOffset === 1 ? 0.88 : 0.74;
-    const opacity = isCenter ? 1 : absOffset === 1 ? 0.82 : 0.45;
+    const opacity = isCenter ? 1 : absOffset === 1 ? 0.82 : 0.48;
     const zIndex = isCenter ? 40 : absOffset === 1 ? 25 : 10;
     const rotateY = -offset * 10; // inward curve toward center
 
@@ -306,6 +511,7 @@ const HeroBanner = () => {
       transform: `translateX(${translateX}px) scale(${scale}) rotateY(${rotateY}deg)`,
       zIndex,
       opacity,
+      pointerEvents: 'auto',
     };
   };
 
@@ -343,21 +549,27 @@ const HeroBanner = () => {
               {/* Studio Floor Soft Contact Shadows */}
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-4/5 h-12 bg-stone-300/40 rounded-full blur-2xl pointer-events-none"></div>
 
-              {/* 3D Circular Turntable Pedestal on Floor beneath center model */}
-              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-[320px] sm:w-[420px] lg:w-[460px] h-[90px] sm:h-[110px] pointer-events-none flex items-center justify-center">
-                {/* Rotating golden dashed orbit ring */}
-                <div className="absolute inset-0 rounded-full border-2 border-dashed border-gold/60 animate-spin-slow scale-y-[0.32] shadow-[0_0_25px_rgba(198,161,91,0.25)]"></div>
-                {/* Inner golden concentric rim */}
-                <div className="absolute inset-3 rounded-full border border-gold/40 scale-y-[0.32]"></div>
-                {/* Radial spotlight floor glow */}
-                <div className="w-4/5 h-4/5 rounded-full bg-radial from-gold/30 via-gold/10 to-transparent blur-md scale-y-[0.30]"></div>
+              {/* 3D Circular Turntable Floor Pedestal (strictly flattened to studio floor perspective) */}
+              <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-[340px] sm:w-[440px] lg:w-[480px] h-[110px] pointer-events-none flex items-center justify-center">
+                {/* Perspective scale wrapper that stays flat forever */}
+                <div
+                  className="relative w-[340px] sm:w-[420px] lg:w-[460px] h-[340px] sm:h-[420px] flex items-center justify-center"
+                  style={{ transform: 'scaleY(0.24)' }}
+                >
+                  {/* Rotating golden dashed orbit ring */}
+                  <div className="absolute inset-0 rounded-full border-2 border-dashed border-gold/60 animate-spin-slow"></div>
+                  {/* Inner golden concentric rim */}
+                  <div className="absolute inset-6 rounded-full border border-gold/40"></div>
+                  {/* Radial spotlight floor glow */}
+                  <div className="w-4/5 h-4/5 rounded-full bg-radial from-gold/30 via-gold/10 to-transparent blur-md"></div>
+                </div>
                 {/* Center contact shadow under model feet */}
-                <div className="w-44 sm:w-52 h-8 bg-stone-900/35 rounded-full blur-md scale-y-[0.32]"></div>
+                <div className="absolute bottom-1 w-44 sm:w-56 h-6 bg-stone-900/35 rounded-full blur-md"></div>
               </div>
 
               {/* Floating Circular Rotate Dial beside Center Model */}
               <div
-                className="absolute left-1/2 top-[46%] -translate-y-1/2 z-50 pointer-events-auto"
+                className="absolute left-1/2 top-[48%] -translate-y-1/2 z-50 pointer-events-auto"
                 style={{
                   transform: 'translate(calc(-50% + 125px), -50%)',
                 }}
@@ -386,7 +598,7 @@ const HeroBanner = () => {
                 </button>
               </div>
 
-              {/* Models Lineup (Full Length Saree Cutouts in 3D Circular Orbit) */}
+              {/* Models Lineup (10 Full Length Saree Cutouts in 3D Circular Orbit) */}
               <div className="relative flex items-end justify-center w-full max-w-4xl h-[460px] sm:h-[520px] lg:h-[560px]">
                 {sareeLooks.map((look, idx) => {
                   const isActive = idx === activeLookIndex;
@@ -459,7 +671,7 @@ const HeroBanner = () => {
 
                 <div className="text-xs">
                   <span className="font-serif font-bold text-primary">
-                    {currentLook.lookNumber} / 05
+                    {currentLook.lookNumber} / 10
                   </span>
                   <span className="text-stone-400 mx-2">•</span>
                   <span className="font-semibold text-brandText">
@@ -469,7 +681,7 @@ const HeroBanner = () => {
               </div>
 
               {/* Minimalist Scrubber Timeline Bar with Clickable Segments */}
-              <div className="flex items-center space-x-2 w-full sm:w-64">
+              <div className="flex items-center space-x-2 w-full sm:w-72">
                 <span className="text-[10px] font-mono text-stone-400">01</span>
                 <div className="relative flex-1 h-1.5 bg-stone-200 rounded-full overflow-hidden flex items-center">
                   <div
@@ -477,7 +689,7 @@ const HeroBanner = () => {
                     style={{ width: `${((activeLookIndex + 1) / sareeLooks.length) * 100}%` }}
                   ></div>
                 </div>
-                <span className="text-[10px] font-mono text-stone-400">05</span>
+                <span className="text-[10px] font-mono text-stone-400">10</span>
               </div>
             </div>
           </div>
