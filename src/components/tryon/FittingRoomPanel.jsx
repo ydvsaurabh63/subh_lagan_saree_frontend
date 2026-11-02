@@ -73,12 +73,11 @@ const FittingRoomPanel = () => {
   return (
     <>
       {/* 
-        EXACT CARD SIZE & LAYOUT MATCHING USER'S SCREENSHOT
-        Taller portrait card with high-aspect ratio photo frame and bold Change Photo button
+        CARD SIZE: REDUCED BY 5% WIDTH & 10% HEIGHT
       */}
       <aside
         aria-label="Fitting Room"
-        className="fixed left-3 sm:left-6 top-10 sm:top-14 z-50 w-[330px] sm:w-[380px] max-w-[94vw] bg-[#141416] border border-stone-800 rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.92)] text-white overflow-hidden transition-all duration-300 animate-fade-in p-4 sm:p-5 space-y-3.5 select-none"
+        className="fixed left-3 sm:left-6 top-10 sm:top-14 z-50 w-[315px] sm:w-[360px] max-w-[94vw] bg-[#141416] border border-stone-800 rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.92)] text-white overflow-hidden transition-all duration-300 animate-fade-in p-3.5 sm:p-4 space-y-3 select-none"
       >
         {/* Hidden File Input */}
         <input
@@ -90,8 +89,8 @@ const FittingRoomPanel = () => {
         />
 
         {/* Header (Exact Match to Screenshot) */}
-        <div className="flex items-center justify-between pb-2.5 border-b border-stone-800/90">
-          <h3 className="font-serif text-xl sm:text-2xl font-bold text-white tracking-tight">
+        <div className="flex items-center justify-between pb-2 border-b border-stone-800/90">
+          <h3 className="font-serif text-lg sm:text-xl font-bold text-white tracking-tight">
             Fitting room
           </h3>
           <div className="flex items-center space-x-1">
@@ -116,27 +115,27 @@ const FittingRoomPanel = () => {
 
         {/* 
           STATE 1: NO PHOTO UPLOADED YET 
-          HIGHLIGHTED "UPLOAD GALLERY" BOX (SAME PORTRAIT CARD SIZE)
+          HIGHLIGHTED "UPLOAD GALLERY" BOX (5% NARROWER, 10% SHORTER)
         */}
         {!customUserPhoto ? (
           <div className="space-y-3">
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="w-full aspect-[3/4] max-h-[460px] rounded-2xl border-2 border-dashed border-[#D97706] bg-gradient-to-b from-[#D97706]/15 via-[#D97706]/5 to-transparent hover:bg-[#D97706]/20 transition-all duration-300 flex flex-col items-center justify-center p-6 text-center cursor-pointer group shadow-[0_0_35px_rgba(217,119,6,0.2)] hover:shadow-[0_0_50px_rgba(217,119,6,0.35)] active:scale-98"
+              className="w-full aspect-[4/5] max-h-[415px] rounded-2xl border-2 border-dashed border-[#D97706] bg-gradient-to-b from-[#D97706]/15 via-[#D97706]/5 to-transparent hover:bg-[#D97706]/20 transition-all duration-300 flex flex-col items-center justify-center p-5 text-center cursor-pointer group shadow-[0_0_35px_rgba(217,119,6,0.2)] hover:shadow-[0_0_50px_rgba(217,119,6,0.35)] active:scale-98"
             >
-              <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-[#D97706] text-white flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
-                <ImagePlus className="w-8 h-8 sm:w-9 sm:h-9" />
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#D97706] text-white flex items-center justify-center mb-3.5 shadow-lg group-hover:scale-110 transition-transform">
+                <ImagePlus className="w-7 h-7 sm:w-8 sm:h-8" />
               </div>
 
-              <h4 className="font-serif text-lg sm:text-xl font-bold text-white tracking-wide">
+              <h4 className="font-serif text-base sm:text-lg font-bold text-white tracking-wide">
                 Upload Gallery
               </h4>
-              <p className="text-xs sm:text-sm text-[#F59E0B] font-semibold mt-1.5">
+              <p className="text-xs sm:text-sm text-[#F59E0B] font-semibold mt-1">
                 Tap to upload your photo
               </p>
 
               {selectedProduct && (
-                <div className="mt-5 px-3.5 py-1.5 rounded-full bg-black/60 border border-white/10 text-xs text-stone-200 truncate max-w-[260px]">
+                <div className="mt-4 px-3 py-1 rounded-full bg-black/60 border border-white/10 text-[11px] text-stone-200 truncate max-w-[240px]">
                   Saree: <span className="text-[#F59E0B] font-bold">{selectedProduct.name}</span>
                 </div>
               )}
@@ -144,35 +143,35 @@ const FittingRoomPanel = () => {
           </div>
         ) : (
           /* 
-            STATE 2: PHOTO UPLOADED FROM GALLERY (EXACT MATCH TO SCREENSHOT)
+            STATE 2: PHOTO UPLOADED FROM GALLERY (5% NARROWER, 10% SHORTER)
           */
           <div className="space-y-3 animate-fade-in">
             {/* Main Portrait Photo Frame */}
-            <div className="relative w-full aspect-[3/4] max-h-[460px] rounded-2xl overflow-hidden bg-stone-900 border border-stone-800 flex items-center justify-center shadow-inner">
+            <div className="relative w-full aspect-[4/5] max-h-[415px] rounded-2xl overflow-hidden bg-stone-900 border border-stone-800 flex items-center justify-center shadow-inner">
               <img
                 src={selectedProduct?.drapedPreview || customUserPhoto}
                 alt="Your Photo"
                 className="w-full h-full object-cover object-top"
               />
 
-              {/* Top-Left Badge (Exact Match) */}
-              <div className="absolute top-3 left-3 z-10 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md text-xs font-bold text-white border border-white/10 shadow-sm">
+              {/* Top-Left Badge */}
+              <div className="absolute top-2.5 left-2.5 z-10 px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md text-[11px] font-bold text-white border border-white/10 shadow-sm">
                 Your Photo
               </div>
 
               {/* Processing Overlay */}
               {isProcessing && (
                 <div className="absolute inset-0 z-20 bg-black/75 backdrop-blur-sm flex flex-col items-center justify-center p-3 text-center text-white space-y-2 animate-fade-in">
-                  <div className="w-9 h-9 rounded-full border-2 border-[#D97706] border-t-transparent animate-spin"></div>
+                  <div className="w-8 h-8 rounded-full border-2 border-[#D97706] border-t-transparent animate-spin"></div>
                   <p className="text-xs font-serif font-bold text-stone-100">Fitting Saree...</p>
                 </div>
               )}
             </div>
 
-            {/* Change Photo Button (Exact Match to Screenshot) */}
+            {/* Change Photo Button */}
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="w-full py-3 px-4 rounded-xl bg-[#222226] hover:bg-[#2c2c32] text-white text-sm font-bold flex items-center justify-center space-x-2 border border-stone-700/60 transition active:scale-98 shadow-sm"
+              className="w-full py-2.5 px-4 rounded-xl bg-[#222226] hover:bg-[#2c2c32] text-white text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 border border-stone-700/60 transition active:scale-98 shadow-sm"
             >
               <Camera className="w-4 h-4 text-[#F59E0B]" />
               <span>Change Photo</span>
