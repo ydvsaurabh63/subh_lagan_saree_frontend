@@ -6,16 +6,16 @@ import { ChevronRight, ChevronLeft } from 'lucide-react';
 const categoryFallbacks = {
   'banarasi-sarees': 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80',
   'bridal-sarees': 'https://images.unsplash.com/photo-1546804784-896d0dca3805?auto=format&fit=crop&w=400&q=80',
-  'chiffon-sarees': '/models/model-8.png',
+  'chiffon-sarees': 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=400&q=80',
   'cotton-sarees': 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=400&q=80',
   'designer-sarees': 'https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=400&q=80',
-  'georgette-sarees': '/models/model-4.png',
+  'georgette-sarees': 'https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=400&q=80',
   'kanjivaram-sarees': 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=400&q=80',
-  'organza-sarees': '/models/model-6.png',
-  'party-wear-sarees': '/models/model-9.png',
-  'printed-sarees': '/models/model-5.png',
-  'silk-sarees': '/models/model-2.png',
-  'wedding-sarees': '/models/model-3.png',
+  'organza-sarees': 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=400&q=80',
+  'party-wear-sarees': 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80',
+  'printed-sarees': 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=400&q=80',
+  'silk-sarees': 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=400&q=80',
+  'wedding-sarees': 'https://images.unsplash.com/photo-1546804784-896d0dca3805?auto=format&fit=crop&w=400&q=80',
 };
 
 const CategoryGrid = ({ categories = [] }) => {

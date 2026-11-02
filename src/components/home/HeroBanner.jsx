@@ -126,7 +126,7 @@ const sareeLooks = [
         detail: 'Bridal Organza with Scallop Border',
         price: 3499,
         originalPrice: 4499,
-        image: 'https://images.unsplash.com/photo-1609357605051-bd6b7588e1aa?auto=format&fit=crop&w=300&q=80',
+        image: 'https://images.unsplash.com/photo-1546804784-896d0dca3805?auto=format&fit=crop&w=300&q=80',
       },
     ],
   },
@@ -233,7 +233,7 @@ const sareeLooks = [
         detail: '0.8M Matching Handloom Fabric Included',
         price: 0,
         originalPrice: 1899,
-        image: 'https://images.unsplash.com/photo-1610030469668-9655519803b0?auto=format&fit=crop&w=300&q=80',
+        image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=300&q=80',
         isIncluded: true,
       },
       {
@@ -262,7 +262,7 @@ const sareeLooks = [
         detail: 'Pure Mulberry Silk • Magenta & Gold Heavy Pallu',
         price: 24999,
         originalPrice: 29999,
-        image: 'https://images.unsplash.com/photo-1610030469668-9655519803b0?auto=format&fit=crop&w=300&q=80',
+        image: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=300&q=80',
         isMain: true,
       },
       {
@@ -301,7 +301,7 @@ const sareeLooks = [
         detail: 'Sheer Silk Organza • Hand Embroidered Scallop Border',
         price: 16999,
         originalPrice: 21000,
-        image: 'https://images.unsplash.com/photo-1609357605051-bd6b7588e1aa?auto=format&fit=crop&w=300&q=80',
+        image: 'https://images.unsplash.com/photo-1546804784-896d0dca3805?auto=format&fit=crop&w=300&q=80',
         isMain: true,
       },
       {
