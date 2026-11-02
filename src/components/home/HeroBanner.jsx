@@ -467,8 +467,8 @@ const HeroBanner = () => {
     if (!isDragging) return;
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const deltaX = clientX - dragStartX;
-    // Rotate in 3D: 1px drag = 0.35 deg rotation
-    setCurrentRotation(dragStartRotation + deltaX * 0.35);
+    // Slower, smooth & controlled 3D rotation drag: 1px drag = 0.16 deg rotation
+    setCurrentRotation(dragStartRotation + deltaX * 0.16);
   };
 
   const handlePointerUp = () => {
@@ -542,7 +542,7 @@ const HeroBanner = () => {
       opacity,
       transition: isDragging
         ? 'none'
-        : 'transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.75s ease-out',
+        : 'transform 1.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.2s ease-out',
     };
   };
 
@@ -706,12 +706,22 @@ const HeroBanner = () => {
                 </div>
               </div>
 
-              {/* Minimalist Scrubber Timeline Bar with Clickable Segments */}
+              {/* Minimalist Scrubber Timeline Bar with Smooth Slow Transition */}
               <div className="flex items-center space-x-2 w-full sm:w-72">
                 <span className="text-[10px] font-mono text-stone-400">01</span>
-                <div className="relative flex-1 h-1.5 bg-stone-200 rounded-full overflow-hidden flex items-center">
+                <div
+                  onClick={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left;
+                    const pct = Math.max(0, Math.min(1, clickX / rect.width));
+                    const targetIdx = Math.min(count - 1, Math.floor(pct * count));
+                    handleSelectModel(targetIdx);
+                  }}
+                  className="relative flex-1 h-2 bg-stone-200 hover:bg-stone-300 cursor-pointer rounded-full overflow-hidden flex items-center transition-colors"
+                  title="Click to glide smoothly to any look"
+                >
                   <div
-                    className="h-full bg-primary transition-all duration-300 rounded-full"
+                    className="h-full bg-primary transition-all duration-700 ease-out rounded-full shadow-sm"
                     style={{ width: `${((activeLookIndex + 1) / sareeLooks.length) * 100}%` }}
                   ></div>
                 </div>
