@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  *, ::before, ::after {
+    font-family: 'Roboto', system-ui, -apple-system, sans-serif;
+  }
+
   html {
     scroll-behavior: smooth;
     font-family: 'Roboto', system-ui, -apple-system, sans-serif;
@@ -23,9 +27,9 @@
     max-width: 100vw;
   }
 
-  /* Solid weighted headings with royal Indian aesthetic */
+  /* Solid weighted headings with Roboto font */
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Roboto', system-ui, -apple-system, sans-serif;
     font-weight: 700;
     color: #1A1616;
     letter-spacing: -0.015em;
@@ -83,21 +87,21 @@
     background: linear-gradient(135deg, #83273B 0%, #681B2C 50%, #42101E 100%);
   }
   
-  /* Weighted typography helpers */
+  /* Weighted typography helpers with Roboto font */
   .font-weighted-title {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Roboto', system-ui, -apple-system, sans-serif;
     font-weight: 800;
     letter-spacing: -0.02em;
   }
 
   .font-weighted-kpi {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Roboto', system-ui, -apple-system, sans-serif;
     font-weight: 800;
     letter-spacing: -0.02em;
   }
 
   .font-weighted-sub {
-    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    font-family: 'Roboto', system-ui, -apple-system, sans-serif;
     font-weight: 700;
     letter-spacing: 0.02em;
   }

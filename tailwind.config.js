@@ -35,10 +35,10 @@ export default {
         }
       },
       fontFamily: {
-        serif: ['"Playfair Display"', 'Georgia', 'serif'],
-        cinzel: ['"Cinzel"', '"Playfair Display"', 'Georgia', 'serif'],
         sans: ['"Roboto"', 'system-ui', '-apple-system', 'sans-serif'],
         roboto: ['"Roboto"', 'system-ui', '-apple-system', 'sans-serif'],
+        serif: ['"Roboto"', 'system-ui', '-apple-system', 'sans-serif'],
+        cinzel: ['"Roboto"', 'system-ui', '-apple-system', 'sans-serif'],
       },
       boxShadow: {
         'luxury': '0 10px 30px -5px rgba(104, 27, 44, 0.08), 0 4px 10px -2px rgba(198, 161, 91, 0.05)',
