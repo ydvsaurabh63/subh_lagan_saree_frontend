@@ -123,5 +123,17 @@ export const adminApi = {
   getSubscribers: () => api.get('/newsletter/admin/all'),
 };
 
+// Upload API (Cloudinary via backend)
+export const uploadApi = {
+  uploadImage: (formData) =>
+    api.post('/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }),
+  uploadMultiple: (formData) =>
+    api.post('/upload/multiple', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }),
+};
+
 export default api;
 
