@@ -599,7 +599,8 @@ const HeroBanner = () => {
 
   const turntableScaleY = isMobile ? 0.24 : isTablet ? 0.22 : 0.20;
   const turntableHeight = Math.round(turntableWidth * turntableScaleY);
-  const turntableBottomOffset = isMobile ? 38 : isTablet ? 50 : 58;
+  const turntableBottomOffset = isMobile ? 80 : isTablet ? 110 : 135;
+  const modelBottomOffset = isMobile ? 75 : isTablet ? 105 : 130;
 
   // 3D Circular Orbit calculations: all 10 models rotate in a real 3D circle
   const getModelStyle = (idx) => {
@@ -658,7 +659,7 @@ const HeroBanner = () => {
 
             {/* Runway Stage with Floor Ambient Shadow and Circular Turntable */}
             <div
-              className="relative my-4 sm:my-6 lg:my-8 flex items-center justify-center min-h-[420px] sm:min-h-[500px] lg:min-h-[580px] cursor-grab active:cursor-grabbing select-none"
+              className="relative mt-2 mb-4 sm:mt-3 sm:mb-6 flex items-center justify-center min-h-[440px] sm:min-h-[520px] lg:min-h-[600px] cursor-grab active:cursor-grabbing select-none"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => {
                 setIsHovered(false);
@@ -672,7 +673,10 @@ const HeroBanner = () => {
               onMouseUp={handlePointerUp}
             >
               {/* Studio Floor Soft Contact Shadows */}
-              <div className="absolute bottom-12 sm:bottom-16 left-1/2 -translate-x-1/2 w-4/5 h-12 bg-stone-300/40 rounded-full blur-2xl pointer-events-none"></div>
+              <div
+                className="absolute left-1/2 -translate-x-1/2 w-4/5 h-12 bg-stone-300/40 rounded-full blur-2xl pointer-events-none"
+                style={{ bottom: `${turntableBottomOffset}px` }}
+              ></div>
 
               {/* 3D Circular Turntable Floor Platform (encapsulates all models inside the circle) */}
               <div
@@ -718,7 +722,7 @@ const HeroBanner = () => {
               </div>
 
               {/* Models Lineup (All 10 Saree Models Arranged in 3D Orbiting Circle) */}
-              <div className="relative flex items-end justify-center w-full max-w-5xl h-[400px] sm:h-[480px] lg:h-[560px]">
+              <div className="relative flex items-end justify-center w-full max-w-5xl h-[420px] sm:h-[500px] lg:h-[580px]">
                 {looks.map((look, idx) => {
                   const isActive = idx === activeLookIndex;
                   const style = getModelStyle(idx);
@@ -730,11 +734,14 @@ const HeroBanner = () => {
                         e.stopPropagation();
                         handleSelectModel(idx);
                       }}
-                      style={style}
-                      className="absolute bottom-8 sm:bottom-14 cursor-pointer flex flex-col items-center group"
+                      style={{
+                        ...style,
+                        bottom: `${modelBottomOffset}px`,
+                      }}
+                      className="absolute cursor-pointer flex flex-col items-center group"
                     >
                       {/* Transparent Standing Model (Authentic Full-Length Saree in 3D Circle) */}
-                      <div className="relative w-40 sm:w-56 lg:w-64 h-[340px] sm:h-[440px] lg:h-[500px] flex items-end justify-center">
+                      <div className="relative w-44 sm:w-60 lg:w-68 h-[370px] sm:h-[460px] lg:h-[530px] flex items-end justify-center">
                         {/* Soft Backdrop Spotlight Halo behind active model */}
                         {isActive && (
                           <div className="absolute inset-0 -top-6 bg-radial from-gold/20 via-gold/5 to-transparent rounded-full filter blur-xl pointer-events-none -z-10"></div>
