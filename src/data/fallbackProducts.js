@@ -139,3 +139,4 @@ export const fallbackSarees = [
     isNewArrival: true,
   },
 ];
+

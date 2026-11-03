@@ -616,20 +616,22 @@ const HeroBanner = () => {
     const x = Math.sin(rad) * R;
     const y = ((1 - z) / 2) * maxFloorDepth;
 
-    // 3D perspective scale: 1.08 at front, down to 0.58 at back
-    const scale = (0.58 + ((z + 1) / 2) * 0.50).toFixed(3);
+    // 3D perspective scale with prominent Center Spotlight Zoom (1.32 at center front, 1.10 flanking, down to 0.52 at back)
     const depthRatio = (z + 1) / 2;
+    const focalBoost = Math.pow(Math.max(0, z), 3.5) * 0.32;
+    const scale = (0.52 + depthRatio * 0.48 + focalBoost).toFixed(3);
 
     const isCenter = Math.abs(effAngle) < 18;
     const opacity = isCenter
       ? 1
       : Math.max(0.40, +(0.38 + depthRatio * 0.62).toFixed(2));
 
-    const zIndex = isCenter ? 60 : Math.round(depthRatio * 50) + 5;
+    const zIndex = isCenter ? 70 : Math.round(depthRatio * 50) + 5;
     const rotateY = (-effAngle * 0.28).toFixed(1);
 
     return {
       transform: `translate(${x.toFixed(2)}px, -${y.toFixed(2)}px) scale(${scale}) rotateY(${rotateY}deg)`,
+      transformOrigin: 'bottom center',
       zIndex,
       opacity,
       transition: isDragging || !isSnapping
