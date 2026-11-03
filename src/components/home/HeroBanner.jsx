@@ -578,26 +578,27 @@ const HeroBanner = () => {
   const isTablet = windowWidth >= 640 && windowWidth < 1024;
   const isLaptop = windowWidth >= 1024 && windowWidth < 1280;
 
-  const R = isMobile
-    ? Math.max(120, Math.min(160, (windowWidth - 32) * 0.40))
+  // Horizontal Radius (Rx): On mobile, use an expanded radius with lateral clearance to prevent flanking models from crowding the center spotlight
+  const Rx = isMobile
+    ? Math.max(200, Math.min(250, (windowWidth - 20) * 0.58))
     : isTablet
     ? Math.min(270, windowWidth * 0.35)
     : isLaptop
     ? 320
     : 370;
 
-  const maxFloorDepth = isMobile ? 28 : isTablet ? 48 : 68;
+  const maxFloorDepth = isMobile ? 26 : isTablet ? 48 : 68;
 
   // Turntable dimensions on the floor (strictly matching the 3D orbit perimeter)
   const turntableWidth = isMobile
-    ? Math.max(260, Math.min(340, windowWidth - 24))
+    ? Math.round(Rx * 2.05)
     : isTablet
     ? 560
     : isLaptop
     ? 680
     : 760;
 
-  const turntableScaleY = isMobile ? 0.24 : isTablet ? 0.22 : 0.20;
+  const turntableScaleY = isMobile ? 0.22 : isTablet ? 0.22 : 0.20;
   const turntableHeight = Math.round(turntableWidth * turntableScaleY);
   const turntableBottomOffset = isMobile ? 120 : isTablet ? 155 : 185;
   const modelBottomOffset = isMobile ? 115 : isTablet ? 150 : 180;
@@ -613,17 +614,29 @@ const HeroBanner = () => {
 
     const rad = (effAngle * Math.PI) / 180;
     const z = Math.cos(rad); // +1 at front, -1 at back
-    const x = Math.sin(rad) * R;
+
+    // Smooth horizontal position with continuous outward separation on mobile to prevent models from sticking to center
+    const sinVal = Math.sin(rad);
+    const lateralClearance = isMobile
+      ? Math.sign(sinVal) * Math.pow(Math.abs(sinVal), 0.75) * 50
+      : 0;
+    const x = sinVal * Rx + lateralClearance;
     const y = ((1 - z) / 2) * maxFloorDepth;
 
-    // 3D perspective scale with prominent Center Spotlight Zoom (1.32 at center front, 1.10 flanking, down to 0.52 at back)
+    // 3D perspective scale:
+    // On mobile: Center model is ~1.20, flanking models ~0.92 to provide crisp separation and avoid overlapping
+    // On desktop: Center is 1.32, flanking 1.10
     const depthRatio = (z + 1) / 2;
-    const focalBoost = Math.pow(Math.max(0, z), 3.5) * 0.32;
-    const scale = (0.52 + depthRatio * 0.48 + focalBoost).toFixed(3);
+    const scale = isMobile
+      ? (0.48 + depthRatio * 0.38 + Math.pow(Math.max(0, z), 4.5) * 0.34).toFixed(3)
+      : (0.52 + depthRatio * 0.48 + Math.pow(Math.max(0, z), 3.5) * 0.32).toFixed(3);
 
     const isCenter = Math.abs(effAngle) < 18;
+    // On mobile, gently reduce opacity of back background models to avoid visual clutter
     const opacity = isCenter
       ? 1
+      : isMobile
+      ? Math.max(0.18, +(0.15 + Math.pow(depthRatio, 2.0) * 0.75).toFixed(2))
       : Math.max(0.40, +(0.38 + depthRatio * 0.62).toFixed(2));
 
     const zIndex = isCenter ? 70 : Math.round(depthRatio * 50) + 5;
@@ -743,7 +756,7 @@ const HeroBanner = () => {
                       className="absolute cursor-pointer flex flex-col items-center group"
                     >
                       {/* Transparent Standing Model (Authentic Full-Length Saree in 3D Circle) */}
-                      <div className="relative w-44 sm:w-60 lg:w-68 h-[370px] sm:h-[460px] lg:h-[530px] flex items-end justify-center">
+                      <div className="relative w-36 sm:w-60 lg:w-68 h-[370px] sm:h-[460px] lg:h-[530px] flex items-end justify-center">
                         {/* Soft Backdrop Spotlight Halo behind active model */}
                         {isActive && (
                           <div className="absolute inset-0 -top-6 bg-radial from-gold/20 via-gold/5 to-transparent rounded-full filter blur-xl pointer-events-none -z-10"></div>
@@ -763,7 +776,7 @@ const HeroBanner = () => {
 
                       {/* Natural Elliptical Floor Contact Shadow under each model on the circle */}
                       <div
-                        className={`w-36 h-4 bg-stone-900/25 rounded-full blur-md -mt-2 transition-all ${
+                        className={`w-28 sm:w-36 h-4 bg-stone-900/25 rounded-full blur-md -mt-2 transition-all ${
                           isActive ? 'scale-110 opacity-70' : 'opacity-40'
                         }`}
                       ></div>
