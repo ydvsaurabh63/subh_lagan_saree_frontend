@@ -31,6 +31,13 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Auto-close dropdowns and mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setSearchOpen(false);
+    setUserDropdownOpen(false);
+  }, [location.pathname, location.search]);
+
   useEffect(() => {
     if (searchOpen && searchInputRef.current) {
       searchInputRef.current.focus();
@@ -57,63 +64,69 @@ const Navbar = () => {
     { name: 'Contact', path: '/contact' },
   ];
 
+  const isLinkActive = (path) => {
+    if (path === '/') return location.pathname === '/';
+    if (path === '/shop') return location.pathname === '/shop' && !location.search;
+    return location.pathname + location.search === path;
+  };
+
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-stone-200 transition-all shadow-sm">
+    <header className="sticky top-0 z-[100] bg-white border-b border-stone-200/90 shadow-sm transition-all duration-200">
       <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Single Compact Top Row Header */}
-        <div className="flex items-center justify-between h-16 lg:h-18">
+        <div className="flex items-center justify-between h-16 lg:h-20">
           
           {/* Mobile Menu & Search Icon (Small screens) */}
-          <div className="flex items-center lg:hidden">
+          <div className="flex items-center lg:hidden space-x-1">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-1.5 rounded-md text-brandText hover:text-primary focus:outline-none"
+              className="p-2 rounded-lg text-brandText hover:text-primary hover:bg-cream transition focus:outline-none"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
             <button
               onClick={() => setSearchOpen(!searchOpen)}
-              className="p-1.5 ml-1 text-brandText hover:text-primary focus:outline-none"
+              className="p-2 rounded-lg text-brandText hover:text-primary hover:bg-cream transition focus:outline-none"
               aria-label="Search"
             >
               <Search className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Brand Logo (Left) */}
-          <div className="flex-1 lg:flex-none text-center lg:text-left">
+          {/* Brand Logo */}
+          <div className="flex items-center">
             <Link to="/" className="inline-flex items-center space-x-2 group">
-              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center border-2 border-gold text-gold font-serif font-bold text-base shadow-sm group-hover:scale-105 transition-transform">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-primary flex items-center justify-center border-2 border-gold text-gold font-serif font-bold text-sm sm:text-base shadow-sm group-hover:scale-105 transition-transform">
                 SL
               </div>
               <div className="text-left">
-                <span className="block font-serif text-lg sm:text-xl font-extrabold tracking-tight text-primary leading-none group-hover:text-primary-light transition-colors">
+                <span className="block font-serif text-base sm:text-lg lg:text-xl font-extrabold tracking-tight text-primary leading-none group-hover:text-primary-light transition-colors">
                   SUBH LAGAN
                 </span>
-                <span className="block text-[9px] tracking-[0.25em] uppercase text-gold-dark font-extrabold leading-tight">
+                <span className="block text-[8px] sm:text-[9px] tracking-[0.22em] uppercase text-gold-dark font-extrabold leading-tight">
                   SAREES • HERITAGE
                 </span>
               </div>
             </Link>
           </div>
 
-          {/* Desktop Navigation Links (Shifted UP into Main Header Row) */}
-          <nav className="hidden lg:flex items-center space-x-3 xl:space-x-6 2xl:space-x-8 text-[10px] xl:text-[11px] font-extrabold uppercase tracking-widest text-stone-900 whitespace-nowrap">
+          {/* Desktop Navigation Links (Bold, readable, clean Roboto typography) */}
+          <nav className="hidden lg:flex items-center space-x-3 xl:space-x-5 2xl:space-x-7 text-xs xl:text-[13px] font-bold uppercase tracking-wider text-stone-800 whitespace-nowrap">
             {navLinks.map((link) => {
-              const isActive = location.pathname + location.search === link.path;
+              const active = isLinkActive(link.path);
               return (
                 <Link
                   key={link.name}
                   to={link.path}
-                  className={`py-1 transition-colors duration-150 relative ${
-                    isActive
+                  className={`py-1.5 transition-colors duration-150 relative ${
+                    active
                       ? 'text-primary font-black'
-                      : 'hover:text-primary'
+                      : 'hover:text-primary text-stone-700'
                   }`}
                 >
                   {link.name}
-                  {isActive && (
+                  {active && (
                     <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full"></span>
                   )}
                 </Link>
@@ -122,11 +135,11 @@ const Navbar = () => {
           </nav>
 
           {/* Right Icons: Search Icon (Small), User Account, Wishlist, Cart */}
-          <div className="flex items-center space-x-1 sm:space-x-2.5">
+          <div className="flex items-center space-x-1 sm:space-x-2">
             {/* Desktop Small Search Icon (Toggles sleek search bar) */}
             <button
               onClick={() => setSearchOpen(!searchOpen)}
-              className={`p-2 rounded-full transition ${
+              className={`p-2 rounded-full transition hidden lg:inline-flex ${
                 searchOpen
                   ? 'bg-primary text-white'
                   : 'text-stone-700 hover:text-primary hover:bg-cream'
@@ -280,77 +293,93 @@ const Navbar = () => {
         )}
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Drawer Menu with Backdrop Overlay */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-white border-b border-stone-200 px-4 pt-2 pb-6 space-y-3 shadow-lg">
-          <div className="flex flex-col space-y-1.5 pt-2">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 text-xs font-semibold text-stone-700 hover:text-primary hover:bg-cream rounded-md transition"
-              >
-                {link.name}
-              </Link>
-            ))}
-          </div>
+        <div className="fixed inset-0 top-16 z-50 lg:hidden">
+          {/* Backdrop overlay (click outside to close) */}
+          <div
+            className="fixed inset-0 bg-black/50 backdrop-blur-xs"
+            onClick={() => setMobileMenuOpen(false)}
+          />
 
-          <div className="border-t border-stone-100 pt-3">
-            {isAuthenticated ? (
-              <div className="space-y-2">
-                {user?.role === 'admin' && (
+          {/* Menu Drawer */}
+          <div className="relative bg-white border-b border-stone-200 px-5 pt-3 pb-6 space-y-4 shadow-2xl max-h-[calc(100vh-64px)] overflow-y-auto">
+            <div className="flex flex-col space-y-1">
+              {navLinks.map((link) => {
+                const active = isLinkActive(link.path);
+                return (
                   <Link
-                    to="/admin"
+                    key={link.name}
+                    to={link.path}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-2 text-xs font-bold text-cream bg-primary rounded-md flex items-center gap-2"
+                    className={`px-3 py-2.5 text-xs font-bold rounded-lg transition ${
+                      active
+                        ? 'bg-primary text-white font-extrabold shadow-sm'
+                        : 'text-stone-700 hover:text-primary hover:bg-cream'
+                    }`}
                   >
-                    <ShieldCheck className="w-4 h-4 text-gold" />
-                    Admin Control Panel
+                    {link.name}
                   </Link>
-                )}
-                <Link
-                  to="/profile"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block px-3 py-2 text-xs font-semibold text-stone-700 hover:text-primary hover:bg-cream rounded-md"
-                >
-                  My Profile ({user?.name})
-                </Link>
-                <Link
-                  to="/profile?tab=orders"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block px-3 py-2 text-xs font-semibold text-stone-700 hover:text-primary hover:bg-cream rounded-md"
-                >
-                  My Orders
-                </Link>
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    logout();
-                  }}
-                  className="w-full text-left px-3 py-2 text-xs font-semibold text-rose-700 hover:bg-rose-50 rounded-md"
-                >
-                  Log Out
-                </button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 gap-2 pt-1">
-                <Link
-                  to="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-center py-2 text-xs font-semibold uppercase tracking-wider text-primary border border-primary rounded-md hover:bg-cream"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  to="/register"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-center py-2 text-xs font-semibold uppercase tracking-wider text-white bg-primary rounded-md hover:bg-primary-light"
-                >
-                  Register
-                </Link>
-              </div>
-            )}
+                );
+              })}
+            </div>
+
+            <div className="border-t border-stone-100 pt-3">
+              {isAuthenticated ? (
+                <div className="space-y-2">
+                  {user?.role === 'admin' && (
+                    <Link
+                      to="/admin"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block px-3 py-2 text-xs font-bold text-cream bg-primary rounded-md flex items-center gap-2"
+                    >
+                      <ShieldCheck className="w-4 h-4 text-gold" />
+                      Admin Control Panel
+                    </Link>
+                  )}
+                  <Link
+                    to="/profile"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block px-3 py-2 text-xs font-semibold text-stone-700 hover:text-primary hover:bg-cream rounded-md"
+                  >
+                    My Profile ({user?.name})
+                  </Link>
+                  <Link
+                    to="/profile?tab=orders"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block px-3 py-2 text-xs font-semibold text-stone-700 hover:text-primary hover:bg-cream rounded-md"
+                  >
+                    My Orders
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      logout();
+                    }}
+                    className="w-full text-left px-3 py-2 text-xs font-semibold text-rose-700 hover:bg-rose-50 rounded-md"
+                  >
+                    Log Out
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-2 pt-1">
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-center py-2 text-xs font-semibold uppercase tracking-wider text-primary border border-primary rounded-md hover:bg-cream"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/register"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-center py-2 text-xs font-semibold uppercase tracking-wider text-white bg-primary rounded-md hover:bg-primary-light"
+                  >
+                    Register
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
