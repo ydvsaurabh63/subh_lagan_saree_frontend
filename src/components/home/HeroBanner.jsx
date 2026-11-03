@@ -4,6 +4,10 @@ import {
   ShieldCheck,
   ArrowRight,
   ShoppingBag,
+  X,
+  Sparkles,
+  Truck,
+  RotateCcw,
 } from 'lucide-react';
 import { useCart } from '../../context/CartContext.jsx';
 import { productApi } from '../../services/api.js';
@@ -411,6 +415,8 @@ const HeroBanner = () => {
   const [dragStartRotation, setDragStartRotation] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isSnapping, setIsSnapping] = useState(false);
+  const [quickViewLook, setQuickViewLook] = useState(null);
+  const dragDistanceRef = useRef(0);
 
   const snapTimeoutRef = useRef(null);
   const requestRef = useRef(null);
@@ -522,10 +528,20 @@ const HeroBanner = () => {
   };
 
   const handleSelectModel = (targetIdx) => {
+    // If the user was dragging/swiping the 3D turntable, do not open modal
+    if (dragDistanceRef.current > 6) {
+      dragDistanceRef.current = 0;
+      return;
+    }
     let diff = (targetIdx - activeLookIndex) % count;
     if (diff > count / 2) diff -= count;
     if (diff < -count / 2) diff += count;
     triggerSnap(Math.round(currentRotation / 36) * 36 - diff * (360 / count));
+    
+    // Open Quick View & Instant Order modal for this look
+    if (looks[targetIdx]) {
+      setQuickViewLook(looks[targetIdx]);
+    }
   };
 
   // Drag / swipe 3D rotation gestures
@@ -534,6 +550,7 @@ const HeroBanner = () => {
     setIsSnapping(false);
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     setDragStartX(clientX);
+    dragDistanceRef.current = 0;
     setDragStartRotation(currentRotation);
   };
 
@@ -541,6 +558,7 @@ const HeroBanner = () => {
     if (!isDragging) return;
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const deltaX = clientX - dragStartX;
+    dragDistanceRef.current = Math.abs(deltaX);
     // Rotate in 3D: 1px drag = 0.35 deg rotation
     setCurrentRotation(dragStartRotation + deltaX * 0.35);
   };
@@ -552,22 +570,44 @@ const HeroBanner = () => {
     triggerSnap(Math.round(currentRotation / 36) * 36);
   };
 
-  const handleAddFullLook = () => {
-    const mainSaree = currentLook.items.find((it) => it.isMain);
+  const handleAddFullLook = (lookToUse = currentLook) => {
+    const mainSaree = lookToUse.items?.find((it) => it.isMain) || lookToUse.items?.[0];
+    const bundlePrice = lookToUse.items?.reduce((acc, it) => acc + it.price, 0) || 19999;
     if (mainSaree) {
       addToCart(
         {
           _id: mainSaree.id,
           name: `${mainSaree.name} (Full Look Ensemble)`,
-          price: mainSaree.originalPrice,
-          discountPrice: totalBundlePrice,
+          price: mainSaree.originalPrice || mainSaree.price,
+          discountPrice: bundlePrice,
           images: [mainSaree.image],
           fabric: 'Pure Handloom Silk',
-          color: currentLook.lookTitle.split(' ')[1] || 'Festive',
+          color: lookToUse.lookTitle.split(' ')[1] || 'Festive',
         },
         1
       );
-      toast.success(`Complete Look "${currentLook.lookTitle}" added to Bag!`);
+      toast.success(`Complete Look "${lookToUse.lookTitle}" added to Bag!`);
+    }
+  };
+
+  const handleOrderNow = (lookToUse = currentLook) => {
+    const mainSaree = lookToUse.items?.find((it) => it.isMain) || lookToUse.items?.[0];
+    const bundlePrice = lookToUse.items?.reduce((acc, it) => acc + it.price, 0) || 19999;
+    if (mainSaree) {
+      addToCart(
+        {
+          _id: mainSaree.id,
+          name: `${mainSaree.name} (Full Look Ensemble)`,
+          price: mainSaree.originalPrice || mainSaree.price,
+          discountPrice: bundlePrice,
+          images: [mainSaree.image],
+          fabric: 'Pure Handloom Silk',
+          color: lookToUse.lookTitle.split(' ')[1] || 'Festive',
+        },
+        1
+      );
+      setQuickViewLook(null);
+      navigate('/checkout');
     }
   };
 
@@ -754,6 +794,12 @@ const HeroBanner = () => {
                   >
                     {/* Transparent Standing Model */}
                     <div className="relative w-36 sm:w-56 lg:w-64 h-[370px] sm:h-[460px] lg:h-[540px] flex items-end justify-center">
+                      {/* Floating 'Tap to Order' hover badge */}
+                      <div className="absolute top-2 px-3 py-1 bg-white/95 border border-gold/60 rounded-full shadow-lg text-[10px] font-black text-primary tracking-wider uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none flex items-center space-x-1.5 z-30">
+                        <ShoppingBag className="w-3 h-3 text-gold" />
+                        <span>Tap to Order</span>
+                      </div>
+
                       {/* Soft Backdrop Spotlight Halo behind active model */}
                       {isActive && (
                         <div className="absolute inset-0 -top-6 bg-radial from-gold/20 via-gold/5 to-transparent rounded-full filter blur-xl pointer-events-none -z-10"></div>
@@ -896,14 +942,23 @@ const HeroBanner = () => {
               </div>
 
               <div className="space-y-2.5 pt-4">
-                <button
-                  onClick={handleAddFullLook}
-                  className="w-full py-3.5 px-4 bg-primary hover:bg-secondary text-cream rounded-xl text-xs font-extrabold uppercase tracking-widest transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-2 active:scale-98 cursor-pointer"
-                >
-                  <ShoppingBag className="w-4 h-4 text-gold" />
-                  <span>Add Full Look to Bag</span>
-                  <ArrowRight className="w-4 h-4 text-gold stroke-[2.5]" />
-                </button>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2">
+                  <button
+                    onClick={() => handleAddFullLook(currentLook)}
+                    className="w-full py-3.5 px-3 bg-primary hover:bg-secondary text-cream rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 active:scale-98 cursor-pointer"
+                  >
+                    <ShoppingBag className="w-4 h-4 text-gold" />
+                    <span>Add to Bag</span>
+                  </button>
+
+                  <button
+                    onClick={() => handleOrderNow(currentLook)}
+                    className="w-full py-3.5 px-3 bg-gold hover:bg-gold-light text-stone-950 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 active:scale-98 cursor-pointer"
+                  >
+                    <Sparkles className="w-4 h-4 text-primary" />
+                    <span>Order Now (COD)</span>
+                  </button>
+                </div>
 
                 <div className="flex items-center justify-between text-[11px] px-1 text-stone-600">
                   <Link
@@ -923,6 +978,137 @@ const HeroBanner = () => {
         </div>
 
       </div>
+
+      {/* ========================================================= */}
+      {/* QUICK VIEW & DIRECT ORDER MODAL ON MODEL CLICK            */}
+      {/* ========================================================= */}
+      {quickViewLook && (
+        <div
+          className="fixed inset-0 z-[120] flex items-center justify-center p-4 sm:p-6 bg-black/65 backdrop-blur-xs animate-fadeIn"
+          onClick={() => setQuickViewLook(null)}
+        >
+          <div
+            className="relative w-full max-w-2xl bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border-2 border-gold/50 max-h-[92vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Close Button */}
+            <button
+              onClick={() => setQuickViewLook(null)}
+              className="absolute top-4 right-4 p-2 rounded-full text-stone-400 hover:text-stone-900 hover:bg-stone-100 transition cursor-pointer"
+              aria-label="Close"
+              title="Close"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Header Tag */}
+            <div className="flex items-center space-x-2.5 mb-4">
+              <span className="px-3 py-1 bg-gold/25 text-gold-dark font-black text-xs uppercase tracking-wider rounded border border-gold/40">
+                Look {quickViewLook.lookNumber}
+              </span>
+              <span className="text-xs text-stone-600 font-bold">
+                {quickViewLook.tagline}
+              </span>
+            </div>
+
+            {/* Content Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
+              {/* Left Column: Model Cutout Image */}
+              <div className="sm:col-span-5 aspect-[3/4] rounded-2xl bg-[#F8F7F4] border border-stone-200 overflow-hidden relative flex items-center justify-center p-3 shadow-inner">
+                <img
+                  src={quickViewLook.modelImage}
+                  alt={quickViewLook.lookTitle}
+                  className="w-full h-full object-contain object-bottom drop-shadow-[0_12px_24px_rgba(0,0,0,0.22)]"
+                />
+                <span className="absolute bottom-2 left-2 right-2 text-center text-[10px] font-extrabold bg-white/95 text-primary py-1 rounded-md shadow-xs border border-stone-200">
+                  Pure Handloom Silk
+                </span>
+              </div>
+
+              {/* Right Column: Saree Details, Breakdown, and Actions */}
+              <div className="sm:col-span-7 space-y-4">
+                <div>
+                  <h3 className="font-serif text-xl sm:text-2xl font-black text-stone-950 leading-tight">
+                    {quickViewLook.lookTitle}
+                  </h3>
+                  <p className="text-xs text-stone-600 font-medium mt-1">
+                    {quickViewLook.items?.[0]?.detail || 'Pure Silk Saree • Handwoven Zari'}
+                  </p>
+                </div>
+
+                {/* Price Display */}
+                <div className="p-3.5 bg-cream/70 rounded-xl border border-gold/40 flex items-baseline justify-between">
+                  <div>
+                    <span className="text-xs text-stone-600 font-bold block">Ensemble Total:</span>
+                    <div className="flex items-baseline space-x-2 mt-0.5">
+                      <span className="text-2xl font-black text-primary font-sans">
+                        {formatPrice(quickViewLook.items?.reduce((acc, it) => acc + it.price, 0) || 19999)}
+                      </span>
+                      <span className="text-xs text-stone-400 line-through font-bold">
+                        {formatPrice(quickViewLook.items?.reduce((acc, it) => acc + (it.originalPrice || it.price), 0) || 24999)}
+                      </span>
+                    </div>
+                  </div>
+                  <span className="text-xs font-black text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded border border-emerald-300">
+                    COD Available
+                  </span>
+                </div>
+
+                {/* What's Included */}
+                <div className="space-y-1.5 text-xs">
+                  <div className="font-bold text-stone-700">Included in this look:</div>
+                  <div className="space-y-1 text-[11px] text-stone-600">
+                    <div className="flex items-center justify-between p-1.5 rounded bg-stone-50 border border-stone-200">
+                      <span className="truncate pr-2">1. {quickViewLook.items?.[0]?.name}</span>
+                      <span className="font-bold text-stone-900 shrink-0">{formatPrice(quickViewLook.items?.[0]?.price)}</span>
+                    </div>
+                    <div className="flex items-center justify-between p-1.5 rounded bg-stone-50 border border-stone-200">
+                      <span className="truncate pr-2">2. {quickViewLook.items?.[1]?.name}</span>
+                      <span className="font-black text-emerald-700 shrink-0">FREE</span>
+                    </div>
+                    <div className="flex items-center justify-between p-1.5 rounded bg-stone-50 border border-stone-200">
+                      <span className="truncate pr-2">3. {quickViewLook.items?.[2]?.name}</span>
+                      <span className="font-bold text-stone-900 shrink-0">{formatPrice(quickViewLook.items?.[2]?.price)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons: Add to Cart & Order Now (COD) */}
+                <div className="space-y-2 pt-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button
+                      onClick={() => handleAddFullLook(quickViewLook)}
+                      className="w-full py-3.5 px-4 bg-primary hover:bg-secondary text-white rounded-xl text-xs font-bold uppercase tracking-wider transition shadow-md hover:shadow-lg flex items-center justify-center space-x-2 cursor-pointer active:scale-98"
+                    >
+                      <ShoppingBag className="w-4 h-4 text-gold" />
+                      <span>Add To Cart</span>
+                    </button>
+
+                    <button
+                      onClick={() => handleOrderNow(quickViewLook)}
+                      className="w-full py-3.5 px-4 bg-gold hover:bg-gold-light text-stone-950 rounded-xl text-xs font-black uppercase tracking-wider transition shadow-md hover:shadow-lg flex items-center justify-center space-x-2 cursor-pointer active:scale-98"
+                    >
+                      <Sparkles className="w-4 h-4 text-primary" />
+                      <span>Order Now (COD)</span>
+                    </button>
+                  </div>
+
+                  <div className="text-center pt-1">
+                    <Link
+                      to={`/product/${quickViewLook.sareeSlug}`}
+                      onClick={() => setQuickViewLook(null)}
+                      className="text-xs text-stone-600 hover:text-primary transition underline font-medium inline-flex items-center space-x-1"
+                    >
+                      <span>Explore complete fabric & drape details</span>
+                      <ArrowRight className="w-3.5 h-3.5 text-gold" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
