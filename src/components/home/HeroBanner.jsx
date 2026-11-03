@@ -638,8 +638,8 @@ const HeroBanner = () => {
 
   const turntableScaleY = isMobile ? 0.22 : isTablet ? 0.22 : 0.20;
   const turntableHeight = Math.round(turntableWidth * turntableScaleY);
-  const turntableBottomOffset = isMobile ? 120 : isTablet ? 155 : 185;
-  const modelBottomOffset = isMobile ? 115 : isTablet ? 150 : 180;
+  const turntableBottomOffset = isMobile ? 65 : isTablet ? 155 : 185;
+  const modelBottomOffset = isMobile ? 60 : isTablet ? 150 : 180;
 
   // 3D Circular Orbit calculations: all 10 models rotate in a real 3D circle
   const getModelStyle = (idx) => {
@@ -656,21 +656,21 @@ const HeroBanner = () => {
     // Smooth horizontal position with continuous outward separation on mobile to prevent models from sticking to center
     const sinVal = Math.sin(rad);
     const lateralClearance = isMobile
-      ? Math.sign(sinVal) * Math.pow(Math.abs(sinVal), 0.70) * 58
+      ? Math.sign(sinVal) * Math.pow(Math.abs(sinVal), 0.65) * 75
       : 0;
     const x = sinVal * Rx + lateralClearance;
     const y = ((1 - z) / 2) * maxFloorDepth;
 
     // 3D perspective scale:
-    // On mobile: Balanced Center Spotlight Zoom (~1.31 at center front, ~0.98 flanking)
-    // On desktop: Center is 1.34, flanking 1.10
+    // On mobile: Dramatic Center Spotlight Zoom (~1.88 at center front for large height & width, ~1.12 flanking)
+    // On desktop: Center is 1.40, flanking 1.10
     const depthRatio = (z + 1) / 2;
     const focalBoost = isMobile
-      ? Math.pow(Math.max(0, z), 5.0) * 0.42
-      : Math.pow(Math.max(0, z), 3.5) * 0.32;
+      ? Math.pow(Math.max(0, z), 5.0) * 1.05
+      : Math.pow(Math.max(0, z), 3.5) * 0.36;
 
-    const baseMin = isMobile ? 0.44 : 0.52;
-    const depthMul = isMobile ? 0.45 : 0.48;
+    const baseMin = isMobile ? 0.38 : 0.52;
+    const depthMul = isMobile ? 0.44 : 0.48;
     const scale = (baseMin + depthRatio * depthMul + focalBoost).toFixed(3);
 
     const isCenter = Math.abs(effAngle) < 18;
@@ -715,7 +715,7 @@ const HeroBanner = () => {
 
           {/* Runway Stage with Floor Ambient Shadow and Circular Turntable */}
           <div
-            className="relative -mt-1 mb-2 sm:mt-0 sm:mb-4 flex items-center justify-center min-h-[440px] sm:min-h-[520px] lg:min-h-[620px] cursor-grab active:cursor-grabbing select-none"
+            className="relative -mt-1 mb-2 sm:mt-0 sm:mb-4 flex items-center justify-center min-h-[500px] sm:min-h-[540px] lg:min-h-[620px] cursor-grab active:cursor-grabbing select-none"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => {
               setIsHovered(false);
@@ -778,7 +778,7 @@ const HeroBanner = () => {
             </div>
 
             {/* Models Lineup (All 10 Saree Models in 3D Full-Width Orbiting Circle) */}
-            <div className="relative flex items-end justify-center w-full max-w-7xl h-[420px] sm:h-[500px] lg:h-[600px]">
+            <div className="relative flex items-end justify-center w-full max-w-7xl h-[470px] sm:h-[510px] lg:h-[600px]">
               {looks.map((look, idx) => {
                 const isActive = idx === activeLookIndex;
                 const style = getModelStyle(idx);
@@ -797,7 +797,7 @@ const HeroBanner = () => {
                     className="absolute cursor-pointer flex flex-col items-center group"
                   >
                     {/* Transparent Standing Model */}
-                    <div className="relative w-36 sm:w-56 lg:w-64 h-[370px] sm:h-[460px] lg:h-[540px] flex items-end justify-center">
+                    <div className="relative w-44 sm:w-56 lg:w-64 h-[410px] sm:h-[470px] lg:h-[540px] flex items-end justify-center">
                       {/* Floating 'Tap to Order' hover badge */}
                       <div className="absolute top-2 px-3 py-1 bg-white/95 border border-gold/60 rounded-full shadow-lg text-[10px] font-black text-primary tracking-wider uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none flex items-center space-x-1.5 z-30">
                         <ShoppingBag className="w-3 h-3 text-gold" />
@@ -823,7 +823,7 @@ const HeroBanner = () => {
 
                     {/* Floor Contact Shadow */}
                     <div
-                      className={`w-28 sm:w-36 h-4 bg-stone-900/25 rounded-full blur-md -mt-2 transition-all ${
+                      className={`w-32 sm:w-36 h-4 bg-stone-900/25 rounded-full blur-md -mt-2 transition-all ${
                         isActive ? 'scale-110 opacity-70' : 'opacity-40'
                       }`}
                     ></div>
