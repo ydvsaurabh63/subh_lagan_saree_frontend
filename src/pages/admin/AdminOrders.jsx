@@ -318,8 +318,11 @@ const AdminOrders = () => {
                   <p className="text-[10px] text-gold uppercase tracking-widest font-semibold mt-0.5">
                     Heirloom Silk & Bridal Drapes
                   </p>
-                  <p className="text-[10px] text-stone-500 mt-1">
-                    support@subhlagansarees.com • +91 98765 00000
+                  <p className="text-[10px] text-stone-500 mt-0.5">
+                    Near Maharaja Sweets, Sutapatti, Muzaffarpur, Bihar 842001
+                  </p>
+                  <p className="text-[10px] text-stone-500 mt-0.5">
+                    care@subhlagansarees.com • +91 98765 43210
                   </p>
                 </div>
                 <div className="text-right">

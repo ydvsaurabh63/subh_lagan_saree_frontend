@@ -35,7 +35,7 @@ const ShippingPolicy = () => {
 
             <h3 className="font-serif text-base font-bold text-brandText">4. Parcel Tracking</h3>
             <p>
-              Once your parcel leaves our Jaipur central fulfillment warehouse, tracking details are updated directly under your <strong>My Orders</strong> profile tab and dispatched to your registered email address.
+              Once your parcel leaves our Muzaffarpur central fulfillment boutique, tracking details are updated directly under your <strong>My Orders</strong> profile tab and dispatched to your registered email address.
             </p>
           </div>
         </div>

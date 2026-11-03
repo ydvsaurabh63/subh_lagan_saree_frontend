@@ -1,6 +1,6 @@
 import React from 'react';
 import Breadcrumb from '../components/common/Breadcrumb.jsx';
-import { Sparkles, Award, Heart, Users } from 'lucide-react';
+import { Sparkles, Award, Heart, Users, MapPin } from 'lucide-react';
 
 const AboutUs = () => {
   return (
@@ -72,6 +72,31 @@ const AboutUs = () => {
               Transparent pricing with safe Cash on Delivery pan-India.
             </p>
           </div>
+        </div>
+
+        {/* Flagship Boutique Visit */}
+        <div className="bg-primary text-white rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-luxury my-8">
+          <div className="space-y-2 text-center md:text-left">
+            <span className="text-[11px] uppercase tracking-widest text-gold font-bold">Visit In Person</span>
+            <h3 className="font-serif text-xl sm:text-2xl font-bold text-white">
+              Flagship Boutique in Muzaffarpur
+            </h3>
+            <p className="text-xs sm:text-sm text-stone-300 max-w-xl">
+              Experience the touch of authentic silk, inspect hand-woven zari borders, and receive personalized bridal trousseau consultations.
+            </p>
+            <p className="text-xs text-gold-light font-medium flex items-center justify-center md:justify-start space-x-1.5 pt-1">
+              <MapPin className="w-4 h-4 text-gold flex-shrink-0" />
+              <span>Near Maharaja Sweets, Sutapatti, Muzaffarpur, Bihar 842001</span>
+            </p>
+          </div>
+          <a
+            href="https://www.google.com/maps/search/?api=1&query=Shubh+Lagan+Saree+near+Maharaja+sweets+Sutapatti+Muzaffarpur+Bihar+842001"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-6 py-3 bg-gold hover:bg-gold-light text-stone-950 font-bold text-xs uppercase tracking-wider rounded-xl transition shadow-md whitespace-nowrap"
+          >
+            Get Directions
+          </a>
         </div>
       </div>
     </div>

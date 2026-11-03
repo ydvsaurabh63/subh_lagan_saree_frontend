@@ -74,11 +74,19 @@ const Footer = () => {
             <p className="text-xs leading-relaxed text-stone-400 max-w-sm">
               Authentic Banarasi, Kanjivaram, and pure silk sarees.
             </p>
-            <div className="pt-1 text-xs space-y-1.5 text-stone-400">
-              <div className="flex items-center space-x-2">
-                <MapPin className="w-3.5 h-3.5 text-gold flex-shrink-0" />
-                <span>Johari Bazaar, Jaipur, Rajasthan 302003</span>
-              </div>
+            <div className="pt-1 text-xs space-y-2 text-stone-400">
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Shubh+Lagan+Saree+near+Maharaja+sweets+Sutapatti+Muzaffarpur+Bihar+842001"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start space-x-2 hover:text-gold transition group"
+                title="Open Boutique Location on Google Maps"
+              >
+                <MapPin className="w-3.5 h-3.5 text-gold flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
+                <span className="leading-relaxed">
+                  Near Maharaja Sweets, Sutapatti, Muzaffarpur, Bihar 842001
+                </span>
+              </a>
               <div className="flex items-center space-x-2">
                 <Phone className="w-3.5 h-3.5 text-gold flex-shrink-0" />
                 <span>+91 98765 43210</span>
