@@ -599,8 +599,8 @@ const HeroBanner = () => {
 
   const turntableScaleY = isMobile ? 0.24 : isTablet ? 0.22 : 0.20;
   const turntableHeight = Math.round(turntableWidth * turntableScaleY);
-  const turntableBottomOffset = isMobile ? 80 : isTablet ? 110 : 135;
-  const modelBottomOffset = isMobile ? 75 : isTablet ? 105 : 130;
+  const turntableBottomOffset = isMobile ? 120 : isTablet ? 155 : 185;
+  const modelBottomOffset = isMobile ? 115 : isTablet ? 150 : 180;
 
   // 3D Circular Orbit calculations: all 10 models rotate in a real 3D circle
   const getModelStyle = (idx) => {
@@ -648,7 +648,7 @@ const HeroBanner = () => {
           {/* ========================================================= */}
           <div className="lg:col-span-8 flex flex-col justify-between">
             {/* Header Titles */}
-            <div className="space-y-1">
+            <div className="space-y-1 relative z-10">
               <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-black text-stone-950 tracking-tight">
                 Try the Look.
               </h1>
@@ -659,7 +659,7 @@ const HeroBanner = () => {
 
             {/* Runway Stage with Floor Ambient Shadow and Circular Turntable */}
             <div
-              className="relative mt-2 mb-4 sm:mt-3 sm:mb-6 flex items-center justify-center min-h-[440px] sm:min-h-[520px] lg:min-h-[600px] cursor-grab active:cursor-grabbing select-none"
+              className="relative -mt-1 mb-3 sm:mt-0 sm:mb-4 flex items-center justify-center min-h-[440px] sm:min-h-[520px] lg:min-h-[600px] cursor-grab active:cursor-grabbing select-none"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => {
                 setIsHovered(false);
