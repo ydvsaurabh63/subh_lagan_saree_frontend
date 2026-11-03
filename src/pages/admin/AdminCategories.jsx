@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout.jsx';
-import { categoryApi, adminApi } from '../../services/api.js';
+import { categoryApi, adminApi, uploadApi } from '../../services/api.js';
 import toast from 'react-hot-toast';
-import { Plus, Edit2, Trash2, X, Tags, Sparkles } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Tags, Sparkles, Upload, Loader2 } from 'lucide-react';
 
 const AdminCategories = () => {
   const [categories, setCategories] = useState([]);
@@ -10,6 +10,8 @@ const AdminCategories = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const fileInputRef = useRef(null);
 
   const initialForm = {
     name: '',
@@ -52,6 +54,29 @@ const AdminCategories = () => {
       status: cat.status || 'active',
     });
     setIsModalOpen(true);
+  };
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      setUploadingImage(true);
+      const fd = new FormData();
+      fd.append('image', file);
+      const res = await uploadApi.uploadImage(fd);
+      if (res && res.url) {
+        setFormData((prev) => ({
+          ...prev,
+          image: res.url,
+        }));
+        toast.success('Category cover uploaded to Cloudinary!');
+      }
+    } catch (err) {
+      toast.error('Image upload failed: ' + (err.message || 'Error'));
+    } finally {
+      setUploadingImage(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -218,16 +243,43 @@ const AdminCategories = () => {
 
               <div>
                 <label className="block font-semibold text-stone-700 mb-1">
-                  Cover Image URL *
+                  Cover Image (Cloudinary / Image URL) *
                 </label>
-                <input
-                  type="url"
-                  required
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  placeholder="https://images.unsplash.com/..."
-                  className="w-full p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
-                />
+                <div className="flex gap-2">
+                  <input
+                    type="url"
+                    required
+                    value={formData.image}
+                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                    placeholder="https://images.unsplash.com/..."
+                    className="flex-1 p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileUpload}
+                    accept="image/*"
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    disabled={uploadingImage}
+                    onClick={() => fileInputRef.current?.click()}
+                    className="inline-flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-primary to-secondary text-cream rounded-lg hover:brightness-110 font-bold transition shadow-sm disabled:opacity-50 shrink-0"
+                  >
+                    {uploadingImage ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin text-gold" />
+                        Uploading...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-3.5 h-3.5 text-gold" />
+                        Upload
+                      </>
+                    )}
+                  </button>
+                </div>
                 {formData.image && (
                   <div className="mt-2 h-24 rounded-lg overflow-hidden border border-stone-200">
                     <img
@@ -290,4 +342,3 @@ const AdminCategories = () => {
 };
 
 export default AdminCategories;
-

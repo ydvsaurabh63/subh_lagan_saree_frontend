@@ -8,6 +8,7 @@ import {
   ShoppingBag,
 } from 'lucide-react';
 import { useCart } from '../../context/CartContext.jsx';
+import { productApi } from '../../services/api.js';
 import { formatPrice } from '../../utils/formatters.js';
 import toast from 'react-hot-toast';
 
@@ -430,10 +431,46 @@ const HeroBanner = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const count = sareeLooks.length; // 10 looks
+  const [looks, setLooks] = useState(sareeLooks);
+
+  // Dynamically load live sarees from database while keeping fallbacks
+  useEffect(() => {
+    productApi.getProducts({ limit: 10 }).then((res) => {
+      if (res.success && res.products && res.products.length >= 3) {
+        const dynamicLooks = res.products.slice(0, 10).map((prod, idx) => {
+          const defaultLook = sareeLooks[idx] || sareeLooks[0];
+          return {
+            id: prod._id,
+            lookNumber: String(idx + 1).padStart(2, '0'),
+            lookTitle: prod.name,
+            tagline: `${prod.fabric} • ${prod.occasion || 'Handcrafted'}`,
+            modelImage: defaultLook.modelImage,
+            sareeSlug: prod.slug,
+            items: [
+              {
+                id: prod._id,
+                type: 'Saree',
+                name: prod.name,
+                detail: `${prod.fabric} • ${prod.color}`,
+                price: prod.discountPrice || prod.price,
+                originalPrice: prod.price,
+                image: (prod.images && prod.images[0]) || defaultLook.items[0].image,
+                isMain: true,
+              },
+              defaultLook.items[1],
+              defaultLook.items[2],
+            ],
+          };
+        });
+        setLooks(dynamicLooks);
+      }
+    }).catch(() => {});
+  }, []);
+
+  const count = looks.length;
   // Active look index derived from 3D turntable rotation angle
   const activeLookIndex = ((Math.round(-currentRotation / 36) % count) + count) % count;
-  const currentLook = sareeLooks[activeLookIndex];
+  const currentLook = looks[activeLookIndex] || sareeLooks[0];
 
   // Slow clockwise 3D rotation (~4.5 deg/sec => 80s for 1 complete revolution)
   useEffect(() => {
@@ -682,7 +719,7 @@ const HeroBanner = () => {
 
               {/* Models Lineup (All 10 Saree Models Arranged in 3D Orbiting Circle) */}
               <div className="relative flex items-end justify-center w-full max-w-5xl h-[400px] sm:h-[480px] lg:h-[560px]">
-                {sareeLooks.map((look, idx) => {
+                {looks.map((look, idx) => {
                   const isActive = idx === activeLookIndex;
                   const style = getModelStyle(idx);
 

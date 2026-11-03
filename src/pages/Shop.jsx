@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { productApi, categoryApi } from '../services/api.js';
 
 import ProductGrid from '../components/product/ProductGrid.jsx';
 import ProductFilters from '../components/product/ProductFilters.jsx';
 import Breadcrumb from '../components/common/Breadcrumb.jsx';
-import { SlidersHorizontal, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { SlidersHorizontal, ChevronLeft, ChevronRight, X, AlertCircle, RefreshCw } from 'lucide-react';
 
 const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -14,6 +14,7 @@ const Shop = () => {
   const [categories, setCategories] = useState([]);
   const [filterOptions, setFilterOptions] = useState({ fabrics: [], colors: [], occasions: [] });
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(null);
 
   const [totalPages, setTotalPages] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
@@ -50,43 +51,46 @@ const Shop = () => {
     fetchMetadata();
   }, []);
 
+  // Fetch Products function
+  const fetchProducts = useCallback(async () => {
+    setLoading(true);
+    setFetchError(null);
+    try {
+      const params = {
+        page,
+        limit: 12,
+        sort: sortBy,
+      };
+      if (selectedCategory) params.category = selectedCategory;
+      if (searchQuery) params.search = searchQuery;
+      if (selectedFabric) params.fabric = selectedFabric;
+      if (selectedColor) params.color = selectedColor;
+      if (selectedOccasion) params.occasion = selectedOccasion;
+      if (minPrice) params.minPrice = minPrice;
+      if (maxPrice) params.maxPrice = maxPrice;
+      if (isBridal) params.isBridal = isBridal;
+      if (isBestSeller) params.isBestSeller = isBestSeller;
+      if (isNewArrival) params.isNewArrival = isNewArrival;
+
+      const res = await productApi.getProducts(params);
+      if (res.success) {
+        setProducts(res.products || []);
+        setTotalPages(res.totalPages || 1);
+        setTotalProducts(res.totalProducts || 0);
+      }
+    } catch (err) {
+      console.error('Error fetching products:', err);
+      setFetchError(err.message || 'Server is waking up or database is connecting.');
+    } finally {
+      setLoading(false);
+    }
+  }, [page, sortBy, selectedCategory, searchQuery, selectedFabric, selectedColor, selectedOccasion, minPrice, maxPrice, isBridal, isBestSeller, isNewArrival]);
+
   // Fetch Products whenever URL search params change
   useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const params = {
-          page,
-          limit: 12,
-          sort: sortBy,
-        };
-        if (selectedCategory) params.category = selectedCategory;
-        if (searchQuery) params.search = searchQuery;
-        if (selectedFabric) params.fabric = selectedFabric;
-        if (selectedColor) params.color = selectedColor;
-        if (selectedOccasion) params.occasion = selectedOccasion;
-        if (minPrice) params.minPrice = minPrice;
-        if (maxPrice) params.maxPrice = maxPrice;
-        if (isBridal) params.isBridal = isBridal;
-        if (isBestSeller) params.isBestSeller = isBestSeller;
-        if (isNewArrival) params.isNewArrival = isNewArrival;
-
-        const res = await productApi.getProducts(params);
-        if (res.success) {
-          setProducts(res.products || []);
-          setTotalPages(res.totalPages || 1);
-          setTotalProducts(res.totalProducts || 0);
-        }
-      } catch (err) {
-        console.error('Error fetching products:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProducts();
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [searchParams]);
+  }, [fetchProducts]);
 
   const handleFilterChange = (key, value) => {
     const newParams = new URLSearchParams(searchParams);
@@ -184,12 +188,33 @@ const Shop = () => {
 
           {/* Product Grid Area */}
           <div className="lg:col-span-3 space-y-8">
-            <ProductGrid
-              products={products}
-              loading={loading}
-              emptyTitle="No Sarees Match Your Filters"
-              emptyDescription="Try clearing some filter options or selecting another category."
-            />
+            {fetchError && products.length === 0 && !loading ? (
+              <div className="bg-white rounded-2xl border border-stone-200 p-8 sm:p-12 text-center shadow-sm max-w-lg mx-auto my-6">
+                <div className="w-14 h-14 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-4 border border-amber-200">
+                  <AlertCircle className="w-7 h-7" />
+                </div>
+                <h3 className="font-serif text-lg font-bold text-stone-800 mb-1">
+                  Connecting to Saree Vault...
+                </h3>
+                <p className="text-xs text-stone-600 leading-relaxed max-w-sm mx-auto mb-5">
+                  The live cloud backend or database is initializing. Please click below to refresh and load sarees.
+                </p>
+                <button
+                  onClick={fetchProducts}
+                  className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary hover:bg-secondary text-cream rounded-lg text-xs font-bold transition shadow-md"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  Refresh Sarees
+                </button>
+              </div>
+            ) : (
+              <ProductGrid
+                products={products}
+                loading={loading}
+                emptyTitle="No Sarees Match Your Filters"
+                emptyDescription="Try clearing some filter options or selecting another category."
+              />
+            )}
 
             {/* Pagination Controls */}
             {totalPages > 1 && (
@@ -266,4 +291,3 @@ const Shop = () => {
 };
 
 export default Shop;
-

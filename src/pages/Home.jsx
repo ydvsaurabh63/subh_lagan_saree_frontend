@@ -27,22 +27,27 @@ const Home = () => {
     const fetchHomeData = async () => {
       try {
         setLoading(true);
-        const catRes = await categoryApi.getCategories();
-        if (catRes.success) setCategories(catRes.categories || []);
 
-        const [bestRes, newRes, bridalRes, silkRes, trendRes] = await Promise.all([
-          productApi.getProducts({ isBestSeller: 'true', limit: 4 }),
-          productApi.getProducts({ isNewArrival: 'true', limit: 4 }),
-          productApi.getProducts({ isBridal: 'true', limit: 4 }),
-          productApi.getProducts({ category: 'silk-sarees', limit: 4 }),
-          productApi.getProducts({ sort: 'rating', limit: 4 }),
+        const [catRes, allRes, bestRes, newRes, bridalRes, silkRes, trendRes] = await Promise.all([
+          categoryApi.getCategories().catch(() => ({ success: false })),
+          productApi.getProducts({ limit: 12 }).catch(() => ({ success: false })),
+          productApi.getProducts({ isBestSeller: 'true', limit: 4 }).catch(() => ({ success: false })),
+          productApi.getProducts({ isNewArrival: 'true', limit: 4 }).catch(() => ({ success: false })),
+          productApi.getProducts({ isBridal: 'true', limit: 4 }).catch(() => ({ success: false })),
+          productApi.getProducts({ category: 'silk-sarees', limit: 4 }).catch(() => ({ success: false })),
+          productApi.getProducts({ sort: 'rating', limit: 4 }).catch(() => ({ success: false })),
         ]);
 
-        if (bestRes.success) setBestSellers(bestRes.products || []);
-        if (newRes.success) setNewArrivals(newRes.products || []);
-        if (bridalRes.success) setBridalCollection(bridalRes.products || []);
-        if (silkRes.success) setSilkCollection(silkRes.products || []);
-        if (trendRes.success) setTrending(trendRes.products || []);
+        if (catRes.success) setCategories(catRes.categories || []);
+
+        const allProds = allRes.success && allRes.products ? allRes.products : [];
+
+        // Dynamically ensure each home shelf displays sarees from database
+        setBestSellers(bestRes.success && bestRes.products?.length > 0 ? bestRes.products : allProds.slice(0, 4));
+        setNewArrivals(newRes.success && newRes.products?.length > 0 ? newRes.products : allProds.slice(4, 8));
+        setBridalCollection(bridalRes.success && bridalRes.products?.length > 0 ? bridalRes.products : allProds.filter(p => p.isBridal || p.price > 12000).slice(0, 4));
+        setSilkCollection(silkRes.success && silkRes.products?.length > 0 ? silkRes.products : allProds.filter(p => p.fabric?.toLowerCase().includes('silk')).slice(0, 4));
+        setTrending(trendRes.success && trendRes.products?.length > 0 ? trendRes.products : allProds.slice(0, 4));
       } catch (error) {
         console.error('Error fetching home data:', error);
       } finally {

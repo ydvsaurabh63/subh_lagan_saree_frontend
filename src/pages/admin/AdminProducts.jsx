@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout.jsx';
-import { productApi, categoryApi, adminApi } from '../../services/api.js';
+import { productApi, categoryApi, adminApi, uploadApi } from '../../services/api.js';
 import { formatPrice } from '../../utils/formatters.js';
 import toast from 'react-hot-toast';
 import {
@@ -15,6 +15,8 @@ import {
   AlertTriangle,
   Sparkles,
   ExternalLink,
+  Upload,
+  Loader2,
 } from 'lucide-react';
 
 const AdminProducts = () => {
@@ -52,6 +54,8 @@ const AdminProducts = () => {
   };
   const [formData, setFormData] = useState(initialForm);
   const [imageInput, setImageInput] = useState('');
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const fileInputRef = useRef(null);
 
   const fetchCategories = async () => {
     try {
@@ -151,6 +155,29 @@ const AdminProducts = () => {
       ...prev,
       images: prev.images.filter((_, idx) => idx !== index),
     }));
+  };
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      setUploadingImage(true);
+      const fd = new FormData();
+      fd.append('image', file);
+      const res = await uploadApi.uploadImage(fd);
+      if (res && res.url) {
+        setFormData((prev) => ({
+          ...prev,
+          images: [...prev.images, res.url],
+        }));
+        toast.success('Image uploaded to Cloudinary successfully!');
+      }
+    } catch (err) {
+      toast.error('Image upload failed: ' + (err.message || 'Error'));
+    } finally {
+      setUploadingImage(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -587,26 +614,58 @@ const AdminProducts = () => {
                 />
               </div>
 
-              {/* Row 5: Product Images (URL list with previews) */}
+              {/* Row 5: Product Images (Cloudinary Direct File Upload & URL list) */}
               <div>
                 <label className="block font-semibold text-stone-700 mb-1">
-                  Product Photography (Cloudinary / Image URLs)
+                  Product Photography (Cloudinary Upload / Image URLs)
                 </label>
-                <div className="flex gap-2 mb-3">
-                  <input
-                    type="url"
-                    placeholder="Paste image URL (https://...)"
-                    value={imageInput}
-                    onChange={(e) => setImageInput(e.target.value)}
-                    className="flex-1 p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleAddImageUrl}
-                    className="px-4 py-2 bg-stone-800 text-white rounded-lg hover:bg-stone-900 font-semibold shrink-0"
-                  >
-                    Add Image
-                  </button>
+
+                {/* Upload from Device or Paste URL */}
+                <div className="flex flex-col sm:flex-row gap-2 mb-3">
+                  <div className="flex-1 flex gap-2">
+                    <input
+                      type="url"
+                      placeholder="Paste image URL (https://...)"
+                      value={imageInput}
+                      onChange={(e) => setImageInput(e.target.value)}
+                      className="flex-1 p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleAddImageUrl}
+                      className="px-4 py-2 bg-stone-800 text-white rounded-lg hover:bg-stone-900 font-semibold shrink-0"
+                    >
+                      Add URL
+                    </button>
+                  </div>
+
+                  <div className="shrink-0 flex items-center">
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={handleFileUpload}
+                      accept="image/*"
+                      className="hidden"
+                    />
+                    <button
+                      type="button"
+                      disabled={uploadingImage}
+                      onClick={() => fileInputRef.current?.click()}
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-primary to-secondary text-cream rounded-lg hover:brightness-110 font-bold transition shadow-sm disabled:opacity-50"
+                    >
+                      {uploadingImage ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin text-gold" />
+                          Uploading...
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-4 h-4 text-gold" />
+                          Upload from Device
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
 
                 {/* Previews */}
