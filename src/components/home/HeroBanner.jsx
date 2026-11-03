@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  ChevronLeft,
-  ChevronRight,
   ShieldCheck,
   ArrowRight,
   ShoppingBag,
@@ -661,41 +659,14 @@ const HeroBanner = () => {
         {/* SECTION 1: FULL-WIDTH 3D VIRTUAL SAREE RUNWAY            */}
         {/* ========================================================= */}
         <div className="w-full flex flex-col justify-between">
-          {/* Header Row: Title & Prev/Next Controls */}
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 relative z-10">
-            <div className="space-y-1">
-              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-black text-stone-950 tracking-tight">
-                Try the Look.
-              </h1>
-              <p className="text-xs sm:text-sm text-stone-700 font-bold max-w-md">
-                Drag or tap to spin the 3D runway.
-              </p>
-            </div>
-
-            {/* Quick Navigation Pill & Controls */}
-            <div className="flex items-center space-x-3 self-start sm:self-auto">
-              <span className="px-3.5 py-1.5 bg-white border border-stone-300 rounded-full text-xs font-bold text-stone-800 shadow-xs">
-                Look <span className="text-primary font-black">{currentLook.lookNumber}</span> of {String(count).padStart(2, '0')}
-              </span>
-              <div className="flex space-x-1.5">
-                <button
-                  onClick={handlePrev}
-                  className="p-2.5 rounded-full bg-white border border-stone-300 hover:border-gold hover:text-primary text-stone-700 transition active:scale-95 shadow-sm cursor-pointer"
-                  aria-label="Previous Look"
-                  title="Previous Look"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={handleNext}
-                  className="p-2.5 rounded-full bg-white border border-stone-300 hover:border-gold hover:text-primary text-stone-700 transition active:scale-95 shadow-sm cursor-pointer"
-                  aria-label="Next Look"
-                  title="Next Look"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
+          {/* Header Row: Title */}
+          <div className="space-y-1 relative z-10">
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-black text-stone-950 tracking-tight">
+              Try the Look.
+            </h1>
+            <p className="text-xs sm:text-sm text-stone-700 font-bold max-w-md">
+              Drag or tap to spin the 3D runway.
+            </p>
           </div>
 
           {/* Runway Stage with Floor Ambient Shadow and Circular Turntable */}
@@ -761,22 +732,6 @@ const HeroBanner = () => {
                 }}
               ></div>
             </div>
-
-            {/* Left and Right Floating Stage Navigation Arrows */}
-            <button
-              onClick={handlePrev}
-              className="absolute left-1 sm:left-4 z-40 p-2.5 sm:p-3.5 rounded-full bg-white/85 hover:bg-white border border-stone-200 text-stone-800 hover:text-primary shadow-lg backdrop-blur-sm transition-all hover:scale-110 active:scale-95 cursor-pointer"
-              aria-label="Previous Look"
-            >
-              <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
-            </button>
-            <button
-              onClick={handleNext}
-              className="absolute right-1 sm:right-4 z-40 p-2.5 sm:p-3.5 rounded-full bg-white/85 hover:bg-white border border-stone-200 text-stone-800 hover:text-primary shadow-lg backdrop-blur-sm transition-all hover:scale-110 active:scale-95 cursor-pointer"
-              aria-label="Next Look"
-            >
-              <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
-            </button>
 
             {/* Models Lineup (All 10 Saree Models in 3D Full-Width Orbiting Circle) */}
             <div className="relative flex items-end justify-center w-full max-w-7xl h-[420px] sm:h-[500px] lg:h-[600px]">
