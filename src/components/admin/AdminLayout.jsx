@@ -102,16 +102,15 @@ const AdminLayout = ({ children, title = 'Store Administration' }) => {
       >
         <div className="flex flex-col flex-1 overflow-hidden">
           {/* Brand Header */}
-          <div className="p-6 border-b border-gold/20 flex items-center justify-between shrink-0">
-            <Link to="/admin" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center text-gold shadow-inner">
-                <Sparkles className="w-5 h-5 text-gold animate-pulse" />
-              </div>
+          <div className="p-5 border-b border-gold/20 flex items-center justify-between shrink-0">
+            <Link to="/admin" className="flex items-center gap-3 group">
+              <img
+                src="/logo.png"
+                alt="Subh Lagan Sarees"
+                className="h-11 w-auto object-contain drop-shadow group-hover:scale-105 transition-transform"
+              />
               <div>
-                <h1 className="font-serif text-lg tracking-wider text-gold font-extrabold leading-tight">
-                  SUBH LAGAN
-                </h1>
-                <p className="text-[10px] tracking-widest text-cream/80 uppercase font-bold">
+                <p className="text-[10px] tracking-widest text-gold uppercase font-bold">
                   Admin Panel
                 </p>
               </div>
@@ -231,17 +230,19 @@ const AdminLayout = ({ children, title = 'Store Administration' }) => {
       {/* Main Admin Content View Area */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Mobile Bar */}
-        <header className="lg:hidden bg-primary text-cream p-4 flex items-center justify-between border-b border-gold/20 shadow-sm">
-          <div className="flex items-center gap-2">
+        <header className="lg:hidden bg-primary text-cream p-3 flex items-center justify-between border-b border-gold/20 shadow-sm">
+          <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
               className="p-1.5 text-cream hover:text-gold focus:outline-none"
             >
               <Menu className="w-6 h-6" />
             </button>
-            <span className="font-serif font-bold text-gold text-base">
-              SUBH LAGAN
-            </span>
+            <img
+              src="/logo.png"
+              alt="Subh Lagan Sarees"
+              className="h-8 w-auto object-contain"
+            />
           </div>
 
           <Link

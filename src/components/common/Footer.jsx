@@ -63,14 +63,13 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand Column */}
           <div className="lg:col-span-2 space-y-3">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center border-2 border-gold text-gold font-serif font-bold text-base">
-                SL
-              </div>
-              <span className="font-serif text-xl font-bold tracking-tight text-white">
-                SUBH LAGAN <span className="text-gold">SAREES</span>
-              </span>
-            </div>
+            <Link to="/" className="inline-block group" title="Subh Lagan Sarees">
+              <img
+                src="/logo.png"
+                alt="Subh Lagan Sarees"
+                className="h-14 sm:h-16 w-auto object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.6)] group-hover:scale-105 transition-transform duration-300"
+              />
+            </Link>
             <p className="text-xs leading-relaxed text-stone-400 max-w-sm">
               Authentic Banarasi, Kanjivaram, and pure silk sarees.
             </p>

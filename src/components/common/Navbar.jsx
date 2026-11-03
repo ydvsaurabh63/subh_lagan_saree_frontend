@@ -96,18 +96,12 @@ const Navbar = () => {
 
           {/* Brand Logo */}
           <div className="flex items-center">
-            <Link to="/" className="inline-flex items-center space-x-2 group">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-primary flex items-center justify-center border-2 border-gold text-gold font-serif font-bold text-sm sm:text-base shadow-sm group-hover:scale-105 transition-transform">
-                SL
-              </div>
-              <div className="text-left">
-                <span className="block font-serif text-base sm:text-lg lg:text-xl font-extrabold tracking-tight text-primary leading-none group-hover:text-primary-light transition-colors">
-                  SUBH LAGAN
-                </span>
-                <span className="block text-[8px] sm:text-[9px] tracking-[0.22em] uppercase text-gold-dark font-extrabold leading-tight">
-                  SAREES • HERITAGE
-                </span>
-              </div>
+            <Link to="/" className="inline-flex items-center py-1 group" title="Subh Lagan Sarees">
+              <img
+                src="/logo.png"
+                alt="Subh Lagan Sarees"
+                className="h-10 sm:h-12 lg:h-14 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
+              />
             </Link>
           </div>
 

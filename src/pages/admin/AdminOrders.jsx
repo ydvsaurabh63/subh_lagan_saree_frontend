@@ -311,19 +311,26 @@ const AdminOrders = () => {
             <div className="p-8 text-xs text-stone-800 space-y-6" id="printable-invoice">
               {/* Header */}
               <div className="flex items-center justify-between border-b pb-4 border-stone-200">
-                <div>
-                  <h1 className="font-serif text-2xl font-bold text-primary tracking-wide">
-                    SUBH LAGAN SAREES
-                  </h1>
-                  <p className="text-[10px] text-gold uppercase tracking-widest font-semibold mt-0.5">
-                    Heirloom Silk & Bridal Drapes
-                  </p>
-                  <p className="text-[10px] text-stone-500 mt-0.5">
-                    Near Maharaja Sweets, Sutapatti, Muzaffarpur, Bihar 842001
-                  </p>
-                  <p className="text-[10px] text-stone-500 mt-0.5">
-                    care@subhlagansarees.com • +91 98765 43210
-                  </p>
+                <div className="flex items-center gap-4">
+                  <img
+                    src="/logo.png"
+                    alt="Subh Lagan Sarees"
+                    className="h-14 w-auto object-contain"
+                  />
+                  <div>
+                    <h1 className="font-serif text-2xl font-bold text-primary tracking-wide">
+                      SUBH LAGAN SAREES
+                    </h1>
+                    <p className="text-[10px] text-gold uppercase tracking-widest font-semibold mt-0.5">
+                      Heirloom Silk & Bridal Drapes
+                    </p>
+                    <p className="text-[10px] text-stone-500 mt-0.5">
+                      Near Maharaja Sweets, Sutapatti, Muzaffarpur, Bihar 842001
+                    </p>
+                    <p className="text-[10px] text-stone-500 mt-0.5">
+                      care@subhlagansarees.com • +91 98765 43210
+                    </p>
+                  </div>
                 </div>
                 <div className="text-right">
                   <div className="font-mono font-bold text-base text-primary">
