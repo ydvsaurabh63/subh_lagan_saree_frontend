@@ -638,8 +638,8 @@ const HeroBanner = () => {
 
   const turntableScaleY = isMobile ? 0.22 : isTablet ? 0.22 : 0.20;
   const turntableHeight = Math.round(turntableWidth * turntableScaleY);
-  const turntableBottomOffset = isMobile ? 110 : isTablet ? 155 : 185;
-  const modelBottomOffset = isMobile ? 105 : isTablet ? 150 : 180;
+  const turntableBottomOffset = isMobile ? 120 : isTablet ? 155 : 185;
+  const modelBottomOffset = isMobile ? 115 : isTablet ? 150 : 180;
 
   // 3D Circular Orbit calculations: all 10 models rotate in a real 3D circle
   const getModelStyle = (idx) => {
@@ -656,21 +656,21 @@ const HeroBanner = () => {
     // Smooth horizontal position with continuous outward separation on mobile to prevent models from sticking to center
     const sinVal = Math.sin(rad);
     const lateralClearance = isMobile
-      ? Math.sign(sinVal) * Math.pow(Math.abs(sinVal), 0.70) * 65
+      ? Math.sign(sinVal) * Math.pow(Math.abs(sinVal), 0.70) * 58
       : 0;
     const x = sinVal * Rx + lateralClearance;
     const y = ((1 - z) / 2) * maxFloorDepth;
 
     // 3D perspective scale:
-    // On mobile: Prominent Center Spotlight Zoom (1.48 at center front for high-detail clarity, ~0.94 flanking)
+    // On mobile: Balanced Center Spotlight Zoom (~1.31 at center front, ~0.98 flanking)
     // On desktop: Center is 1.34, flanking 1.10
     const depthRatio = (z + 1) / 2;
     const focalBoost = isMobile
-      ? Math.pow(Math.max(0, z), 5.5) * 0.58
+      ? Math.pow(Math.max(0, z), 5.0) * 0.42
       : Math.pow(Math.max(0, z), 3.5) * 0.32;
 
     const baseMin = isMobile ? 0.44 : 0.52;
-    const depthMul = isMobile ? 0.46 : 0.48;
+    const depthMul = isMobile ? 0.45 : 0.48;
     const scale = (baseMin + depthRatio * depthMul + focalBoost).toFixed(3);
 
     const isCenter = Math.abs(effAngle) < 18;
@@ -703,19 +703,19 @@ const HeroBanner = () => {
         {/* SECTION 1: FULL-WIDTH 3D VIRTUAL SAREE RUNWAY            */}
         {/* ========================================================= */}
         <div className="w-full flex flex-col justify-between">
-          {/* Header Row: Title */}
-          <div className="space-y-1 relative z-10">
+          {/* Header Row: Centered Title */}
+          <div className="space-y-1 relative z-10 text-center mx-auto">
             <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-black text-stone-950 tracking-tight">
               Try the Look.
             </h1>
-            <p className="text-xs sm:text-sm text-stone-700 font-bold max-w-md">
+            <p className="text-xs sm:text-sm text-stone-700 font-bold max-w-md mx-auto">
               Drag or tap to spin the 3D runway.
             </p>
           </div>
 
           {/* Runway Stage with Floor Ambient Shadow and Circular Turntable */}
           <div
-            className="relative -mt-1 mb-2 sm:mt-0 sm:mb-4 flex items-center justify-center min-h-[480px] sm:min-h-[520px] lg:min-h-[620px] cursor-grab active:cursor-grabbing select-none"
+            className="relative -mt-1 mb-2 sm:mt-0 sm:mb-4 flex items-center justify-center min-h-[440px] sm:min-h-[520px] lg:min-h-[620px] cursor-grab active:cursor-grabbing select-none"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => {
               setIsHovered(false);
@@ -797,7 +797,7 @@ const HeroBanner = () => {
                     className="absolute cursor-pointer flex flex-col items-center group"
                   >
                     {/* Transparent Standing Model */}
-                    <div className="relative w-40 sm:w-56 lg:w-64 h-[400px] sm:h-[460px] lg:h-[540px] flex items-end justify-center">
+                    <div className="relative w-36 sm:w-56 lg:w-64 h-[370px] sm:h-[460px] lg:h-[540px] flex items-end justify-center">
                       {/* Floating 'Tap to Order' hover badge */}
                       <div className="absolute top-2 px-3 py-1 bg-white/95 border border-gold/60 rounded-full shadow-lg text-[10px] font-black text-primary tracking-wider uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none flex items-center space-x-1.5 z-30">
                         <ShoppingBag className="w-3 h-3 text-gold" />
