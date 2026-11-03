@@ -13,15 +13,16 @@ import InstagramGallery from '../components/home/InstagramGallery.jsx';
 import NewsletterSection from '../components/home/NewsletterSection.jsx';
 import ProductGrid from '../components/product/ProductGrid.jsx';
 import { Sparkles, ArrowRight, HeartHandshake, Award } from 'lucide-react';
+import { fallbackSarees } from '../data/fallbackProducts.js';
 
 const Home = () => {
   const [categories, setCategories] = useState([]);
-  const [bestSellers, setBestSellers] = useState([]);
-  const [newArrivals, setNewArrivals] = useState([]);
-  const [bridalCollection, setBridalCollection] = useState([]);
-  const [silkCollection, setSilkCollection] = useState([]);
-  const [trending, setTrending] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [bestSellers, setBestSellers] = useState(fallbackSarees.slice(0, 4));
+  const [newArrivals, setNewArrivals] = useState(fallbackSarees.slice(4, 8));
+  const [bridalCollection, setBridalCollection] = useState(fallbackSarees.filter(p => p.isBridal).slice(0, 4));
+  const [silkCollection, setSilkCollection] = useState(fallbackSarees.slice(0, 4));
+  const [trending, setTrending] = useState(fallbackSarees.slice(2, 6));
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchHomeData = async () => {
@@ -40,9 +41,11 @@ const Home = () => {
 
         if (catRes.success) setCategories(catRes.categories || []);
 
-        const allProds = allRes.success && allRes.products ? allRes.products : [];
+        const allProds = (allRes.success && allRes.products && allRes.products.length > 0)
+          ? allRes.products
+          : fallbackSarees;
 
-        // Dynamically ensure each home shelf displays sarees from database
+        // Dynamically ensure each home shelf displays sarees from database (with fallback)
         setBestSellers(bestRes.success && bestRes.products?.length > 0 ? bestRes.products : allProds.slice(0, 4));
         setNewArrivals(newRes.success && newRes.products?.length > 0 ? newRes.products : allProds.slice(4, 8));
         setBridalCollection(bridalRes.success && bridalRes.products?.length > 0 ? bridalRes.products : allProds.filter(p => p.isBridal || p.price > 12000).slice(0, 4));
