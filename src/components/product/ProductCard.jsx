@@ -88,10 +88,10 @@ const ProductCard = ({ product }) => {
           <Shirt className="w-3.5 h-3.5 stroke-[2.2]" />
         </button>
 
-        {/* Quick Add To Cart on Hover */}
+        {/* Quick Add To Cart on Hover / Mobile */}
         <button
           onClick={handleQuickAdd}
-          className="absolute bottom-2 left-2 right-2 py-2 px-3 bg-white/95 backdrop-blur-sm text-primary hover:bg-primary hover:text-white text-[11px] font-bold uppercase tracking-wider rounded-lg shadow-md flex items-center justify-center space-x-1 opacity-0 group-hover:opacity-100 transition-all duration-200 translate-y-2 group-hover:translate-y-0"
+          className="absolute bottom-2 left-2 right-2 py-2 px-3 bg-white/95 backdrop-blur-sm text-primary hover:bg-primary hover:text-white text-[10px] sm:text-[11px] font-bold uppercase tracking-wider rounded-lg shadow-md flex items-center justify-center space-x-1 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-200 sm:translate-y-2 sm:group-hover:translate-y-0"
         >
           <ShoppingBag className="w-3.5 h-3.5" />
           <span>Quick Add</span>

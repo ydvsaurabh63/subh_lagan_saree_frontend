@@ -71,7 +71,7 @@ const ProductGallery = ({ images = [], productName = 'Subh Lagan Saree' }) => {
         />
 
         {/* Indicator */}
-        <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-[10px] px-2.5 py-1 rounded-full uppercase tracking-wider">
+        <div className="hidden lg:block absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-[10px] px-2.5 py-1 rounded-full uppercase tracking-wider">
           Hover to Zoom
         </div>
       </div>

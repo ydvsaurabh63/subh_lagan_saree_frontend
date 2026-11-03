@@ -290,6 +290,9 @@ const ProductDetail = () => {
                   title={inWishlist ? 'In Wishlist' : 'Add to Wishlist'}
                 >
                   <Heart className={`w-4 h-4 ${inWishlist ? 'fill-current' : ''}`} />
+                  <span className="sm:hidden text-xs font-semibold ml-2">
+                    {inWishlist ? 'In Wishlist' : 'Add to Wishlist'}
+                  </span>
                 </button>
               </div>
             </div>

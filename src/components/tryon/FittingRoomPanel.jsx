@@ -77,7 +77,7 @@ const FittingRoomPanel = () => {
       */}
       <aside
         aria-label="Fitting Room"
-        className="fixed left-3 sm:left-6 top-10 sm:top-14 z-50 w-[315px] sm:w-[360px] max-w-[94vw] bg-[#141416] border border-stone-800 rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.92)] text-white overflow-hidden transition-all duration-300 animate-fade-in p-3.5 sm:p-4 space-y-3 select-none"
+        className="fixed left-3 sm:left-6 top-6 sm:top-14 z-50 w-[310px] sm:w-[360px] max-w-[calc(100vw-24px)] max-h-[92vh] overflow-y-auto bg-[#141416] border border-stone-800 rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.92)] text-white transition-all duration-300 animate-fade-in p-3.5 sm:p-4 space-y-3 select-none"
       >
         {/* Hidden File Input */}
         <input

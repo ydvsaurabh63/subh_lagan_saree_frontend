@@ -99,7 +99,7 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Navigation Links (Shifted UP into Main Header Row) */}
-          <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8 text-[11px] font-extrabold uppercase tracking-widest text-stone-900">
+          <nav className="hidden lg:flex items-center space-x-3 xl:space-x-6 2xl:space-x-8 text-[10px] xl:text-[11px] font-extrabold uppercase tracking-widest text-stone-900 whitespace-nowrap">
             {navLinks.map((link) => {
               const isActive = location.pathname + location.search === link.path;
               return (
