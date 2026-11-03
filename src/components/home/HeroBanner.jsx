@@ -578,14 +578,14 @@ const HeroBanner = () => {
   const isTablet = windowWidth >= 640 && windowWidth < 1024;
   const isLaptop = windowWidth >= 1024 && windowWidth < 1280;
 
-  // Horizontal Radius (Rx): On mobile, use an expanded radius with lateral clearance to prevent flanking models from crowding the center spotlight
+  // Horizontal Radius (Rx): Full screen width runway
   const Rx = isMobile
     ? Math.max(200, Math.min(250, (windowWidth - 20) * 0.58))
     : isTablet
-    ? Math.min(270, windowWidth * 0.35)
+    ? Math.min(320, windowWidth * 0.38)
     : isLaptop
-    ? 320
-    : 370;
+    ? 400
+    : 470;
 
   const maxFloorDepth = isMobile ? 26 : isTablet ? 48 : 68;
 
@@ -593,10 +593,10 @@ const HeroBanner = () => {
   const turntableWidth = isMobile
     ? Math.round(Rx * 2.05)
     : isTablet
-    ? 560
+    ? 620
     : isLaptop
-    ? 680
-    : 760;
+    ? 800
+    : 940;
 
   const turntableScaleY = isMobile ? 0.22 : isTablet ? 0.22 : 0.20;
   const turntableHeight = Math.round(turntableWidth * turntableScaleY);
@@ -656,14 +656,14 @@ const HeroBanner = () => {
   return (
     <div className="relative isolate bg-[#F8F7F4] border-b border-stone-200 overflow-hidden select-none">
       <div className="max-w-[1550px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          
-          {/* ========================================================= */}
-          {/* LEFT & CENTER: THE VIRTUAL SAREE RUNWAY (CIRCULAR ORBIT)   */}
-          {/* ========================================================= */}
-          <div className="lg:col-span-8 flex flex-col justify-between">
-            {/* Header Titles */}
-            <div className="space-y-1 relative z-10">
+        
+        {/* ========================================================= */}
+        {/* SECTION 1: FULL-WIDTH 3D VIRTUAL SAREE RUNWAY            */}
+        {/* ========================================================= */}
+        <div className="w-full flex flex-col justify-between">
+          {/* Header Row: Title & Prev/Next Controls */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 relative z-10">
+            <div className="space-y-1">
               <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-black text-stone-950 tracking-tight">
                 Try the Look.
               </h1>
@@ -672,134 +672,25 @@ const HeroBanner = () => {
               </p>
             </div>
 
-            {/* Runway Stage with Floor Ambient Shadow and Circular Turntable */}
-            <div
-              className="relative -mt-1 mb-3 sm:mt-0 sm:mb-4 flex items-center justify-center min-h-[440px] sm:min-h-[520px] lg:min-h-[600px] cursor-grab active:cursor-grabbing select-none"
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => {
-                setIsHovered(false);
-                if (isDragging) setIsDragging(false);
-              }}
-              onTouchStart={handlePointerDown}
-              onTouchMove={handlePointerMove}
-              onTouchEnd={handlePointerUp}
-              onMouseDown={handlePointerDown}
-              onMouseMove={handlePointerMove}
-              onMouseUp={handlePointerUp}
-            >
-              {/* Studio Floor Soft Contact Shadows */}
-              <div
-                className="absolute left-1/2 -translate-x-1/2 w-4/5 h-12 bg-stone-300/40 rounded-full blur-2xl pointer-events-none"
-                style={{ bottom: `${turntableBottomOffset}px` }}
-              ></div>
-
-              {/* 3D Circular Turntable Floor Platform (encapsulates all models inside the circle) */}
-              <div
-                className="absolute pointer-events-none flex items-center justify-center -translate-x-1/2"
-                style={{
-                  bottom: `${turntableBottomOffset}px`,
-                  left: '50%',
-                  width: `${turntableWidth}px`,
-                  height: `${turntableHeight}px`,
-                }}
-              >
-                {/* 3D Perspective Flattened Local Circle Container */}
-                <div
-                  className="relative flex items-center justify-center"
-                  style={{
-                    width: `${turntableWidth}px`,
-                    height: `${turntableWidth}px`,
-                    transform: `scaleY(${turntableScaleY})`,
-                  }}
-                >
-                  {/* Rotating golden dashed orbit ring synced to models */}
-                  <div
-                    className="absolute inset-0 rounded-full border-2 border-dashed border-gold/70 shadow-[0_0_35px_rgba(198,161,91,0.25)]"
-                    style={{
-                      transform: `rotate(${-currentRotation}deg)`,
-                      transition: isSnapping ? 'transform 0.75s cubic-bezier(0.16, 1, 0.3, 1)' : 'none',
-                    }}
-                  ></div>
-                  {/* Inner golden concentric rim */}
-                  <div className="absolute inset-8 sm:inset-12 rounded-full border border-gold/45"></div>
-                  {/* Radial spotlight floor glow */}
-                  <div className="w-4/5 h-4/5 rounded-full bg-radial from-gold/30 via-gold/10 to-transparent blur-md"></div>
-                </div>
-                {/* Soft ambient ground contact shadow */}
-                <div
-                  className="absolute bg-stone-900/25 rounded-full blur-xl"
-                  style={{
-                    width: `${turntableWidth * 0.85}px`,
-                    height: `${turntableHeight * 0.65}px`,
-                    bottom: '4px',
-                  }}
-                ></div>
-              </div>
-
-              {/* Models Lineup (All 10 Saree Models Arranged in 3D Orbiting Circle) */}
-              <div className="relative flex items-end justify-center w-full max-w-5xl h-[420px] sm:h-[500px] lg:h-[580px]">
-                {looks.map((look, idx) => {
-                  const isActive = idx === activeLookIndex;
-                  const style = getModelStyle(idx);
-
-                  return (
-                    <div
-                      key={look.id}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleSelectModel(idx);
-                      }}
-                      style={{
-                        ...style,
-                        bottom: `${modelBottomOffset}px`,
-                      }}
-                      className="absolute cursor-pointer flex flex-col items-center group"
-                    >
-                      {/* Transparent Standing Model (Authentic Full-Length Saree in 3D Circle) */}
-                      <div className="relative w-36 sm:w-60 lg:w-68 h-[370px] sm:h-[460px] lg:h-[530px] flex items-end justify-center">
-                        {/* Soft Backdrop Spotlight Halo behind active model */}
-                        {isActive && (
-                          <div className="absolute inset-0 -top-6 bg-radial from-gold/20 via-gold/5 to-transparent rounded-full filter blur-xl pointer-events-none -z-10"></div>
-                        )}
-
-                        <img
-                          src={look.modelImage}
-                          alt={look.lookTitle}
-                          draggable={false}
-                          className={`w-full h-full object-contain object-bottom drop-shadow-[0_15px_25px_rgba(0,0,0,0.18)] transition-all duration-500 ${
-                            isActive
-                              ? 'filter drop-shadow-[0_20px_35px_rgba(104,27,44,0.22)]'
-                              : 'grayscale-[10%] hover:grayscale-0'
-                          }`}
-                        />
-                      </div>
-
-                      {/* Natural Elliptical Floor Contact Shadow under each model on the circle */}
-                      <div
-                        className={`w-28 sm:w-36 h-4 bg-stone-900/25 rounded-full blur-md -mt-2 transition-all ${
-                          isActive ? 'scale-110 opacity-70' : 'opacity-40'
-                        }`}
-                      ></div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Bottom Navigation Controls */}
-            <div className="pt-2 flex items-center justify-start">
-              <div className="flex space-x-2">
+            {/* Quick Navigation Pill & Controls */}
+            <div className="flex items-center space-x-3 self-start sm:self-auto">
+              <span className="px-3.5 py-1.5 bg-white border border-stone-300 rounded-full text-xs font-bold text-stone-800 shadow-xs">
+                Look <span className="text-primary font-black">{currentLook.lookNumber}</span> of {String(count).padStart(2, '0')}
+              </span>
+              <div className="flex space-x-1.5">
                 <button
                   onClick={handlePrev}
-                  className="p-2.5 rounded-full border border-stone-300 hover:border-gold hover:bg-white text-stone-700 transition active:scale-95 shadow-sm"
+                  className="p-2.5 rounded-full bg-white border border-stone-300 hover:border-gold hover:text-primary text-stone-700 transition active:scale-95 shadow-sm cursor-pointer"
                   aria-label="Previous Look"
+                  title="Previous Look"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
                 <button
                   onClick={handleNext}
-                  className="p-2.5 rounded-full border border-stone-300 hover:border-gold hover:bg-white text-stone-700 transition active:scale-95 shadow-sm"
+                  className="p-2.5 rounded-full bg-white border border-stone-300 hover:border-gold hover:text-primary text-stone-700 transition active:scale-95 shadow-sm cursor-pointer"
                   aria-label="Next Look"
+                  title="Next Look"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
@@ -807,39 +698,178 @@ const HeroBanner = () => {
             </div>
           </div>
 
-          {/* ========================================================= */}
-          {/* RIGHT SIDE PANEL: "IN THIS LOOK" (ENSEMBLE BREAKDOWN)     */}
-          {/* ========================================================= */}
+          {/* Runway Stage with Floor Ambient Shadow and Circular Turntable */}
           <div
+            className="relative -mt-1 mb-2 sm:mt-0 sm:mb-4 flex items-center justify-center min-h-[440px] sm:min-h-[520px] lg:min-h-[620px] cursor-grab active:cursor-grabbing select-none"
             onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            className="lg:col-span-4 bg-white rounded-3xl p-6 sm:p-7 border border-gold/40 shadow-xl flex flex-col justify-between"
+            onMouseLeave={() => {
+              setIsHovered(false);
+              if (isDragging) setIsDragging(false);
+            }}
+            onTouchStart={handlePointerDown}
+            onTouchMove={handlePointerMove}
+            onTouchEnd={handlePointerUp}
+            onMouseDown={handlePointerDown}
+            onMouseMove={handlePointerMove}
+            onMouseUp={handlePointerUp}
           >
-            <div className="space-y-4">
-              {/* Header */}
-              <div className="flex items-center justify-between border-b border-stone-200 pb-3">
-                <div>
-                  <h3 className="font-serif text-xl font-extrabold text-stone-950">
-                    In this look
-                  </h3>
-                  <p className="text-xs text-stone-600 font-bold">
-                    {currentLook.tagline}
-                  </p>
-                </div>
-                <span className="px-2.5 py-1 bg-gold/25 text-gold-dark text-[11px] font-black uppercase tracking-wider rounded border border-gold/40">
+            {/* Studio Floor Soft Contact Shadows */}
+            <div
+              className="absolute left-1/2 -translate-x-1/2 w-4/5 h-12 bg-stone-300/40 rounded-full blur-2xl pointer-events-none"
+              style={{ bottom: `${turntableBottomOffset}px` }}
+            ></div>
+
+            {/* 3D Circular Turntable Floor Platform (encapsulates all models inside the circle) */}
+            <div
+              className="absolute pointer-events-none flex items-center justify-center -translate-x-1/2"
+              style={{
+                bottom: `${turntableBottomOffset}px`,
+                left: '50%',
+                width: `${turntableWidth}px`,
+                height: `${turntableHeight}px`,
+              }}
+            >
+              {/* 3D Perspective Flattened Local Circle Container */}
+              <div
+                className="relative flex items-center justify-center"
+                style={{
+                  width: `${turntableWidth}px`,
+                  height: `${turntableWidth}px`,
+                  transform: `scaleY(${turntableScaleY})`,
+                }}
+              >
+                {/* Rotating golden dashed orbit ring synced to models */}
+                <div
+                  className="absolute inset-0 rounded-full border-2 border-dashed border-gold/70 shadow-[0_0_35px_rgba(198,161,91,0.25)]"
+                  style={{
+                    transform: `rotate(${-currentRotation}deg)`,
+                    transition: isSnapping ? 'transform 0.75s cubic-bezier(0.16, 1, 0.3, 1)' : 'none',
+                  }}
+                ></div>
+                {/* Inner golden concentric rim */}
+                <div className="absolute inset-8 sm:inset-12 rounded-full border border-gold/45"></div>
+                {/* Radial spotlight floor glow */}
+                <div className="w-4/5 h-4/5 rounded-full bg-radial from-gold/30 via-gold/10 to-transparent blur-md"></div>
+              </div>
+              {/* Soft ambient ground contact shadow */}
+              <div
+                className="absolute bg-stone-900/25 rounded-full blur-xl"
+                style={{
+                  width: `${turntableWidth * 0.85}px`,
+                  height: `${turntableHeight * 0.65}px`,
+                  bottom: '4px',
+                }}
+              ></div>
+            </div>
+
+            {/* Left and Right Floating Stage Navigation Arrows */}
+            <button
+              onClick={handlePrev}
+              className="absolute left-1 sm:left-4 z-40 p-2.5 sm:p-3.5 rounded-full bg-white/85 hover:bg-white border border-stone-200 text-stone-800 hover:text-primary shadow-lg backdrop-blur-sm transition-all hover:scale-110 active:scale-95 cursor-pointer"
+              aria-label="Previous Look"
+            >
+              <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+            </button>
+            <button
+              onClick={handleNext}
+              className="absolute right-1 sm:right-4 z-40 p-2.5 sm:p-3.5 rounded-full bg-white/85 hover:bg-white border border-stone-200 text-stone-800 hover:text-primary shadow-lg backdrop-blur-sm transition-all hover:scale-110 active:scale-95 cursor-pointer"
+              aria-label="Next Look"
+            >
+              <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+            </button>
+
+            {/* Models Lineup (All 10 Saree Models in 3D Full-Width Orbiting Circle) */}
+            <div className="relative flex items-end justify-center w-full max-w-7xl h-[420px] sm:h-[500px] lg:h-[600px]">
+              {looks.map((look, idx) => {
+                const isActive = idx === activeLookIndex;
+                const style = getModelStyle(idx);
+
+                return (
+                  <div
+                    key={look.id}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSelectModel(idx);
+                    }}
+                    style={{
+                      ...style,
+                      bottom: `${modelBottomOffset}px`,
+                    }}
+                    className="absolute cursor-pointer flex flex-col items-center group"
+                  >
+                    {/* Transparent Standing Model */}
+                    <div className="relative w-36 sm:w-56 lg:w-64 h-[370px] sm:h-[460px] lg:h-[540px] flex items-end justify-center">
+                      {/* Soft Backdrop Spotlight Halo behind active model */}
+                      {isActive && (
+                        <div className="absolute inset-0 -top-6 bg-radial from-gold/20 via-gold/5 to-transparent rounded-full filter blur-xl pointer-events-none -z-10"></div>
+                      )}
+
+                      <img
+                        src={look.modelImage}
+                        alt={look.lookTitle}
+                        draggable={false}
+                        className={`w-full h-full object-contain object-bottom drop-shadow-[0_15px_25px_rgba(0,0,0,0.18)] transition-all duration-500 ${
+                          isActive
+                            ? 'filter drop-shadow-[0_20px_35px_rgba(104,27,44,0.22)]'
+                            : 'grayscale-[10%] hover:grayscale-0'
+                        }`}
+                      />
+                    </div>
+
+                    {/* Floor Contact Shadow */}
+                    <div
+                      className={`w-28 sm:w-36 h-4 bg-stone-900/25 rounded-full blur-md -mt-2 transition-all ${
+                        isActive ? 'scale-110 opacity-70' : 'opacity-40'
+                      }`}
+                    ></div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* ========================================================= */}
+        {/* SECTION 2: "IN THIS LOOK" (ENSEMBLE BREAKDOWN BELOW)      */}
+        {/* ========================================================= */}
+        <div
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          className="mt-6 lg:mt-8 bg-white rounded-3xl p-5 sm:p-7 lg:p-8 border border-gold/40 shadow-xl transition-all"
+        >
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-stone-200 pb-4 gap-2">
+            <div>
+              <div className="flex items-center space-x-3">
+                <h3 className="font-serif text-xl sm:text-2xl font-extrabold text-stone-950">
+                  In this look
+                </h3>
+                <span className="px-3 py-1 bg-gold/25 text-gold-dark text-xs font-black uppercase tracking-wider rounded border border-gold/40">
                   Look {currentLook.lookNumber}
                 </span>
               </div>
+              <p className="text-xs sm:text-sm text-stone-600 font-bold mt-1">
+                {currentLook.tagline}
+              </p>
+            </div>
 
-              {/* Items List */}
-              <div className="space-y-3.5">
-                {currentLook.items.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex items-center space-x-3 p-2.5 rounded-xl border border-stone-200 hover:border-gold hover:bg-cream/40 transition group"
-                  >
+            <div className="text-xs text-stone-500 font-medium hidden sm:block">
+              Full 3-Piece Heritage Bridal & Festive Ensemble
+            </div>
+          </div>
+
+          {/* Grid Layout: 3 Ensemble Items on Left (8 cols) + Total & CTA Box on Right (4 cols) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch pt-5">
+            {/* The 3 Ensemble Items */}
+            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+              {currentLook.items.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex flex-col justify-between p-3.5 rounded-2xl border border-stone-200 hover:border-gold hover:bg-cream/40 transition group bg-stone-50/50"
+                >
+                  <div>
                     {/* Item Thumbnail */}
-                    <div className="w-14 h-16 sm:w-16 sm:h-20 rounded-lg overflow-hidden bg-stone-100 border border-stone-200 flex-shrink-0">
+                    <div className="w-full aspect-square rounded-xl overflow-hidden bg-stone-100 border border-stone-200 mb-3">
                       <img
                         src={item.image}
                         alt={item.name}
@@ -847,86 +877,96 @@ const HeroBanner = () => {
                       />
                     </div>
 
-                    {/* Details */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] uppercase tracking-wider font-extrabold text-gold-dark">
-                          {item.type}
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-[10px] uppercase tracking-wider font-extrabold text-gold-dark">
+                        {item.type}
+                      </span>
+                      {item.isIncluded && (
+                        <span className="text-[10px] font-black text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
+                          FREE
                         </span>
-                        {item.isIncluded && (
-                          <span className="text-[10px] font-black text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
-                            FREE
-                          </span>
-                        )}
-                      </div>
-
-                      <h4 className="font-serif text-sm font-bold text-stone-950 truncate mt-0.5" title={item.name}>
-                        {item.name}
-                      </h4>
-                      <p className="text-xs text-stone-600 font-medium truncate">
-                        {item.detail}
-                      </p>
-
-                      <div className="flex items-baseline space-x-2 mt-1">
-                        <span className="text-sm font-extrabold text-primary font-sans">
-                          {item.price === 0 ? 'Complimentary' : formatPrice(item.price)}
-                        </span>
-                        {item.originalPrice > item.price && (
-                          <span className="text-xs text-stone-400 font-bold line-through">
-                            {formatPrice(item.originalPrice)}
-                          </span>
-                        )}
-                      </div>
+                      )}
                     </div>
+
+                    <h4 className="font-serif text-sm font-bold text-stone-950 line-clamp-1" title={item.name}>
+                      {item.name}
+                    </h4>
+                    <p className="text-xs text-stone-600 font-medium line-clamp-1 mt-0.5">
+                      {item.detail}
+                    </p>
                   </div>
-                ))}
-              </div>
+
+                  {/* Price */}
+                  <div className="flex items-baseline space-x-2 pt-3 mt-2 border-t border-stone-200/60">
+                    <span className="text-sm font-extrabold text-primary font-sans">
+                      {item.price === 0 ? 'Complimentary' : formatPrice(item.price)}
+                    </span>
+                    {item.originalPrice > item.price && (
+                      <span className="text-xs text-stone-400 font-bold line-through">
+                        {formatPrice(item.originalPrice)}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
 
-            {/* Bottom Actions */}
-            <div className="pt-4 border-t border-stone-200 space-y-3 mt-4">
-              {/* Savings Card */}
-              <div className="bg-cream/80 rounded-xl p-3 border border-gold/40 flex justify-between items-center text-xs">
-                <div>
-                  <span className="text-stone-500 line-through font-sans block text-[11px] font-bold">
-                    {formatPrice(totalOriginalPrice)}
-                  </span>
-                  <span className="font-serif text-lg font-extrabold text-primary font-sans">
-                    {formatPrice(totalBundlePrice)}
+            {/* Total Ensemble & Checkout Card */}
+            <div className="lg:col-span-4 flex flex-col justify-between p-5 rounded-2xl bg-cream/60 border border-gold/40 shadow-sm">
+              <div className="space-y-3">
+                <span className="text-[11px] font-extrabold uppercase tracking-widest text-gold-dark block">
+                  Complete Look Ensemble
+                </span>
+
+                <div className="space-y-1">
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-xs text-stone-600 font-semibold">Total Value:</span>
+                    <span className="text-xs text-stone-400 font-bold line-through font-sans">
+                      {formatPrice(totalOriginalPrice)}
+                    </span>
+                  </div>
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-sm font-bold text-stone-900">Ensemble Price:</span>
+                    <span className="font-serif text-2xl font-extrabold text-primary font-sans">
+                      {formatPrice(totalBundlePrice)}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-center">
+                  <span className="text-xs font-black text-emerald-800">
+                    🎉 You Save {formatPrice(savings)} on this Look!
                   </span>
                 </div>
-                <span className="text-xs font-black text-emerald-800">
-                  Save {formatPrice(savings)}
-                </span>
               </div>
 
-              {/* Add full look to bag */}
-              <button
-                onClick={handleAddFullLook}
-                className="w-full py-3.5 px-4 bg-primary hover:bg-secondary text-cream rounded-xl text-xs font-extrabold uppercase tracking-widest transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-2 active:scale-98 cursor-pointer"
-              >
-                <ShoppingBag className="w-4 h-4 text-gold" />
-                <span>Add full look</span>
-                <ArrowRight className="w-4 h-4 text-gold stroke-[2.5]" />
-              </button>
-
-              <div className="flex items-center justify-between text-[11px] pt-1">
-                <Link
-                  to={`/product/${currentLook.sareeSlug}`}
-                  className="text-stone-500 hover:text-primary transition underline font-medium"
+              <div className="space-y-2.5 pt-4">
+                <button
+                  onClick={handleAddFullLook}
+                  className="w-full py-3.5 px-4 bg-primary hover:bg-secondary text-cream rounded-xl text-xs font-extrabold uppercase tracking-widest transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-2 active:scale-98 cursor-pointer"
                 >
-                  View Saree
-                </Link>
-                <span className="text-stone-400 flex items-center space-x-1">
-                  <ShieldCheck className="w-3.5 h-3.5 text-gold" />
-                  <span>COD</span>
-                </span>
+                  <ShoppingBag className="w-4 h-4 text-gold" />
+                  <span>Add Full Look to Bag</span>
+                  <ArrowRight className="w-4 h-4 text-gold stroke-[2.5]" />
+                </button>
+
+                <div className="flex items-center justify-between text-[11px] px-1 text-stone-600">
+                  <Link
+                    to={`/product/${currentLook.sareeSlug}`}
+                    className="hover:text-primary transition underline font-semibold"
+                  >
+                    View Saree Details
+                  </Link>
+                  <span className="flex items-center space-x-1 font-semibold text-stone-700">
+                    <ShieldCheck className="w-3.5 h-3.5 text-gold" />
+                    <span>Cash on Delivery (COD)</span>
+                  </span>
+                </div>
               </div>
             </div>
-
           </div>
-
         </div>
+
       </div>
     </div>
   );
