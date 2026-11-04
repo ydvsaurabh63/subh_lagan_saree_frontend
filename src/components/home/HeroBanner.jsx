@@ -14,6 +14,7 @@ import { useCart } from '../../context/CartContext.jsx';
 import { productApi } from '../../services/api.js';
 import { formatPrice } from '../../utils/formatters.js';
 import toast from 'react-hot-toast';
+import Model360Viewer from './Model360Viewer.jsx';
 
 // 10 Curated Royal Indian Saree Looks with Transparent Cutout Full-Length Models
 const sareeLooks = [
@@ -1013,13 +1014,13 @@ const HeroBanner = () => {
             onClick={() => setQuickViewLook(null)}
           >
             <div
-              className="relative w-full max-w-2xl bg-white rounded-3xl p-5 sm:p-7 shadow-2xl border border-gold/40 max-h-[90vh] overflow-y-auto"
+              className="relative w-full max-w-3xl bg-white rounded-3xl p-5 sm:p-7 shadow-2xl border border-gold/40 max-h-[92vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Close Button */}
               <button
                 onClick={() => setQuickViewLook(null)}
-                className="absolute top-4 right-4 p-2 rounded-full text-stone-400 hover:text-stone-900 hover:bg-stone-100 transition cursor-pointer z-10"
+                className="absolute top-4 right-4 p-2 rounded-full text-stone-400 hover:text-stone-900 hover:bg-stone-100 transition cursor-pointer z-30"
                 aria-label="Close"
                 title="Close"
               >
@@ -1028,12 +1029,13 @@ const HeroBanner = () => {
 
               {/* Content Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-5 sm:gap-7 items-center">
-                {/* Left Column: Model Cutout Image (Substantially Enlarged) */}
-                <div className="sm:col-span-6 h-[360px] sm:h-[460px] rounded-2xl bg-[#F8F7F4] border border-stone-200 overflow-hidden relative flex items-center justify-center p-1.5 shadow-inner">
-                  <img
-                    src={quickViewLook.modelImage.replace('.png', '-crop.png')}
-                    alt={quickViewLook.lookTitle}
-                    className="w-full h-full object-contain object-bottom drop-shadow-[0_14px_28px_rgba(0,0,0,0.22)]"
+                {/* Left Column: Interactive 360° Rotatable Turntable Model Stage */}
+                <div className="sm:col-span-6">
+                  <Model360Viewer
+                    frontImage={quickViewLook.modelImage.replace('.png', '-crop.png')}
+                    backImage={quickViewLook.items?.[0]?.image}
+                    title={quickViewLook.lookTitle}
+                    sareeName={quickViewLook.items?.[0]?.name}
                   />
                 </div>
 
