@@ -1035,18 +1035,12 @@ const HeroBanner = () => {
                     alt={quickViewLook.lookTitle}
                     className="w-full h-full object-contain object-bottom drop-shadow-[0_12px_24px_rgba(0,0,0,0.20)]"
                   />
-                  <span className="absolute bottom-2 inset-x-2 text-center text-[10px] font-extrabold bg-white/95 text-primary py-1 rounded shadow-xs border border-stone-200">
-                    Pure Handloom Silk
-                  </span>
                 </div>
 
-                {/* Right Column: Clean & Concise Details (50% text reduced) */}
+                {/* Right Column: Clean & Concise Details */}
                 <div className="sm:col-span-7 space-y-3.5">
                   <div>
-                    <span className="text-[10px] font-black tracking-widest text-gold uppercase">
-                      Look {quickViewLook.lookNumber}
-                    </span>
-                    <h3 className="font-serif text-lg sm:text-xl font-black text-stone-950 leading-snug mt-0.5">
+                    <h3 className="font-serif text-lg sm:text-xl font-black text-stone-950 leading-snug">
                       {quickViewLook.lookTitle}
                     </h3>
                     <p className="text-xs text-stone-500 font-medium mt-1">
@@ -1054,8 +1048,8 @@ const HeroBanner = () => {
                     </p>
                   </div>
 
-                  {/* Clean Price & COD Tag */}
-                  <div className="p-3 bg-cream/70 rounded-xl border border-gold/30 flex items-center justify-between">
+                  {/* Clean Price */}
+                  <div className="p-3 bg-cream/70 rounded-xl border border-gold/30 flex items-center">
                     <div className="flex items-baseline space-x-2">
                       <span className="text-xl sm:text-2xl font-black text-primary font-sans">
                         {formatPrice(quickViewLook.items?.reduce((acc, it) => acc + it.price, 0) || 19999)}
@@ -1064,9 +1058,6 @@ const HeroBanner = () => {
                         {formatPrice(quickViewLook.items?.reduce((acc, it) => acc + (it.originalPrice || it.price), 0) || 24999)}
                       </span>
                     </div>
-                    <span className="text-[11px] font-black text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
-                      COD Available
-                    </span>
                   </div>
 
                   {/* Concise Perk */}
