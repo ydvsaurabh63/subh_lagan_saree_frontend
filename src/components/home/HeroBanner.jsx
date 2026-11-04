@@ -9,8 +9,10 @@ import {
   Sparkles,
   Truck,
   RotateCcw,
+  Shirt,
 } from 'lucide-react';
 import { useCart } from '../../context/CartContext.jsx';
+import { useTryOn } from '../../context/TryOnContext.jsx';
 import { productApi } from '../../services/api.js';
 import { formatPrice } from '../../utils/formatters.js';
 import toast from 'react-hot-toast';
@@ -428,6 +430,7 @@ const HeroBanner = () => {
   );
 
   const { addToCart } = useCart();
+  const { tryOnProduct } = useTryOn();
   const navigate = useNavigate();
 
   // Lock body scroll and close on Escape when QuickView modal is open
@@ -631,6 +634,27 @@ const HeroBanner = () => {
     }
   };
 
+  const handleTryItOn = (lookToUse = currentLook) => {
+    if (!lookToUse) return;
+    const mainSaree = lookToUse.items?.find((it) => it.isMain) || lookToUse.items?.[0];
+    const bundlePrice = lookToUse.items?.reduce((acc, it) => acc + it.price, 0) || 19999;
+    
+    // Close the Quick View modal if open
+    setQuickViewLook(null);
+
+    // Launch the AI Virtual Fitting Room with this exact saree and draped preview
+    tryOnProduct({
+      _id: mainSaree?.id || `look-${lookToUse.id}`,
+      name: mainSaree?.name || lookToUse.lookTitle,
+      fabric: lookToUse.tagline?.split('•')[0]?.trim() || 'Pure Handloom Silk',
+      price: bundlePrice,
+      originalPrice: lookToUse.items?.reduce((acc, it) => acc + (it.originalPrice || it.price), 0) || 24999,
+      image: mainSaree?.image || lookToUse.modelImage,
+      drapedPreview: lookToUse.modelImage,
+      slug: lookToUse.sareeSlug || '',
+    });
+  };
+
   // Responsive turntable dimensions & 3D focal parameters
   const isMobile = windowWidth < 640;
   const isTablet = windowWidth >= 640 && windowWidth < 1024;
@@ -818,11 +842,19 @@ const HeroBanner = () => {
                   >
                     {/* Transparent Standing Model */}
                     <div className="relative w-44 sm:w-56 lg:w-64 h-[410px] sm:h-[470px] lg:h-[540px] flex items-end justify-center">
-                      {/* Floating 'Tap to Order' hover badge */}
-                      <div className="absolute top-2 px-3 py-1 bg-white/95 border border-gold/60 rounded-full shadow-lg text-[10px] font-black text-primary tracking-wider uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none flex items-center space-x-1.5 z-30">
-                        <ShoppingBag className="w-3 h-3 text-gold" />
-                        <span>Tap to Order</span>
-                      </div>
+                      {/* Floating 'Try It On' action badge on model */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleTryItOn(look);
+                        }}
+                        className="absolute top-2 px-3.5 py-1.5 bg-[#18181b]/95 hover:bg-black backdrop-blur-md border border-[#D97706] hover:border-amber-400 rounded-full shadow-xl text-[11px] font-black text-white tracking-wider uppercase opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer flex items-center space-x-1.5 z-30 active:scale-95 hover:scale-105"
+                        title="Try It On in AI Fitting Room"
+                      >
+                        <Shirt className="w-3.5 h-3.5 text-[#F59E0B]" />
+                        <span>Try It On</span>
+                      </button>
 
                       {/* Soft Backdrop Spotlight Halo behind active model */}
                       {isActive && (
@@ -966,6 +998,15 @@ const HeroBanner = () => {
               </div>
 
               <div className="space-y-2.5 pt-4">
+                <button
+                  type="button"
+                  onClick={() => handleTryItOn(currentLook)}
+                  className="w-full py-3 px-3 bg-[#18181b] hover:bg-black text-[#F59E0B] hover:text-white border border-[#D97706]/70 hover:border-[#D97706] rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-sm flex items-center justify-center space-x-2 active:scale-98 cursor-pointer"
+                >
+                  <Shirt className="w-4 h-4 text-[#D97706]" />
+                  <span>Try It On (AI Fitting Room)</span>
+                </button>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2">
                   <button
                     onClick={() => handleAddFullLook(currentLook)}
@@ -1089,22 +1130,36 @@ const HeroBanner = () => {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="grid grid-cols-2 gap-2 pt-1">
+                  <div className="space-y-2 pt-1">
+                    {/* Primary TRY IT ON Button (AI Fitting Room) */}
                     <button
-                      onClick={() => handleAddFullLook(quickViewLook)}
-                      className="w-full py-3 px-2 bg-primary hover:bg-secondary text-white rounded-xl text-xs font-bold uppercase tracking-wider transition shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 cursor-pointer active:scale-98"
+                      type="button"
+                      onClick={() => handleTryItOn(quickViewLook)}
+                      className="w-full py-3 px-4 bg-gradient-to-r from-[#D97706] to-[#b45309] hover:from-[#b45309] hover:to-[#92400e] text-white rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition shadow-md hover:shadow-lg flex items-center justify-center space-x-2 cursor-pointer active:scale-98"
                     >
-                      <ShoppingBag className="w-4 h-4 text-gold" />
-                      <span>Add To Cart</span>
+                      <Shirt className="w-4 h-4 text-white" />
+                      <span>Try It On (AI Fitting Room)</span>
                     </button>
 
-                    <button
-                      onClick={() => handleOrderNow(quickViewLook)}
-                      className="w-full py-3 px-2 bg-gold hover:bg-gold-light text-stone-950 rounded-xl text-xs font-black uppercase tracking-wider transition shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 cursor-pointer active:scale-98"
-                    >
-                      <Sparkles className="w-4 h-4 text-primary" />
-                      <span>Order Now</span>
-                    </button>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleAddFullLook(quickViewLook)}
+                        className="w-full py-2.5 px-2 bg-primary hover:bg-secondary text-white rounded-xl text-xs font-bold uppercase tracking-wider transition shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 cursor-pointer active:scale-98"
+                      >
+                        <ShoppingBag className="w-3.5 h-3.5 text-gold" />
+                        <span>Add To Cart</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleOrderNow(quickViewLook)}
+                        className="w-full py-2.5 px-2 bg-gold hover:bg-gold-light text-stone-950 rounded-xl text-xs font-black uppercase tracking-wider transition shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 cursor-pointer active:scale-98"
+                      >
+                        <Sparkles className="w-3.5 h-3.5 text-primary" />
+                        <span>Order Now</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
