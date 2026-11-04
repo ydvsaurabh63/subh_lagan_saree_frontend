@@ -1040,6 +1040,23 @@ const HeroBanner = () => {
                 {/* Right Column: Clean & Concise Details */}
                 <div className="sm:col-span-6 space-y-4">
                   <div>
+                    {/* Brand Identity: Logo + Brand Name */}
+                    <div className="flex items-center space-x-2.5 mb-2.5 pb-2 border-b border-stone-100">
+                      <img
+                        src="/logo.png"
+                        alt="Shubh Lagan Sarees"
+                        className="h-8 sm:h-9 w-auto object-contain drop-shadow-xs"
+                      />
+                      <div className="border-l border-gold/40 pl-2.5">
+                        <span className="text-[11px] sm:text-xs font-black tracking-widest text-primary uppercase block leading-tight">
+                          Shubh Lagan Sarees
+                        </span>
+                        <span className="text-[9px] font-bold text-gold uppercase tracking-wider block leading-tight">
+                          Heritage Handloom
+                        </span>
+                      </div>
+                    </div>
+
                     <h3 className="font-serif text-lg sm:text-xl font-black text-stone-950 leading-snug">
                       {quickViewLook.lookTitle}
                     </h3>
