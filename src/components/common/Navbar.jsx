@@ -71,10 +71,10 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-[100] bg-white/85 backdrop-blur-md border-b border-stone-200/70 shadow-sm transition-all duration-200">
-      <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-[100] bg-white/90 backdrop-blur-md border-b border-stone-200/70 shadow-sm transition-all duration-200">
+      <div className="max-w-[1550px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Single Compact Top Row Header */}
-        <div className="flex items-center justify-between h-16 lg:h-20">
+        <div className="flex items-center justify-between min-h-[72px] sm:min-h-[80px] lg:min-h-[96px] py-1.5 sm:py-2">
           
           {/* Mobile Menu & Search Icon (Small screens) */}
           <div className="flex items-center lg:hidden space-x-1">
@@ -100,13 +100,13 @@ const Navbar = () => {
               <img
                 src="/logo.png"
                 alt="Subh Lagan Sarees"
-                className="h-10 sm:h-12 lg:h-14 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
+                className="h-14 sm:h-16 md:h-18 lg:h-20 xl:h-24 w-auto object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-300"
               />
             </Link>
           </div>
 
           {/* Desktop Navigation Links (Bold, readable, clean Roboto typography) */}
-          <nav className="hidden lg:flex items-center space-x-3 xl:space-x-5 2xl:space-x-7 text-xs xl:text-[13px] font-bold uppercase tracking-wider text-stone-800 whitespace-nowrap">
+          <nav className="hidden lg:flex items-center space-x-2.5 xl:space-x-4 2xl:space-x-6 text-[11px] xl:text-xs 2xl:text-[13px] font-bold uppercase tracking-wider text-stone-800 whitespace-nowrap">
             {navLinks.map((link) => {
               const active = isLinkActive(link.path);
               return (
@@ -289,7 +289,7 @@ const Navbar = () => {
 
       {/* Mobile Drawer Menu with Backdrop Overlay */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 top-16 z-50 lg:hidden">
+        <div className="fixed inset-0 top-[72px] sm:top-[80px] z-50 lg:hidden">
           {/* Backdrop overlay (click outside to close) */}
           <div
             className="fixed inset-0 bg-black/50 backdrop-blur-xs"
@@ -297,7 +297,7 @@ const Navbar = () => {
           />
 
           {/* Menu Drawer */}
-          <div className="relative bg-white border-b border-stone-200 px-5 pt-3 pb-6 space-y-4 shadow-2xl max-h-[calc(100vh-64px)] overflow-y-auto">
+          <div className="relative bg-white border-b border-stone-200 px-5 pt-3 pb-6 space-y-4 shadow-2xl max-h-[calc(100vh-80px)] overflow-y-auto">
             <div className="flex flex-col space-y-1">
               {navLinks.map((link) => {
                 const active = isLinkActive(link.path);

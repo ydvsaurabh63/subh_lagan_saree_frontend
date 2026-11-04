@@ -107,7 +107,7 @@ const AdminLayout = ({ children, title = 'Store Administration' }) => {
               <img
                 src="/logo.png"
                 alt="Subh Lagan Sarees"
-                className="h-11 w-auto object-contain drop-shadow group-hover:scale-105 transition-transform"
+                className="h-14 w-auto object-contain drop-shadow group-hover:scale-105 transition-transform"
               />
               <div>
                 <p className="text-[10px] tracking-widest text-gold uppercase font-bold">
