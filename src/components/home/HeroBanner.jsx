@@ -836,20 +836,6 @@ const HeroBanner = () => {
                   >
                     {/* Transparent Standing Model */}
                     <div className="relative w-44 sm:w-56 lg:w-64 h-[410px] sm:h-[470px] lg:h-[540px] flex items-end justify-center">
-                      {/* Floating 'Try It On' action badge on model */}
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleTryItOn(look);
-                        }}
-                        className="absolute top-2 px-3.5 py-1.5 bg-[#18181b]/95 hover:bg-black backdrop-blur-md border border-[#D97706] hover:border-amber-400 rounded-full shadow-xl text-[11px] font-black text-white tracking-wider uppercase opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer flex items-center space-x-1.5 z-30 active:scale-95 hover:scale-105"
-                        title="Try It On in AI Fitting Room"
-                      >
-                        <Shirt className="w-3.5 h-3.5 text-[#F59E0B]" />
-                        <span>Try It On</span>
-                      </button>
-
                       {/* Soft Backdrop Spotlight Halo behind active model */}
                       {isActive && (
                         <div className="absolute inset-0 -top-6 bg-radial from-gold/20 via-gold/5 to-transparent rounded-full filter blur-xl pointer-events-none -z-10"></div>
