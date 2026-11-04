@@ -11,6 +11,7 @@ import AnnouncementBar from './components/common/AnnouncementBar.jsx';
 import Navbar from './components/common/Navbar.jsx';
 import Footer from './components/common/Footer.jsx';
 import FittingRoomPanel from './components/tryon/FittingRoomPanel.jsx';
+import WhatsAppButton from './components/common/WhatsAppButton.jsx';
 import ProtectedRoute from './components/common/ProtectedRoute.jsx';
 import AdminRoute from './components/common/AdminRoute.jsx';
 
@@ -205,6 +206,7 @@ function AppShell() {
         </Routes>
       </main>
       {!isAdminRoute && <FittingRoomPanel />}
+      {!isAdminRoute && <WhatsAppButton />}
       {!isAdminRoute && <Footer />}
     </div>
   );
