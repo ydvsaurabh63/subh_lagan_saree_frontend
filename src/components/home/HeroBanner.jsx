@@ -1030,57 +1030,57 @@ const HeroBanner = () => {
       {quickViewLook &&
         createPortal(
           <div
-            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 bg-black/65 backdrop-blur-xs animate-fadeIn select-none"
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 bg-black/70 backdrop-blur-xs animate-fadeIn select-none"
             onClick={() => setQuickViewLook(null)}
           >
             <div
-              className="relative w-full max-w-2xl bg-white rounded-3xl p-5 sm:p-7 shadow-[0_25px_60px_rgba(0,0,0,0.3)] border border-gold/40 max-h-[92vh] overflow-y-auto"
+              className="relative w-full max-w-lg sm:max-w-2xl bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-7 shadow-[0_25px_60px_rgba(0,0,0,0.35)] border border-gold/40 max-h-[94vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Close Button */}
               <button
                 onClick={() => setQuickViewLook(null)}
-                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-500 hover:text-stone-900 transition flex items-center justify-center cursor-pointer z-10 shadow-xs active:scale-95"
+                className="absolute top-3 right-3 sm:top-4 sm:right-4 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-500 hover:text-stone-900 transition flex items-center justify-center cursor-pointer z-20 shadow-xs active:scale-95"
                 aria-label="Close"
                 title="Close"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
 
               {/* Content Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-12 gap-5 sm:gap-7 items-center">
-                {/* Left Column: Model Cutout Image */}
-                <div className="sm:col-span-6 h-[380px] sm:h-[470px] rounded-2xl bg-gradient-to-b from-[#FAF8F5] via-[#F4EFEA] to-[#EFEAE2] border border-stone-200/80 overflow-hidden relative flex items-center justify-center p-2 shadow-inner group/img">
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-7 items-center">
+                {/* Left Column: Model Cutout Image (Compact on mobile so full card & buttons fit on screen) */}
+                <div className="sm:col-span-6 h-[195px] xs:h-[220px] sm:h-[470px] rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#FAF8F5] via-[#F4EFEA] to-[#EFEAE2] border border-stone-200/80 overflow-hidden relative flex items-center justify-center p-1.5 sm:p-2 shadow-inner group/img">
                   {/* Luxury Look Badge */}
-                  <div className="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md text-[10px] font-black text-primary tracking-widest uppercase border border-gold/40 shadow-xs">
+                  <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-10 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-white/95 backdrop-blur-md text-[9px] sm:text-[10px] font-black text-primary tracking-widest uppercase border border-gold/40 shadow-xs">
                     Look {quickViewLook.lookNumber || '01'}
                   </div>
 
                   <img
                     src={quickViewLook.modelImage.replace('.png', '-crop.png')}
                     alt={quickViewLook.lookTitle}
-                    className="w-full h-full object-contain object-bottom drop-shadow-[0_16px_30px_rgba(0,0,0,0.22)] transition-transform duration-500 group-hover/img:scale-105"
+                    className="w-full h-full object-contain object-bottom drop-shadow-[0_12px_24px_rgba(0,0,0,0.2)] sm:drop-shadow-[0_16px_30px_rgba(0,0,0,0.22)] transition-transform duration-500 group-hover/img:scale-105"
                   />
                 </div>
 
                 {/* Right Column: Clean & Luxurious Details */}
-                <div className="sm:col-span-6 space-y-4">
+                <div className="sm:col-span-6 space-y-2.5 sm:space-y-4">
                   <div>
                     {/* Handloom & Quality Eyebrow */}
-                    <div className="flex items-center space-x-2 mb-2">
-                      <span className="text-[10px] font-black tracking-widest text-gold uppercase px-2 py-0.5 rounded bg-gold/10 border border-gold/30">
+                    <div className="flex items-center space-x-2 mb-1 sm:mb-2">
+                      <span className="text-[9px] sm:text-[10px] font-black tracking-widest text-gold uppercase px-1.5 sm:px-2 py-0.5 rounded bg-gold/10 border border-gold/30">
                         Pure Handloom
                       </span>
                       <div className="flex items-center space-x-1 text-amber-500">
-                        <Star className="w-3.5 h-3.5 fill-current" />
-                        <span className="text-[11px] font-bold text-stone-700">4.9 • Boutique Exclusive</span>
+                        <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current" />
+                        <span className="text-[10px] sm:text-[11px] font-bold text-stone-700">4.9 • Boutique Exclusive</span>
                       </div>
                     </div>
 
-                    <h3 className="font-serif text-xl sm:text-2xl font-black text-stone-950 leading-snug tracking-tight">
+                    <h3 className="font-serif text-base sm:text-2xl font-black text-stone-950 leading-tight sm:leading-snug tracking-tight">
                       {quickViewLook.lookTitle}
                     </h3>
-                    <p className="text-xs text-stone-500 font-medium mt-1">
+                    <p className="text-[11px] sm:text-xs text-stone-500 font-medium mt-0.5 line-clamp-1">
                       {quickViewLook.items?.[0]?.detail || quickViewLook.tagline || 'Pure Silk Saree • Handwoven Zari'}
                     </p>
                   </div>
@@ -1091,10 +1091,10 @@ const HeroBanner = () => {
                     const origPrice = quickViewLook.items?.reduce((acc, it) => acc + (it.originalPrice || it.price), 0) || 24999;
                     const savings = Math.max(0, origPrice - price);
                     return (
-                      <div className="p-3.5 bg-gradient-to-r from-cream/90 via-cream/60 to-cream/40 rounded-2xl border border-gold/40 space-y-1.5">
+                      <div className="p-2.5 sm:p-3.5 bg-gradient-to-r from-cream/90 via-cream/60 to-cream/40 rounded-xl sm:rounded-2xl border border-gold/40 space-y-1 sm:space-y-1.5">
                         <div className="flex items-baseline justify-between">
                           <div className="flex items-baseline space-x-2">
-                            <span className="text-2xl sm:text-3xl font-black text-primary font-sans">
+                            <span className="text-xl sm:text-3xl font-black text-primary font-sans">
                               {formatPrice(price)}
                             </span>
                             {origPrice > price && (
@@ -1104,14 +1104,14 @@ const HeroBanner = () => {
                             )}
                           </div>
                           {savings > 0 && (
-                            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-100/90 px-2 py-0.5 rounded border border-emerald-300">
+                            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-100/90 px-1.5 sm:px-2 py-0.5 rounded border border-emerald-300">
                               Save {formatPrice(savings)}
                             </span>
                           )}
                         </div>
 
-                        <div className="text-[11px] font-bold text-emerald-700 flex items-center space-x-1">
-                          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+                        <div className="text-[10px] sm:text-[11px] font-bold text-emerald-700 flex items-center space-x-1">
+                          <ShieldCheck className="w-3 h-3 text-emerald-600 flex-shrink-0" />
                           <span>Cash on Delivery (COD) Available</span>
                         </div>
                       </div>
@@ -1119,26 +1119,35 @@ const HeroBanner = () => {
                   })()}
 
                   {/* Trust Micro-Perks */}
-                  <div className="space-y-1.5 text-[11px] text-stone-600 font-medium pt-0.5">
-                    <div className="flex items-center space-x-2">
+                  <div className="text-[10px] sm:text-[11px] text-stone-600 font-medium">
+                    {/* Mobile 1-line perk */}
+                    <div className="sm:hidden flex items-center space-x-1.5">
                       <span className="text-gold font-bold">✦</span>
                       <span>Includes free unstitched matching blouse piece</span>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-gold font-bold">✦</span>
-                      <span>100% Handcrafted Mulberry Silk • Certified Quality</span>
+
+                    {/* Desktop 2-line perks */}
+                    <div className="hidden sm:block space-y-1.5 pt-0.5">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-gold font-bold">✦</span>
+                        <span>Includes free unstitched matching blouse piece</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-gold font-bold">✦</span>
+                        <span>100% Handcrafted Mulberry Silk • Certified Quality</span>
+                      </div>
                     </div>
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="space-y-2 pt-1.5">
-                    {/* Primary TRY IT ON Button (Clean - no AI Fitting Room text) */}
+                  <div className="space-y-1.5 sm:space-y-2 pt-0.5 sm:pt-1">
+                    {/* Primary TRY IT ON Button */}
                     <button
                       type="button"
                       onClick={() => handleTryItOn(quickViewLook)}
-                      className="w-full py-3.5 px-4 bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-700 hover:to-amber-600 text-white rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-2 cursor-pointer active:scale-98"
+                      className="w-full py-2.5 sm:py-3.5 px-4 bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-700 hover:to-amber-600 text-white rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-2 cursor-pointer active:scale-98"
                     >
-                      <Shirt className="w-4 h-4 text-white" />
+                      <Shirt className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
                       <span>TRY IT ON</span>
                     </button>
 
@@ -1146,7 +1155,7 @@ const HeroBanner = () => {
                       <button
                         type="button"
                         onClick={() => handleAddFullLook(quickViewLook)}
-                        className="w-full py-3 px-2 bg-primary hover:bg-[#521321] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 cursor-pointer active:scale-98"
+                        className="w-full py-2.5 sm:py-3 px-2 bg-primary hover:bg-[#521321] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 cursor-pointer active:scale-98"
                       >
                         <ShoppingBag className="w-3.5 h-3.5 text-gold" />
                         <span>Add To Cart</span>
@@ -1155,7 +1164,7 @@ const HeroBanner = () => {
                       <button
                         type="button"
                         onClick={() => handleOrderNow(quickViewLook)}
-                        className="w-full py-3 px-2 bg-gradient-to-r from-[#D4AF37] to-[#C5A059] hover:from-[#C5A059] hover:to-[#B38F46] text-stone-950 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 cursor-pointer active:scale-98"
+                        className="w-full py-2.5 sm:py-3 px-2 bg-gradient-to-r from-[#D4AF37] to-[#C5A059] hover:from-[#C5A059] hover:to-[#B38F46] text-stone-950 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 cursor-pointer active:scale-98"
                       >
                         <Sparkles className="w-3.5 h-3.5 text-primary" />
                         <span>Order Now</span>
