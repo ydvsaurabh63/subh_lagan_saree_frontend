@@ -76,31 +76,21 @@ const Navbar = () => {
         {/* Single Compact Top Row Header matching logo height */}
         <div className="flex items-center justify-between h-14 sm:h-16 lg:h-20">
           
-          {/* Mobile Menu & Search Icon (Small screens) */}
-          <div className="flex items-center lg:hidden space-x-1">
+          {/* Left Side: Brand Logo & Mobile Menu (Shifted to Left) */}
+          <div className="flex items-center h-full space-x-1 sm:space-x-2">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg text-brandText hover:text-primary hover:bg-cream transition focus:outline-none"
+              className="p-1.5 sm:p-2 rounded-lg text-brandText hover:text-primary hover:bg-cream transition focus:outline-none lg:hidden cursor-pointer"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
-            <button
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="p-2 rounded-lg text-brandText hover:text-primary hover:bg-cream transition focus:outline-none"
-              aria-label="Search"
-            >
-              <Search className="w-5 h-5" />
-            </button>
-          </div>
 
-          {/* Brand Logo - fits snugly to navbar height without extra whitespace */}
-          <div className="flex items-center h-full">
             <Link to="/" className="inline-flex items-center h-full group py-0.5" title="Subh Lagan Sarees">
               <img
                 src="/logo.png"
                 alt="Subh Lagan Sarees"
-                className="h-full max-h-14 sm:max-h-16 lg:max-h-20 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
+                className="h-full max-h-12 sm:max-h-16 lg:max-h-20 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
               />
             </Link>
           </div>
@@ -128,12 +118,12 @@ const Navbar = () => {
             })}
           </nav>
 
-          {/* Right Icons: Search Icon (Small), User Account, Wishlist, Cart */}
+          {/* Right Icons: Search Icon, User Account, Wishlist, Cart */}
           <div className="flex items-center space-x-1 sm:space-x-2">
-            {/* Desktop Small Search Icon (Toggles sleek search bar) */}
+            {/* Search Icon (All screens) */}
             <button
               onClick={() => setSearchOpen(!searchOpen)}
-              className={`p-2 rounded-full transition hidden lg:inline-flex ${
+              className={`p-1.5 sm:p-2 rounded-full transition ${
                 searchOpen
                   ? 'bg-primary text-white'
                   : 'text-stone-700 hover:text-primary hover:bg-cream'
@@ -141,7 +131,7 @@ const Navbar = () => {
               title="Search Sarees"
               aria-label="Search"
             >
-              {searchOpen ? <X className="w-4 h-4" /> : <Search className="w-4 h-4" />}
+              {searchOpen ? <X className="w-4 h-4 sm:w-5 sm:h-5" /> : <Search className="w-4 h-4 sm:w-5 sm:h-5" />}
             </button>
 
             {/* User Account Menu */}
