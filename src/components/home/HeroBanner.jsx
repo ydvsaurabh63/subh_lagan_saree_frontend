@@ -1013,7 +1013,7 @@ const HeroBanner = () => {
             onClick={() => setQuickViewLook(null)}
           >
             <div
-              className="relative w-full max-w-xl bg-white rounded-3xl p-5 sm:p-7 shadow-2xl border border-gold/40 max-h-[90vh] overflow-y-auto"
+              className="relative w-full max-w-2xl bg-white rounded-3xl p-5 sm:p-7 shadow-2xl border border-gold/40 max-h-[90vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Close Button */}
@@ -1027,18 +1027,18 @@ const HeroBanner = () => {
               </button>
 
               {/* Content Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-12 gap-5 sm:gap-6 items-center">
-                {/* Left Column: Model Cutout Image */}
-                <div className="sm:col-span-5 aspect-[3/4] rounded-2xl bg-[#F8F7F4] border border-stone-200 overflow-hidden relative flex items-center justify-center p-2.5 shadow-inner">
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-5 sm:gap-7 items-center">
+                {/* Left Column: Model Cutout Image (Substantially Enlarged) */}
+                <div className="sm:col-span-6 h-[360px] sm:h-[460px] rounded-2xl bg-[#F8F7F4] border border-stone-200 overflow-hidden relative flex items-center justify-center p-1.5 shadow-inner">
                   <img
-                    src={quickViewLook.modelImage}
+                    src={quickViewLook.modelImage.replace('.png', '-crop.png')}
                     alt={quickViewLook.lookTitle}
-                    className="w-full h-full object-contain object-bottom drop-shadow-[0_12px_24px_rgba(0,0,0,0.20)]"
+                    className="w-full h-full object-contain object-bottom drop-shadow-[0_14px_28px_rgba(0,0,0,0.22)]"
                   />
                 </div>
 
                 {/* Right Column: Clean & Concise Details */}
-                <div className="sm:col-span-7 space-y-3.5">
+                <div className="sm:col-span-6 space-y-4">
                   <div>
                     <h3 className="font-serif text-lg sm:text-xl font-black text-stone-950 leading-snug">
                       {quickViewLook.lookTitle}
