@@ -1147,16 +1147,33 @@ const HeroBanner = () => {
 
               {/* Content Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-7 items-center">
-                {/* Left Column: Model Cutout Image (Compact on mobile so full card & buttons fit on screen) */}
-                <div className="sm:col-span-6 h-[195px] xs:h-[220px] sm:h-[470px] rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#FAF8F5] via-[#F4EFEA] to-[#EFEAE2] border border-stone-200/80 overflow-hidden relative flex items-center justify-center p-1.5 sm:p-2 shadow-inner group/img">
-                  {/* Luxury Look Badge */}
-                  <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-10 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-white/95 backdrop-blur-md text-[9px] sm:text-[10px] font-black text-primary tracking-widest uppercase border border-gold/40 shadow-xs">
-                    Look {quickViewLook.lookNumber || '01'}
+                {/* Left Column: Model Cutout Image (Large & Prominent matching green circle) */}
+                <div className="sm:col-span-6 h-[340px] xs:h-[380px] sm:h-[490px] rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#FAF8F5] via-[#F4EFEA] to-[#EFEAE2] border border-stone-200/80 overflow-hidden relative flex items-center justify-center pt-2 px-1 pb-0 shadow-inner group/img">
+                  {/* Look Badge + Try It On Icon Button right next to Look 01 */}
+                  <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-10 flex items-center space-x-1.5">
+                    <div className="px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md text-[9px] sm:text-[10px] font-black text-primary tracking-widest uppercase border border-gold/40 shadow-xs">
+                      Look {quickViewLook.lookNumber || '01'}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => handleTryItOn(quickViewLook)}
+                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-700 hover:to-amber-600 text-white flex items-center justify-center shadow-md hover:shadow-lg active:scale-90 hover:scale-105 transition cursor-pointer"
+                      title="Try It On in AI Fitting Room"
+                      aria-label="Try It On"
+                    >
+                      <Shirt className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2] text-white" />
+                    </button>
                   </div>
 
                   <img
                     src={quickViewLook.modelImage.replace('.png', '-crop.png')}
                     alt={quickViewLook.lookTitle}
+                    onError={(e) => {
+                      if (e.currentTarget.src.includes('-crop.png')) {
+                        e.currentTarget.src = quickViewLook.modelImage;
+                      }
+                    }}
                     className="w-full h-full object-contain object-bottom drop-shadow-[0_12px_24px_rgba(0,0,0,0.2)] sm:drop-shadow-[0_16px_30px_rgba(0,0,0,0.22)] transition-transform duration-500 group-hover/img:scale-105"
                   />
                 </div>
@@ -1237,18 +1254,8 @@ const HeroBanner = () => {
                     </div>
                   </div>
 
-                  {/* Action Buttons */}
-                  <div className="space-y-1.5 sm:space-y-2 pt-0.5 sm:pt-1">
-                    {/* Primary TRY IT ON Button */}
-                    <button
-                      type="button"
-                      onClick={() => handleTryItOn(quickViewLook)}
-                      className="w-full py-2.5 sm:py-3.5 px-4 bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-700 hover:to-amber-600 text-white rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-2 cursor-pointer active:scale-98"
-                    >
-                      <Shirt className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
-                      <span>TRY IT ON</span>
-                    </button>
-
+                  {/* Action Buttons: Quantity Controller (- & +) and Order Now */}
+                  <div className="pt-1 sm:pt-2">
                     <div className="grid grid-cols-2 gap-2">
                       {/* Quantity Controller: - & + */}
                       <div className="w-full py-1.5 sm:py-2 px-2 bg-primary text-white rounded-xl shadow-md flex items-center justify-between border border-primary/20">
