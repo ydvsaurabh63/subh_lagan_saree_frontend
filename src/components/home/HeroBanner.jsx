@@ -1018,12 +1018,11 @@ const HeroBanner = () => {
                     <button
                       type="button"
                       onClick={() => handleTryItem(item, currentLook)}
-                      className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-700 hover:to-amber-600 text-white text-[10px] font-black uppercase tracking-wider shadow-xs hover:shadow-md transition active:scale-90 cursor-pointer"
-                      title={`Try ${item.name} in Fitting Room`}
+                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-700 hover:to-amber-600 text-white flex items-center justify-center shadow-xs hover:shadow-md hover:scale-105 active:scale-90 transition-all cursor-pointer flex-shrink-0"
+                      title={`Try on ${item.name}`}
                       aria-label={`Try on ${item.name}`}
                     >
-                      <Shirt className="w-3.5 h-3.5 stroke-[2.2] text-white flex-shrink-0" />
-                      <span>Try On</span>
+                      <Shirt className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2] text-white" />
                     </button>
                   </div>
                 </div>
