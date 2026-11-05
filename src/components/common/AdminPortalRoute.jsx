@@ -26,3 +26,4 @@ const AdminPortalRoute = ({ children }) => {
 };
 
 export default AdminPortalRoute;
+

@@ -547,44 +547,7 @@ const SuperAdminDashboard = () => {
               </nav>
             </div>
 
-            {/* Quick Switch Links */}
-            <div className="pt-4 border-t border-gold/15 space-y-2">
-              <p className="px-3 text-[10px] uppercase tracking-widest text-gold/70 font-bold mb-1">
-                Portals & Links
-              </p>
-              <Link
-                to="/admin-portal"
-                className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-cream/75 hover:text-gold hover:bg-white/5 transition"
-              >
-                <span className="flex items-center gap-2">
-                  <Shield className="w-3.5 h-3.5 text-gold" />
-                  Admin Dashboard
-                </span>
-                <ExternalLink className="w-3 h-3 opacity-60" />
-              </Link>
-              <Link
-                to="/admin"
-                className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-cream/75 hover:text-gold hover:bg-white/5 transition"
-              >
-                <span className="flex items-center gap-2">
-                  <Store className="w-3.5 h-3.5 text-gold" />
-                  Client Store Panel
-                </span>
-                <ExternalLink className="w-3 h-3 opacity-60" />
-              </Link>
-              <Link
-                to="/"
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium text-cream/75 hover:text-gold hover:bg-white/5 transition"
-              >
-                <span className="flex items-center gap-2">
-                  <Sparkles className="w-3.5 h-3.5 text-gold" />
-                  Live Website
-                </span>
-                <ExternalLink className="w-3 h-3 opacity-60" />
-              </Link>
-            </div>
+
           </div>
         </div>
 
@@ -1729,3 +1692,4 @@ const SuperAdminDashboard = () => {
 };
 
 export default SuperAdminDashboard;
+
