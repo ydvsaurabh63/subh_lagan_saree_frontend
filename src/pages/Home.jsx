@@ -72,63 +72,128 @@ const Home = () => {
       {/* 2. Shop By 12 Saree Categories (Visual Circular Grid) */}
       <CategoryGrid categories={categories} />
 
-      {/* 3. Visual Curated Edits Lookbook */}
-      <section className="py-10 bg-white">
+      {/* 3. Shop By Occasion */}
+      <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Box 1 */}
+          {/* Section Header */}
+          <div className="text-center mb-8">
+            <span className="text-gold-dark text-[11px] uppercase tracking-[0.25em] font-bold">
+              Curated Occasions
+            </span>
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary mt-1">
+              Shop By Occasion
+            </h2>
+            <div className="w-16 h-0.5 bg-gold mx-auto mt-2"></div>
+            <p className="text-xs sm:text-sm text-stone-500 max-w-lg mx-auto mt-2 font-medium">
+              Handpicked silk weaves curated for weddings, festivals, receptions, and sacred rituals
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {/* Occasion 1: Wedding & Bridal */}
             <Link
-              to="/shop?isBridal=true"
-              className="group relative h-64 rounded-2xl overflow-hidden shadow-sm border border-gold/30 flex items-end p-6"
+              to="/shop?occasion=Bridal"
+              className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5"
             >
               <img
                 src="https://images.unsplash.com/photo-1546804784-896d0dca3805?auto=format&fit=crop&w=800&q=80"
-                alt="Bridal Trousseau"
-                className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                alt="Wedding & Bridal Sarees"
+                className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-108 transition-transform duration-700"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/30 to-transparent"></div>
-              <div className="relative z-10 text-white">
-                <h3 className="font-serif text-xl font-bold text-white drop-shadow-md">Bridal Trousseau</h3>
-                <span className="inline-flex items-center text-xs text-white/90 mt-1 font-semibold group-hover:text-gold transition">
-                  Shop <ArrowRight className="w-3.5 h-3.5 ml-1" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#20040E]/95 via-[#20040E]/40 to-transparent"></div>
+              <div className="relative z-10 text-white w-full">
+                <span className="inline-block px-2 py-0.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-[10px] font-bold uppercase tracking-wider mb-1.5">
+                  Occasion
+                </span>
+                <h3 className="font-serif text-xl font-bold text-white drop-shadow-md">
+                  Wedding & Bridal
+                </h3>
+                <p className="text-xs text-white/85 font-medium mt-1">
+                  Grand Heritage Silks & Zari
+                </p>
+                <span className="inline-flex items-center text-xs text-gold font-bold mt-2.5 group-hover:text-gold-light group-hover:translate-x-1 transition-all">
+                  Explore Weaves <ArrowRight className="w-3.5 h-3.5 ml-1" />
                 </span>
               </div>
             </Link>
 
-            {/* Box 2 */}
+            {/* Occasion 2: Festive Celebrations */}
             <Link
-              to="/shop?category=banarasi-sarees"
-              className="group relative h-64 rounded-2xl overflow-hidden shadow-sm border border-gold/30 flex items-end p-6"
+              to="/shop?occasion=Festive"
+              className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5"
             >
               <img
                 src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80"
-                alt="Royal Banarasi"
-                className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                alt="Festive Celebrations Sarees"
+                className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-108 transition-transform duration-700"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/30 to-transparent"></div>
-              <div className="relative z-10 text-white">
-                <h3 className="font-serif text-xl font-bold text-white drop-shadow-md">Banarasi Silks</h3>
-                <span className="inline-flex items-center text-xs text-white/90 mt-1 font-semibold group-hover:text-gold transition">
-                  Shop <ArrowRight className="w-3.5 h-3.5 ml-1" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#20040E]/95 via-[#20040E]/40 to-transparent"></div>
+              <div className="relative z-10 text-white w-full">
+                <span className="inline-block px-2 py-0.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-[10px] font-bold uppercase tracking-wider mb-1.5">
+                  Occasion
+                </span>
+                <h3 className="font-serif text-xl font-bold text-white drop-shadow-md">
+                  Festive Celebrations
+                </h3>
+                <p className="text-xs text-white/85 font-medium mt-1">
+                  Diwali, Karwa Chauth & Navratri
+                </p>
+                <span className="inline-flex items-center text-xs text-gold font-bold mt-2.5 group-hover:text-gold-light group-hover:translate-x-1 transition-all">
+                  Explore Weaves <ArrowRight className="w-3.5 h-3.5 ml-1" />
                 </span>
               </div>
             </Link>
 
-            {/* Box 3 */}
+            {/* Occasion 3: Party & Reception */}
             <Link
-              to="/shop?category=kanjivaram-sarees"
-              className="group relative h-64 rounded-2xl overflow-hidden shadow-sm border border-gold/30 flex items-end p-6"
+              to="/shop?occasion=Party%20Wear"
+              className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=80"
+                alt="Party & Reception Sarees"
+                className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-108 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#20040E]/95 via-[#20040E]/40 to-transparent"></div>
+              <div className="relative z-10 text-white w-full">
+                <span className="inline-block px-2 py-0.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-[10px] font-bold uppercase tracking-wider mb-1.5">
+                  Occasion
+                </span>
+                <h3 className="font-serif text-xl font-bold text-white drop-shadow-md">
+                  Party & Reception
+                </h3>
+                <p className="text-xs text-white/85 font-medium mt-1">
+                  Cocktail Drapes & Designer Organza
+                </p>
+                <span className="inline-flex items-center text-xs text-gold font-bold mt-2.5 group-hover:text-gold-light group-hover:translate-x-1 transition-all">
+                  Explore Weaves <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                </span>
+              </div>
+            </Link>
+
+            {/* Occasion 4: Traditional & Puja */}
+            <Link
+              to="/shop?occasion=Traditional"
+              className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5"
             >
               <img
                 src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=800&q=80"
-                alt="Kanjivaram Temple Weaves"
-                className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                alt="Traditional & Puja Sarees"
+                className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-108 transition-transform duration-700"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/30 to-transparent"></div>
-              <div className="relative z-10 text-white">
-                <h3 className="font-serif text-xl font-bold text-white drop-shadow-md">Pure Kanjivaram</h3>
-                <span className="inline-flex items-center text-xs text-white/90 mt-1 font-semibold group-hover:text-gold transition">
-                  Shop <ArrowRight className="w-3.5 h-3.5 ml-1" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#20040E]/95 via-[#20040E]/40 to-transparent"></div>
+              <div className="relative z-10 text-white w-full">
+                <span className="inline-block px-2 py-0.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-[10px] font-bold uppercase tracking-wider mb-1.5">
+                  Occasion
+                </span>
+                <h3 className="font-serif text-xl font-bold text-white drop-shadow-md">
+                  Traditional & Puja
+                </h3>
+                <p className="text-xs text-white/85 font-medium mt-1">
+                  Auspicious Temple Borders & Silks
+                </p>
+                <span className="inline-flex items-center text-xs text-gold font-bold mt-2.5 group-hover:text-gold-light group-hover:translate-x-1 transition-all">
+                  Explore Weaves <ArrowRight className="w-3.5 h-3.5 ml-1" />
                 </span>
               </div>
             </Link>
