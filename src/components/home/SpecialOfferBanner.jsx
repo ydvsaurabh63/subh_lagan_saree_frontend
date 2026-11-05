@@ -44,7 +44,7 @@ const SpecialOfferBanner = () => {
             {/* Right Image */}
             <div className="relative h-60 lg:h-full min-h-[260px] overflow-hidden">
               <img
-                src="https://images.unsplash.com/photo-1546804784-896d0dca3805?auto=format&fit=crop&w=1200&q=85"
+                src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85"
                 alt="Bridal Saree Special Offer"
                 className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700"
               />

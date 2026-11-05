@@ -90,7 +90,7 @@ const Home = () => {
               className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5"
             >
               <img
-                src="https://images.unsplash.com/photo-1546804784-896d0dca3805?auto=format&fit=crop&w=800&q=80"
+                src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80"
                 alt="Wedding & Bridal Sarees"
                 className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-108 transition-transform duration-700"
               />
@@ -204,7 +204,7 @@ const Home = () => {
               className="group relative h-80 sm:h-96 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex flex-col justify-between p-5 bg-stone-900"
             >
               <img
-                src="https://images.unsplash.com/photo-1546804784-896d0dca3805?auto=format&fit=crop&w=600&q=80"
+                src="https://images.unsplash.com/photo-1610030469668-8e9f641aaf27?auto=format&fit=crop&w=600&q=80"
                 alt="Subh Lagan Privé"
                 className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-108 transition-transform duration-700"
               />
@@ -460,7 +460,7 @@ const Home = () => {
               className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5"
             >
               <img
-                src="https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=800&q=80"
+                src="https://images.unsplash.com/photo-1618901185975-d59f7091bcfe?auto=format&fit=crop&w=800&q=80"
                 alt="Viscose Georgette"
                 className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-108 transition-transform duration-700"
               />

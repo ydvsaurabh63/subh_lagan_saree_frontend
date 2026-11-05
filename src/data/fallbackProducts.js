@@ -79,7 +79,8 @@ export const fallbackSarees = [
     fabric: 'Pure Organza Silk',
     color: 'Blush Rose',
     images: [
-      'https://images.unsplash.com/photo-1546804784-896d0dca3805?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=80',
     ],
     ratings: 4.9,
     reviewsCount: 41,

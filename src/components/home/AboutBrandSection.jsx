@@ -35,7 +35,7 @@ const AboutBrandSection = () => {
             <div className="pt-6 space-y-3">
               <div className="aspect-square rounded-2xl overflow-hidden shadow-sm border border-stone-200">
                 <img
-                  src="https://images.unsplash.com/photo-1546804784-896d0dca3805?auto=format&fit=crop&w=700&q=80"
+                  src="https://images.unsplash.com/photo-1610030469668-8e9f641aaf27?auto=format&fit=crop&w=700&q=80"
                   alt="Bridal Saree Detail"
                   className="w-full h-full object-cover hover:scale-105 transition duration-500"
                 />
