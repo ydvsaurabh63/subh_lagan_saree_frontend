@@ -392,22 +392,131 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 8. Pure Silk Sarees Showcase */}
+      {/* 8. Shop By Fabric */}
       <section className="py-12 bg-white border-t border-stone-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
             <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary">
-              Silk Sarees
+              Shop By Fabric
             </h2>
             <Link
-              to="/shop?category=silk-sarees"
+              to="/shop"
               className="inline-flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-primary hover:text-gold-dark transition"
             >
               <span>View All</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
-          <ProductGrid products={silkCollection} loading={loading} />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {/* Fabric 1: Pure Katan Silk */}
+            <Link
+              to="/shop?fabric=Pure%20Katan%20Silk"
+              className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80"
+                alt="Pure Katan Silk"
+                className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-108 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#20040E]/95 via-[#20040E]/40 to-transparent"></div>
+              <div className="relative z-10 text-white w-full">
+                <span className="inline-block px-2 py-0.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-[10px] font-bold uppercase tracking-wider mb-1.5">
+                  Hand-Spun
+                </span>
+                <h3 className="font-serif text-xl font-bold text-white drop-shadow-md">
+                  Pure Katan Silk
+                </h3>
+                <p className="text-xs text-white/85 font-medium mt-1">
+                  Traditional Banarasi Kadhwa & Brocade
+                </p>
+                <span className="inline-flex items-center text-xs text-gold font-bold mt-2.5 group-hover:text-gold-light group-hover:translate-x-1 transition-all">
+                  Explore Fabric <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                </span>
+              </div>
+            </Link>
+
+            {/* Fabric 2: Kanchipuram Silk */}
+            <Link
+              to="/shop?fabric=Pure%20Kanchipuram%20Silk"
+              className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=800&q=80"
+                alt="Pure Kanchipuram Silk"
+                className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-108 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#20040E]/95 via-[#20040E]/40 to-transparent"></div>
+              <div className="relative z-10 text-white w-full">
+                <span className="inline-block px-2 py-0.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-[10px] font-bold uppercase tracking-wider mb-1.5">
+                  Mulberry Silk
+                </span>
+                <h3 className="font-serif text-xl font-bold text-white drop-shadow-md">
+                  Kanchipuram Silk
+                </h3>
+                <p className="text-xs text-white/85 font-medium mt-1">
+                  Pure Temple Korvai & Gold Zari
+                </p>
+                <span className="inline-flex items-center text-xs text-gold font-bold mt-2.5 group-hover:text-gold-light group-hover:translate-x-1 transition-all">
+                  Explore Fabric <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                </span>
+              </div>
+            </Link>
+
+            {/* Fabric 3: Pure Organza Silk */}
+            <Link
+              to="/shop?fabric=Pure%20Organza%20Silk"
+              className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=800&q=80"
+                alt="Pure Organza Silk"
+                className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-108 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#20040E]/95 via-[#20040E]/40 to-transparent"></div>
+              <div className="relative z-10 text-white w-full">
+                <span className="inline-block px-2 py-0.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-[10px] font-bold uppercase tracking-wider mb-1.5">
+                  Featherlight
+                </span>
+                <h3 className="font-serif text-xl font-bold text-white drop-shadow-md">
+                  Pure Organza Silk
+                </h3>
+                <p className="text-xs text-white/85 font-medium mt-1">
+                  Sheer Drapes & Modern Elegance
+                </p>
+                <span className="inline-flex items-center text-xs text-gold font-bold mt-2.5 group-hover:text-gold-light group-hover:translate-x-1 transition-all">
+                  Explore Fabric <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                </span>
+              </div>
+            </Link>
+
+            {/* Fabric 4: Viscose Georgette */}
+            <Link
+              to="/shop?fabric=Viscose%20Georgette"
+              className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=800&q=80"
+                alt="Viscose Georgette"
+                className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-108 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#20040E]/95 via-[#20040E]/40 to-transparent"></div>
+              <div className="relative z-10 text-white w-full">
+                <span className="inline-block px-2 py-0.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-[10px] font-bold uppercase tracking-wider mb-1.5">
+                  Flowing & Graceful
+                </span>
+                <h3 className="font-serif text-xl font-bold text-white drop-shadow-md">
+                  Viscose Georgette
+                </h3>
+                <p className="text-xs text-white/85 font-medium mt-1">
+                  Effortless Fall & Embellished Borders
+                </p>
+                <span className="inline-flex items-center text-xs text-gold font-bold mt-2.5 group-hover:text-gold-light group-hover:translate-x-1 transition-all">
+                  Explore Fabric <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                </span>
+              </div>
+            </Link>
+          </div>
         </div>
       </section>
 
