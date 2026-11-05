@@ -836,8 +836,8 @@ const HeroBanner = () => {
             <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-black text-stone-950 tracking-tight leading-tight">
               Try the Look.
             </h1>
-            <p className="text-[11px] sm:text-xs text-stone-600 font-bold max-w-md mx-auto">
-              Drag or tap to spin the 3D runway.
+            <p className="text-[11px] sm:text-xs text-stone-600 font-bold max-w-md mx-auto tracking-wide">
+              Powered by TryoAI
             </p>
           </div>
 
