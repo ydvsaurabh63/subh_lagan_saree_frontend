@@ -1149,22 +1149,16 @@ const HeroBanner = () => {
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-7 items-center">
                 {/* Left Column: Model Cutout Image (Large & Prominent matching green circle) */}
                 <div className="sm:col-span-6 h-[340px] xs:h-[380px] sm:h-[490px] rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#FAF8F5] via-[#F4EFEA] to-[#EFEAE2] border border-stone-200/80 overflow-hidden relative flex items-center justify-center pt-2 px-1 pb-0 shadow-inner group/img">
-                  {/* Look Badge + Try It On Icon Button right next to Look 01 */}
-                  <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-10 flex items-center space-x-1.5">
-                    <div className="px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md text-[9px] sm:text-[10px] font-black text-primary tracking-widest uppercase border border-gold/40 shadow-xs">
-                      Look {quickViewLook.lookNumber || '01'}
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => handleTryItOn(quickViewLook)}
-                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-700 hover:to-amber-600 text-white flex items-center justify-center shadow-md hover:shadow-lg active:scale-90 hover:scale-105 transition cursor-pointer"
-                      title="Try It On in AI Fitting Room"
-                      aria-label="Try It On"
-                    >
-                      <Shirt className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2] text-white" />
-                    </button>
-                  </div>
+                  {/* Try It On Icon Button */}
+                  <button
+                    type="button"
+                    onClick={() => handleTryItOn(quickViewLook)}
+                    className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-10 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-700 hover:to-amber-600 text-white flex items-center justify-center shadow-md hover:shadow-lg active:scale-90 hover:scale-105 transition cursor-pointer"
+                    title="Try It On in AI Fitting Room"
+                    aria-label="Try It On"
+                  >
+                    <Shirt className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2] text-white" />
+                  </button>
 
                   <img
                     src={quickViewLook.modelImage.replace('.png', '-crop.png')}
@@ -1178,21 +1172,10 @@ const HeroBanner = () => {
                   />
                 </div>
 
-                {/* Right Column: Clean & Luxurious Details */}
-                <div className="sm:col-span-6 space-y-2.5 sm:space-y-4">
+                {/* Right Column: Clean Details */}
+                <div className="sm:col-span-6 space-y-3 sm:space-y-4">
                   <div>
-                    {/* Handloom & Quality Eyebrow */}
-                    <div className="flex items-center space-x-2 mb-1 sm:mb-2">
-                      <span className="text-[9px] sm:text-[10px] font-black tracking-widest text-gold uppercase px-1.5 sm:px-2 py-0.5 rounded bg-gold/10 border border-gold/30">
-                        Pure Handloom
-                      </span>
-                      <div className="flex items-center space-x-1 text-amber-500">
-                        <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current" />
-                        <span className="text-[10px] sm:text-[11px] font-bold text-stone-700">4.9 • Boutique Exclusive</span>
-                      </div>
-                    </div>
-
-                    <h3 className="font-serif text-base sm:text-2xl font-black text-stone-950 leading-tight sm:leading-snug tracking-tight">
+                    <h3 className="font-serif text-lg sm:text-2xl font-black text-stone-950 leading-tight sm:leading-snug tracking-tight">
                       {quickViewLook.lookTitle}
                     </h3>
                     <p className="text-[11px] sm:text-xs text-stone-500 font-medium mt-0.5 line-clamp-1">
@@ -1206,7 +1189,7 @@ const HeroBanner = () => {
                     const origPrice = quickViewLook.items?.reduce((acc, it) => acc + (it.originalPrice || it.price), 0) || 24999;
                     const savings = Math.max(0, origPrice - price);
                     return (
-                      <div className="p-2.5 sm:p-3.5 bg-gradient-to-r from-cream/90 via-cream/60 to-cream/40 rounded-xl sm:rounded-2xl border border-gold/40 space-y-1 sm:space-y-1.5">
+                      <div className="p-2.5 sm:p-3.5 bg-gradient-to-r from-cream/90 via-cream/60 to-cream/40 rounded-xl sm:rounded-2xl border border-gold/40">
                         <div className="flex items-baseline justify-between">
                           <div className="flex items-baseline space-x-2">
                             <span className="text-xl sm:text-3xl font-black text-primary font-sans">
@@ -1224,35 +1207,9 @@ const HeroBanner = () => {
                             </span>
                           )}
                         </div>
-
-                        <div className="text-[10px] sm:text-[11px] font-bold text-emerald-700 flex items-center space-x-1">
-                          <ShieldCheck className="w-3 h-3 text-emerald-600 flex-shrink-0" />
-                          <span>Cash on Delivery (COD) Available</span>
-                        </div>
                       </div>
                     );
                   })()}
-
-                  {/* Trust Micro-Perks */}
-                  <div className="text-[10px] sm:text-[11px] text-stone-600 font-medium">
-                    {/* Mobile 1-line perk */}
-                    <div className="sm:hidden flex items-center space-x-1.5">
-                      <span className="text-gold font-bold">✦</span>
-                      <span>Includes free unstitched matching blouse piece</span>
-                    </div>
-
-                    {/* Desktop 2-line perks */}
-                    <div className="hidden sm:block space-y-1.5 pt-0.5">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-gold font-bold">✦</span>
-                        <span>Includes free unstitched matching blouse piece</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-gold font-bold">✦</span>
-                        <span>100% Handcrafted Mulberry Silk • Certified Quality</span>
-                      </div>
-                    </div>
-                  </div>
 
                   {/* Action Buttons: Quantity Controller (- & +) and Order Now */}
                   <div className="pt-1 sm:pt-2">
