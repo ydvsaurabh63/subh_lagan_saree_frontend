@@ -157,7 +157,11 @@ const Navbar = () => {
                       className="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-xl border border-stone-100 py-2 text-sm z-50 animate-in fade-in slide-in-from-top-2 duration-150"
                     >
                       <div className="px-4 py-2 border-b border-stone-100">
-                        <p className="font-semibold text-brandText truncate">{user?.name}</p>
+                        <p className="font-semibold text-brandText truncate">
+                          {user?.name
+                            ? user.name.replace(/\(Admin\)/gi, '(Client)').replace(/\bAdmin\b/gi, 'Client')
+                            : ''}
+                        </p>
                         <p className="text-xs text-stone-500 truncate">{user?.email}</p>
                       </div>
                       {user?.role === 'admin' && (
@@ -167,7 +171,7 @@ const Navbar = () => {
                           className="flex items-center space-x-2 px-3 py-2 mx-2 my-1.5 bg-primary/10 hover:bg-primary text-primary hover:text-white transition rounded-lg text-xs font-bold shadow-xs"
                         >
                           <ShieldCheck className="w-4 h-4 text-gold" />
-                          <span>Admin Control Panel</span>
+                          <span>Client Control Panel</span>
                         </Link>
                       )}
                       <Link

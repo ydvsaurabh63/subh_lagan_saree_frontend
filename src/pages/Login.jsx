@@ -78,7 +78,7 @@ const Login = () => {
             </div>
             <div className="flex items-center justify-between pt-2 border-t border-amber-200">
               <div>
-                <p className="font-semibold text-primary">Admin / Owner Demo:</p>
+                <p className="font-semibold text-primary">Client / Owner Demo:</p>
                 <p className="text-[11px] text-stone-600">admin@subhlagansarees.com / admin123</p>
               </div>
               <button
@@ -86,7 +86,7 @@ const Login = () => {
                 onClick={handleUseAdmin}
                 className="px-2.5 py-1 bg-primary hover:bg-secondary text-white rounded text-[11px] font-semibold transition shadow-xs"
               >
-                Fill Admin
+                Fill Client
               </button>
             </div>
           </div>

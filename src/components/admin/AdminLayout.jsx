@@ -18,7 +18,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 
-const AdminLayout = ({ children, title = 'Store Administration' }) => {
+const AdminLayout = ({ children, title = 'Store Client Panel' }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -111,7 +111,7 @@ const AdminLayout = ({ children, title = 'Store Administration' }) => {
               />
               <div>
                 <p className="text-[10px] tracking-widest text-gold uppercase font-bold">
-                  Admin Panel
+                  Client Panel
                 </p>
               </div>
             </Link>
@@ -207,11 +207,18 @@ const AdminLayout = ({ children, title = 'Store Administration' }) => {
           <div className="flex items-center justify-between px-2 pt-1 border-t border-white/5">
             <div className="flex items-center gap-2 overflow-hidden">
               <div className="w-7 h-7 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center text-xs font-bold text-gold shrink-0">
-                {user?.name ? user.name.charAt(0).toUpperCase() : 'A'}
+                {(() => {
+                  const displayName = (user?.name || 'Client')
+                    .replace(/\(Admin\)/gi, '(Client)')
+                    .replace(/\bAdmin\b/gi, 'Client');
+                  return displayName.charAt(0).toUpperCase();
+                })()}
               </div>
               <div className="overflow-hidden">
                 <p className="text-xs font-bold text-cream truncate">
-                  {user?.name || 'Admin'}
+                  {(user?.name || 'Client')
+                    .replace(/\(Admin\)/gi, '(Client)')
+                    .replace(/\bAdmin\b/gi, 'Client')}
                 </p>
               </div>
             </div>
