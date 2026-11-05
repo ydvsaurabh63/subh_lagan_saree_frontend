@@ -73,20 +73,14 @@ const Home = () => {
       <CategoryGrid categories={categories} />
 
       {/* 3. Shop By Occasion */}
-      <section className="py-12 bg-white">
+      <section className="pt-2 sm:pt-4 pb-10 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
-          <div className="text-center mb-8">
-            <span className="text-gold-dark text-[11px] uppercase tracking-[0.25em] font-bold">
-              Curated Occasions
-            </span>
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary mt-1">
+          <div className="text-center mb-5 sm:mb-6">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary">
               Shop By Occasion
             </h2>
-            <div className="w-16 h-0.5 bg-gold mx-auto mt-2"></div>
-            <p className="text-xs sm:text-sm text-stone-500 max-w-lg mx-auto mt-2 font-medium">
-              Handpicked silk weaves curated for weddings, festivals, receptions, and sacred rituals
-            </p>
+            <div className="w-14 h-0.5 bg-gold mx-auto mt-2"></div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
