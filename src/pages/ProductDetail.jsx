@@ -265,9 +265,9 @@ const ProductDetail = () => {
 
                 <button
                   onClick={handleBuyNow}
-                  className="flex-1 py-3 px-5 bg-gold hover:bg-gold-light text-secondary-dark text-xs font-bold uppercase tracking-wider rounded-lg shadow transition flex items-center justify-center space-x-1.5"
+                  className="flex-1 py-3 px-5 bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-700 hover:to-amber-600 text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow transition flex items-center justify-center space-x-1.5"
                 >
-                  <Sparkles className="w-4 h-4" />
+                  <Sparkles className="w-4 h-4 text-white" />
                   <span>Buy Now (COD)</span>
                 </button>
 

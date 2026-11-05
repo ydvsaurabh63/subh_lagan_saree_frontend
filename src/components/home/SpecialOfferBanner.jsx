@@ -10,33 +10,33 @@ const SpecialOfferBanner = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 items-center">
             {/* Left Content */}
             <div className="p-8 sm:p-12 space-y-4 z-10 text-white">
-              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-gold/20 text-gold-light text-[11px] font-bold uppercase tracking-wider border border-gold/30">
-                <Gift className="w-3.5 h-3.5 text-gold" />
+              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 text-white text-[11px] font-bold uppercase tracking-wider border border-white/30">
+                <Gift className="w-3.5 h-3.5 text-white" />
                 <span>Festive Offer</span>
               </div>
 
-              <h3 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
-                Flat <span className="text-gold">30% Off</span> Bridal
+              <h3 className="font-serif text-3xl sm:text-4xl font-bold leading-tight text-white">
+                Flat <span className="text-amber-200">30% Off</span> Bridal
               </h3>
 
-              <p className="text-xs sm:text-sm text-stone-200 leading-relaxed max-w-md">
+              <p className="text-xs sm:text-sm text-stone-100 leading-relaxed max-w-md">
                 Handcrafted wedding & festive silks.
               </p>
 
               {/* Promo Code Pill & CTA */}
               <div className="pt-2 flex flex-wrap items-center gap-3">
-                <div className="inline-flex items-center space-x-2 bg-black/40 px-3.5 py-2 rounded-lg border border-gold/40 text-xs">
-                  <Tag className="w-3.5 h-3.5 text-gold" />
-                  <span className="text-stone-300">Code:</span>
+                <div className="inline-flex items-center space-x-2 bg-black/40 px-3.5 py-2 rounded-lg border border-white/20 text-xs">
+                  <Tag className="w-3.5 h-3.5 text-white" />
+                  <span className="text-stone-200">Code:</span>
                   <span className="font-bold text-white tracking-widest">SUBHLAGAN30</span>
                 </div>
 
                 <Link
                   to="/shop?isBridal=true"
-                  className="inline-flex items-center space-x-2 px-5 py-2 bg-gold hover:bg-gold-light text-secondary-dark text-xs font-bold uppercase tracking-wider rounded-lg shadow transition"
+                  className="inline-flex items-center space-x-2 px-5 py-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow transition"
                 >
                   <span>Shop</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-4 h-4 text-white" />
                 </Link>
               </div>
             </div>

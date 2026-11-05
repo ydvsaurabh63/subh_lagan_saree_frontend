@@ -125,8 +125,8 @@ const Shop = () => {
       {/* Header Banner */}
       <div className="bg-primary-dark text-white py-8 px-4 sm:px-6 lg:px-8 border-b border-gold/30">
         <div className="max-w-7xl mx-auto">
-          <Breadcrumb items={[{ label: 'All Sarees' }]} />
-          <h1 className="font-serif text-3xl sm:text-4xl font-bold mt-2">
+          <Breadcrumb items={[{ label: 'All Sarees' }]} light={true} />
+          <h1 className="font-serif text-3xl sm:text-4xl font-bold mt-2 text-white">
             All Sarees
           </h1>
         </div>
@@ -201,7 +201,7 @@ const Shop = () => {
                 </p>
                 <button
                   onClick={fetchProducts}
-                  className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary hover:bg-secondary text-cream rounded-lg text-xs font-bold transition shadow-md"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary hover:bg-secondary text-white rounded-lg text-xs font-bold transition shadow-md"
                 >
                   <RefreshCw className="w-3.5 h-3.5" />
                   Refresh Sarees

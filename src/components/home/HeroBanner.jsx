@@ -1043,26 +1043,26 @@ const HeroBanner = () => {
                 <button
                   type="button"
                   onClick={() => handleTryItOn(currentLook)}
-                  className="w-full py-3 px-3 bg-[#18181b] hover:bg-black text-[#F59E0B] hover:text-white border border-[#D97706]/70 hover:border-[#D97706] rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-sm flex items-center justify-center space-x-2 active:scale-98 cursor-pointer"
+                  className="w-full py-3 px-3 bg-[#18181b] hover:bg-black text-white border border-[#D97706]/70 hover:border-[#D97706] rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-sm flex items-center justify-center space-x-2 active:scale-98 cursor-pointer"
                 >
-                  <Shirt className="w-4 h-4 text-[#D97706]" />
+                  <Shirt className="w-4 h-4 text-white" />
                   <span>Try It On</span>
                 </button>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2">
                   <button
                     onClick={() => handleAddFullLook(currentLook)}
-                    className="w-full py-3.5 px-3 bg-primary hover:bg-secondary text-cream rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 active:scale-98 cursor-pointer"
+                    className="w-full py-3.5 px-3 bg-primary hover:bg-secondary text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 active:scale-98 cursor-pointer"
                   >
-                    <ShoppingBag className="w-4 h-4 text-gold" />
+                    <ShoppingBag className="w-4 h-4 text-white" />
                     <span>Add to Bag</span>
                   </button>
 
                   <button
                     onClick={() => handleOrderNow(currentLook)}
-                    className="w-full py-3.5 px-3 bg-gold hover:bg-gold-light text-stone-950 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 active:scale-98 cursor-pointer"
+                    className="w-full py-3.5 px-3 bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-700 hover:to-amber-600 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 active:scale-98 cursor-pointer"
                   >
-                    <Sparkles className="w-4 h-4 text-primary" />
+                    <Sparkles className="w-4 h-4 text-white" />
                     <span>Order Now (COD)</span>
                   </button>
                 </div>
@@ -1246,9 +1246,9 @@ const HeroBanner = () => {
                       <button
                         type="button"
                         onClick={() => handleOrderNow(quickViewLook, modalQty)}
-                        className="w-full py-2.5 sm:py-3 px-2 bg-gradient-to-r from-[#D4AF37] to-[#C5A059] hover:from-[#C5A059] hover:to-[#B38F46] text-stone-950 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 cursor-pointer active:scale-98"
+                        className="w-full py-2.5 sm:py-3 px-2 bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-700 hover:to-amber-600 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 cursor-pointer active:scale-98"
                       >
-                        <Sparkles className="w-3.5 h-3.5 text-primary" />
+                        <Sparkles className="w-3.5 h-3.5 text-white" />
                         <span>Order Now</span>
                       </button>
                     </div>

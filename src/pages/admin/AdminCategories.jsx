@@ -140,9 +140,9 @@ const AdminCategories = () => {
           </div>
           <button
             onClick={handleOpenAdd}
-            className="inline-flex items-center gap-2 bg-primary hover:bg-secondary text-cream font-extrabold px-4 py-2.5 rounded-lg text-xs tracking-wider uppercase transition-all shadow-md shrink-0"
+            className="inline-flex items-center gap-2 bg-primary hover:bg-secondary text-white font-extrabold px-4 py-2.5 rounded-lg text-xs tracking-wider uppercase transition-all shadow-md shrink-0"
           >
-            <Plus className="w-4 h-4 text-gold stroke-[3]" />
+            <Plus className="w-4 h-4 text-white stroke-[3]" />
             Add Category
           </button>
         </div>
@@ -214,13 +214,13 @@ const AdminCategories = () => {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden border border-gold/40">
-            <div className="p-4 bg-primary text-cream flex items-center justify-between">
-              <h3 className="font-serif text-base font-bold text-cream">
+            <div className="p-4 bg-primary text-white flex items-center justify-between">
+              <h3 className="font-serif text-base font-bold text-white">
                 {editingCategory ? 'Edit Category' : 'Create New Category'}
               </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="text-cream/70 hover:text-white p-1"
+                className="text-white/80 hover:text-white p-1"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -327,7 +327,7 @@ const AdminCategories = () => {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-6 py-2 bg-primary hover:bg-secondary text-cream rounded-lg font-bold shadow-md flex items-center gap-2"
+                  className="px-6 py-2 bg-primary hover:bg-secondary text-white rounded-lg font-bold shadow-md flex items-center gap-2"
                 >
                   {saving && <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />}
                   Save Category

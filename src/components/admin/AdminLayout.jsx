@@ -230,11 +230,11 @@ const AdminLayout = ({ children, title = 'Store Administration' }) => {
       {/* Main Admin Content View Area */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Mobile Bar */}
-        <header className="lg:hidden bg-primary text-cream p-3 flex items-center justify-between border-b border-gold/20 shadow-sm">
+        <header className="lg:hidden bg-primary text-white p-3 flex items-center justify-between border-b border-gold/20 shadow-sm">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="p-1.5 text-cream hover:text-gold focus:outline-none"
+              className="p-1.5 text-white hover:text-gold focus:outline-none"
             >
               <Menu className="w-6 h-6" />
             </button>

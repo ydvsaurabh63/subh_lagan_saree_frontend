@@ -22,7 +22,7 @@ const VirtualTryOn = () => {
               <div className="text-[11px] sm:text-xs font-black tracking-wider uppercase text-white font-sans leading-tight">
                 TRY IT ON
               </div>
-              <div className="text-[9px] sm:text-[10px] font-semibold text-[#F59E0B] leading-tight">
+              <div className="text-[9px] sm:text-[10px] font-semibold text-white/90 leading-tight">
                 Fitting Room
               </div>
             </div>

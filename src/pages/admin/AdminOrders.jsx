@@ -122,7 +122,7 @@ const AdminOrders = () => {
                 onClick={() => setStatusFilter(st.id)}
                 className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
                   statusFilter === st.id
-                    ? 'bg-primary text-cream shadow-sm'
+                    ? 'bg-primary text-white shadow-sm'
                     : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
                 }`}
               >
@@ -287,9 +287,9 @@ const AdminOrders = () => {
       {selectedReceiptOrder && (
         <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden border border-gold/40 my-8">
-            <div className="p-4 bg-primary text-cream flex items-center justify-between">
-              <h3 className="font-serif text-base font-bold text-cream flex items-center gap-2">
-                <Printer className="w-4 h-4 text-gold" /> Packing Slip & COD Invoice
+            <div className="p-4 bg-primary text-white flex items-center justify-between">
+              <h3 className="font-serif text-base font-bold text-white flex items-center gap-2">
+                <Printer className="w-4 h-4 text-white" /> Packing Slip & COD Invoice
               </h3>
               <div className="flex items-center gap-2">
                 <button
@@ -300,7 +300,7 @@ const AdminOrders = () => {
                 </button>
                 <button
                   onClick={() => setSelectedReceiptOrder(null)}
-                  className="text-cream/70 hover:text-white p-1"
+                  className="text-white/80 hover:text-white p-1"
                 >
                   <X className="w-5 h-5" />
                 </button>

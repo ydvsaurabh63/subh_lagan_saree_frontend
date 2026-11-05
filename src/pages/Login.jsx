@@ -84,7 +84,7 @@ const Login = () => {
               <button
                 type="button"
                 onClick={handleUseAdmin}
-                className="px-2.5 py-1 bg-primary hover:bg-secondary text-cream rounded text-[11px] font-semibold transition shadow-xs"
+                className="px-2.5 py-1 bg-primary hover:bg-secondary text-white rounded text-[11px] font-semibold transition shadow-xs"
               >
                 Fill Admin
               </button>
