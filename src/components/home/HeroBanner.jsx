@@ -436,6 +436,7 @@ const HeroBanner = () => {
   const { tryOnProduct } = useTryOn();
   const navigate = useNavigate();
   const [modalQty, setModalQty] = useState(1);
+  const [sectionQty, setSectionQty] = useState(1);
 
   // Lock body scroll and close on Escape when QuickView modal is open
   useEffect(() => {
@@ -608,6 +609,13 @@ const HeroBanner = () => {
     }
   }, [quickViewLook, items]);
 
+  useEffect(() => {
+    if (currentLook) {
+      const inCart = getLookCartQuantity(currentLook);
+      setSectionQty(inCart > 0 ? inCart : 1);
+    }
+  }, [currentLook, items]);
+
   const handleAddFullLook = (lookToUse = currentLook, quantity = 1) => {
     const mainSaree = lookToUse.items?.find((it) => it.isMain) || lookToUse.items?.[0];
     const bundlePrice = lookToUse.items?.reduce((acc, it) => acc + it.price, 0) || 19999;
@@ -639,10 +647,12 @@ const HeroBanner = () => {
     if (inCartQty > 0) {
       const nextQty = inCartQty + 1;
       setModalQty(nextQty);
+      setSectionQty(nextQty);
       updateQuantity(prodId, nextQty);
       toast.success(`Updated to ${nextQty} in Bag!`, { id: 'modal-cart-qty' });
     } else {
       setModalQty(1);
+      setSectionQty(1);
       handleAddFullLook(lookToUse, 1);
     }
   };
@@ -656,13 +666,16 @@ const HeroBanner = () => {
     if (inCartQty > 1) {
       const nextQty = inCartQty - 1;
       setModalQty(nextQty);
+      setSectionQty(nextQty);
       updateQuantity(prodId, nextQty);
       toast.success(`Updated to ${nextQty} in Bag!`, { id: 'modal-cart-qty' });
     } else if (inCartQty === 1) {
       setModalQty(1);
+      setSectionQty(1);
       removeFromCart(prodId);
     } else {
       setModalQty((prev) => Math.max(1, prev - 1));
+      setSectionQty((prev) => Math.max(1, prev - 1));
     }
   };
 
@@ -1029,34 +1042,51 @@ const HeroBanner = () => {
                 </button>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2">
-                  <button
-                    onClick={() => handleAddFullLook(currentLook)}
-                    className="w-full py-3.5 px-3 bg-primary hover:bg-secondary text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 active:scale-98 cursor-pointer"
-                  >
-                    <ShoppingBag className="w-4 h-4 text-white" />
-                    <span>Add to Bag</span>
-                  </button>
+                  {/* Quantity Controller: - & + */}
+                  <div className="w-full py-2 px-2 bg-primary text-white rounded-xl shadow-md flex items-center justify-between border border-primary/20">
+                    <button
+                      type="button"
+                      onClick={() => handleDecrementModalQty(currentLook)}
+                      className="w-8 h-8 rounded-lg bg-black/20 hover:bg-black/35 text-white flex items-center justify-center transition active:scale-90 cursor-pointer"
+                      aria-label="Decrease quantity"
+                      title="Decrease"
+                    >
+                      <Minus className="w-4 h-4 stroke-[2.5]" />
+                    </button>
+
+                    <span className="font-sans font-black text-sm sm:text-base text-white select-none px-2">
+                      {getLookCartQuantity(currentLook) > 0
+                        ? getLookCartQuantity(currentLook)
+                        : sectionQty}
+                    </span>
+
+                    <button
+                      type="button"
+                      onClick={() => handleIncrementModalQty(currentLook)}
+                      className="w-8 h-8 rounded-lg bg-black/20 hover:bg-black/35 text-white flex items-center justify-center transition active:scale-90 cursor-pointer"
+                      aria-label="Increase quantity"
+                      title="Increase"
+                    >
+                      <Plus className="w-4 h-4 stroke-[2.5]" />
+                    </button>
+                  </div>
 
                   <button
-                    onClick={() => handleOrderNow(currentLook)}
+                    onClick={() => handleOrderNow(currentLook, getLookCartQuantity(currentLook) > 0 ? getLookCartQuantity(currentLook) : sectionQty)}
                     className="w-full py-3.5 px-3 bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-700 hover:to-amber-600 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 active:scale-98 cursor-pointer"
                   >
                     <Sparkles className="w-4 h-4 text-white" />
-                    <span>Order Now (COD)</span>
+                    <span>Order Now</span>
                   </button>
                 </div>
 
-                <div className="flex items-center justify-between text-[11px] px-1 text-stone-600">
+                <div className="flex items-center justify-center text-[11px] px-1 text-stone-600 pt-0.5">
                   <Link
                     to={`/product/${currentLook.sareeSlug}`}
                     className="hover:text-primary transition underline font-semibold"
                   >
                     View Saree Details
                   </Link>
-                  <span className="flex items-center space-x-1 font-semibold text-stone-700">
-                    <ShieldCheck className="w-3.5 h-3.5 text-gold" />
-                    <span>Cash on Delivery (COD)</span>
-                  </span>
                 </div>
               </div>
             </div>
