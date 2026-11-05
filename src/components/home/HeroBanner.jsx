@@ -797,25 +797,25 @@ const HeroBanner = () => {
 
   return (
     <div className="relative isolate bg-[#F8F7F4] border-b border-stone-200 overflow-hidden select-none">
-      <div className="max-w-[1550px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+      <div className="max-w-[1550px] mx-auto px-4 sm:px-6 lg:px-8 pt-1 sm:pt-2 pb-6 lg:pb-8">
         
         {/* ========================================================= */}
         {/* SECTION 1: FULL-WIDTH 3D VIRTUAL SAREE RUNWAY            */}
         {/* ========================================================= */}
         <div className="w-full flex flex-col justify-between">
-          {/* Header Row: Centered Title */}
-          <div className="space-y-1 relative z-10 text-center mx-auto">
-            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-black text-stone-950 tracking-tight">
+          {/* Header Row: Centered Title (Shifted Up & Reduced Size) */}
+          <div className="space-y-0.5 relative z-10 text-center mx-auto -mt-0.5 sm:-mt-1">
+            <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-black text-stone-950 tracking-tight leading-tight">
               Try the Look.
             </h1>
-            <p className="text-xs sm:text-sm text-stone-700 font-bold max-w-md mx-auto">
+            <p className="text-[11px] sm:text-xs text-stone-600 font-bold max-w-md mx-auto">
               Drag or tap to spin the 3D runway.
             </p>
           </div>
 
           {/* Runway Stage with Floor Ambient Shadow and Circular Turntable */}
           <div
-            className="relative -mt-1 mb-2 sm:mt-0 sm:mb-4 flex items-center justify-center min-h-[500px] sm:min-h-[540px] lg:min-h-[620px] cursor-grab active:cursor-grabbing select-none"
+            className="relative -mt-2 mb-2 sm:-mt-3 sm:mb-4 flex items-center justify-center min-h-[500px] sm:min-h-[540px] lg:min-h-[620px] cursor-grab active:cursor-grabbing select-none"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => {
               setIsHovered(false);
