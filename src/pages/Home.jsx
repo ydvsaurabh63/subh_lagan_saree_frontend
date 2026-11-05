@@ -96,18 +96,9 @@ const Home = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#20040E]/95 via-[#20040E]/40 to-transparent"></div>
               <div className="relative z-10 text-white w-full">
-                <span className="inline-block px-2 py-0.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-[10px] font-bold uppercase tracking-wider mb-1.5">
-                  Occasion
-                </span>
-                <h3 className="font-serif text-xl font-bold text-white drop-shadow-md">
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-white drop-shadow-md group-hover:text-gold-light transition-colors">
                   Wedding & Bridal
                 </h3>
-                <p className="text-xs text-white/85 font-medium mt-1">
-                  Grand Heritage Silks & Zari
-                </p>
-                <span className="inline-flex items-center text-xs text-gold font-bold mt-2.5 group-hover:text-gold-light group-hover:translate-x-1 transition-all">
-                  Explore Weaves <ArrowRight className="w-3.5 h-3.5 ml-1" />
-                </span>
               </div>
             </Link>
 
@@ -123,18 +114,9 @@ const Home = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#20040E]/95 via-[#20040E]/40 to-transparent"></div>
               <div className="relative z-10 text-white w-full">
-                <span className="inline-block px-2 py-0.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-[10px] font-bold uppercase tracking-wider mb-1.5">
-                  Occasion
-                </span>
-                <h3 className="font-serif text-xl font-bold text-white drop-shadow-md">
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-white drop-shadow-md group-hover:text-gold-light transition-colors">
                   Festive Celebrations
                 </h3>
-                <p className="text-xs text-white/85 font-medium mt-1">
-                  Diwali, Karwa Chauth & Navratri
-                </p>
-                <span className="inline-flex items-center text-xs text-gold font-bold mt-2.5 group-hover:text-gold-light group-hover:translate-x-1 transition-all">
-                  Explore Weaves <ArrowRight className="w-3.5 h-3.5 ml-1" />
-                </span>
               </div>
             </Link>
 
@@ -150,18 +132,9 @@ const Home = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#20040E]/95 via-[#20040E]/40 to-transparent"></div>
               <div className="relative z-10 text-white w-full">
-                <span className="inline-block px-2 py-0.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-[10px] font-bold uppercase tracking-wider mb-1.5">
-                  Occasion
-                </span>
-                <h3 className="font-serif text-xl font-bold text-white drop-shadow-md">
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-white drop-shadow-md group-hover:text-gold-light transition-colors">
                   Party & Reception
                 </h3>
-                <p className="text-xs text-white/85 font-medium mt-1">
-                  Cocktail Drapes & Designer Organza
-                </p>
-                <span className="inline-flex items-center text-xs text-gold font-bold mt-2.5 group-hover:text-gold-light group-hover:translate-x-1 transition-all">
-                  Explore Weaves <ArrowRight className="w-3.5 h-3.5 ml-1" />
-                </span>
               </div>
             </Link>
 
@@ -177,18 +150,9 @@ const Home = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#20040E]/95 via-[#20040E]/40 to-transparent"></div>
               <div className="relative z-10 text-white w-full">
-                <span className="inline-block px-2 py-0.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-[10px] font-bold uppercase tracking-wider mb-1.5">
-                  Occasion
-                </span>
-                <h3 className="font-serif text-xl font-bold text-white drop-shadow-md">
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-white drop-shadow-md group-hover:text-gold-light transition-colors">
                   Traditional & Puja
                 </h3>
-                <p className="text-xs text-white/85 font-medium mt-1">
-                  Auspicious Temple Borders & Silks
-                </p>
-                <span className="inline-flex items-center text-xs text-gold font-bold mt-2.5 group-hover:text-gold-light group-hover:translate-x-1 transition-all">
-                  Explore Weaves <ArrowRight className="w-3.5 h-3.5 ml-1" />
-                </span>
               </div>
             </Link>
           </div>
