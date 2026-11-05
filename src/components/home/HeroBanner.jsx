@@ -11,6 +11,8 @@ import {
   RotateCcw,
   Shirt,
   Star,
+  Minus,
+  Plus,
 } from 'lucide-react';
 import { useCart } from '../../context/CartContext.jsx';
 import { useTryOn } from '../../context/TryOnContext.jsx';
@@ -430,9 +432,10 @@ const HeroBanner = () => {
     typeof window !== 'undefined' ? window.innerWidth : 1200
   );
 
-  const { addToCart } = useCart();
+  const { addToCart, items = [], updateQuantity, removeFromCart } = useCart();
   const { tryOnProduct } = useTryOn();
   const navigate = useNavigate();
+  const [modalQty, setModalQty] = useState(1);
 
   // Lock body scroll and close on Escape when QuickView modal is open
   useEffect(() => {
@@ -587,13 +590,34 @@ const HeroBanner = () => {
     triggerSnap(Math.round(currentRotation / 36) * 36);
   };
 
-  const handleAddFullLook = (lookToUse = currentLook) => {
+  const getLookCartQuantity = (look) => {
+    if (!look) return 0;
+    const mainSaree = look.items?.find((it) => it.isMain) || look.items?.[0];
+    const prodId = mainSaree?.id || mainSaree?._id || `look-${look.id}`;
+    const cartItem = items.find((it) => {
+      const itId = it.product?._id || it.product?.id || it.product;
+      return itId === prodId || (it.product?.name && it.product.name.includes(look.lookTitle));
+    });
+    return cartItem ? cartItem.quantity : 0;
+  };
+
+  useEffect(() => {
+    if (quickViewLook) {
+      const inCart = getLookCartQuantity(quickViewLook);
+      setModalQty(inCart > 0 ? inCart : 1);
+    }
+  }, [quickViewLook, items]);
+
+  const handleAddFullLook = (lookToUse = currentLook, quantity = 1) => {
     const mainSaree = lookToUse.items?.find((it) => it.isMain) || lookToUse.items?.[0];
     const bundlePrice = lookToUse.items?.reduce((acc, it) => acc + it.price, 0) || 19999;
+    const prodId = mainSaree?.id || mainSaree?._id || `look-${lookToUse.id}`;
+    const qtyToAdd = Math.max(1, parseInt(quantity, 10) || 1);
+
     if (mainSaree) {
       addToCart(
         {
-          _id: mainSaree.id,
+          _id: prodId,
           name: `${mainSaree.name} (Full Look Ensemble)`,
           price: mainSaree.originalPrice || mainSaree.price,
           discountPrice: bundlePrice,
@@ -601,19 +625,57 @@ const HeroBanner = () => {
           fabric: 'Pure Handloom Silk',
           color: lookToUse.lookTitle.split(' ')[1] || 'Festive',
         },
-        1
+        qtyToAdd
       );
-      toast.success(`Complete Look "${lookToUse.lookTitle}" added to Bag!`);
     }
   };
 
-  const handleOrderNow = (lookToUse = currentLook) => {
+  const handleIncrementModalQty = (lookToUse = quickViewLook) => {
+    if (!lookToUse) return;
+    const mainSaree = lookToUse.items?.find((it) => it.isMain) || lookToUse.items?.[0];
+    const prodId = mainSaree?.id || mainSaree?._id || `look-${lookToUse.id}`;
+    const inCartQty = getLookCartQuantity(lookToUse);
+
+    if (inCartQty > 0) {
+      const nextQty = inCartQty + 1;
+      setModalQty(nextQty);
+      updateQuantity(prodId, nextQty);
+      toast.success(`Updated to ${nextQty} in Bag!`, { id: 'modal-cart-qty' });
+    } else {
+      setModalQty(1);
+      handleAddFullLook(lookToUse, 1);
+    }
+  };
+
+  const handleDecrementModalQty = (lookToUse = quickViewLook) => {
+    if (!lookToUse) return;
+    const mainSaree = lookToUse.items?.find((it) => it.isMain) || lookToUse.items?.[0];
+    const prodId = mainSaree?.id || mainSaree?._id || `look-${lookToUse.id}`;
+    const inCartQty = getLookCartQuantity(lookToUse);
+
+    if (inCartQty > 1) {
+      const nextQty = inCartQty - 1;
+      setModalQty(nextQty);
+      updateQuantity(prodId, nextQty);
+      toast.success(`Updated to ${nextQty} in Bag!`, { id: 'modal-cart-qty' });
+    } else if (inCartQty === 1) {
+      setModalQty(1);
+      removeFromCart(prodId);
+    } else {
+      setModalQty((prev) => Math.max(1, prev - 1));
+    }
+  };
+
+  const handleOrderNow = (lookToUse = currentLook, quantity = 1) => {
     const mainSaree = lookToUse.items?.find((it) => it.isMain) || lookToUse.items?.[0];
     const bundlePrice = lookToUse.items?.reduce((acc, it) => acc + it.price, 0) || 19999;
+    const prodId = mainSaree?.id || mainSaree?._id || `look-${lookToUse.id}`;
+    const qtyToOrder = Math.max(1, parseInt(quantity, 10) || 1);
+
     if (mainSaree) {
       addToCart(
         {
-          _id: mainSaree.id,
+          _id: prodId,
           name: `${mainSaree.name} (Full Look Ensemble)`,
           price: mainSaree.originalPrice || mainSaree.price,
           discountPrice: bundlePrice,
@@ -621,7 +683,7 @@ const HeroBanner = () => {
           fabric: 'Pure Handloom Silk',
           color: lookToUse.lookTitle.split(' ')[1] || 'Festive',
         },
-        1
+        qtyToOrder
       );
       setQuickViewLook(null);
       navigate('/checkout');
@@ -1152,18 +1214,45 @@ const HeroBanner = () => {
                     </button>
 
                     <div className="grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => handleAddFullLook(quickViewLook)}
-                        className="w-full py-2.5 sm:py-3 px-2 bg-primary hover:bg-[#521321] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 cursor-pointer active:scale-98"
-                      >
-                        <ShoppingBag className="w-3.5 h-3.5 text-gold" />
-                        <span>Add To Cart</span>
-                      </button>
+                      {/* Quantity Controller: - & + */}
+                      <div className="w-full py-1 sm:py-1.5 px-1 sm:px-1.5 bg-primary text-white rounded-xl text-xs font-bold transition-all shadow-md flex items-center justify-between border border-primary/20">
+                        <button
+                          type="button"
+                          onClick={() => handleDecrementModalQty(quickViewLook)}
+                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-black/20 hover:bg-black/35 text-white flex items-center justify-center transition active:scale-90 cursor-pointer"
+                          aria-label="Decrease quantity"
+                          title="Decrease"
+                        >
+                          <Minus className="w-3.5 h-3.5 stroke-[2.5]" />
+                        </button>
+
+                        <div
+                          onClick={() => handleIncrementModalQty(quickViewLook)}
+                          className="flex items-center space-x-1 sm:space-x-1.5 px-1 py-1 select-none font-sans cursor-pointer hover:opacity-90 active:scale-95 transition"
+                          title="Add to Bag"
+                        >
+                          <ShoppingBag className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gold flex-shrink-0" />
+                          <span className="text-xs sm:text-sm font-black tracking-wide text-white">
+                            {getLookCartQuantity(quickViewLook) > 0
+                              ? `${getLookCartQuantity(quickViewLook)} in Bag`
+                              : `${modalQty} in Bag`}
+                          </span>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => handleIncrementModalQty(quickViewLook)}
+                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-black/20 hover:bg-black/35 text-white flex items-center justify-center transition active:scale-90 cursor-pointer"
+                          aria-label="Increase quantity"
+                          title="Increase"
+                        >
+                          <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+                        </button>
+                      </div>
 
                       <button
                         type="button"
-                        onClick={() => handleOrderNow(quickViewLook)}
+                        onClick={() => handleOrderNow(quickViewLook, modalQty)}
                         className="w-full py-2.5 sm:py-3 px-2 bg-gradient-to-r from-[#D4AF37] to-[#C5A059] hover:from-[#C5A059] hover:to-[#B38F46] text-stone-950 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 cursor-pointer active:scale-98"
                       >
                         <Sparkles className="w-3.5 h-3.5 text-primary" />
