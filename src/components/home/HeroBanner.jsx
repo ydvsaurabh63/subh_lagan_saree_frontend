@@ -936,29 +936,8 @@ const HeroBanner = () => {
           onMouseLeave={() => setIsHovered(false)}
           className="mt-6 lg:mt-8 bg-white rounded-3xl p-5 sm:p-7 lg:p-8 border border-gold/40 shadow-xl transition-all"
         >
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-stone-200 pb-4 gap-2">
-            <div>
-              <div className="flex items-center space-x-3">
-                <h3 className="font-serif text-xl sm:text-2xl font-extrabold text-stone-950">
-                  In this look
-                </h3>
-                <span className="px-3 py-1 bg-gold/25 text-gold-dark text-xs font-black uppercase tracking-wider rounded border border-gold/40">
-                  Look {currentLook.lookNumber}
-                </span>
-              </div>
-              <p className="text-xs sm:text-sm text-stone-600 font-bold mt-1">
-                {currentLook.tagline}
-              </p>
-            </div>
-
-            <div className="text-xs text-stone-500 font-medium hidden sm:block">
-              Full 3-Piece Heritage Bridal & Festive Ensemble
-            </div>
-          </div>
-
           {/* Grid Layout: 3 Ensemble Items on Left (8 cols) + Total & CTA Box on Right (4 cols) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch pt-5">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
             {/* The 3 Ensemble Items */}
             <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-3.5">
               {currentLook.items.map((item) => (
