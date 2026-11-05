@@ -88,8 +88,8 @@ const Home = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/30 to-transparent"></div>
               <div className="relative z-10 text-white">
-                <h3 className="font-serif text-xl font-bold">Bridal Trousseau</h3>
-                <span className="inline-flex items-center text-xs text-stone-200 mt-1 font-medium group-hover:text-gold transition">
+                <h3 className="font-serif text-xl font-bold text-white drop-shadow-md">Bridal Trousseau</h3>
+                <span className="inline-flex items-center text-xs text-white/90 mt-1 font-semibold group-hover:text-gold transition">
                   Shop <ArrowRight className="w-3.5 h-3.5 ml-1" />
                 </span>
               </div>
@@ -107,8 +107,8 @@ const Home = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/30 to-transparent"></div>
               <div className="relative z-10 text-white">
-                <h3 className="font-serif text-xl font-bold">Banarasi Silks</h3>
-                <span className="inline-flex items-center text-xs text-stone-200 mt-1 font-medium group-hover:text-gold transition">
+                <h3 className="font-serif text-xl font-bold text-white drop-shadow-md">Banarasi Silks</h3>
+                <span className="inline-flex items-center text-xs text-white/90 mt-1 font-semibold group-hover:text-gold transition">
                   Shop <ArrowRight className="w-3.5 h-3.5 ml-1" />
                 </span>
               </div>
@@ -126,8 +126,8 @@ const Home = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/30 to-transparent"></div>
               <div className="relative z-10 text-white">
-                <h3 className="font-serif text-xl font-bold">Pure Kanjivaram</h3>
-                <span className="inline-flex items-center text-xs text-stone-200 mt-1 font-medium group-hover:text-gold transition">
+                <h3 className="font-serif text-xl font-bold text-white drop-shadow-md">Pure Kanjivaram</h3>
+                <span className="inline-flex items-center text-xs text-white/90 mt-1 font-semibold group-hover:text-gold transition">
                   Shop <ArrowRight className="w-3.5 h-3.5 ml-1" />
                 </span>
               </div>
