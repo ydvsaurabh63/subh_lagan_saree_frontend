@@ -4,60 +4,11 @@ import {
   Phone,
   Mail,
   MapPin,
-  ShieldCheck,
-  Truck,
-  RotateCcw,
-  Sparkles,
 } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-secondary-dark text-stone-200 pt-12 pb-8 border-t-2 border-gold/40">
-      {/* Brand Value Pillars with prominent icons */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 border-b border-stone-800">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center md:text-left">
-          <div className="flex flex-col md:flex-row items-center md:items-start space-y-2 md:space-y-0 md:space-x-3">
-            <div className="w-10 h-10 rounded-full bg-gold/15 border border-gold/40 flex items-center justify-center text-gold flex-shrink-0">
-              <Sparkles className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-white font-serif text-xs font-bold uppercase tracking-wider">100% Handcrafted</h4>
-              <p className="text-[11px] text-stone-300">Silk Mark certified</p>
-            </div>
-          </div>
-
-          <div className="flex flex-col md:flex-row items-center md:items-start space-y-2 md:space-y-0 md:space-x-3">
-            <div className="w-10 h-10 rounded-full bg-gold/15 border border-gold/40 flex items-center justify-center text-gold flex-shrink-0">
-              <Truck className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-white font-serif text-xs font-bold uppercase tracking-wider">Free Shipping</h4>
-              <p className="text-[11px] text-stone-300">Orders &gt; ₹1,999</p>
-            </div>
-          </div>
-
-          <div className="flex flex-col md:flex-row items-center md:items-start space-y-2 md:space-y-0 md:space-x-3">
-            <div className="w-10 h-10 rounded-full bg-gold/15 border border-gold/40 flex items-center justify-center text-gold flex-shrink-0">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-white font-serif text-xs font-bold uppercase tracking-wider">Cash On Delivery</h4>
-              <p className="text-[11px] text-stone-300">Doorstep payment</p>
-            </div>
-          </div>
-
-          <div className="flex flex-col md:flex-row items-center md:items-start space-y-2 md:space-y-0 md:space-x-3">
-            <div className="w-10 h-10 rounded-full bg-gold/15 border border-gold/40 flex items-center justify-center text-gold flex-shrink-0">
-              <RotateCcw className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-white font-serif text-xs font-bold uppercase tracking-wider">7-Day Exchange</h4>
-              <p className="text-[11px] text-stone-300">Doorstep pickup</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <footer className="bg-secondary-dark text-stone-200 pt-8 pb-8 border-t-2 border-gold/40">
       {/* Main Footer Links */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
