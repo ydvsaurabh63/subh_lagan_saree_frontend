@@ -1215,38 +1215,31 @@ const HeroBanner = () => {
 
                     <div className="grid grid-cols-2 gap-2">
                       {/* Quantity Controller: - & + */}
-                      <div className="w-full py-1 sm:py-1.5 px-1 sm:px-1.5 bg-primary text-white rounded-xl text-xs font-bold transition-all shadow-md flex items-center justify-between border border-primary/20">
+                      <div className="w-full py-1.5 sm:py-2 px-2 bg-primary text-white rounded-xl shadow-md flex items-center justify-between border border-primary/20">
                         <button
                           type="button"
                           onClick={() => handleDecrementModalQty(quickViewLook)}
-                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-black/20 hover:bg-black/35 text-white flex items-center justify-center transition active:scale-90 cursor-pointer"
+                          className="w-8 h-8 rounded-lg bg-black/20 hover:bg-black/35 text-white flex items-center justify-center transition active:scale-90 cursor-pointer"
                           aria-label="Decrease quantity"
                           title="Decrease"
                         >
-                          <Minus className="w-3.5 h-3.5 stroke-[2.5]" />
+                          <Minus className="w-4 h-4 stroke-[2.5]" />
                         </button>
 
-                        <div
-                          onClick={() => handleIncrementModalQty(quickViewLook)}
-                          className="flex items-center space-x-1 sm:space-x-1.5 px-1 py-1 select-none font-sans cursor-pointer hover:opacity-90 active:scale-95 transition"
-                          title="Add to Bag"
-                        >
-                          <ShoppingBag className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gold flex-shrink-0" />
-                          <span className="text-xs sm:text-sm font-black tracking-wide text-white">
-                            {getLookCartQuantity(quickViewLook) > 0
-                              ? `${getLookCartQuantity(quickViewLook)} in Bag`
-                              : `${modalQty} in Bag`}
-                          </span>
-                        </div>
+                        <span className="font-sans font-black text-sm sm:text-base text-white select-none px-2">
+                          {getLookCartQuantity(quickViewLook) > 0
+                            ? getLookCartQuantity(quickViewLook)
+                            : modalQty}
+                        </span>
 
                         <button
                           type="button"
                           onClick={() => handleIncrementModalQty(quickViewLook)}
-                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-black/20 hover:bg-black/35 text-white flex items-center justify-center transition active:scale-90 cursor-pointer"
+                          className="w-8 h-8 rounded-lg bg-black/20 hover:bg-black/35 text-white flex items-center justify-center transition active:scale-90 cursor-pointer"
                           aria-label="Increase quantity"
                           title="Increase"
                         >
-                          <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+                          <Plus className="w-4 h-4 stroke-[2.5]" />
                         </button>
                       </div>
 
