@@ -724,6 +724,21 @@ const HeroBanner = () => {
     });
   };
 
+  const handleTryItem = (item, lookToUse = currentLook) => {
+    if (!item) return;
+    setQuickViewLook(null);
+    tryOnProduct({
+      _id: item.id || `item-${item.name}`,
+      name: item.name,
+      fabric: item.detail || 'Pure Silk Handloom',
+      price: item.price,
+      originalPrice: item.originalPrice || item.price,
+      image: item.image,
+      drapedPreview: lookToUse?.modelImage || item.image,
+      slug: lookToUse?.sareeSlug || '',
+    });
+  };
+
   // Responsive turntable dimensions & 3D focal parameters
   const isMobile = windowWidth < 640;
   const isTablet = windowWidth >= 640 && windowWidth < 1024;
@@ -987,16 +1002,29 @@ const HeroBanner = () => {
                     </p>
                   </div>
 
-                  {/* Price */}
-                  <div className="flex items-baseline space-x-2 pt-3 mt-2 border-t border-stone-200/60">
-                    <span className="text-sm font-extrabold text-primary font-sans">
-                      {item.price === 0 ? 'Complimentary' : formatPrice(item.price)}
-                    </span>
-                    {item.originalPrice > item.price && (
-                      <span className="text-xs text-stone-400 font-bold line-through">
-                        {formatPrice(item.originalPrice)}
+                  {/* Price & Try It On Button */}
+                  <div className="flex items-center justify-between pt-2.5 mt-2 border-t border-stone-200/60">
+                    <div className="flex items-baseline space-x-1.5 sm:space-x-2">
+                      <span className="text-xs sm:text-sm font-extrabold text-primary font-sans">
+                        {item.price === 0 ? 'Complimentary' : formatPrice(item.price)}
                       </span>
-                    )}
+                      {item.originalPrice > item.price && (
+                        <span className="text-[10px] sm:text-xs text-stone-400 font-bold line-through">
+                          {formatPrice(item.originalPrice)}
+                        </span>
+                      )}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => handleTryItem(item, currentLook)}
+                      className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-700 hover:to-amber-600 text-white text-[10px] font-black uppercase tracking-wider shadow-xs hover:shadow-md transition active:scale-90 cursor-pointer"
+                      title={`Try ${item.name} in Fitting Room`}
+                      aria-label={`Try on ${item.name}`}
+                    >
+                      <Shirt className="w-3.5 h-3.5 stroke-[2.2] text-white flex-shrink-0" />
+                      <span>Try On</span>
+                    </button>
                   </div>
                 </div>
               ))}
