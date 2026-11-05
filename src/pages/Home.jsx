@@ -12,7 +12,7 @@ import AboutBrandSection from '../components/home/AboutBrandSection.jsx';
 import InstagramGallery from '../components/home/InstagramGallery.jsx';
 import NewsletterSection from '../components/home/NewsletterSection.jsx';
 import ProductGrid from '../components/product/ProductGrid.jsx';
-import { Sparkles, ArrowRight, HeartHandshake, Award } from 'lucide-react';
+import { Sparkles, ArrowRight, HeartHandshake, Award, Store, ShieldCheck } from 'lucide-react';
 import { fallbackSarees } from '../data/fallbackProducts.js';
 
 const Home = () => {
@@ -217,22 +217,159 @@ const Home = () => {
       {/* 5. Special Festive Offers Banner */}
       <SpecialOfferBanner />
 
-      {/* 6. Heirloom Bridal Spotlight */}
+      {/* 6. Featured Brands */}
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">
             <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary">
-              Bridal Sarees
+              Featured Brands
             </h2>
             <Link
-              to="/shop?isBridal=true"
+              to="/shop"
               className="inline-flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-primary hover:text-gold-dark transition"
             >
               <span>View All</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
-          <ProductGrid products={bridalCollection} loading={loading} />
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {/* Brand 1: Subh Lagan Privé */}
+            <Link
+              to="/shop?isBridal=true"
+              className="group relative h-80 sm:h-96 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex flex-col justify-between p-5 bg-stone-900"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1546804784-896d0dca3805?auto=format&fit=crop&w=600&q=80"
+                alt="Subh Lagan Privé"
+                className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-108 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1A030A] via-[#1A030A]/40 to-black/30"></div>
+
+              <div className="relative z-10 flex justify-between items-start">
+                <span className="px-2.5 py-1 rounded-full bg-black/60 border border-gold/40 text-gold text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm">
+                  Haute Couture
+                </span>
+              </div>
+
+              <div className="relative z-10 text-white w-full">
+                <div className="w-9 h-9 rounded-xl bg-gold/20 border border-gold/40 flex items-center justify-center text-gold mb-2 backdrop-blur-sm group-hover:bg-gold group-hover:text-stone-950 transition-colors">
+                  <Sparkles className="w-4 h-4" />
+                </div>
+                <h3 className="font-serif text-lg sm:text-xl font-bold text-white drop-shadow-md group-hover:text-gold-light transition">
+                  Subh Lagan Privé
+                </h3>
+                <p className="text-xs text-white/80 font-medium mt-1">
+                  Couture Bridal & Master Zari
+                </p>
+                <span className="inline-flex items-center text-xs text-gold font-bold mt-2.5 group-hover:translate-x-1 transition-transform">
+                  Explore Brand <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                </span>
+              </div>
+            </Link>
+
+            {/* Brand 2: Varanasi Silk Guild */}
+            <Link
+              to="/shop?category=banarasi-sarees"
+              className="group relative h-80 sm:h-96 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex flex-col justify-between p-5 bg-stone-900"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80"
+                alt="Varanasi Silk Guild"
+                className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-108 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1A030A] via-[#1A030A]/40 to-black/30"></div>
+
+              <div className="relative z-10 flex justify-between items-start">
+                <span className="px-2.5 py-1 rounded-full bg-black/60 border border-gold/40 text-gold text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm">
+                  Silk Mark
+                </span>
+              </div>
+
+              <div className="relative z-10 text-white w-full">
+                <div className="w-9 h-9 rounded-xl bg-gold/20 border border-gold/40 flex items-center justify-center text-gold mb-2 backdrop-blur-sm group-hover:bg-gold group-hover:text-stone-950 transition-colors">
+                  <Award className="w-4 h-4" />
+                </div>
+                <h3 className="font-serif text-lg sm:text-xl font-bold text-white drop-shadow-md group-hover:text-gold-light transition">
+                  Varanasi Silk Guild
+                </h3>
+                <p className="text-xs text-white/80 font-medium mt-1">
+                  Pure Katan Silk & Kadhwa
+                </p>
+                <span className="inline-flex items-center text-xs text-gold font-bold mt-2.5 group-hover:translate-x-1 transition-transform">
+                  Explore Brand <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                </span>
+              </div>
+            </Link>
+
+            {/* Brand 3: Kanchi Royal Weavers */}
+            <Link
+              to="/shop?category=kanjivaram-sarees"
+              className="group relative h-80 sm:h-96 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex flex-col justify-between p-5 bg-stone-900"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=600&q=80"
+                alt="Kanchi Royal Weavers"
+                className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-108 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1A030A] via-[#1A030A]/40 to-black/30"></div>
+
+              <div className="relative z-10 flex justify-between items-start">
+                <span className="px-2.5 py-1 rounded-full bg-black/60 border border-gold/40 text-gold text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm">
+                  Heirloom
+                </span>
+              </div>
+
+              <div className="relative z-10 text-white w-full">
+                <div className="w-9 h-9 rounded-xl bg-gold/20 border border-gold/40 flex items-center justify-center text-gold mb-2 backdrop-blur-sm group-hover:bg-gold group-hover:text-stone-950 transition-colors">
+                  <ShieldCheck className="w-4 h-4" />
+                </div>
+                <h3 className="font-serif text-lg sm:text-xl font-bold text-white drop-shadow-md group-hover:text-gold-light transition">
+                  Kanchi Royal Weavers
+                </h3>
+                <p className="text-xs text-white/80 font-medium mt-1">
+                  Gold Zari Korvai Handloom
+                </p>
+                <span className="inline-flex items-center text-xs text-gold font-bold mt-2.5 group-hover:translate-x-1 transition-transform">
+                  Explore Brand <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                </span>
+              </div>
+            </Link>
+
+            {/* Brand 4: Avadh Brocades */}
+            <Link
+              to="/shop?category=organza-sarees"
+              className="group relative h-80 sm:h-96 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex flex-col justify-between p-5 bg-stone-900"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=600&q=80"
+                alt="Avadh Brocades"
+                className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-108 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1A030A] via-[#1A030A]/40 to-black/30"></div>
+
+              <div className="relative z-10 flex justify-between items-start">
+                <span className="px-2.5 py-1 rounded-full bg-black/60 border border-gold/40 text-gold text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm">
+                  Artisan Collective
+                </span>
+              </div>
+
+              <div className="relative z-10 text-white w-full">
+                <div className="w-9 h-9 rounded-xl bg-gold/20 border border-gold/40 flex items-center justify-center text-gold mb-2 backdrop-blur-sm group-hover:bg-gold group-hover:text-stone-950 transition-colors">
+                  <Store className="w-4 h-4" />
+                </div>
+                <h3 className="font-serif text-lg sm:text-xl font-bold text-white drop-shadow-md group-hover:text-gold-light transition">
+                  Avadh Brocades
+                </h3>
+                <p className="text-xs text-white/80 font-medium mt-1">
+                  Royal Organza & Tissue Silks
+                </p>
+                <span className="inline-flex items-center text-xs text-gold font-bold mt-2.5 group-hover:translate-x-1 transition-transform">
+                  Explore Brand <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                </span>
+              </div>
+            </Link>
+          </div>
         </div>
       </section>
 
