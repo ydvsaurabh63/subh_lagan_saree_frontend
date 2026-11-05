@@ -125,6 +125,28 @@ export const adminApi = {
   getSubscribers: () => api.get('/newsletter/admin/all'),
 };
 
+// Management APIs (Superadmin & Admin)
+export const managementApi = {
+  // Stats
+  getSuperAdminStats: () => api.get('/management/superadmin/stats'),
+  getAdminStats: () => api.get('/management/admin/stats'),
+
+  // Admin CRUD (Superadmin only)
+  getAdmins: (params) => api.get('/management/admins', { params }),
+  createAdmin: (data) => api.post('/management/admins', data),
+  updateAdmin: (id, data) => api.put(`/management/admins/${id}`, data),
+  deleteAdmin: (id) => api.delete(`/management/admins/${id}`),
+
+  // Client CRUD (Superadmin & Admin)
+  getClients: (params) => api.get('/management/clients', { params }),
+  createClient: (data) => api.post('/management/clients', data),
+  updateClient: (id, data) => api.put(`/management/clients/${id}`, data),
+  deleteClient: (id) => api.delete(`/management/clients/${id}`),
+
+  // Status toggle
+  toggleUserStatus: (id) => api.put(`/management/users/${id}/toggle-status`),
+};
+
 // Upload API (Cloudinary via backend)
 export const uploadApi = {
   uploadImage: (formData) =>

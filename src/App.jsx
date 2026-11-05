@@ -14,6 +14,12 @@ import FittingRoomPanel from './components/tryon/FittingRoomPanel.jsx';
 import WhatsAppButton from './components/common/WhatsAppButton.jsx';
 import ProtectedRoute from './components/common/ProtectedRoute.jsx';
 import AdminRoute from './components/common/AdminRoute.jsx';
+import SuperAdminRoute from './components/common/SuperAdminRoute.jsx';
+import AdminPortalRoute from './components/common/AdminPortalRoute.jsx';
+
+// Superadmin & Admin Management Portals
+import SuperAdminDashboard from './pages/superadmin/SuperAdminDashboard.jsx';
+import AdminPortalDashboard from './pages/adminPortal/AdminPortalDashboard.jsx';
 
 // Customer Pages
 import Home from './pages/Home.jsx';
@@ -60,14 +66,37 @@ function ScrollToTop() {
 
 function AppShell() {
   const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith('/admin');
+  const isSuperAdminRoute = location.pathname.startsWith('/superadmin');
+  const isAdminPortalRoute = location.pathname.startsWith('/admin-portal');
+  const isClientAdminRoute = location.pathname.startsWith('/admin') || location.pathname.startsWith('/client');
+  const isDashboardRoute = isSuperAdminRoute || isAdminPortalRoute || isClientAdminRoute;
 
   return (
-    <div className={`min-h-screen flex flex-col ${isAdminRoute ? 'bg-[#FDFBF7]' : 'bg-cream/30 text-brandText selection:bg-gold/30 selection:text-primary'}`}>
-      {!isAdminRoute && <AnnouncementBar />}
-      {!isAdminRoute && <Navbar />}
+    <div className={`min-h-screen flex flex-col ${isDashboardRoute ? 'bg-[#FDFBF7]' : 'bg-cream/30 text-brandText selection:bg-gold/30 selection:text-primary'}`}>
+      {!isDashboardRoute && <AnnouncementBar />}
+      {!isDashboardRoute && <Navbar />}
       <main className="flex-1">
         <Routes>
+          {/* SuperAdmin Master Portal (4 Tabs: Overview, Manage Admin, Manage Client, Profile) */}
+          <Route
+            path="/superadmin"
+            element={
+              <SuperAdminRoute>
+                <SuperAdminDashboard />
+              </SuperAdminRoute>
+            }
+          />
+
+          {/* Admin Management Portal (3 Tabs: Overview, Manage Client, Profile) */}
+          <Route
+            path="/admin-portal"
+            element={
+              <AdminPortalRoute>
+                <AdminPortalDashboard />
+              </AdminPortalRoute>
+            }
+          />
+
           {/* Customer Facing Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
@@ -205,9 +234,9 @@ function AppShell() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-      {!isAdminRoute && <FittingRoomPanel />}
-      {!isAdminRoute && <WhatsAppButton />}
-      {!isAdminRoute && <Footer />}
+      {!isDashboardRoute && <FittingRoomPanel />}
+      {!isDashboardRoute && <WhatsAppButton />}
+      {!isDashboardRoute && <Footer />}
     </div>
   );
 }

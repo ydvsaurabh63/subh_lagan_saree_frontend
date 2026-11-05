@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
         setToken(res.token);
         setUser(res.user);
         toast.success(`Welcome back, ${res.user.name}!`);
-        return { success: true };
+        return { success: true, user: res.user };
       }
     } catch (error) {
       toast.error(error.message || 'Login failed');

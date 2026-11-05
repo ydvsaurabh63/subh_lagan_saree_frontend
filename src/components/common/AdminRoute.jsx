@@ -18,7 +18,7 @@ const AdminRoute = ({ children }) => {
     );
   }
 
-  if (!isAuthenticated || user?.role !== 'admin') {
+  if (!isAuthenticated || !['admin', 'client', 'superadmin'].includes(user?.role)) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 

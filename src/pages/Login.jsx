@@ -22,7 +22,12 @@ const Login = () => {
     const result = await login(email, password);
     setLoading(false);
     if (result?.success) {
-      if (email.toLowerCase().includes('admin')) {
+      const userRole = result.user?.role;
+      if (userRole === 'superadmin' || email.toLowerCase().includes('superadmin')) {
+        navigate('/superadmin', { replace: true });
+      } else if (userRole === 'admin') {
+        navigate('/admin-portal', { replace: true });
+      } else if (userRole === 'client' || email.toLowerCase().includes('admin') || email.toLowerCase().includes('client')) {
         navigate('/admin', { replace: true });
       } else {
         navigate(redirectPath, { replace: true });
@@ -35,9 +40,19 @@ const Login = () => {
     setPassword('password123');
   };
 
+  const handleUseSuperAdmin = () => {
+    setEmail('superadmin@subhlagansarees.com');
+    setPassword('superadmin123');
+  };
+
   const handleUseAdmin = () => {
     setEmail('admin@subhlagansarees.com');
     setPassword('admin123');
+  };
+
+  const handleUseClient = () => {
+    setEmail('client@subhlagansarees.com');
+    setPassword('client123');
   };
 
   return (
@@ -62,31 +77,69 @@ const Login = () => {
           </div>
 
           {/* Quick Demo Credentials Autofill Banner */}
+          {/* Demo Login Credentials for All Roles */}
           <div className="bg-amber-50/80 border border-amber-300 rounded-xl p-3 text-xs text-amber-900 space-y-2">
-            <div className="flex items-center justify-between">
+            <p className="font-bold text-[10px] text-amber-950 uppercase tracking-wider">
+              Quick One-Click Demo Access
+            </p>
+
+            {/* 1. SuperAdmin */}
+            <div className="flex items-center justify-between pt-1 border-t border-amber-200/60">
               <div>
-                <p className="font-semibold text-amber-950">Customer Demo:</p>
-                <p className="text-[11px] text-amber-800">customer@subhlagansarees.com / password123</p>
+                <p className="font-bold text-purple-900">SuperAdmin (Master Portal):</p>
+                <p className="text-[10px] text-stone-600">superadmin@subhlagansarees.com</p>
               </div>
               <button
                 type="button"
-                onClick={handleUseDemo}
-                className="px-2.5 py-1 bg-gold hover:bg-gold-dark text-white rounded text-[11px] font-semibold transition shadow-xs"
+                onClick={handleUseSuperAdmin}
+                className="px-2.5 py-1 bg-purple-900 hover:bg-purple-950 text-white rounded text-[10px] font-bold transition shadow-xs cursor-pointer"
               >
-                Fill Customer
+                Fill SuperAdmin
               </button>
             </div>
-            <div className="flex items-center justify-between pt-2 border-t border-amber-200">
+
+            {/* 2. Admin */}
+            <div className="flex items-center justify-between pt-1 border-t border-amber-200/60">
               <div>
-                <p className="font-semibold text-primary">Client / Owner Demo:</p>
-                <p className="text-[11px] text-stone-600">admin@subhlagansarees.com / admin123</p>
+                <p className="font-bold text-stone-900">Admin Portal (3 Tabs):</p>
+                <p className="text-[10px] text-stone-600">admin@subhlagansarees.com</p>
               </div>
               <button
                 type="button"
                 onClick={handleUseAdmin}
-                className="px-2.5 py-1 bg-primary hover:bg-secondary text-white rounded text-[11px] font-semibold transition shadow-xs"
+                className="px-2.5 py-1 bg-stone-800 hover:bg-stone-900 text-white rounded text-[10px] font-bold transition shadow-xs cursor-pointer"
+              >
+                Fill Admin
+              </button>
+            </div>
+
+            {/* 3. Client */}
+            <div className="flex items-center justify-between pt-1 border-t border-amber-200/60">
+              <div>
+                <p className="font-bold text-primary">Client Store Dashboard:</p>
+                <p className="text-[10px] text-stone-600">client@subhlagansarees.com</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleUseClient}
+                className="px-2.5 py-1 bg-primary hover:bg-secondary text-white rounded text-[10px] font-bold transition shadow-xs cursor-pointer"
               >
                 Fill Client
+              </button>
+            </div>
+
+            {/* 4. Customer */}
+            <div className="flex items-center justify-between pt-1 border-t border-amber-200/60">
+              <div>
+                <p className="font-bold text-amber-950">Customer Account:</p>
+                <p className="text-[10px] text-amber-800">customer@subhlagansarees.com</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleUseDemo}
+                className="px-2.5 py-1 bg-gold hover:bg-gold-dark text-white rounded text-[10px] font-bold transition shadow-xs cursor-pointer"
+              >
+                Fill Customer
               </button>
             </div>
           </div>

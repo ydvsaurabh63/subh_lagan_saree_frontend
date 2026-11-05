@@ -12,6 +12,7 @@ import {
   Package,
   UserCheck,
   ShieldCheck,
+  Store,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { useCart } from '../../context/CartContext.jsx';
@@ -164,14 +165,34 @@ const Navbar = () => {
                         </p>
                         <p className="text-xs text-stone-500 truncate">{user?.email}</p>
                       </div>
-                      {user?.role === 'admin' && (
+                      {user?.role === 'superadmin' && (
+                        <Link
+                          to="/superadmin"
+                          onClick={() => setUserDropdownOpen(false)}
+                          className="flex items-center space-x-2 px-3 py-2 mx-2 my-1 bg-purple-900/10 hover:bg-purple-900 text-purple-900 hover:text-white transition rounded-lg text-xs font-bold shadow-xs"
+                        >
+                          <ShieldCheck className="w-4 h-4 text-purple-600" />
+                          <span>SuperAdmin Master Portal</span>
+                        </Link>
+                      )}
+                      {(user?.role === 'admin' || user?.role === 'superadmin') && (
+                        <Link
+                          to="/admin-portal"
+                          onClick={() => setUserDropdownOpen(false)}
+                          className="flex items-center space-x-2 px-3 py-2 mx-2 my-1 bg-amber-500/10 hover:bg-amber-600 text-amber-900 hover:text-white transition rounded-lg text-xs font-bold shadow-xs"
+                        >
+                          <ShieldCheck className="w-4 h-4 text-gold" />
+                          <span>Admin Management Portal</span>
+                        </Link>
+                      )}
+                      {['admin', 'client', 'superadmin'].includes(user?.role) && (
                         <Link
                           to="/admin"
                           onClick={() => setUserDropdownOpen(false)}
-                          className="flex items-center space-x-2 px-3 py-2 mx-2 my-1.5 bg-primary/10 hover:bg-primary text-primary hover:text-white transition rounded-lg text-xs font-bold shadow-xs"
+                          className="flex items-center space-x-2 px-3 py-2 mx-2 my-1 bg-primary/10 hover:bg-primary text-primary hover:text-white transition rounded-lg text-xs font-bold shadow-xs"
                         >
-                          <ShieldCheck className="w-4 h-4 text-gold" />
-                          <span>Client Control Panel</span>
+                          <Store className="w-4 h-4 text-gold" />
+                          <span>Client Store Panel</span>
                         </Link>
                       )}
                       <Link
