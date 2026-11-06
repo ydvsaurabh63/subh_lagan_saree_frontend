@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { contactApi } from '../services/api.js';
 import Breadcrumb from '../components/common/Breadcrumb.jsx';
+import { useStore } from '../context/StoreContext.jsx';
 import { Phone, Mail, MapPin, Clock, Send, MessageCircle, ExternalLink } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const ContactUs = () => {
+  const { store } = useStore();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -23,7 +25,11 @@ const ContactUs = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await contactApi.submitContact(formData);
+      const res = await contactApi.submitContact({
+        ...formData,
+        storeSlug: store.slug,
+        storeName: store.name,
+      });
       if (res.success) {
         toast.success(res.message || 'Enquiry submitted successfully!');
         setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
@@ -54,19 +60,19 @@ const ContactUs = () => {
           {/* Contact Details Card */}
           <div className="bg-primary text-white p-8 rounded-3xl space-y-6 shadow-luxury">
             <h2 className="font-serif text-xl font-bold text-gold-light border-b border-primary-light pb-3">
-              Heritage Boutique
+              {store.name}
             </h2>
 
             <div className="space-y-4 text-xs">
               <div className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="font-semibold text-white">Flagship Boutique</h4>
+                  <h4 className="font-semibold text-white">Boutique Address</h4>
                   <p className="text-stone-300 mt-0.5 leading-relaxed">
-                    Shubh Lagan Sarees, Near Maharaja Sweets, Sutapatti, Muzaffarpur, Bihar 842001, India
+                    {store.address || 'Near Maharaja Sweets, Sutapatti, Muzaffarpur, Bihar 842001, India'}
                   </p>
                   <a
-                    href="https://www.google.com/maps/search/?api=1&query=Shubh+Lagan+Saree+near+Maharaja+sweets+Sutapatti+Muzaffarpur+Bihar+842001"
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(store.address || store.name)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center space-x-1.5 mt-2 px-3 py-1 bg-gold/20 hover:bg-gold/30 text-gold-light border border-gold/40 rounded-lg text-[11px] font-medium transition"
@@ -81,16 +87,18 @@ const ContactUs = () => {
                 <Phone className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
                 <div>
                   <h4 className="font-semibold text-white">Direct Phone & WhatsApp</h4>
-                  <p className="text-stone-300 mt-0.5">+91 98765 43210</p>
-                  <p className="text-stone-300">+91 141 2567890</p>
+                  <p className="text-stone-300 mt-0.5">{store.phone || store.whatsapp || '+91 98765 43210'}</p>
+                  {store.whatsapp && store.phone !== store.whatsapp && (
+                    <p className="text-stone-300">WhatsApp: {store.whatsapp}</p>
+                  )}
                 </div>
               </div>
 
               <div className="flex items-start space-x-3">
                 <Mail className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="font-semibold text-white">Customer Care Email</h4>
-                  <p className="text-stone-300 mt-0.5">care@subhlagansarees.com</p>
+                  <h4 className="font-semibold text-white">Customer Support Email</h4>
+                  <p className="text-stone-300 mt-0.5">{store.ownerEmail || 'care@subhlagansarees.com'}</p>
                 </div>
               </div>
 

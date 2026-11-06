@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+import { useStore } from '../context/StoreContext.jsx';
 import { orderApi, userApi } from '../services/api.js';
 import { formatPrice } from '../utils/formatters.js';
 
@@ -12,6 +13,7 @@ import toast from 'react-hot-toast';
 const Checkout = () => {
   const { items, subtotal, clearCart } = useCart();
   const { user, isAuthenticated } = useAuth();
+  const { store } = useStore();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
@@ -127,6 +129,8 @@ const Checkout = () => {
           pincode: formData.pincode,
         },
         notes: formData.notes,
+        storeSlug: store.slug || 'subh-lagan',
+        storeName: store.name || 'Subh Lagan Sarees',
         items: items.map((it) => ({
           productId: it.product?._id || it.product,
           name: it.product?.name || 'Saree',

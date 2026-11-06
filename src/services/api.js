@@ -11,12 +11,16 @@ const api = axios.create({
   },
 });
 
-// Request interceptor to attach JWT token
+// Request interceptor to attach JWT token & active store slug
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('sls_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    }
+    const storeSlug = localStorage.getItem('sls_store_slug') || 'subh-lagan';
+    if (storeSlug) {
+      config.headers['X-Store-Slug'] = storeSlug;
     }
     return config;
   },

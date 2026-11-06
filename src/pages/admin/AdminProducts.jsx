@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout.jsx';
+import { useAuth } from '../../context/AuthContext.jsx';
 import { productApi, categoryApi, adminApi, uploadApi } from '../../services/api.js';
 import { formatPrice } from '../../utils/formatters.js';
 import toast from 'react-hot-toast';
@@ -20,6 +21,7 @@ import {
 } from 'lucide-react';
 
 const AdminProducts = () => {
+  const { user } = useAuth();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -77,6 +79,10 @@ const AdminProducts = () => {
       const params = { limit: 100 };
       if (search.trim()) params.search = search.trim();
       if (selectedCategory !== 'all') params.category = selectedCategory;
+
+      if (user && user.role === 'client' && user.storeName) {
+        params.store = user.storeName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+      }
 
       const res = await productApi.getProducts(params);
       if (res.success) {
@@ -197,7 +203,12 @@ const AdminProducts = () => {
           fetchProducts();
         }
       } else {
-        const res = await adminApi.createProduct(formData);
+        const payload = {
+          ...formData,
+          storeSlug: user?.storeName ? user.storeName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-') : 'subh-lagan',
+          storeName: user?.storeName || 'Subh Lagan Sarees',
+        };
+        const res = await adminApi.createProduct(payload);
         if (res.success) {
           toast.success('New saree added to boutique catalog');
           setIsModalOpen(false);
