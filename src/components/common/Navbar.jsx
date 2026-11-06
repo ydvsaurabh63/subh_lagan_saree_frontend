@@ -96,10 +96,30 @@ const Navbar = () => {
                 <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-[#681B2C] to-[#3a0a16] border border-gold/60 flex items-center justify-center text-gold shadow-md group-hover:scale-105 transition-transform flex-shrink-0">
                   <Store className="w-5 h-5 text-gold" />
                 </div>
-                <div className="flex flex-col text-left">
-                  <span className="font-serif font-black text-sm sm:text-base lg:text-lg tracking-wider text-primary leading-tight uppercase group-hover:text-primary-dark transition-colors">
-                    {store.name}
-                  </span>
+                <div className="flex flex-col text-left leading-tight">
+                  {(() => {
+                    const rawName = (store.name || '').trim();
+                    const words = rawName.split(/\s+/);
+                    if (words.length <= 1) {
+                      return (
+                        <span className="font-serif font-black text-sm sm:text-base lg:text-lg tracking-wider text-primary uppercase group-hover:text-primary-dark transition-colors leading-tight">
+                          {rawName}
+                        </span>
+                      );
+                    }
+                    const line1 = words.length === 3 ? words[0] : words.slice(0, Math.ceil(words.length / 2)).join(' ');
+                    const line2 = words.length === 3 ? `${words[1]} ${words[2]}` : words.slice(Math.ceil(words.length / 2)).join(' ');
+                    return (
+                      <>
+                        <span className="font-serif font-black text-sm sm:text-base lg:text-lg tracking-wider text-primary uppercase group-hover:text-primary-dark transition-colors leading-tight">
+                          {line1}
+                        </span>
+                        <span className="font-serif font-black text-xs sm:text-sm lg:text-base tracking-widest text-primary uppercase group-hover:text-primary-dark transition-colors leading-tight">
+                          {line2}
+                        </span>
+                      </>
+                    );
+                  })()}
                 </div>
               </Link>
             ) : (

@@ -23,9 +23,6 @@ const Footer = () => {
                     <h2 className="font-serif text-xl sm:text-2xl font-bold tracking-wide text-white uppercase group-hover:text-gold-light transition">
                       {store.name}
                     </h2>
-                    <span className="text-[10px] font-bold text-gold uppercase tracking-wider block">
-                      {store.badge || 'Verified Boutique Partner'}
-                    </span>
                   </div>
                 </Link>
                 <p className="text-xs leading-relaxed text-stone-200 max-w-sm">
