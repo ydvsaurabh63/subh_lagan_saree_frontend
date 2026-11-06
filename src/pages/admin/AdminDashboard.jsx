@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AdminLayout from '../../components/admin/AdminLayout.jsx';
+import { useAuth } from '../../context/AuthContext.jsx';
 import { adminApi } from '../../services/api.js';
 import { formatPrice, formatDate } from '../../utils/formatters.js';
 import toast from 'react-hot-toast';
@@ -15,6 +16,7 @@ import {
 } from 'lucide-react';
 
 const AdminDashboard = () => {
+  const { user } = useAuth();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [updatingOrderId, setUpdatingOrderId] = useState(null);
@@ -91,8 +93,8 @@ const AdminDashboard = () => {
             <h1 className="font-serif text-2xl font-bold text-brandText">
               Overview
             </h1>
-            <p className="text-xs text-brandText-muted">
-              Subh Lagan Sarees
+            <p className="text-xs text-brandText-muted font-medium">
+              {user?.storeName || 'Subh Lagan Sarees'}
             </p>
           </div>
           <div className="flex items-center gap-2">

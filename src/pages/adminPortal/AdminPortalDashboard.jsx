@@ -40,12 +40,15 @@ import {
   Cpu,
   Copy,
   Globe,
+  LogIn,
+  Loader2,
 } from 'lucide-react';
 
 const AdminPortalDashboard = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, impersonateAsClient } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [directLoginId, setDirectLoginId] = useState(null);
 
   // Active Tab: overview | manage-client | profile
   const activeTab = searchParams.get('tab') || 'overview';
@@ -321,6 +324,20 @@ const AdminPortalDashboard = () => {
   const handleLogout = () => {
     logout();
     navigate('/login');
+  };
+
+  const handleDirectLogin = async (client) => {
+    try {
+      setDirectLoginId(client._id);
+      const res = await impersonateAsClient(client._id);
+      if (res?.success) {
+        navigate('/admin');
+      }
+    } catch (err) {
+      toast.error(err.message || 'Direct login failed');
+    } finally {
+      setDirectLoginId(null);
+    }
   };
 
   // Derived metrics
@@ -908,6 +925,20 @@ const AdminPortalDashboard = () => {
                             })}
                           </td>
                           <td className="py-3.5 px-4 text-right space-x-1.5 whitespace-nowrap">
+                            <button
+                              type="button"
+                              onClick={() => handleDirectLogin(cl)}
+                              disabled={directLoginId === cl._id}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-600 via-amber-700 to-amber-800 hover:from-amber-700 hover:to-amber-900 text-white text-[11px] font-bold shadow-sm transition active:scale-95 disabled:opacity-50"
+                              title={`Direct login to ${cl.storeName || cl.name}'s Dashboard`}
+                            >
+                              {directLoginId === cl._id ? (
+                                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                              ) : (
+                                <LogIn className="w-3.5 h-3.5 text-amber-200" />
+                              )}
+                              <span>Login</span>
+                            </button>
                             <a
                               href={`/store/${getStoreSlug(cl.storeName)}`}
                               target="_blank"

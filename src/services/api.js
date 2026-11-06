@@ -145,6 +145,9 @@ export const managementApi = {
 
   // Status toggle
   toggleUserStatus: (id) => api.put(`/management/users/${id}/toggle-status`),
+
+  // Direct Impersonation Login
+  impersonateUser: (id) => api.post(`/management/impersonate/${id}`),
 };
 
 // Upload API (Cloudinary via backend)

@@ -16,10 +16,11 @@ import {
   ExternalLink,
   ShieldCheck,
   Sparkles,
+  ArrowLeft,
 } from 'lucide-react';
 
 const AdminLayout = ({ children, title = 'Store Client Panel' }) => {
-  const { user, logout } = useAuth();
+  const { user, logout, isImpersonating, stopImpersonation } = useAuth();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -27,6 +28,20 @@ const AdminLayout = ({ children, title = 'Store Client Panel' }) => {
     logout();
     navigate('/login');
   };
+
+  const handleReturnToAdminPortal = async () => {
+    const res = await stopImpersonation();
+    if (res?.success) {
+      navigate(res.returnPath || '/superadmin');
+    }
+  };
+
+  const clientStoreSlug = user?.storeName
+    ? user.storeName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-')
+    : '';
+  const liveStoreUrl = clientStoreSlug && clientStoreSlug !== 'subh-lagan-boutique-store'
+    ? `/store/${clientStoreSlug}`
+    : '/';
 
   // Section 1: Main Tabs requested by user
   // Overview, Store, Trials, Playground, Credits, Sales
@@ -85,8 +100,33 @@ const AdminLayout = ({ children, title = 'Store Client Panel' }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] flex">
-      {/* Mobile Sidebar Overlay */}
+    <div className="min-h-screen bg-[#FDFBF7] flex flex-col">
+      {/* Impersonation Banner when logged in directly by SuperAdmin / Admin */}
+      {isImpersonating && (
+        <div className="bg-gradient-to-r from-[#2B0A13] via-[#4A1525] to-[#2B0A13] text-cream border-b border-gold/40 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 shadow-lg sticky top-0 z-[60]">
+          <div className="flex items-center gap-2.5">
+            <span className="inline-flex items-center gap-1 bg-gold text-primary font-black px-2 py-0.5 rounded text-[10px] uppercase tracking-wider shadow-sm">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              Direct Login Mode
+            </span>
+            <span className="text-xs sm:text-sm font-medium text-cream">
+              Logged in as client: <strong className="text-gold font-bold">{user?.storeName || user?.name}</strong>
+              {user?.email && <span className="text-white/60 text-xs ml-1 font-mono">({user.email})</span>}
+            </span>
+          </div>
+
+          <button
+            onClick={handleReturnToAdminPortal}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gold hover:bg-gold-light text-primary font-bold text-xs shadow transition active:scale-95 ml-auto"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Return to SuperAdmin</span>
+          </button>
+        </div>
+      )}
+
+      <div className="flex-1 flex">
+        {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/60 z-40 lg:hidden backdrop-blur-sm"
@@ -192,7 +232,7 @@ const AdminLayout = ({ children, title = 'Store Client Panel' }) => {
         {/* Sidebar Footer */}
         <div className="p-3 border-t border-gold/20 space-y-2 shrink-0">
           <Link
-            to="/"
+            to={liveStoreUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold text-cream hover:text-gold hover:bg-white/5 border border-gold/30 transition-all"
@@ -204,22 +244,35 @@ const AdminLayout = ({ children, title = 'Store Client Panel' }) => {
             <ExternalLink className="w-3.5 h-3.5 opacity-80" />
           </Link>
 
+          {isImpersonating && (
+            <button
+              onClick={handleReturnToAdminPortal}
+              className="w-full flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-gold/15 hover:bg-gold/25 text-gold text-[11px] font-bold border border-gold/30 transition"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Return to SuperAdmin</span>
+            </button>
+          )}
+
           <div className="flex items-center justify-between px-2 pt-1 border-t border-white/5">
             <div className="flex items-center gap-2 overflow-hidden">
               <div className="w-7 h-7 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center text-xs font-bold text-gold shrink-0">
                 {(() => {
-                  const displayName = (user?.name || 'Client')
-                    .replace(/\(Admin\)/gi, '(Client)')
-                    .replace(/\bAdmin\b/gi, 'Client');
+                  const displayName = user?.storeName || user?.name || 'Client';
                   return displayName.charAt(0).toUpperCase();
                 })()}
               </div>
               <div className="overflow-hidden">
                 <p className="text-xs font-bold text-cream truncate">
-                  {(user?.name || 'Client')
+                  {user?.storeName || (user?.name || 'Client')
                     .replace(/\(Admin\)/gi, '(Client)')
                     .replace(/\bAdmin\b/gi, 'Client')}
                 </p>
+                {user?.email && (
+                  <p className="text-[10px] text-gold/70 truncate font-mono">
+                    {user.email}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -252,14 +305,24 @@ const AdminLayout = ({ children, title = 'Store Client Panel' }) => {
             />
           </div>
 
-          <Link
-            to="/"
-            target="_blank"
-            className="text-xs font-bold text-gold flex items-center gap-1"
-          >
-            <span>Live Store</span>
-            <ExternalLink className="w-3 h-3" />
-          </Link>
+          <div className="flex items-center gap-2">
+            {isImpersonating && (
+              <button
+                onClick={handleReturnToAdminPortal}
+                className="text-[10px] bg-gold text-primary font-bold px-2 py-1 rounded"
+              >
+                Exit
+              </button>
+            )}
+            <Link
+              to={liveStoreUrl}
+              target="_blank"
+              className="text-xs font-bold text-gold flex items-center gap-1"
+            >
+              <span>Live Store</span>
+              <ExternalLink className="w-3 h-3" />
+            </Link>
+          </div>
         </header>
 
         {/* Child Pages Body */}
@@ -268,6 +331,7 @@ const AdminLayout = ({ children, title = 'Store Client Panel' }) => {
         </main>
       </div>
     </div>
+  </div>
   );
 };
 

@@ -46,12 +46,15 @@ import {
   Sliders,
   Check,
   Copy,
+  LogIn,
+  Loader2,
 } from 'lucide-react';
 
 const SuperAdminDashboard = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, impersonateAsClient } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [directLoginId, setDirectLoginId] = useState(null);
 
   // Active Tab: overview | manage-admin | manage-client | profile
   const activeTab = searchParams.get('tab') || 'overview';
@@ -450,6 +453,20 @@ const SuperAdminDashboard = () => {
   const handleLogout = () => {
     logout();
     navigate('/login');
+  };
+
+  const handleDirectLogin = async (client) => {
+    try {
+      setDirectLoginId(client._id);
+      const res = await impersonateAsClient(client._id);
+      if (res?.success) {
+        navigate('/admin');
+      }
+    } catch (err) {
+      toast.error(err.message || 'Direct login failed');
+    } finally {
+      setDirectLoginId(null);
+    }
   };
 
   const formatPrice = (amount) => {
@@ -1013,7 +1030,21 @@ const SuperAdminDashboard = () => {
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-2 shrink-0">
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => handleDirectLogin(cl)}
+                            disabled={directLoginId === cl._id}
+                            className="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-[10px] font-bold inline-flex items-center gap-1 shadow-sm transition active:scale-95 disabled:opacity-50"
+                            title="Direct Login to Client Dashboard"
+                          >
+                            {directLoginId === cl._id ? (
+                              <Loader2 className="w-3 h-3 animate-spin" />
+                            ) : (
+                              <LogIn className="w-3 h-3 text-amber-200" />
+                            )}
+                            <span>Login</span>
+                          </button>
                           <button
                             onClick={() => handleToggleUserStatus(cl._id, cl.accountStatus, 'client')}
                             className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border cursor-pointer transition ${
@@ -1449,6 +1480,20 @@ const SuperAdminDashboard = () => {
                             })}
                           </td>
                           <td className="py-3.5 px-4 text-right space-x-1.5 whitespace-nowrap">
+                            <button
+                              type="button"
+                              onClick={() => handleDirectLogin(cl)}
+                              disabled={directLoginId === cl._id}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-600 via-amber-700 to-amber-800 hover:from-amber-700 hover:to-amber-900 text-white text-[11px] font-bold shadow-sm transition active:scale-95 disabled:opacity-50"
+                              title={`Direct login to ${cl.storeName || cl.name}'s Dashboard`}
+                            >
+                              {directLoginId === cl._id ? (
+                                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                              ) : (
+                                <LogIn className="w-3.5 h-3.5 text-amber-200" />
+                              )}
+                              <span>Login</span>
+                            </button>
                             <a
                               href={`/store/${getStoreSlug(cl.storeName)}`}
                               target="_blank"
