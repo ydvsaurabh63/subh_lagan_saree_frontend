@@ -23,14 +23,13 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   const searchInputRef = useRef(null);
 
   const { user, isAuthenticated, logout } = useAuth();
   const { totalQuantity } = useCart();
   const { wishlist } = useWishlist();
-  const { store, isBoutiqueStore, resetToDefaultStore } = useStore();
+  const { store, isBoutiqueStore } = useStore();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -38,7 +37,6 @@ const Navbar = () => {
   useEffect(() => {
     setMobileMenuOpen(false);
     setSearchOpen(false);
-    setUserDropdownOpen(false);
   }, [location.pathname, location.search]);
 
   useEffect(() => {
@@ -102,10 +100,6 @@ const Navbar = () => {
                   <span className="font-serif font-black text-sm sm:text-base lg:text-lg tracking-wider text-primary leading-tight uppercase group-hover:text-primary-dark transition-colors">
                     {store.name}
                   </span>
-                  <span className="text-[9px] sm:text-[10px] font-bold text-gold-dark uppercase tracking-widest flex items-center">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block mr-1"></span>
-                    {store.badge || 'Verified Boutique Partner'}
-                  </span>
                 </div>
               </Link>
             ) : (
@@ -142,26 +136,8 @@ const Navbar = () => {
             })}
           </nav>
 
-          {/* Right Icons: Search Icon, User Account, Wishlist, Cart */}
+          {/* Right Icons: Search Icon, Wishlist, Cart */}
           <div className="flex items-center space-x-1 sm:space-x-2">
-            {/* Boutique Badge Indicator */}
-            {isBoutiqueStore && (
-              <div className="hidden md:flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-gold/15 border border-gold/40 text-primary text-[10px] font-bold">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span className="max-w-[120px] truncate">{store.name}</span>
-                <button
-                  onClick={() => {
-                    resetToDefaultStore();
-                    navigate('/');
-                  }}
-                  className="text-stone-500 hover:text-primary ml-1 pl-1 border-l border-gold/40 text-[9px] uppercase cursor-pointer"
-                  title="Return to Flagship Store"
-                >
-                  Main Site
-                </button>
-              </div>
-            )}
-
             {/* Search Icon (All screens) */}
             <button
               onClick={() => setSearchOpen(!searchOpen)}
@@ -175,116 +151,6 @@ const Navbar = () => {
             >
               {searchOpen ? <X className="w-4 h-4 sm:w-5 sm:h-5" /> : <Search className="w-4 h-4 sm:w-5 sm:h-5" />}
             </button>
-
-            {/* User Account Menu */}
-            <div className="relative">
-              {isAuthenticated ? (
-                <div>
-                  <button
-                    onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                    className="flex items-center space-x-1.5 p-1.5 rounded-full hover:bg-cream text-brandText hover:text-primary transition"
-                  >
-                    <div className="w-7 h-7 rounded-full bg-primary/10 text-primary font-semibold text-xs flex items-center justify-center border border-primary/20">
-                      {user?.name?.charAt(0).toUpperCase()}
-                    </div>
-                    <span className="hidden xl:inline-block text-xs font-medium max-w-[80px] truncate">
-                      {user?.name?.split(' ')[0]}
-                    </span>
-                    <ChevronDown className="w-3.5 h-3.5 text-stone-400 hidden sm:inline-block" />
-                  </button>
-
-                  {userDropdownOpen && (
-                    <div
-                      onMouseLeave={() => setUserDropdownOpen(false)}
-                      className="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-xl border border-stone-100 py-2 text-sm z-50 animate-in fade-in slide-in-from-top-2 duration-150"
-                    >
-                      <div className="px-4 py-2 border-b border-stone-100">
-                        <p className="font-semibold text-brandText truncate">
-                          {user?.name
-                            ? user.name.replace(/\(Admin\)/gi, '(Client)').replace(/\bAdmin\b/gi, 'Client')
-                            : ''}
-                        </p>
-                        <p className="text-xs text-stone-500 truncate">{user?.email}</p>
-                      </div>
-                      {user?.role === 'superadmin' && (
-                        <Link
-                          to="/superadmin"
-                          onClick={() => setUserDropdownOpen(false)}
-                          className="flex items-center space-x-2 px-3 py-2 mx-2 my-1 bg-purple-900/10 hover:bg-purple-900 text-purple-900 hover:text-white transition rounded-lg text-xs font-bold shadow-xs"
-                        >
-                          <ShieldCheck className="w-4 h-4 text-purple-600" />
-                          <span>SuperAdmin Master Portal</span>
-                        </Link>
-                      )}
-                      {(user?.role === 'admin' || user?.role === 'superadmin') && (
-                        <Link
-                          to="/admin-portal"
-                          onClick={() => setUserDropdownOpen(false)}
-                          className="flex items-center space-x-2 px-3 py-2 mx-2 my-1 bg-amber-500/10 hover:bg-amber-600 text-amber-900 hover:text-white transition rounded-lg text-xs font-bold shadow-xs"
-                        >
-                          <ShieldCheck className="w-4 h-4 text-gold" />
-                          <span>Admin Management Portal</span>
-                        </Link>
-                      )}
-                      {['admin', 'client', 'superadmin'].includes(user?.role) && (
-                        <Link
-                          to="/admin"
-                          onClick={() => setUserDropdownOpen(false)}
-                          className="flex items-center space-x-2 px-3 py-2 mx-2 my-1 bg-primary/10 hover:bg-primary text-primary hover:text-white transition rounded-lg text-xs font-bold shadow-xs"
-                        >
-                          <Store className="w-4 h-4 text-gold" />
-                          <span>Client Store Panel</span>
-                        </Link>
-                      )}
-                      <Link
-                        to="/profile"
-                        onClick={() => setUserDropdownOpen(false)}
-                        className="flex items-center space-x-2 px-4 py-2 hover:bg-cream text-stone-700 hover:text-primary transition text-xs font-medium"
-                      >
-                        <UserCheck className="w-4 h-4 text-gold" />
-                        <span>My Profile</span>
-                      </Link>
-                      <Link
-                        to="/profile?tab=orders"
-                        onClick={() => setUserDropdownOpen(false)}
-                        className="flex items-center space-x-2 px-4 py-2 hover:bg-cream text-stone-700 hover:text-primary transition text-xs font-medium"
-                      >
-                        <Package className="w-4 h-4 text-gold" />
-                        <span>My Orders</span>
-                      </Link>
-                      <Link
-                        to="/wishlist"
-                        onClick={() => setUserDropdownOpen(false)}
-                        className="flex items-center space-x-2 px-4 py-2 hover:bg-cream text-stone-700 hover:text-primary transition text-xs font-medium"
-                      >
-                        <Heart className="w-4 h-4 text-gold" />
-                        <span>My Wishlist</span>
-                      </Link>
-                      <div className="border-t border-stone-100 my-1"></div>
-                      <button
-                        onClick={() => {
-                          setUserDropdownOpen(false);
-                          logout();
-                        }}
-                        className="w-full flex items-center space-x-2 px-4 py-2 hover:bg-rose-50 text-rose-700 transition text-left text-xs font-medium"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        <span>Log Out</span>
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <Link
-                  to="/login"
-                  className="flex items-center space-x-1 p-2 rounded-full hover:bg-cream text-stone-700 hover:text-primary transition"
-                  title="Account Sign In"
-                >
-                  <User className="w-4 h-4" />
-                  <span className="hidden xl:inline-block text-xs font-medium">Sign In</span>
-                </Link>
-              )}
-            </div>
 
             {/* Wishlist Link */}
             <Link

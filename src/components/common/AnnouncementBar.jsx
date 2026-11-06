@@ -8,7 +8,7 @@ const AnnouncementBar = () => {
 
   const announcements = isBoutiqueStore
     ? [
-        { icon: Store, text: `Welcome to ${store.name} • ${store.badge || 'Verified Boutique Store'}` },
+        { icon: Store, text: `Welcome to ${store.name}` },
         { icon: Sparkles, text: `${store.tagline || 'Exclusive Heritage Silks & Sarees'}` },
         { icon: ShieldCheck, text: `Direct WhatsApp Orders: ${store.whatsapp || '+91 81475 40362'}` },
         { icon: Truck, text: 'Cash on Delivery (COD) Available • Silk Mark Certified' },
