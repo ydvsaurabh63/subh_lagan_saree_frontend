@@ -1,15 +1,19 @@
 import React from 'react';
 import { useTryOn } from '../../context/TryOnContext.jsx';
+import { useStore } from '../../context/StoreContext.jsx';
 
 const WhatsAppButton = () => {
   const { isOpen } = useTryOn();
+  const { store } = useStore();
 
   // If virtual fitting room panel is open on small screen, hide to avoid obstruction
   if (isOpen) return null;
 
-  const phoneNumber = '918147540362';
+  const rawNumber = (store?.whatsapp || '918147540362').replace(/\D/g, '');
+  const phoneNumber = rawNumber.length === 10 ? `91${rawNumber}` : rawNumber;
+  const storeName = store?.name || 'Shubh Lagan Sarees';
   const message = encodeURIComponent(
-    'Namaste Shubh Lagan Sarees, I would like to inquire about your saree collection.'
+    `Namaste ${storeName}, I would like to inquire about your saree collection.`
   );
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
 
@@ -19,7 +23,7 @@ const WhatsAppButton = () => {
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        title="Chat on WhatsApp (+91 81475 40362)"
+        title={`Chat on WhatsApp (${storeName})`}
         aria-label="Connect on WhatsApp"
         className="relative group flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full shadow-[0_8px_25px_rgba(37,211,102,0.45)] hover:shadow-[0_12px_35px_rgba(37,211,102,0.60)] transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer"
       >

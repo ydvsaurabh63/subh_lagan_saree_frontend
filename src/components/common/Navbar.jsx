@@ -17,6 +17,7 @@ import {
 import { useAuth } from '../../context/AuthContext.jsx';
 import { useCart } from '../../context/CartContext.jsx';
 import { useWishlist } from '../../context/WishlistContext.jsx';
+import { useStore } from '../../context/StoreContext.jsx';
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -29,6 +30,7 @@ const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const { totalQuantity } = useCart();
   const { wishlist } = useWishlist();
+  const { store, isBoutiqueStore, resetToDefaultStore } = useStore();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -87,13 +89,34 @@ const Navbar = () => {
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
 
-            <Link to="/" className="inline-flex items-center h-full group py-0.5" title="Subh Lagan Sarees">
-              <img
-                src="/logo.png"
-                alt="Subh Lagan Sarees"
-                className="h-full max-h-12 sm:max-h-16 lg:max-h-20 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
-              />
-            </Link>
+            {isBoutiqueStore ? (
+              <Link
+                to={`/store/${store.slug}`}
+                className="inline-flex items-center space-x-2.5 h-full group py-1"
+                title={store.name}
+              >
+                <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-[#681B2C] to-[#3a0a16] border border-gold/60 flex items-center justify-center text-gold shadow-md group-hover:scale-105 transition-transform flex-shrink-0">
+                  <Store className="w-5 h-5 text-gold" />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className="font-serif font-black text-sm sm:text-base lg:text-lg tracking-wider text-primary leading-tight uppercase group-hover:text-primary-dark transition-colors">
+                    {store.name}
+                  </span>
+                  <span className="text-[9px] sm:text-[10px] font-bold text-gold-dark uppercase tracking-widest flex items-center">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block mr-1"></span>
+                    {store.badge || 'Verified Boutique Partner'}
+                  </span>
+                </div>
+              </Link>
+            ) : (
+              <Link to="/" className="inline-flex items-center h-full group py-0.5" title="Subh Lagan Sarees">
+                <img
+                  src="/logo.png"
+                  alt="Subh Lagan Sarees"
+                  className="h-full max-h-12 sm:max-h-16 lg:max-h-20 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
+                />
+              </Link>
+            )}
           </div>
 
           {/* Desktop Navigation Links (Bold, readable, clean Roboto typography) */}
@@ -121,6 +144,24 @@ const Navbar = () => {
 
           {/* Right Icons: Search Icon, User Account, Wishlist, Cart */}
           <div className="flex items-center space-x-1 sm:space-x-2">
+            {/* Boutique Badge Indicator */}
+            {isBoutiqueStore && (
+              <div className="hidden md:flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-gold/15 border border-gold/40 text-primary text-[10px] font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span className="max-w-[120px] truncate">{store.name}</span>
+                <button
+                  onClick={() => {
+                    resetToDefaultStore();
+                    navigate('/');
+                  }}
+                  className="text-stone-500 hover:text-primary ml-1 pl-1 border-l border-gold/40 text-[9px] uppercase cursor-pointer"
+                  title="Return to Flagship Store"
+                >
+                  Main Site
+                </button>
+              </div>
+            )}
+
             {/* Search Icon (All screens) */}
             <button
               onClick={() => setSearchOpen(!searchOpen)}

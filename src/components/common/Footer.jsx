@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Phone,
-  Mail,
-  MapPin,
-} from 'lucide-react';
+import { Phone, Mail, MapPin, Store } from 'lucide-react';
+import { useStore } from '../../context/StoreContext.jsx';
 
 const Footer = () => {
+  const { store, isBoutiqueStore } = useStore();
+
   return (
     <footer className="bg-secondary-dark text-stone-200 pt-8 pb-8 border-t-2 border-gold/40">
       {/* Main Footer Links */}
@@ -14,36 +13,54 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand Column */}
           <div className="lg:col-span-2 space-y-3">
-            <Link to="/" className="inline-block group" title="Subh Lagan Sarees">
-              <img
-                src="/logo.png"
-                alt="Subh Lagan Sarees"
-                className="h-16 sm:h-20 lg:h-24 w-auto object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.6)] group-hover:scale-105 transition-transform duration-300"
-              />
-            </Link>
-            <p className="text-xs leading-relaxed text-stone-200 max-w-sm">
-              Authentic Banarasi, Kanjivaram, and pure silk sarees.
-            </p>
+            {isBoutiqueStore ? (
+              <div className="space-y-2">
+                <Link to={`/store/${store.slug}`} className="inline-flex items-center space-x-2.5 group">
+                  <div className="w-10 h-10 rounded-xl bg-gold/20 border border-gold/50 flex items-center justify-center text-gold shadow-md">
+                    <Store className="w-5 h-5 text-gold" />
+                  </div>
+                  <div>
+                    <h2 className="font-serif text-xl sm:text-2xl font-bold tracking-wide text-white uppercase group-hover:text-gold-light transition">
+                      {store.name}
+                    </h2>
+                    <span className="text-[10px] font-bold text-gold uppercase tracking-wider block">
+                      {store.badge || 'Verified Boutique Partner'}
+                    </span>
+                  </div>
+                </Link>
+                <p className="text-xs leading-relaxed text-stone-200 max-w-sm">
+                  {store.tagline || 'Authentic Banarasi, Kanjivaram, and pure silk sarees.'}
+                </p>
+              </div>
+            ) : (
+              <>
+                <Link to="/" className="inline-block group" title="Subh Lagan Sarees">
+                  <img
+                    src="/logo.png"
+                    alt="Subh Lagan Sarees"
+                    className="h-16 sm:h-20 lg:h-24 w-auto object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.6)] group-hover:scale-105 transition-transform duration-300"
+                  />
+                </Link>
+                <p className="text-xs leading-relaxed text-stone-200 max-w-sm">
+                  Authentic Banarasi, Kanjivaram, and pure silk sarees.
+                </p>
+              </>
+            )}
+
             <div className="pt-1 text-xs space-y-2 text-stone-200">
-              <a
-                href="https://www.google.com/maps/search/?api=1&query=Shubh+Lagan+Saree+near+Maharaja+sweets+Sutapatti+Muzaffarpur+Bihar+842001"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-start space-x-2 hover:text-white transition group"
-                title="Open Boutique Location on Google Maps"
-              >
-                <MapPin className="w-3.5 h-3.5 text-gold flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
+              <div className="flex items-start space-x-2">
+                <MapPin className="w-3.5 h-3.5 text-gold flex-shrink-0 mt-0.5" />
                 <span className="leading-relaxed">
-                  Near Maharaja Sweets, Sutapatti, Muzaffarpur, Bihar 842001
+                  {store.address || 'Near Maharaja Sweets, Sutapatti, Muzaffarpur, Bihar 842001'}
                 </span>
-              </a>
+              </div>
               <div className="flex items-center space-x-2">
                 <Phone className="w-3.5 h-3.5 text-gold flex-shrink-0" />
-                <span>+91 98765 43210</span>
+                <span>{store.phone || store.whatsapp || '+91 98765 43210'}</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="w-3.5 h-3.5 text-gold flex-shrink-0" />
-                <span>care@subhlagansarees.com</span>
+                <span>{store.ownerEmail || 'care@subhlagansarees.com'}</span>
               </div>
             </div>
           </div>
@@ -69,11 +86,11 @@ const Footer = () => {
               Explore
             </h3>
             <ul className="space-y-1.5 text-xs text-stone-200">
-              <li><Link to="/shop" className="hover:text-white transition">All Sarees</Link></li>
-              <li><Link to="/shop?isNewArrival=true" className="hover:text-white transition">New Arrivals</Link></li>
-              <li><Link to="/shop?isBestSeller=true" className="hover:text-white transition">Best Sellers</Link></li>
-              <li><Link to="/about" className="hover:text-white transition">About Us</Link></li>
-              <li><Link to="/contact" className="hover:text-white transition">Contact Boutique</Link></li>
+              <li><Link to="/about" className="hover:text-white transition">About Our Brand</Link></li>
+              <li><Link to="/shop?sort=bestseller" className="hover:text-white transition">Bestsellers</Link></li>
+              <li><Link to="/shop?isBridal=true" className="hover:text-white transition">Bridal Edit</Link></li>
+              <li><Link to="/shop?sort=newest" className="hover:text-white transition">New Arrivals</Link></li>
+              <li><Link to="/contact" className="hover:text-white transition">Contact Us</Link></li>
               <li><Link to="/faq" className="hover:text-white transition">FAQs</Link></li>
             </ul>
           </div>
@@ -96,7 +113,7 @@ const Footer = () => {
 
       {/* Copyright Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 border-t border-stone-800 text-center flex flex-col md:flex-row items-center justify-between text-xs text-stone-300">
-        <p>&copy; {new Date().getFullYear()} Subh Lagan Sarees. All Rights Reserved.</p>
+        <p>&copy; {new Date().getFullYear()} {store.name}. All Rights Reserved.</p>
         <p className="mt-2 md:mt-0 text-stone-200">
           Payment Mode: <strong className="text-white">Cash on Delivery (COD)</strong>
         </p>

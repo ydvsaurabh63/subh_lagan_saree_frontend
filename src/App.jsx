@@ -6,6 +6,7 @@ import { AuthProvider } from './context/AuthContext.jsx';
 import { CartProvider } from './context/CartContext.jsx';
 import { WishlistProvider } from './context/WishlistContext.jsx';
 import { TryOnProvider } from './context/TryOnContext.jsx';
+import { StoreProvider } from './context/StoreContext.jsx';
 
 import AnnouncementBar from './components/common/AnnouncementBar.jsx';
 import Navbar from './components/common/Navbar.jsx';
@@ -99,6 +100,8 @@ function AppShell() {
 
           {/* Customer Facing Routes */}
           <Route path="/" element={<Home />} />
+          <Route path="/store/:storeSlug" element={<Home />} />
+          <Route path="/store/:storeSlug/shop" element={<Shop />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/product/:identifier" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
@@ -248,33 +251,35 @@ function App() {
         <CartProvider>
           <WishlistProvider>
             <TryOnProvider>
-              <ScrollToTop />
-              <Toaster
-                position="top-right"
-                toastOptions={{
-                  duration: 3500,
-                  style: {
-                    background: '#681B2C',
-                    color: '#FFF8EF',
-                    border: '1px solid #C6A15B',
-                    fontSize: '12px',
-                    fontFamily: 'Inter, sans-serif',
-                  },
-                  success: {
-                    iconTheme: {
-                      primary: '#C6A15B',
-                      secondary: '#681B2C',
+              <StoreProvider>
+                <ScrollToTop />
+                <Toaster
+                  position="top-right"
+                  toastOptions={{
+                    duration: 3500,
+                    style: {
+                      background: '#681B2C',
+                      color: '#FFF8EF',
+                      border: '1px solid #C6A15B',
+                      fontSize: '12px',
+                      fontFamily: 'Inter, sans-serif',
                     },
-                  },
-                  error: {
-                    iconTheme: {
-                      primary: '#EF4444',
-                      secondary: '#FFFFFF',
+                    success: {
+                      iconTheme: {
+                        primary: '#C6A15B',
+                        secondary: '#681B2C',
+                      },
                     },
-                  },
-                }}
-              />
-              <AppShell />
+                    error: {
+                      iconTheme: {
+                        primary: '#EF4444',
+                        secondary: '#FFFFFF',
+                      },
+                    },
+                  }}
+                />
+                <AppShell />
+              </StoreProvider>
             </TryOnProvider>
           </WishlistProvider>
         </CartProvider>

@@ -45,6 +45,7 @@ import {
   Globe,
   Sliders,
   Check,
+  Copy,
 } from 'lucide-react';
 
 const SuperAdminDashboard = () => {
@@ -76,6 +77,20 @@ const SuperAdminDashboard = () => {
   const [clientSearch, setClientSearch] = useState('');
   const [clientStatusFilter, setClientStatusFilter] = useState('all');
   const [clientAdminFilter, setClientAdminFilter] = useState('all');
+
+  const getStoreSlug = (storeName) => {
+    return (storeName || 'subh-lagan').toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+  };
+
+  const handleCopyStoreLink = (storeName) => {
+    const slug = getStoreSlug(storeName);
+    const origin = window.location.origin;
+    const url = `${origin}/store/${slug}`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url);
+      toast.success(`Store Link Copied: /store/${slug}`);
+    }
+  };
 
   // Password visibility toggles
   const [showAdminPassword, setShowAdminPassword] = useState(false);
@@ -1352,9 +1367,19 @@ const SuperAdminDashboard = () => {
                                 <p className="font-bold text-stone-900 text-xs">
                                   {cl.storeName || 'Subh Lagan Boutique Store'}
                                 </p>
-                                <span className="text-[10px] text-amber-800 font-bold uppercase tracking-wider">
-                                  ID: {cl._id.slice(-6)}
-                                </span>
+                                <div className="flex items-center gap-1.5 mt-0.5">
+                                  <span className="text-[10px] text-amber-800 font-bold uppercase tracking-wider font-mono">
+                                    /store/{getStoreSlug(cl.storeName)}
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleCopyStoreLink(cl.storeName)}
+                                    className="p-0.5 hover:text-amber-800 text-stone-400 transition cursor-pointer"
+                                    title="Copy Store URL"
+                                  >
+                                    <Copy className="w-3 h-3" />
+                                  </button>
+                                </div>
                               </div>
                             </div>
                           </td>
@@ -1423,7 +1448,17 @@ const SuperAdminDashboard = () => {
                               year: 'numeric',
                             })}
                           </td>
-                          <td className="py-3.5 px-4 text-right space-x-1">
+                          <td className="py-3.5 px-4 text-right space-x-1.5 whitespace-nowrap">
+                            <a
+                              href={`/store/${getStoreSlug(cl.storeName)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 text-[10px] font-bold border border-amber-300 transition"
+                              title="Open Live Boutique Store"
+                            >
+                              <ExternalLink className="w-3.5 h-3.5" />
+                              <span>Live Store</span>
+                            </a>
                             <button
                               onClick={() => handleOpenEditClient(cl)}
                               className="p-2 rounded-xl text-stone-600 hover:text-amber-700 hover:bg-amber-50 transition"
@@ -1859,9 +1894,17 @@ const SuperAdminDashboard = () => {
                   value={clientFormData.storeName}
                   onChange={(e) => setClientFormData({ ...clientFormData, storeName: e.target.value })}
                   required
-                  placeholder="e.g. Subh Lagan Sarees Varanasi"
+                  placeholder="e.g. Arun Vastralay or Veeraj Brand Seller"
                   className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500/20 bg-stone-50/50"
                 />
+                {clientFormData.storeName && (
+                  <div className="mt-1.5 flex items-center gap-1.5 text-[10px] text-amber-900 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200">
+                    <Globe className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+                    <span className="font-semibold truncate">
+                      Store Link: /store/{getStoreSlug(clientFormData.storeName)}
+                    </span>
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
