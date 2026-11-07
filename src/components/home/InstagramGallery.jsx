@@ -1,5 +1,6 @@
 import React from 'react';
 import { Instagram } from 'lucide-react';
+import { useStore } from '../../context/StoreContext.jsx';
 
 const instaPosts = [
   'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80',
@@ -11,13 +12,18 @@ const instaPosts = [
 ];
 
 const InstagramGallery = () => {
+  const { store, isBoutiqueStore } = useStore();
+  const handle = isBoutiqueStore && store?.name
+    ? `@${store.name.replace(/\s+/g, '')}`
+    : '@SubhLaganSarees';
+
   return (
     <section className="py-12 bg-cream/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-xl mx-auto mb-8">
           <div className="flex items-center justify-center space-x-2 text-primary font-bold text-xs uppercase tracking-widest mb-1">
             <Instagram className="w-4 h-4 text-gold" />
-            <span>@SubhLaganSarees</span>
+            <span>{handle}</span>
           </div>
           <h2 className="font-serif text-2xl sm:text-3xl font-bold text-brandText">
             Instagram

@@ -13,44 +13,63 @@ import InstagramGallery from '../components/home/InstagramGallery.jsx';
 import NewsletterSection from '../components/home/NewsletterSection.jsx';
 import ProductGrid from '../components/product/ProductGrid.jsx';
 import { Sparkles, ArrowRight, HeartHandshake, Award, Store, ShieldCheck } from 'lucide-react';
-import { fallbackSarees } from '../data/fallbackProducts.js';
+import { getFallbackSareesForStore } from '../data/fallbackProducts.js';
+import { useStore } from '../context/StoreContext.jsx';
 
 const Home = () => {
+  const { store, isBoutiqueStore } = useStore();
+  const currentStoreSlug = store?.slug || 'subh-lagan';
+  const initialFallback = getFallbackSareesForStore(currentStoreSlug);
+
   const [categories, setCategories] = useState([]);
-  const [bestSellers, setBestSellers] = useState(fallbackSarees.slice(0, 4));
-  const [newArrivals, setNewArrivals] = useState(fallbackSarees.slice(4, 8));
-  const [bridalCollection, setBridalCollection] = useState(fallbackSarees.filter(p => p.isBridal).slice(0, 4));
-  const [silkCollection, setSilkCollection] = useState(fallbackSarees.slice(0, 4));
-  const [trending, setTrending] = useState(fallbackSarees.slice(2, 6));
+  const [bestSellers, setBestSellers] = useState(initialFallback.slice(0, 4));
+  const [newArrivals, setNewArrivals] = useState(initialFallback.slice(4, 8).length ? initialFallback.slice(4, 8) : initialFallback.slice(0, 4));
+  const [bridalCollection, setBridalCollection] = useState(initialFallback.filter(p => p.isBridal).slice(0, 4));
+  const [silkCollection, setSilkCollection] = useState(initialFallback.slice(0, 4));
+  const [trending, setTrending] = useState(initialFallback.slice(2, 6).length ? initialFallback.slice(2, 6) : initialFallback.slice(0, 4));
   const [loading, setLoading] = useState(false);
+
+  // Helper to keep links within boutique store if active
+  const getStoreLink = (path) => {
+    if (!isBoutiqueStore) return path;
+    if (path.startsWith('/shop')) {
+      return path.includes('?')
+        ? `/store/${store.slug}/shop${path.substring(5)}`
+        : `/store/${store.slug}/shop`;
+    }
+    return path;
+  };
 
   useEffect(() => {
     const fetchHomeData = async () => {
       try {
         setLoading(true);
+        const activeSlug = store?.slug || 'subh-lagan';
 
         const [catRes, allRes, bestRes, newRes, bridalRes, silkRes, trendRes] = await Promise.all([
           categoryApi.getCategories().catch(() => ({ success: false })),
-          productApi.getProducts({ limit: 12 }).catch(() => ({ success: false })),
-          productApi.getProducts({ isBestSeller: 'true', limit: 4 }).catch(() => ({ success: false })),
-          productApi.getProducts({ isNewArrival: 'true', limit: 4 }).catch(() => ({ success: false })),
-          productApi.getProducts({ isBridal: 'true', limit: 4 }).catch(() => ({ success: false })),
-          productApi.getProducts({ category: 'silk-sarees', limit: 4 }).catch(() => ({ success: false })),
-          productApi.getProducts({ sort: 'rating', limit: 4 }).catch(() => ({ success: false })),
+          productApi.getProducts({ store: activeSlug, limit: 12 }).catch(() => ({ success: false })),
+          productApi.getProducts({ store: activeSlug, isBestSeller: 'true', limit: 4 }).catch(() => ({ success: false })),
+          productApi.getProducts({ store: activeSlug, isNewArrival: 'true', limit: 4 }).catch(() => ({ success: false })),
+          productApi.getProducts({ store: activeSlug, isBridal: 'true', limit: 4 }).catch(() => ({ success: false })),
+          productApi.getProducts({ store: activeSlug, category: 'silk-sarees', limit: 4 }).catch(() => ({ success: false })),
+          productApi.getProducts({ store: activeSlug, sort: 'rating', limit: 4 }).catch(() => ({ success: false })),
         ]);
 
         if (catRes.success) setCategories(catRes.categories || []);
 
+        const fallback = getFallbackSareesForStore(activeSlug);
+
         const allProds = (allRes.success && allRes.products && allRes.products.length > 0)
           ? allRes.products
-          : fallbackSarees;
+          : fallback;
 
         // Dynamically ensure each home shelf displays sarees from database (with fallback)
         setBestSellers(bestRes.success && bestRes.products?.length > 0 ? bestRes.products : allProds.slice(0, 4));
-        setNewArrivals(newRes.success && newRes.products?.length > 0 ? newRes.products : allProds.slice(4, 8));
-        setBridalCollection(bridalRes.success && bridalRes.products?.length > 0 ? bridalRes.products : allProds.filter(p => p.isBridal || p.price > 12000).slice(0, 4));
-        setSilkCollection(silkRes.success && silkRes.products?.length > 0 ? silkRes.products : allProds.filter(p => p.fabric?.toLowerCase().includes('silk')).slice(0, 4));
-        setTrending(trendRes.success && trendRes.products?.length > 0 ? trendRes.products : allProds.slice(0, 4));
+        setNewArrivals(newRes.success && newRes.products?.length > 0 ? newRes.products : (allProds.slice(4, 8).length ? allProds.slice(4, 8) : allProds.slice(0, 4)));
+        setBridalCollection(bridalRes.success && bridalRes.products?.length > 0 ? bridalRes.products : (allProds.filter(p => p.isBridal || p.price > 12000).slice(0, 4)));
+        setSilkCollection(silkRes.success && silkRes.products?.length > 0 ? silkRes.products : (allProds.filter(p => p.fabric?.toLowerCase().includes('silk')).slice(0, 4)));
+        setTrending(trendRes.success && trendRes.products?.length > 0 ? trendRes.products : (allProds.slice(2, 6).length ? allProds.slice(2, 6) : allProds.slice(0, 4)));
       } catch (error) {
         console.error('Error fetching home data:', error);
       } finally {
@@ -59,7 +78,7 @@ const Home = () => {
     };
 
     fetchHomeData();
-  }, []);
+  }, [store?.slug]);
 
   return (
     <div className="space-y-0">
@@ -86,7 +105,7 @@ const Home = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {/* Occasion 1: Wedding & Bridal */}
             <Link
-              to="/shop?occasion=Bridal"
+              to={getStoreLink('/shop?occasion=Bridal')}
               className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5"
             >
               <img
@@ -104,7 +123,7 @@ const Home = () => {
 
             {/* Occasion 2: Festive Celebrations */}
             <Link
-              to="/shop?occasion=Festive"
+              to={getStoreLink('/shop?occasion=Festive')}
               className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5"
             >
               <img
@@ -122,7 +141,7 @@ const Home = () => {
 
             {/* Occasion 3: Party & Reception */}
             <Link
-              to="/shop?occasion=Party%20Wear"
+              to={getStoreLink('/shop?occasion=Party%20Wear')}
               className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5"
             >
               <img
@@ -140,7 +159,7 @@ const Home = () => {
 
             {/* Occasion 4: Traditional & Puja */}
             <Link
-              to="/shop?occasion=Traditional"
+              to={getStoreLink('/shop?occasion=Traditional')}
               className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5"
             >
               <img
@@ -167,7 +186,7 @@ const Home = () => {
               Best Sellers
             </h2>
             <Link
-              to="/shop?isBestSeller=true"
+              to={getStoreLink('/shop?isBestSeller=true')}
               className="inline-flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-primary hover:text-gold-dark transition"
             >
               <span>View All</span>
@@ -189,7 +208,7 @@ const Home = () => {
               Featured Brands
             </h2>
             <Link
-              to="/shop"
+              to={getStoreLink('/shop')}
               className="inline-flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-primary hover:text-gold-dark transition"
             >
               <span>View All</span>
@@ -198,14 +217,14 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {/* Brand 1: Subh Lagan Privé */}
+            {/* Brand 1: Boutique Signature or Subh Lagan Privé */}
             <Link
-              to="/shop?isBridal=true"
+              to={getStoreLink('/shop?isBridal=true')}
               className="group relative h-80 sm:h-96 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex flex-col justify-between p-5 bg-stone-900"
             >
               <img
                 src="https://images.unsplash.com/photo-1610030469668-8e9f641aaf27?auto=format&fit=crop&w=600&q=80"
-                alt="Subh Lagan Privé"
+                alt={isBoutiqueStore ? `${store.name} Signature` : 'Subh Lagan Privé'}
                 className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-108 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#1A030A] via-[#1A030A]/40 to-black/30"></div>
@@ -221,7 +240,7 @@ const Home = () => {
                   <Sparkles className="w-4 h-4" />
                 </div>
                 <h3 className="font-serif text-lg sm:text-xl font-bold text-white drop-shadow-md group-hover:text-gold-light transition">
-                  Subh Lagan Privé
+                  {isBoutiqueStore ? `${store.name} Signature` : 'Subh Lagan Privé'}
                 </h3>
                 <p className="text-xs text-white/80 font-medium mt-1">
                   Couture Bridal & Master Zari
@@ -234,7 +253,7 @@ const Home = () => {
 
             {/* Brand 2: Varanasi Silk Guild */}
             <Link
-              to="/shop?category=banarasi-sarees"
+              to={getStoreLink('/shop?category=banarasi-sarees')}
               className="group relative h-80 sm:h-96 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex flex-col justify-between p-5 bg-stone-900"
             >
               <img
@@ -345,7 +364,7 @@ const Home = () => {
               New Arrivals
             </h2>
             <Link
-              to="/shop?isNewArrival=true"
+              to={getStoreLink('/shop?isNewArrival=true')}
               className="inline-flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-primary hover:text-gold-dark transition"
             >
               <span>View All</span>
@@ -364,7 +383,7 @@ const Home = () => {
               Shop By Fabric
             </h2>
             <Link
-              to="/shop"
+              to={getStoreLink('/shop')}
               className="inline-flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-primary hover:text-gold-dark transition"
             >
               <span>View All</span>
@@ -375,7 +394,7 @@ const Home = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {/* Fabric 1: Pure Katan Silk */}
             <Link
-              to="/shop?fabric=Pure%20Katan%20Silk"
+              to={getStoreLink('/shop?fabric=Pure%20Katan%20Silk')}
               className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5"
             >
               <img
@@ -402,7 +421,7 @@ const Home = () => {
 
             {/* Fabric 2: Kanchipuram Silk */}
             <Link
-              to="/shop?fabric=Pure%20Kanchipuram%20Silk"
+              to={getStoreLink('/shop?fabric=Pure%20Kanchipuram%20Silk')}
               className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5"
             >
               <img
@@ -429,7 +448,7 @@ const Home = () => {
 
             {/* Fabric 3: Pure Organza Silk */}
             <Link
-              to="/shop?fabric=Pure%20Organza%20Silk"
+              to={getStoreLink('/shop?fabric=Pure%20Organza%20Silk')}
               className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5"
             >
               <img
@@ -456,7 +475,7 @@ const Home = () => {
 
             {/* Fabric 4: Viscose Georgette */}
             <Link
-              to="/shop?fabric=Viscose%20Georgette"
+              to={getStoreLink('/shop?fabric=Viscose%20Georgette')}
               className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5"
             >
               <img
@@ -492,7 +511,7 @@ const Home = () => {
               Trending
             </h2>
             <Link
-              to="/shop?sort=rating"
+              to={getStoreLink('/shop?sort=rating')}
               className="inline-flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-primary hover:text-gold-dark transition"
             >
               <span>View All</span>

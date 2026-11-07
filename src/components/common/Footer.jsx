@@ -6,6 +6,16 @@ import { useStore } from '../../context/StoreContext.jsx';
 const Footer = () => {
   const { store, isBoutiqueStore } = useStore();
 
+  const getLink = (path) => {
+    if (!isBoutiqueStore) return path;
+    if (path.startsWith('/shop')) {
+      return path.includes('?')
+        ? `/store/${store.slug}/shop${path.substring(5)}`
+        : `/store/${store.slug}/shop`;
+    }
+    return path;
+  };
+
   return (
     <footer className="bg-secondary-dark text-stone-200 pt-8 pb-8 border-t-2 border-gold/40">
       {/* Main Footer Links */}
@@ -68,12 +78,12 @@ const Footer = () => {
               Collections
             </h3>
             <ul className="space-y-1.5 text-xs text-stone-200">
-              <li><Link to="/shop?category=banarasi-sarees" className="hover:text-white transition">Banarasi Sarees</Link></li>
-              <li><Link to="/shop?category=kanjivaram-sarees" className="hover:text-white transition">Kanjivaram Sarees</Link></li>
-              <li><Link to="/shop?category=silk-sarees" className="hover:text-white transition">Pure Silk Sarees</Link></li>
-              <li><Link to="/shop?category=bridal-sarees" className="hover:text-white transition">Bridal Sarees</Link></li>
-              <li><Link to="/shop?category=organza-sarees" className="hover:text-white transition">Organza Sarees</Link></li>
-              <li><Link to="/shop?category=georgette-sarees" className="hover:text-white transition">Georgette Sarees</Link></li>
+              <li><Link to={getLink('/shop?category=banarasi-sarees')} className="hover:text-white transition">Banarasi Sarees</Link></li>
+              <li><Link to={getLink('/shop?category=kanjivaram-sarees')} className="hover:text-white transition">Kanjivaram Sarees</Link></li>
+              <li><Link to={getLink('/shop?category=silk-sarees')} className="hover:text-white transition">Pure Silk Sarees</Link></li>
+              <li><Link to={getLink('/shop?category=bridal-sarees')} className="hover:text-white transition">Bridal Sarees</Link></li>
+              <li><Link to={getLink('/shop?category=organza-sarees')} className="hover:text-white transition">Organza Sarees</Link></li>
+              <li><Link to={getLink('/shop?category=georgette-sarees')} className="hover:text-white transition">Georgette Sarees</Link></li>
             </ul>
           </div>
 
@@ -83,11 +93,11 @@ const Footer = () => {
               Explore
             </h3>
             <ul className="space-y-1.5 text-xs text-stone-200">
-              <li><Link to="/about" className="hover:text-white transition">About Our Brand</Link></li>
-              <li><Link to="/shop?sort=bestseller" className="hover:text-white transition">Bestsellers</Link></li>
-              <li><Link to="/shop?isBridal=true" className="hover:text-white transition">Bridal Edit</Link></li>
-              <li><Link to="/shop?sort=newest" className="hover:text-white transition">New Arrivals</Link></li>
-              <li><Link to="/contact" className="hover:text-white transition">Contact Us</Link></li>
+              <li><Link to={isBoutiqueStore ? `/store/${store.slug}/about` : '/about'} className="hover:text-white transition">About Our Brand</Link></li>
+              <li><Link to={getLink('/shop?sort=bestseller')} className="hover:text-white transition">Bestsellers</Link></li>
+              <li><Link to={getLink('/shop?isBridal=true')} className="hover:text-white transition">Bridal Edit</Link></li>
+              <li><Link to={getLink('/shop?sort=newest')} className="hover:text-white transition">New Arrivals</Link></li>
+              <li><Link to={isBoutiqueStore ? `/store/${store.slug}/contact` : '/contact'} className="hover:text-white transition">Contact Us</Link></li>
               <li><Link to="/faq" className="hover:text-white transition">FAQs</Link></li>
             </ul>
           </div>

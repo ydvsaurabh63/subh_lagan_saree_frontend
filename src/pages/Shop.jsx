@@ -6,8 +6,10 @@ import ProductGrid from '../components/product/ProductGrid.jsx';
 import ProductFilters from '../components/product/ProductFilters.jsx';
 import Breadcrumb from '../components/common/Breadcrumb.jsx';
 import { SlidersHorizontal, ChevronLeft, ChevronRight, X, AlertCircle, RefreshCw } from 'lucide-react';
+import { useStore } from '../context/StoreContext.jsx';
 
 const Shop = () => {
+  const { store } = useStore();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [products, setProducts] = useState([]);
@@ -57,6 +59,7 @@ const Shop = () => {
     setFetchError(null);
     try {
       const params = {
+        store: store?.slug || 'subh-lagan',
         page,
         limit: 12,
         sort: sortBy,
@@ -84,7 +87,7 @@ const Shop = () => {
     } finally {
       setLoading(false);
     }
-  }, [page, sortBy, selectedCategory, searchQuery, selectedFabric, selectedColor, selectedOccasion, minPrice, maxPrice, isBridal, isBestSeller, isNewArrival]);
+  }, [store?.slug, page, sortBy, selectedCategory, searchQuery, selectedFabric, selectedColor, selectedOccasion, minPrice, maxPrice, isBridal, isBestSeller, isNewArrival]);
 
   // Fetch Products whenever URL search params change
   useEffect(() => {

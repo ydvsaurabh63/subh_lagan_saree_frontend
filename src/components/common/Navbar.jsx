@@ -48,26 +48,41 @@ const Navbar = () => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
+      const searchTarget = isBoutiqueStore
+        ? `/store/${store.slug}/shop?search=${encodeURIComponent(searchQuery.trim())}`
+        : `/shop?search=${encodeURIComponent(searchQuery.trim())}`;
+      navigate(searchTarget);
       setSearchOpen(false);
       setSearchQuery('');
     }
   };
 
-  const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'All Sarees', path: '/shop' },
-    { name: 'Banarasi', path: '/shop?category=banarasi-sarees' },
-    { name: 'Kanjivaram', path: '/shop?category=kanjivaram-sarees' },
-    { name: 'Bridal Couture', path: '/shop?isBridal=true' },
-    { name: 'Pure Silk', path: '/shop?fabric=Pure+Katan+Silk' },
-    { name: 'About Us', path: '/about' },
-    { name: 'Contact', path: '/contact' },
-  ];
+  const navLinks = isBoutiqueStore
+    ? [
+        { name: 'Home', path: `/store/${store.slug}` },
+        { name: 'All Sarees', path: `/store/${store.slug}/shop` },
+        { name: 'Banarasi', path: `/store/${store.slug}/shop?category=banarasi-sarees` },
+        { name: 'Kanjivaram', path: `/store/${store.slug}/shop?category=kanjivaram-sarees` },
+        { name: 'Bridal Couture', path: `/store/${store.slug}/shop?isBridal=true` },
+        { name: 'Pure Silk', path: `/store/${store.slug}/shop?fabric=Pure+Katan+Silk` },
+        { name: 'About Us', path: `/store/${store.slug}/about` },
+        { name: 'Contact', path: `/store/${store.slug}/contact` },
+      ]
+    : [
+        { name: 'Home', path: '/' },
+        { name: 'All Sarees', path: '/shop' },
+        { name: 'Banarasi', path: '/shop?category=banarasi-sarees' },
+        { name: 'Kanjivaram', path: '/shop?category=kanjivaram-sarees' },
+        { name: 'Bridal Couture', path: '/shop?isBridal=true' },
+        { name: 'Pure Silk', path: '/shop?fabric=Pure+Katan+Silk' },
+        { name: 'About Us', path: '/about' },
+        { name: 'Contact', path: '/contact' },
+      ];
 
   const isLinkActive = (path) => {
-    if (path === '/') return location.pathname === '/';
-    if (path === '/shop') return location.pathname === '/shop' && !location.search;
+    if (path === '/' || path === `/store/${store?.slug}`) {
+      return location.pathname === path;
+    }
     return location.pathname + location.search === path;
   };
 

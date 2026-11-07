@@ -1,8 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Gift, ArrowRight, Tag } from 'lucide-react';
+import { useStore } from '../../context/StoreContext.jsx';
 
 const SpecialOfferBanner = () => {
+  const { store, isBoutiqueStore } = useStore();
+  const promoCode = isBoutiqueStore
+    ? `${(store.name || '').replace(/[^a-zA-Z]/g, '').slice(0, 8).toUpperCase()}30`
+    : 'SUBHLAGAN30';
+  const shopLink = isBoutiqueStore
+    ? `/store/${store.slug}/shop?isBridal=true`
+    : '/shop?isBridal=true';
   return (
     <section className="py-4 bg-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -28,11 +36,11 @@ const SpecialOfferBanner = () => {
                 <div className="inline-flex items-center space-x-2 bg-black/40 px-3 py-1.5 rounded-lg border border-white/20 text-xs">
                   <Tag className="w-3 h-3 text-white" />
                   <span className="text-stone-300 text-[11px]">Code:</span>
-                  <span className="font-bold text-white tracking-widest text-xs">SUBHLAGAN30</span>
+                  <span className="font-bold text-white tracking-widest text-xs">{promoCode}</span>
                 </div>
 
                 <Link
-                  to="/shop?isBridal=true"
+                  to={shopLink}
                   className="inline-flex items-center space-x-1.5 px-4 py-1.5 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow transition"
                 >
                   <span>Shop</span>

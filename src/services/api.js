@@ -18,7 +18,10 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    const storeSlug = localStorage.getItem('sls_store_slug') || 'subh-lagan';
+    const storeSlug =
+      localStorage.getItem('sls_store_slug') ||
+      localStorage.getItem('active_store_slug') ||
+      'subh-lagan';
     if (storeSlug) {
       config.headers['X-Store-Slug'] = storeSlug;
     }

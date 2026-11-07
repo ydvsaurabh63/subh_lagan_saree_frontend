@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://subh-lagan-saree-backend.onrender.com';
 
@@ -17,7 +17,7 @@ export const DEFAULT_FLAGSHIP_STORE = {
   isDefault: true,
 };
 
-// Known offline / fallback stores in case API is cold-starting
+// Known client boutique stores
 export const CLIENT_STORES = [
   DEFAULT_FLAGSHIP_STORE,
   {
@@ -48,67 +48,86 @@ export const CLIENT_STORES = [
   },
 ];
 
+export const getStoreBySlug = (slug) => {
+  if (!slug || slug === 'subh-lagan' || slug === 'default') {
+    return DEFAULT_FLAGSHIP_STORE;
+  }
+  const cleanSlug = slug.toLowerCase().trim();
+  const match = CLIENT_STORES.find((s) => s.slug.toLowerCase() === cleanSlug);
+  return match || DEFAULT_FLAGSHIP_STORE;
+};
+
+// Extract store slug strictly from current URL:
+// 1. Direct path: /store/:storeSlug
+// 2. Query param: ?store=:storeSlug
+// 3. Fallback for root / and standard routes: 'subh-lagan'
+export const detectSlugFromLocation = (pathname = '', search = '') => {
+  const pathMatch = pathname.match(/^\/store\/([a-zA-Z0-9_-]+)/i);
+  if (pathMatch && pathMatch[1]) {
+    return pathMatch[1].toLowerCase().trim();
+  }
+  const params = new URLSearchParams(search);
+  const storeParam = params.get('store');
+  if (storeParam) {
+    return storeParam.toLowerCase().trim();
+  }
+  return 'subh-lagan';
+};
+
 const StoreContext = createContext(null);
 
 export const StoreProvider = ({ children }) => {
+  const location = useLocation();
+
+  // Initialize store strictly based on the current window location
   const [store, setStore] = useState(() => {
-    const saved = localStorage.getItem('active_store_data');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        // ignore
-      }
+    if (typeof window !== 'undefined') {
+      const initialSlug = detectSlugFromLocation(window.location.pathname, window.location.search);
+      return getStoreBySlug(initialSlug);
     }
     return DEFAULT_FLAGSHIP_STORE;
   });
 
   const [loadingStore, setLoadingStore] = useState(false);
-  const location = useLocation();
 
-  // Extract store slug from:
-  // 1. Path: /store/:storeSlug (or /store/:storeSlug/...)
-  // 2. Query param: ?store=arun-vastralay
-  const detectSlugFromLocation = () => {
-    const pathMatch = location.pathname.match(/^\/store\/([a-zA-Z0-9_-]+)/i);
-    if (pathMatch && pathMatch[1]) {
-      return pathMatch[1].toLowerCase();
+  const resetToDefaultStore = () => {
+    setStore(DEFAULT_FLAGSHIP_STORE);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('active_store_slug', 'subh-lagan');
+      localStorage.setItem('sls_store_slug', 'subh-lagan');
+      localStorage.setItem('active_store_data', JSON.stringify(DEFAULT_FLAGSHIP_STORE));
     }
-    const params = new URLSearchParams(location.search);
-    const storeParam = params.get('store');
-    if (storeParam) {
-      return storeParam.toLowerCase().trim();
-    }
-    return null;
+    return DEFAULT_FLAGSHIP_STORE;
   };
 
   const loadStoreBySlug = async (slug) => {
-    if (!slug || slug === 'subh-lagan' || slug === 'default') {
-      setStore(DEFAULT_FLAGSHIP_STORE);
-      localStorage.removeItem('active_store_slug');
-      localStorage.removeItem('active_store_data');
-      return DEFAULT_FLAGSHIP_STORE;
+    const cleanSlug = (slug || 'subh-lagan').toLowerCase().trim();
+    if (cleanSlug === 'subh-lagan' || cleanSlug === 'default') {
+      return resetToDefaultStore();
     }
 
-    // First check local catalog for instant snappy rendering without flicker
-    const localMatch = CLIENT_STORES.find(
-      (s) => s.slug.toLowerCase() === slug.toLowerCase()
-    );
-    if (localMatch) {
-      setStore(localMatch);
+    // Instant snappy local match with zero latency
+    const localMatch = getStoreBySlug(cleanSlug);
+    setStore(localMatch);
+
+    if (typeof window !== 'undefined') {
       localStorage.setItem('active_store_slug', localMatch.slug);
+      localStorage.setItem('sls_store_slug', localMatch.slug);
       localStorage.setItem('active_store_data', JSON.stringify(localMatch));
     }
 
-    // Now try fetching fresh data from backend
+    // Attempt remote fetch asynchronously for live updates
     try {
       setLoadingStore(true);
-      const res = await fetch(`${API_BASE_URL}/api/stores/by-slug/${slug}`);
+      const res = await fetch(`${API_BASE_URL}/api/stores/by-slug/${cleanSlug}`);
       const data = await res.json();
       if (data.success && data.store) {
         setStore(data.store);
-        localStorage.setItem('active_store_slug', data.store.slug);
-        localStorage.setItem('active_store_data', JSON.stringify(data.store));
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('active_store_slug', data.store.slug);
+          localStorage.setItem('sls_store_slug', data.store.slug);
+          localStorage.setItem('active_store_data', JSON.stringify(data.store));
+        }
         return data.store;
       }
     } catch (err) {
@@ -117,20 +136,16 @@ export const StoreProvider = ({ children }) => {
       setLoadingStore(false);
     }
 
-    return localMatch || DEFAULT_FLAGSHIP_STORE;
+    return localMatch;
   };
 
-  const resetToDefaultStore = () => {
-    setStore(DEFAULT_FLAGSHIP_STORE);
-    localStorage.removeItem('active_store_slug');
-    localStorage.removeItem('active_store_data');
-  };
-
-  // Re-check whenever URL changes
+  // Re-synchronize store strictly whenever the route / URL changes
   useEffect(() => {
-    const slug = detectSlugFromLocation();
-    if (slug) {
-      loadStoreBySlug(slug);
+    const currentSlug = detectSlugFromLocation(location.pathname, location.search);
+    if (currentSlug === 'subh-lagan') {
+      resetToDefaultStore();
+    } else {
+      loadStoreBySlug(currentSlug);
     }
   }, [location.pathname, location.search]);
 
@@ -143,7 +158,7 @@ export const StoreProvider = ({ children }) => {
     }
   }, [store]);
 
-  const isBoutiqueStore = store && store.slug !== 'subh-lagan';
+  const isBoutiqueStore = Boolean(store && store.slug && store.slug !== 'subh-lagan');
 
   return (
     <StoreContext.Provider
@@ -168,4 +183,3 @@ export const useStore = () => {
   }
   return context;
 };
-

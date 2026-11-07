@@ -102,6 +102,9 @@ function AppShell() {
           <Route path="/" element={<Home />} />
           <Route path="/store/:storeSlug" element={<Home />} />
           <Route path="/store/:storeSlug/shop" element={<Shop />} />
+          <Route path="/store/:storeSlug/about" element={<AboutUs />} />
+          <Route path="/store/:storeSlug/contact" element={<ContactUs />} />
+          <Route path="/store/:storeSlug/product/:identifier" element={<ProductDetail />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/product/:identifier" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
