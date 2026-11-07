@@ -945,12 +945,12 @@ const HeroBanner = () => {
         {/* SECTION 1: FULL-WIDTH 3D VIRTUAL SAREE RUNWAY            */}
         {/* ========================================================= */}
         <div className="w-full flex flex-col justify-between">
-          {/* Header Row: Centered Title (Shifted Up & Reduced Size) */}
-          <div className="space-y-0.5 relative z-10 text-center mx-auto -mt-0.5 sm:-mt-1">
+          {/* Header Row: Left-Aligned Title */}
+          <div className="space-y-0.5 relative z-10 text-left -mt-0.5 sm:-mt-1">
             <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-black text-stone-950 tracking-tight leading-tight">
               Try the Look.
             </h1>
-            <p className="text-[11px] sm:text-xs text-stone-600 font-bold max-w-md mx-auto tracking-wide">
+            <p className="text-[11px] sm:text-xs text-stone-600 font-bold tracking-wide">
               Powered by TryoAI
             </p>
           </div>
