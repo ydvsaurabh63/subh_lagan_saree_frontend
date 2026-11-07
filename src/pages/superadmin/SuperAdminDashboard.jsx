@@ -1860,14 +1860,14 @@ const SuperAdminDashboard = () => {
                 <div>
                   <div className="flex items-center gap-2.5">
                     <h1 className="font-serif text-2xl sm:text-3xl font-black text-stone-950">
-                      Multi-Tenant Stores & Custom Domains
+                      Multi-Tenant Stores
                     </h1>
                     <span className="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 text-xs font-black border border-purple-300">
-                      {stores.length} Configured
+                      {stores.length} Stores
                     </span>
                   </div>
                   <p className="text-xs text-stone-500 font-medium mt-1">
-                    Zero-Code Platform: Customize industry storefronts (Sarees, Fine Jewellery, Hair Care & General), map independent custom domains, and adjust brand themes in real-time.
+                    Manage multi-industry stores, custom domains, and brand themes without writing code.
                   </p>
                 </div>
 
@@ -1877,7 +1877,7 @@ const SuperAdminDashboard = () => {
                     onClick={fetchStores}
                     disabled={loadingStores}
                     className="p-2.5 bg-white border border-stone-200 hover:border-gold rounded-xl text-stone-600 transition shadow-xs cursor-pointer"
-                    title="Refresh Stores"
+                    title="Refresh"
                   >
                     <RefreshCw className={`w-4 h-4 ${loadingStores ? 'animate-spin text-gold' : ''}`} />
                   </button>
@@ -1887,41 +1887,31 @@ const SuperAdminDashboard = () => {
                     className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-800 via-indigo-900 to-purple-900 hover:brightness-110 text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-lg shadow-purple-950/20 transition active:scale-95 cursor-pointer"
                   >
                     <Plus className="w-4 h-4 text-purple-200" />
-                    <span>+ Add New Store</span>
+                    <span>+ Add Store</span>
                   </button>
                 </div>
               </div>
 
-              {/* Multi-Tenant SaaS Architecture Guidance Box */}
-              <div className="p-5 rounded-2xl bg-gradient-to-r from-stone-900 via-purple-950 to-stone-900 text-white border border-purple-500/30 shadow-lg relative overflow-hidden">
-                <div className="absolute right-0 top-0 w-80 h-full bg-radial from-gold/15 to-transparent pointer-events-none"></div>
-                <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-5">
-                  <div className="space-y-1.5">
-                    <div className="flex items-center gap-2 text-amber-300 text-xs font-black uppercase tracking-wider font-sans">
-                      <Globe className="w-4 h-4" />
-                      <span>1. Custom Domain Mapping</span>
-                    </div>
-                    <p className="text-[11px] text-stone-300 leading-relaxed font-sans">
-                      Map any store to its own domain (e.g. <span className="text-white font-mono font-bold">arunvastralay.com</span> or <span className="text-white font-mono font-bold">kashijewels.com</span>) by pointing CNAME to <span className="text-amber-200 font-mono">cname.vercel-dns.com</span>.
-                    </p>
+              {/* Multi-Tenant Summary Strip (Minimal & Clean) */}
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-stone-900 via-purple-950 to-stone-900 text-white border border-purple-500/30 shadow-md">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                  <div className="flex items-center gap-2.5">
+                    <Globe className="w-4 h-4 text-amber-300 shrink-0" />
+                    <span className="text-stone-300">
+                      <strong className="text-white">Domain Mapping:</strong> Point CNAME to <code className="text-amber-200 font-mono">cname.vercel-dns.com</code>
+                    </span>
                   </div>
-                  <div className="space-y-1.5">
-                    <div className="flex items-center gap-2 text-amber-300 text-xs font-black uppercase tracking-wider font-sans">
-                      <Palette className="w-4 h-4" />
-                      <span>2. Zero-Code Live Theming</span>
-                    </div>
-                    <p className="text-[11px] text-stone-300 leading-relaxed font-sans">
-                      Change primary colors, 22K gold accents, serif/sans fonts, logos, and hero banners. The frontend updates immediately for all visitors with no code redeployment.
-                    </p>
+                  <div className="flex items-center gap-2.5">
+                    <Palette className="w-4 h-4 text-amber-300 shrink-0" />
+                    <span className="text-stone-300">
+                      <strong className="text-white">Live Theming:</strong> Colors, fonts & banners update in real-time
+                    </span>
                   </div>
-                  <div className="space-y-1.5">
-                    <div className="flex items-center gap-2 text-amber-300 text-xs font-black uppercase tracking-wider font-sans">
-                      <Layers className="w-4 h-4" />
-                      <span>3. Multi-Industry Ready</span>
-                    </div>
-                    <p className="text-[11px] text-stone-300 leading-relaxed font-sans">
-                      Supports <span className="text-white font-bold">Sarees & Ethnic Wear</span>, <span className="text-white font-bold">Fine Jewellery & Diamonds</span>, <span className="text-white font-bold">Hair Extensions & Care</span>, and <span className="text-white font-bold">General Retail</span> with adaptive components.
-                    </p>
+                  <div className="flex items-center gap-2.5">
+                    <Layers className="w-4 h-4 text-amber-300 shrink-0" />
+                    <span className="text-stone-300">
+                      <strong className="text-white">Industries:</strong> Saree, Jewellery, Hair & General Retail
+                    </span>
                   </div>
                 </div>
               </div>
@@ -2579,24 +2569,22 @@ const SuperAdminDashboard = () => {
       {/* ========================================================= */}
       {storeModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-md animate-fade-in overflow-y-auto">
-          <div className="bg-white rounded-3xl max-w-3xl w-full shadow-2xl border border-purple-300 relative my-auto flex flex-col max-h-[92vh] overflow-hidden">
+          <div className="bg-white rounded-3xl max-w-2xl w-full shadow-2xl border border-purple-200 relative my-auto flex flex-col max-h-[90vh] overflow-hidden">
             {/* Modal Header */}
-            <div className="px-6 py-4 bg-gradient-to-r from-stone-900 via-purple-950 to-stone-900 text-white flex items-center justify-between shrink-0 border-b border-purple-500/30">
+            <div className="px-5 py-3.5 bg-gradient-to-r from-stone-900 via-purple-950 to-stone-900 text-white flex items-center justify-between shrink-0 border-b border-purple-500/30">
               <div className="flex items-center gap-3">
                 <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold shadow-sm shrink-0 border border-white/20"
+                  className="w-9 h-9 rounded-xl flex items-center justify-center text-white font-bold shadow-sm shrink-0 border border-white/20"
                   style={{ backgroundColor: storeFormData.primaryColor || '#681B2C' }}
                 >
-                  <Palette className="w-5 h-5 text-white" />
+                  <Palette className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-serif text-base sm:text-lg font-black text-white leading-tight">
-                    {editingStore ? 'Storefront Theme & Branding Customizer' : 'Create New Multi-Industry Storefront'}
+                  <h3 className="font-serif text-base font-bold text-white leading-tight">
+                    {editingStore ? 'Customize Store' : 'Add Store'}
                   </h3>
                   <p className="text-[11px] text-purple-200">
-                    {editingStore
-                      ? `Customizing: ${storeFormData.name || editingStore.name} (${storeFormData.slug})`
-                      : 'Configure industry type, custom domain, brand colors, fonts, and banners'}
+                    {editingStore ? (storeFormData.name || editingStore.name) : 'Setup branding & custom domain'}
                   </p>
                 </div>
               </div>
@@ -2607,11 +2595,11 @@ const SuperAdminDashboard = () => {
                     href={`/store/${editingStore.slug}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold border border-white/20 transition cursor-pointer"
-                    title="Preview Live Store"
+                    className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold border border-white/20 transition cursor-pointer"
+                    title="Live Store"
                   >
                     <ExternalLink className="w-3.5 h-3.5 text-amber-300" />
-                    <span>View Store</span>
+                    <span>Live</span>
                   </a>
                 )}
                 <button
@@ -2619,19 +2607,19 @@ const SuperAdminDashboard = () => {
                   onClick={() => setStoreModalOpen(false)}
                   className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-stone-300 hover:text-white transition cursor-pointer"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-4 h-4" />
                 </button>
               </div>
             </div>
 
             {/* Sub-Tab Navigation Bar */}
-            <div className="flex items-center gap-1 px-6 py-2 bg-stone-100 border-b border-stone-200 overflow-x-auto no-scrollbar shrink-0">
+            <div className="flex items-center gap-1 px-5 py-2 bg-stone-100 border-b border-stone-200 overflow-x-auto no-scrollbar shrink-0">
               {[
-                { id: 'identity', label: '🏷️ Identity & Domain' },
-                { id: 'theme', label: '🎨 Colors & Typography' },
-                { id: 'hero', label: '🖼️ Hero & Logo' },
-                { id: 'marketing', label: '💎 Badges & Offers' },
-                { id: 'contact', label: '📞 Contact & Socials' },
+                { id: 'identity', label: '🏷️ Identity' },
+                { id: 'theme', label: '🎨 Branding' },
+                { id: 'hero', label: '🖼️ Banners' },
+                { id: 'marketing', label: '💎 Offers' },
+                { id: 'contact', label: '📞 Contact' },
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -2649,16 +2637,14 @@ const SuperAdminDashboard = () => {
             </div>
 
             {/* Form Body - Scrollable */}
-            <form onSubmit={handleSaveStore} className="flex-1 overflow-y-auto p-6 space-y-5">
-              {/* ========================================================= */}
-              {/* TAB 1: IDENTITY & DOMAIN                                 */}
-              {/* ========================================================= */}
+            <form onSubmit={handleSaveStore} className="flex-1 overflow-y-auto p-5 space-y-4">
+              {/* TAB 1: IDENTITY */}
               {storeModalTab === 'identity' && (
                 <div className="space-y-4 animate-fade-in">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
                       <label className="block text-xs font-bold text-stone-700 mb-1">
-                        Store / Boutique Name *
+                        Store Name *
                       </label>
                       <input
                         type="text"
@@ -2672,14 +2658,14 @@ const SuperAdminDashboard = () => {
                           }));
                         }}
                         required
-                        placeholder="e.g. Kundan Heritage Jewellers or Crown Luxe Hair"
-                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                        placeholder="e.g. Kundan Jewels"
+                        className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
                       />
                     </div>
 
                     <div>
                       <label className="block text-xs font-bold text-stone-700 mb-1">
-                        Store URL Slug *
+                        Store Slug *
                       </label>
                       <div className="relative">
                         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] text-stone-400 font-mono">
@@ -2695,52 +2681,35 @@ const SuperAdminDashboard = () => {
                             })
                           }
                           required
-                          placeholder="kundan-heritage-jewellers"
-                          className="w-full pl-16 pr-3.5 py-2.5 text-xs font-mono rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                          placeholder="kundan-jewels"
+                          className="w-full pl-16 pr-3 py-2 text-xs font-mono rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
                         />
                       </div>
                     </div>
                   </div>
 
-                  {/* Industry / Store Type Selector */}
+                  {/* Industry Category Cards (Concise, no paragraph text) */}
                   <div>
                     <label className="block text-xs font-bold text-stone-700 mb-1.5">
-                      Store Industry Category *
+                      Category *
                     </label>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                       {[
-                        {
-                          id: 'saree',
-                          title: '🥻 Saree Boutique',
-                          desc: '3D Runway, Pure Silk Handlooms & AI Fitting Room',
-                        },
-                        {
-                          id: 'jewellery',
-                          title: '💎 Fine Jewellery',
-                          desc: '22K Hallmarked Gold, Polki & Solitaire Diamonds',
-                        },
-                        {
-                          id: 'hair',
-                          title: '💇 Hair & Salon',
-                          desc: '100% Remy Extensions, HD Wigs & Luxury Serums',
-                        },
-                        {
-                          id: 'general',
-                          title: '🛍️ General Retail',
-                          desc: 'Universal E-Commerce Catalog & Multi-Product',
-                        },
+                        { id: 'saree', title: '🥻 Saree' },
+                        { id: 'jewellery', title: '💎 Jewellery' },
+                        { id: 'hair', title: '💇 Hair & Salon' },
+                        { id: 'general', title: '🛍️ General' },
                       ].map((type) => (
                         <div
                           key={type.id}
                           onClick={() => setStoreFormData({ ...storeFormData, storeType: type.id })}
-                          className={`p-3 rounded-2xl border text-left cursor-pointer transition ${
+                          className={`py-2.5 px-3 rounded-xl border text-center font-bold text-xs cursor-pointer transition ${
                             storeFormData.storeType === type.id
-                              ? 'border-purple-600 bg-purple-50/80 shadow-xs ring-2 ring-purple-600/20'
-                              : 'border-stone-200 bg-stone-50/50 hover:bg-stone-100/60'
+                              ? 'border-purple-600 bg-purple-50 text-purple-900 ring-2 ring-purple-600/20'
+                              : 'border-stone-200 bg-stone-50/50 text-stone-700 hover:bg-stone-100'
                           }`}
                         >
-                          <p className="font-bold text-xs text-stone-900">{type.title}</p>
-                          <p className="text-[10px] text-stone-500 mt-0.5 leading-snug">{type.desc}</p>
+                          {type.title}
                         </div>
                       ))}
                     </div>
@@ -2749,7 +2718,7 @@ const SuperAdminDashboard = () => {
                   {/* Custom Domain Input */}
                   <div>
                     <label className="block text-xs font-bold text-stone-700 mb-1">
-                      Independent Custom Domain (Optional)
+                      Custom Domain
                     </label>
                     <div className="relative">
                       <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] text-stone-400 font-mono">
@@ -2764,57 +2733,48 @@ const SuperAdminDashboard = () => {
                             customDomain: e.target.value.toLowerCase().replace(/[^a-z0-9.-]/g, ''),
                           })
                         }
-                        placeholder="e.g. kashijewels.com or arunvastralay.com"
-                        className="w-full pl-16 pr-3.5 py-2.5 text-xs font-mono rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                        placeholder="e.g. kashijewels.com"
+                        className="w-full pl-16 pr-3 py-2 text-xs font-mono rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
                       />
                     </div>
-                    {/* DNS Hint Box */}
-                    <div className="mt-2 p-3 rounded-xl bg-purple-50 border border-purple-200 text-[11px] text-purple-900 space-y-1">
-                      <div className="flex items-center gap-1.5 font-bold">
-                        <Globe className="w-3.5 h-3.5 text-purple-700" />
-                        <span>Zero-Code Custom Domain DNS Setup:</span>
-                      </div>
-                      <p className="text-purple-800 leading-relaxed">
-                        To connect this domain, add a <span className="font-mono font-bold">CNAME</span> record on your DNS provider (GoDaddy, Cloudflare, etc.) pointing to{' '}
-                        <span className="font-mono font-bold text-purple-950 bg-white px-1.5 py-0.5 rounded border border-purple-300">
-                          cname.vercel-dns.com
-                        </span>
-                        . Once pointed, any visitor opening that domain will see only this store!
-                      </p>
+                    {/* Minimal 1-line DNS Hint */}
+                    <div className="mt-1.5 flex items-center gap-1.5 text-[11px] text-purple-800">
+                      <Globe className="w-3.5 h-3.5 text-purple-600 shrink-0" />
+                      <span>DNS CNAME: <code className="bg-purple-100 text-purple-950 font-bold px-1.5 py-0.5 rounded">cname.vercel-dns.com</code></span>
                     </div>
                   </div>
 
                   {/* Tagline */}
                   <div>
                     <label className="block text-xs font-bold text-stone-700 mb-1">
-                      Tagline / Brand Philosophy
+                      Tagline
                     </label>
                     <input
                       type="text"
                       value={storeFormData.tagline}
                       onChange={(e) => setStoreFormData({ ...storeFormData, tagline: e.target.value })}
-                      placeholder="e.g. 22K Hallmarked Gold, Polki & Solitaire Diamond Masterpieces"
-                      className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                      placeholder="e.g. 22K Hallmarked Gold & Diamonds"
+                      className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
                     />
                   </div>
 
                   {/* Status & Default */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
                     <div>
                       <label className="block text-xs font-bold text-stone-700 mb-1">
-                        Store Operating Status
+                        Status
                       </label>
                       <select
                         value={storeFormData.status}
                         onChange={(e) => setStoreFormData({ ...storeFormData, status: e.target.value })}
-                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 bg-white font-medium focus:outline-none"
+                        className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 bg-white font-medium focus:outline-none"
                       >
-                        <option value="active">Active (Store Open & Accepting Orders)</option>
-                        <option value="inactive">Inactive (Temporarily Suspended)</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
                       </select>
                     </div>
 
-                    <div className="flex items-center gap-3 pt-6">
+                    <div className="flex items-center gap-2.5 pt-5 sm:pt-6">
                       <input
                         type="checkbox"
                         id="isDefaultStore"
@@ -2823,317 +2783,238 @@ const SuperAdminDashboard = () => {
                         className="w-4 h-4 text-purple-600 rounded focus:ring-purple-500"
                       />
                       <label htmlFor="isDefaultStore" className="text-xs font-bold text-stone-700 cursor-pointer">
-                        Set as Default Flagship Store (Root Domain /)
+                        Default Store (Root /)
                       </label>
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* ========================================================= */}
-              {/* TAB 2: BRAND COLORS & TYPOGRAPHY                         */}
-              {/* ========================================================= */}
+              {/* TAB 2: BRANDING & THEME */}
               {storeModalTab === 'theme' && (
-                <div className="space-y-5 animate-fade-in">
-                  {/* Preset Theme Buttons */}
+                <div className="space-y-4 animate-fade-in">
+                  {/* Preset Buttons (Names only, no paragraph text) */}
                   <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <label className="text-xs font-black uppercase tracking-wider text-stone-700 flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-gold" />
-                        <span>Instant Luxury Theme Presets (1-Click Apply)</span>
-                      </label>
-                      <span className="text-[10px] text-stone-400">Click to apply palette</span>
-                    </div>
-
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                    <label className="text-xs font-bold text-stone-700 block mb-1.5">
+                      Presets
+                    </label>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                       {THEME_PRESETS.map((preset) => (
                         <button
                           key={preset.name}
                           type="button"
                           onClick={() => applyPreset(preset)}
-                          className="p-2.5 rounded-xl border border-stone-200 hover:border-gold bg-stone-50 hover:bg-amber-50/40 text-left transition cursor-pointer flex flex-col justify-between"
+                          className="p-2 rounded-xl border border-stone-200 hover:border-gold bg-stone-50 hover:bg-amber-50/50 transition cursor-pointer flex items-center justify-between"
                         >
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="font-bold text-xs text-stone-900 truncate">
-                              {preset.name}
-                            </span>
-                            <div className="flex items-center gap-1 shrink-0">
-                              <span
-                                className="w-3.5 h-3.5 rounded-full border border-stone-300 shadow-xs"
-                                style={{ backgroundColor: preset.primary }}
-                              />
-                              <span
-                                className="w-3.5 h-3.5 rounded-full border border-stone-300 shadow-xs"
-                                style={{ backgroundColor: preset.gold }}
-                              />
-                            </div>
+                          <span className="font-bold text-xs text-stone-800 truncate mr-1.5">
+                            {preset.name}
+                          </span>
+                          <div className="flex items-center gap-1 shrink-0">
+                            <span
+                              className="w-3 h-3 rounded-full border border-stone-300"
+                              style={{ backgroundColor: preset.primary }}
+                            />
+                            <span
+                              className="w-3 h-3 rounded-full border border-stone-300"
+                              style={{ backgroundColor: preset.gold }}
+                            />
                           </div>
-                          <p className="text-[10px] text-stone-500 leading-tight">{preset.desc}</p>
                         </button>
                       ))}
                     </div>
                   </div>
 
                   {/* Manual Color Pickers */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 rounded-2xl bg-stone-50 border border-stone-200">
-                    {/* 1. Primary Brand Color */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3.5 rounded-2xl bg-stone-50 border border-stone-200">
                     <div>
-                      <label className="block text-xs font-bold text-stone-700 mb-1.5">
-                        Primary Brand Color
+                      <label className="block text-xs font-bold text-stone-700 mb-1">
+                        Primary Color
                       </label>
                       <div className="flex items-center gap-2">
                         <input
                           type="color"
                           value={storeFormData.primaryColor || '#681B2C'}
                           onChange={(e) => setStoreFormData({ ...storeFormData, primaryColor: e.target.value })}
-                          className="w-10 h-10 rounded-xl cursor-pointer border border-stone-300 p-0.5 bg-white"
+                          className="w-9 h-9 rounded-xl cursor-pointer border border-stone-300 p-0.5 bg-white"
                         />
                         <input
                           type="text"
                           value={storeFormData.primaryColor || '#681B2C'}
                           onChange={(e) => setStoreFormData({ ...storeFormData, primaryColor: e.target.value })}
-                          className="w-full px-3 py-2 text-xs font-mono font-bold uppercase rounded-xl border border-stone-200 bg-white"
+                          className="w-full px-2.5 py-1.5 text-xs font-mono font-bold uppercase rounded-lg border border-stone-200 bg-white"
                         />
                       </div>
-                      <p className="text-[10px] text-stone-400 mt-1">Header, CTA buttons & brand identity</p>
                     </div>
 
-                    {/* 2. Secondary / Gold Accent */}
                     <div>
-                      <label className="block text-xs font-bold text-stone-700 mb-1.5">
-                        Gold / Highlight Accent
+                      <label className="block text-xs font-bold text-stone-700 mb-1">
+                        Accent Gold
                       </label>
                       <div className="flex items-center gap-2">
                         <input
                           type="color"
                           value={storeFormData.secondaryColor || '#C6A15B'}
                           onChange={(e) => setStoreFormData({ ...storeFormData, secondaryColor: e.target.value })}
-                          className="w-10 h-10 rounded-xl cursor-pointer border border-stone-300 p-0.5 bg-white"
+                          className="w-9 h-9 rounded-xl cursor-pointer border border-stone-300 p-0.5 bg-white"
                         />
                         <input
                           type="text"
                           value={storeFormData.secondaryColor || '#C6A15B'}
                           onChange={(e) => setStoreFormData({ ...storeFormData, secondaryColor: e.target.value })}
-                          className="w-full px-3 py-2 text-xs font-mono font-bold uppercase rounded-xl border border-stone-200 bg-white"
+                          className="w-full px-2.5 py-1.5 text-xs font-mono font-bold uppercase rounded-lg border border-stone-200 bg-white"
                         />
                       </div>
-                      <p className="text-[10px] text-stone-400 mt-1">Badges, prices & golden borders</p>
                     </div>
 
-                    {/* 3. Typography Family */}
                     <div>
-                      <label className="block text-xs font-bold text-stone-700 mb-1.5">
-                        Brand Typography Font
+                      <label className="block text-xs font-bold text-stone-700 mb-1">
+                        Typography
                       </label>
                       <select
                         value={storeFormData.fontFamily || 'serif'}
                         onChange={(e) => setStoreFormData({ ...storeFormData, fontFamily: e.target.value })}
-                        className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 bg-white font-medium focus:outline-none mt-1"
+                        className="w-full px-2.5 py-2 text-xs rounded-xl border border-stone-200 bg-white font-medium focus:outline-none"
                       >
-                        <option value="serif">Royal Serif (Playfair / Cinzel)</option>
-                        <option value="sans">Modern Sans (Montserrat / Inter)</option>
-                        <option value="luxury">Haute Couture (Cormorant Garamond)</option>
+                        <option value="serif">Royal Serif</option>
+                        <option value="sans">Modern Sans</option>
+                        <option value="luxury">Haute Couture</option>
                       </select>
-                      <p className="text-[10px] text-stone-400 mt-1">Applied to headlines & luxury banners</p>
                     </div>
                   </div>
 
-                  {/* Real-Time Live Preview Mockup Box */}
+                  {/* Compact Live Preview */}
                   <div>
-                    <label className="block text-xs font-black uppercase tracking-wider text-stone-700 mb-2">
-                      Real-Time Storefront Live Preview
+                    <label className="block text-xs font-bold text-stone-700 mb-1.5">
+                      Preview
                     </label>
-                    <div className="rounded-2xl border border-stone-300 overflow-hidden shadow-sm">
-                      {/* Top Bar Preview */}
+                    <div className="rounded-xl border border-stone-300 overflow-hidden shadow-xs">
                       <div
-                        className="py-1 px-4 text-center text-[10px] font-bold text-white flex items-center justify-center gap-1.5"
-                        style={{ backgroundColor: storeFormData.secondaryColor || '#C6A15B' }}
-                      >
-                        <Sparkles className="w-3 h-3 text-white" />
-                        <span>
-                          {storeFormData.promoDiscount || 'Special Festive Promotion'} • Use Code: {storeFormData.promoCode || 'SAVE20'}
-                        </span>
-                      </div>
-
-                      {/* Header Preview */}
-                      <div
-                        className="p-4 text-white flex items-center justify-between"
+                        className="p-3 text-white flex items-center justify-between"
                         style={{ backgroundColor: storeFormData.primaryColor || '#681B2C' }}
                       >
-                        <div className="flex items-center gap-2">
-                          <div
-                            className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shadow-xs"
-                            style={{
-                              backgroundColor: storeFormData.secondaryColor || '#C6A15B',
-                              color: storeFormData.primaryColor || '#681B2C',
-                            }}
-                          >
-                            {storeFormData.name ? storeFormData.name.charAt(0).toUpperCase() : 'S'}
-                          </div>
-                          <span
-                            className={`text-base font-bold tracking-wide ${
-                              storeFormData.fontFamily === 'sans'
-                                ? 'font-sans'
-                                : storeFormData.fontFamily === 'luxury'
-                                ? 'font-serif italic'
-                                : 'font-serif'
-                            }`}
-                          >
-                            {storeFormData.name || 'Your Storefront Name'}
-                          </span>
-                        </div>
-
-                        <div className="flex items-center gap-2 text-xs">
-                          <span className="hidden sm:inline text-stone-200 text-[11px]">Collection</span>
-                          <span className="hidden sm:inline text-stone-200 text-[11px]">About</span>
-                          <span
-                            className="px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider shadow-sm"
-                            style={{
-                              backgroundColor: storeFormData.secondaryColor || '#C6A15B',
-                              color: '#1a1a1a',
-                            }}
-                          >
-                            Shop Now
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Mini Hero Mockup */}
-                      <div className="p-6 bg-stone-900 text-white flex flex-col items-center justify-center text-center space-y-2">
                         <span
-                          className="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider border border-white/20"
-                          style={{ color: storeFormData.secondaryColor || '#C6A15B' }}
-                        >
-                          {storeFormData.trustBadge || '100% Certified Authentic Quality'}
-                        </span>
-                        <h4
-                          className={`text-lg sm:text-xl font-black text-white ${
-                            storeFormData.fontFamily === 'sans' ? 'font-sans' : 'font-serif'
+                          className={`text-sm font-bold ${
+                            storeFormData.fontFamily === 'sans'
+                              ? 'font-sans'
+                              : storeFormData.fontFamily === 'luxury'
+                              ? 'font-serif italic'
+                              : 'font-serif'
                           }`}
                         >
-                          {storeFormData.heroHeading || 'Exquisite Handcrafted Masterpieces'}
-                        </h4>
-                        <p className="text-[11px] text-stone-300 max-w-md">
-                          {storeFormData.heroSubheading || storeFormData.tagline || 'Direct to your doorstep with Cash on Delivery.'}
-                        </p>
+                          {storeFormData.name || 'Store Name'}
+                        </span>
+                        <span
+                          className="px-2.5 py-0.5 rounded text-[10px] font-bold"
+                          style={{
+                            backgroundColor: storeFormData.secondaryColor || '#C6A15B',
+                            color: '#1a1a1a',
+                          }}
+                        >
+                          Shop Now
+                        </span>
                       </div>
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* ========================================================= */}
-              {/* TAB 3: HERO & LOGO MEDIA                                 */}
-              {/* ========================================================= */}
+              {/* TAB 3: BANNERS & LOGO */}
               {storeModalTab === 'hero' && (
-                <div className="space-y-4 animate-fade-in">
+                <div className="space-y-3.5 animate-fade-in">
                   <div>
                     <label className="block text-xs font-bold text-stone-700 mb-1">
-                      Store Logo Image URL
+                      Logo URL
                     </label>
                     <input
                       type="url"
                       value={storeFormData.logo}
                       onChange={(e) => setStoreFormData({ ...storeFormData, logo: e.target.value })}
                       placeholder="https://example.com/logo.png"
-                      className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                      className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
                     />
-                    {storeFormData.logo && (
-                      <div className="mt-2 w-16 h-16 rounded-xl border border-stone-200 overflow-hidden bg-stone-50 p-1">
-                        <img src={storeFormData.logo} alt="Logo Preview" className="w-full h-full object-contain" />
-                      </div>
-                    )}
                   </div>
 
                   <div>
                     <label className="block text-xs font-bold text-stone-700 mb-1">
-                      Custom Hero Banner Image URL (Full-Width High-Res)
+                      Hero Banner URL
                     </label>
                     <input
                       type="url"
                       value={storeFormData.heroBannerUrl}
                       onChange={(e) => setStoreFormData({ ...storeFormData, heroBannerUrl: e.target.value })}
-                      placeholder="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1920&q=85"
-                      className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                      placeholder="https://images.unsplash.com/photo-..."
+                      className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
                     />
                     {storeFormData.heroBannerUrl && (
-                      <div className="mt-2 h-36 rounded-2xl border border-stone-200 overflow-hidden">
-                        <img src={storeFormData.heroBannerUrl} alt="Hero Banner Preview" className="w-full h-full object-cover" />
+                      <div className="mt-2 h-28 rounded-xl border border-stone-200 overflow-hidden">
+                        <img src={storeFormData.heroBannerUrl} alt="Hero Banner" className="w-full h-full object-cover" />
                       </div>
                     )}
-                    <p className="text-[10px] text-stone-400 mt-1">
-                      If provided, this image will take center stage on your store's homepage hero banner.
-                    </p>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
                       <label className="block text-xs font-bold text-stone-700 mb-1">
-                        Hero Main Headline
+                        Headline
                       </label>
                       <input
                         type="text"
                         value={storeFormData.heroHeading}
                         onChange={(e) => setStoreFormData({ ...storeFormData, heroHeading: e.target.value })}
-                        placeholder="e.g. Sacred 22K Gold & Polki Jewellery"
-                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                        placeholder="e.g. Sacred 22K Gold & Polki"
+                        className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
                       />
                     </div>
 
                     <div>
                       <label className="block text-xs font-bold text-stone-700 mb-1">
-                        Hero Subtitle / Description
+                        Subheading
                       </label>
                       <input
                         type="text"
                         value={storeFormData.heroSubheading}
                         onChange={(e) => setStoreFormData({ ...storeFormData, heroSubheading: e.target.value })}
-                        placeholder="e.g. Authentic 22K hallmarked bridal chokers & solitaires."
-                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                        placeholder="e.g. Handcrafted bridal chokers."
+                        className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
                       />
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* ========================================================= */}
-              {/* TAB 4: MARKETING & BADGES                                 */}
-              {/* ========================================================= */}
+              {/* TAB 4: OFFERS & BADGES */}
               {storeModalTab === 'marketing' && (
-                <div className="space-y-4 animate-fade-in">
+                <div className="space-y-3.5 animate-fade-in">
                   <div>
                     <label className="block text-xs font-bold text-stone-700 mb-1">
-                      Trust Badge / Certification Highlight
+                      Trust Badge
                     </label>
                     <input
                       type="text"
                       value={storeFormData.trustBadge}
                       onChange={(e) => setStoreFormData({ ...storeFormData, trustBadge: e.target.value })}
-                      placeholder="e.g. 100% BIS Hallmarked • Certified Gold & Diamonds • Insured Shipping"
-                      className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                      placeholder="e.g. 100% BIS Hallmarked • Certified Gold"
+                      className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
                     />
-                    <p className="text-[10px] text-stone-400 mt-1">
-                      Displayed on announcement bars, hero banners, and checkout pages.
-                    </p>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
                       <label className="block text-xs font-bold text-stone-700 mb-1">
-                        Promo Discount Text
+                        Promo Discount
                       </label>
                       <input
                         type="text"
                         value={storeFormData.promoDiscount}
                         onChange={(e) => setStoreFormData({ ...storeFormData, promoDiscount: e.target.value })}
-                        placeholder="e.g. Flat 30% Off Bridal or Flat 20% Off Making"
-                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                        placeholder="e.g. Flat 20% Off"
+                        className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
                       />
                     </div>
 
                     <div>
                       <label className="block text-xs font-bold text-stone-700 mb-1">
-                        Promo Coupon Code
+                        Promo Code
                       </label>
                       <input
                         type="text"
@@ -3144,23 +3025,21 @@ const SuperAdminDashboard = () => {
                             promoCode: e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''),
                           })
                         }
-                        placeholder="e.g. JEWELS20 or SUBHLAGAN30"
-                        className="w-full px-3.5 py-2.5 text-xs font-mono font-bold uppercase rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                        placeholder="e.g. JEWELS20"
+                        className="w-full px-3 py-2 text-xs font-mono font-bold uppercase rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
                       />
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* ========================================================= */}
-              {/* TAB 5: CONTACT & SOCIALS                                 */}
-              {/* ========================================================= */}
+              {/* TAB 5: CONTACT */}
               {storeModalTab === 'contact' && (
-                <div className="space-y-4 animate-fade-in">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-3.5 animate-fade-in">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
                       <label className="block text-xs font-bold text-stone-700 mb-1">
-                        WhatsApp Number (Used for 1-Click Orders) *
+                        WhatsApp *
                       </label>
                       <input
                         type="text"
@@ -3168,109 +3047,107 @@ const SuperAdminDashboard = () => {
                         onChange={(e) => setStoreFormData({ ...storeFormData, whatsapp: e.target.value })}
                         placeholder="+91 81475 40362"
                         required
-                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                        className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
                       />
                     </div>
 
                     <div>
                       <label className="block text-xs font-bold text-stone-700 mb-1">
-                        Customer Care Phone Number
+                        Phone Number
                       </label>
                       <input
                         type="text"
                         value={storeFormData.phone}
                         onChange={(e) => setStoreFormData({ ...storeFormData, phone: e.target.value })}
                         placeholder="+91 98765 43210"
-                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                        className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
                       />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
                       <label className="block text-xs font-bold text-stone-700 mb-1">
-                        Store Owner Name
+                        Owner Name
                       </label>
                       <input
                         type="text"
                         value={storeFormData.ownerName}
                         onChange={(e) => setStoreFormData({ ...storeFormData, ownerName: e.target.value })}
                         placeholder="e.g. Rameshwar Soni"
-                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                        className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
                       />
                     </div>
 
                     <div>
                       <label className="block text-xs font-bold text-stone-700 mb-1">
-                        Store Owner / Care Email
+                        Owner Email
                       </label>
                       <input
                         type="email"
                         value={storeFormData.ownerEmail}
                         onChange={(e) => setStoreFormData({ ...storeFormData, ownerEmail: e.target.value })}
                         placeholder="contact@kashijewels.com"
-                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                        className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
                       />
                     </div>
                   </div>
 
                   <div>
                     <label className="block text-xs font-bold text-stone-700 mb-1">
-                      Physical Store Address
+                      Store Address
                     </label>
                     <input
                       type="text"
                       value={storeFormData.address}
                       onChange={(e) => setStoreFormData({ ...storeFormData, address: e.target.value })}
-                      placeholder="e.g. Thatheri Bazaar, Chowk, Varanasi, Uttar Pradesh 221001"
-                      className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                      placeholder="e.g. Chowk, Varanasi, Uttar Pradesh 221001"
+                      className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
                     />
                   </div>
 
                   <div>
                     <label className="block text-xs font-bold text-stone-700 mb-1">
-                      Instagram Handle / Profile Link
+                      Instagram Handle
                     </label>
                     <input
                       type="text"
                       value={storeFormData.instagramHandle}
                       onChange={(e) => setStoreFormData({ ...storeFormData, instagramHandle: e.target.value })}
-                      placeholder="@kashijewels or https://instagram.com/kashijewels"
-                      className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                      placeholder="@kashijewels"
+                      className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
                     />
                   </div>
                 </div>
               )}
 
               {/* Modal Footer Controls */}
-              <div className="flex items-center justify-between pt-4 border-t border-stone-200 shrink-0">
+              <div className="flex items-center justify-between pt-3.5 border-t border-stone-200 shrink-0">
                 <button
                   type="button"
                   onClick={() => setStoreModalOpen(false)}
-                  className="px-4 py-2.5 text-xs font-bold text-stone-600 hover:bg-stone-100 rounded-xl transition cursor-pointer"
+                  className="px-3.5 py-2 text-xs font-bold text-stone-600 hover:bg-stone-100 rounded-xl transition cursor-pointer"
                 >
                   Cancel
                 </button>
 
-                <div className="flex items-center gap-2">
-                  <button
-                    type="submit"
-                    disabled={savingStore}
-                    className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-purple-800 via-indigo-900 to-purple-950 hover:brightness-110 text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-md transition disabled:opacity-50 cursor-pointer"
-                  >
-                    {savingStore ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin text-purple-200" />
-                        <span>Saving Changes...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Check className="w-4 h-4 text-emerald-400" />
-                        <span>{editingStore ? 'Save Storefront Changes' : 'Create Storefront'}</span>
-                      </>
-                    )}
-                  </button>
-                </div>
+                <button
+                  type="submit"
+                  disabled={savingStore}
+                  className="inline-flex items-center gap-1.5 px-5 py-2 bg-gradient-to-r from-purple-800 via-indigo-900 to-purple-950 hover:brightness-110 text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-md transition disabled:opacity-50 cursor-pointer"
+                >
+                  {savingStore ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin text-purple-200" />
+                      <span>Saving...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Save Store</span>
+                    </>
+                  )}
+                </button>
               </div>
             </form>
           </div>
