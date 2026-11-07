@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
-import { managementApi, userApi } from '../../services/api.js';
+import { managementApi, userApi, storeApi } from '../../services/api.js';
 import toast from 'react-hot-toast';
 import {
   ShieldAlert,
@@ -48,6 +48,13 @@ import {
   Copy,
   LogIn,
   Loader2,
+  Palette,
+  MapPin,
+  Tag,
+  Image as ImageIcon,
+  ShieldCheck,
+  Gem,
+  Crown,
 } from 'lucide-react';
 
 const SuperAdminDashboard = () => {
@@ -128,6 +135,117 @@ const SuperAdminDashboard = () => {
   });
   const [savingClient, setSavingClient] = useState(false);
 
+  // ==========================================
+  // MULTI-TENANT STORES & THEME CUSTOMIZER STATE
+  // ==========================================
+  const [loadingStores, setLoadingStores] = useState(false);
+  const [stores, setStores] = useState([]);
+  const [storeSearch, setStoreSearch] = useState('');
+  const [storeTypeFilter, setStoreTypeFilter] = useState('all');
+
+  const [storeModalOpen, setStoreModalOpen] = useState(false);
+  const [editingStore, setEditingStore] = useState(null);
+  const [storeModalTab, setStoreModalTab] = useState('identity'); // identity | theme | hero | marketing | contact
+  const [savingStore, setSavingStore] = useState(false);
+
+  const [storeFormData, setStoreFormData] = useState({
+    name: '',
+    slug: '',
+    storeType: 'saree',
+    customDomain: '',
+    tagline: '',
+    primaryColor: '#681B2C',
+    secondaryColor: '#C6A15B',
+    accentColor: '#8B0000',
+    fontFamily: 'serif',
+    themePreset: 'heritage',
+    heroHeading: '',
+    heroSubheading: '',
+    heroBannerUrl: '',
+    logo: '',
+    promoCode: '',
+    promoDiscount: '',
+    trustBadge: '',
+    whatsapp: '+91 81475 40362',
+    phone: '+91 98765 43210',
+    ownerName: '',
+    ownerEmail: '',
+    address: '',
+    instagramHandle: '',
+    badge: 'Verified Boutique Partner',
+    status: 'active',
+    isDefault: false,
+    notes: '',
+  });
+
+  const THEME_PRESETS = [
+    {
+      name: 'Royal Heritage Maroon',
+      type: 'saree',
+      primary: '#681B2C',
+      gold: '#C6A15B',
+      accent: '#8B0000',
+      font: 'serif',
+      desc: 'Authentic Banarasi & Kanjivaram Bridal Silks',
+    },
+    {
+      name: 'Imperial Emerald & 22K Gold',
+      type: 'jewellery',
+      primary: '#064E3B',
+      gold: '#D97706',
+      accent: '#047857',
+      font: 'serif',
+      desc: 'Hallmarked Gold, Polki & Precious Stones',
+    },
+    {
+      name: 'Royal Sapphire Navy',
+      type: 'saree',
+      primary: '#1E3A8A',
+      gold: '#E0A96D',
+      accent: '#1D4ED8',
+      font: 'luxury',
+      desc: 'Contemporary Royal Weaves & Organza',
+    },
+    {
+      name: 'Luxe Berry & Rose Gold',
+      type: 'hair',
+      primary: '#831843',
+      gold: '#F472B6',
+      accent: '#9D174D',
+      font: 'sans',
+      desc: 'Salon Grade Virgin Extensions & Care',
+    },
+    {
+      name: 'Obsidian Noir & 24K Gold',
+      type: 'general',
+      primary: '#0F172A',
+      gold: '#F59E0B',
+      accent: '#334155',
+      font: 'luxury',
+      desc: 'Ultra Luxury High Fashion & Diamonds',
+    },
+    {
+      name: 'Velvet Crimson Brocade',
+      type: 'saree',
+      primary: '#881337',
+      gold: '#FBBF24',
+      accent: '#BE123C',
+      font: 'serif',
+      desc: 'Auspicious Bridal & Festive Weaves',
+    },
+  ];
+
+  const applyPreset = (preset) => {
+    setStoreFormData((prev) => ({
+      ...prev,
+      primaryColor: preset.primary,
+      secondaryColor: preset.gold,
+      accentColor: preset.accent,
+      fontFamily: preset.font,
+    }));
+    toast.success(`Applied ${preset.name} Theme!`);
+  };
+
   // Profile Form States
   const [profileData, setProfileData] = useState({
     name: user?.name || '',
@@ -195,10 +313,25 @@ const SuperAdminDashboard = () => {
     }
   };
 
+  const fetchStores = async () => {
+    try {
+      setLoadingStores(true);
+      const res = await storeApi.getStores();
+      if (res.success && res.stores) {
+        setStores(res.stores);
+      }
+    } catch (err) {
+      console.warn('Failed to fetch stores:', err.message);
+    } finally {
+      setLoadingStores(false);
+    }
+  };
+
   useEffect(() => {
     fetchStats();
     fetchAdmins();
     fetchClients();
+    fetchStores();
   }, []);
 
   useEffect(() => {
@@ -206,6 +339,8 @@ const SuperAdminDashboard = () => {
       fetchAdmins();
     } else if (activeTab === 'manage-client') {
       fetchClients();
+    } else if (activeTab === 'manage-stores') {
+      fetchStores();
     } else if (activeTab === 'overview') {
       fetchStats();
     }
@@ -395,6 +530,153 @@ const SuperAdminDashboard = () => {
       }
     } catch (err) {
       toast.error(err.message || 'Failed to delete client');
+    }
+  };
+
+  // ==========================================
+  // MULTI-TENANT STOREFRONT CRUD HANDLERS
+  // ==========================================
+  const handleOpenAddStore = (prefill = {}) => {
+    setEditingStore(null);
+    setStoreModalTab('identity');
+    setStoreFormData({
+      name: prefill.name || '',
+      slug: prefill.slug || '',
+      storeType: prefill.storeType || 'saree',
+      customDomain: prefill.customDomain || '',
+      tagline: prefill.tagline || '',
+      primaryColor: prefill.primaryColor || '#681B2C',
+      secondaryColor: prefill.secondaryColor || '#C6A15B',
+      accentColor: prefill.accentColor || '#8B0000',
+      fontFamily: prefill.fontFamily || 'serif',
+      themePreset: prefill.themePreset || 'heritage',
+      heroHeading: prefill.heroHeading || '',
+      heroSubheading: prefill.heroSubheading || '',
+      heroBannerUrl: prefill.heroBannerUrl || '',
+      logo: prefill.logo || '',
+      promoCode: prefill.promoCode || '',
+      promoDiscount: prefill.promoDiscount || '',
+      trustBadge: prefill.trustBadge || '',
+      whatsapp: prefill.whatsapp || '+91 81475 40362',
+      phone: prefill.phone || '+91 98765 43210',
+      ownerName: prefill.ownerName || '',
+      ownerEmail: prefill.ownerEmail || '',
+      address: prefill.address || '',
+      instagramHandle: prefill.instagramHandle || '',
+      badge: prefill.badge || 'Verified Boutique Partner',
+      status: prefill.status || 'active',
+      isDefault: false,
+      notes: '',
+    });
+    setStoreModalOpen(true);
+  };
+
+  const handleOpenEditStore = (store) => {
+    setEditingStore(store);
+    setStoreModalTab('identity');
+    setStoreFormData({
+      name: store.name || '',
+      slug: store.slug || '',
+      storeType: store.storeType || 'saree',
+      customDomain: store.customDomain || '',
+      tagline: store.tagline || '',
+      primaryColor: store.primaryColor || '#681B2C',
+      secondaryColor: store.secondaryColor || '#C6A15B',
+      accentColor: store.accentColor || '#8B0000',
+      fontFamily: store.fontFamily || 'serif',
+      themePreset: store.themePreset || 'heritage',
+      heroHeading: store.heroHeading || '',
+      heroSubheading: store.heroSubheading || '',
+      heroBannerUrl: store.heroBannerUrl || '',
+      logo: store.logo || '',
+      promoCode: store.promoCode || '',
+      promoDiscount: store.promoDiscount || '',
+      trustBadge: store.trustBadge || '',
+      whatsapp: store.whatsapp || '+91 81475 40362',
+      phone: store.phone || '+91 98765 43210',
+      ownerName: store.ownerName || '',
+      ownerEmail: store.ownerEmail || '',
+      address: store.address || '',
+      instagramHandle: store.instagramHandle || '',
+      badge: store.badge || 'Verified Boutique Partner',
+      status: store.status || 'active',
+      isDefault: Boolean(store.isDefault),
+      notes: store.notes || '',
+    });
+    setStoreModalOpen(true);
+  };
+
+  const handleCustomizeStoreByClient = (client) => {
+    const slug = getStoreSlug(client.storeName || client.name);
+    const existing = stores.find(
+      (s) => s.slug === slug || (s.name && s.name.toLowerCase() === (client.storeName || client.name).toLowerCase())
+    );
+    if (existing) {
+      handleOpenEditStore(existing);
+    } else {
+      handleOpenAddStore({
+        name: client.storeName || client.name,
+        slug,
+        ownerName: client.name,
+        ownerEmail: client.email,
+        phone: client.phone,
+        whatsapp: client.phone,
+      });
+    }
+  };
+
+  const handleSaveStore = async (e) => {
+    e.preventDefault();
+    if (!storeFormData.name.trim()) {
+      toast.error('Store Name is required');
+      return;
+    }
+    try {
+      setSavingStore(true);
+      const payload = {
+        ...storeFormData,
+        slug: (storeFormData.slug || storeFormData.name).toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-'),
+        customDomain: (storeFormData.customDomain || '').toLowerCase().trim().replace(/^https?:\/\//, '').replace(/^www\./, ''),
+      };
+
+      if (editingStore && editingStore._id) {
+        const res = await storeApi.updateStore(editingStore._id, payload);
+        if (res.success) {
+          toast.success(`Store "${payload.name}" updated successfully!`);
+          setStoreModalOpen(false);
+          fetchStores();
+        }
+      } else {
+        const res = await storeApi.createStore(payload);
+        if (res.success) {
+          toast.success(`New Store "${payload.name}" created successfully!`);
+          setStoreModalOpen(false);
+          fetchStores();
+        }
+      }
+    } catch (err) {
+      toast.error(err.message || 'Failed to save store');
+    } finally {
+      setSavingStore(false);
+    }
+  };
+
+  const handleDeleteStore = async (store) => {
+    if (store.isDefault) {
+      toast.error('Cannot delete the default flagship store');
+      return;
+    }
+    if (!window.confirm(`Are you sure you want to delete store "${store.name}"? This will remove its branding from the platform.`)) {
+      return;
+    }
+    try {
+      const res = await storeApi.deleteStore(store._id);
+      if (res.success) {
+        toast.success(`Store "${store.name}" deleted successfully`);
+        fetchStores();
+      }
+    } catch (err) {
+      toast.error(err.message || 'Failed to delete store');
     }
   };
 
@@ -600,7 +882,29 @@ const SuperAdminDashboard = () => {
                   </span>
                 </button>
 
-                {/* 4. Profile */}
+                {/* 4. Multi-Tenant Stores & Custom Domains */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveTab('manage-stores');
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-xs font-bold tracking-wide transition-all ${
+                    activeTab === 'manage-stores'
+                      ? 'bg-gradient-to-r from-gold via-amber-500 to-gold-dark text-stone-950 font-black shadow-lg shadow-gold/25 translate-x-1'
+                      : 'text-cream/80 hover:bg-white/10 hover:text-white'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Store className="w-4 h-4" />
+                    <span>Multi-Tenant Stores</span>
+                  </div>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/20 font-bold">
+                    {stores.length}
+                  </span>
+                </button>
+
+                {/* 5. Profile */}
                 <button
                   type="button"
                   onClick={() => {
@@ -1494,6 +1798,15 @@ const SuperAdminDashboard = () => {
                               )}
                               <span>Login</span>
                             </button>
+                            <button
+                              type="button"
+                              onClick={() => handleCustomizeStoreByClient(cl)}
+                              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-900 text-[10px] font-bold border border-purple-200 transition cursor-pointer"
+                              title="Customize Storefront Theme, Branding & Industry"
+                            >
+                              <Palette className="w-3.5 h-3.5 text-purple-700" />
+                              <span>Customize</span>
+                            </button>
                             <a
                               href={`/store/${getStoreSlug(cl.storeName)}`}
                               target="_blank"
@@ -1538,7 +1851,366 @@ const SuperAdminDashboard = () => {
           )}
 
           {/* ===================================================== */}
-          {/* TAB 4: PROFILE                                       */}
+          {/* TAB 4: MULTI-TENANT STORES & CUSTOM DOMAINS           */}
+          {/* ===================================================== */}
+          {activeTab === 'manage-stores' && (
+            <div className="space-y-6 animate-fade-in">
+              {/* Header & Controls Strip */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-stone-200">
+                <div>
+                  <div className="flex items-center gap-2.5">
+                    <h1 className="font-serif text-2xl sm:text-3xl font-black text-stone-950">
+                      Multi-Tenant Stores & Custom Domains
+                    </h1>
+                    <span className="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 text-xs font-black border border-purple-300">
+                      {stores.length} Configured
+                    </span>
+                  </div>
+                  <p className="text-xs text-stone-500 font-medium mt-1">
+                    Zero-Code Platform: Customize industry storefronts (Sarees, Fine Jewellery, Hair Care & General), map independent custom domains, and adjust brand themes in real-time.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2.5 shrink-0">
+                  <button
+                    type="button"
+                    onClick={fetchStores}
+                    disabled={loadingStores}
+                    className="p-2.5 bg-white border border-stone-200 hover:border-gold rounded-xl text-stone-600 transition shadow-xs cursor-pointer"
+                    title="Refresh Stores"
+                  >
+                    <RefreshCw className={`w-4 h-4 ${loadingStores ? 'animate-spin text-gold' : ''}`} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleOpenAddStore()}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-purple-800 via-indigo-900 to-purple-900 hover:brightness-110 text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-lg shadow-purple-950/20 transition active:scale-95 cursor-pointer"
+                  >
+                    <Plus className="w-4 h-4 text-purple-200" />
+                    <span>+ Add New Store</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Multi-Tenant SaaS Architecture Guidance Box */}
+              <div className="p-5 rounded-2xl bg-gradient-to-r from-stone-900 via-purple-950 to-stone-900 text-white border border-purple-500/30 shadow-lg relative overflow-hidden">
+                <div className="absolute right-0 top-0 w-80 h-full bg-radial from-gold/15 to-transparent pointer-events-none"></div>
+                <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-5">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-2 text-amber-300 text-xs font-black uppercase tracking-wider font-sans">
+                      <Globe className="w-4 h-4" />
+                      <span>1. Custom Domain Mapping</span>
+                    </div>
+                    <p className="text-[11px] text-stone-300 leading-relaxed font-sans">
+                      Map any store to its own domain (e.g. <span className="text-white font-mono font-bold">arunvastralay.com</span> or <span className="text-white font-mono font-bold">kashijewels.com</span>) by pointing CNAME to <span className="text-amber-200 font-mono">cname.vercel-dns.com</span>.
+                    </p>
+                  </div>
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-2 text-amber-300 text-xs font-black uppercase tracking-wider font-sans">
+                      <Palette className="w-4 h-4" />
+                      <span>2. Zero-Code Live Theming</span>
+                    </div>
+                    <p className="text-[11px] text-stone-300 leading-relaxed font-sans">
+                      Change primary colors, 22K gold accents, serif/sans fonts, logos, and hero banners. The frontend updates immediately for all visitors with no code redeployment.
+                    </p>
+                  </div>
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-2 text-amber-300 text-xs font-black uppercase tracking-wider font-sans">
+                      <Layers className="w-4 h-4" />
+                      <span>3. Multi-Industry Ready</span>
+                    </div>
+                    <p className="text-[11px] text-stone-300 leading-relaxed font-sans">
+                      Supports <span className="text-white font-bold">Sarees & Ethnic Wear</span>, <span className="text-white font-bold">Fine Jewellery & Diamonds</span>, <span className="text-white font-bold">Hair Extensions & Care</span>, and <span className="text-white font-bold">General Retail</span> with adaptive components.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Search & Industry Filter Tabs */}
+              <div className="bg-white p-4 rounded-2xl border border-stone-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-3">
+                <div className="relative w-full md:w-80">
+                  <Search className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={storeSearch}
+                    onChange={(e) => setStoreSearch(e.target.value)}
+                    placeholder="Search by store name, slug, domain..."
+                    className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                  />
+                  {storeSearch && (
+                    <button
+                      type="button"
+                      onClick={() => setStoreSearch('')}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+
+                {/* Industry Filter Pills */}
+                <div className="flex flex-wrap items-center gap-1.5 w-full md:w-auto">
+                  {[
+                    { id: 'all', label: 'All Industries', count: stores.length },
+                    { id: 'saree', label: '🥻 Sarees', count: stores.filter((s) => (s.storeType || 'saree') === 'saree').length },
+                    { id: 'jewellery', label: '💎 Jewellery', count: stores.filter((s) => s.storeType === 'jewellery').length },
+                    { id: 'hair', label: '💇 Hair Studio', count: stores.filter((s) => s.storeType === 'hair').length },
+                    { id: 'general', label: '🛍️ General', count: stores.filter((s) => s.storeType === 'general').length },
+                  ].map((filter) => (
+                    <button
+                      key={filter.id}
+                      type="button"
+                      onClick={() => setStoreTypeFilter(filter.id)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                        storeTypeFilter === filter.id
+                          ? 'bg-purple-900 text-white shadow-sm'
+                          : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
+                      }`}
+                    >
+                      <span>{filter.label}</span>
+                      <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/20">
+                        {filter.count}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Stores Grid Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                {stores
+                  .filter((st) => {
+                    const q = storeSearch.toLowerCase().trim();
+                    const matchQ =
+                      !q ||
+                      st.name?.toLowerCase().includes(q) ||
+                      st.slug?.toLowerCase().includes(q) ||
+                      st.customDomain?.toLowerCase().includes(q) ||
+                      st.ownerName?.toLowerCase().includes(q);
+                    const matchType =
+                      storeTypeFilter === 'all' || (st.storeType || 'saree') === storeTypeFilter;
+                    return matchQ && matchType;
+                  })
+                  .map((st) => {
+                    const isSaree = (st.storeType || 'saree') === 'saree';
+                    const isJewel = st.storeType === 'jewellery';
+                    const isHair = st.storeType === 'hair';
+                    const isGeneral = st.storeType === 'general';
+
+                    const primary = st.primaryColor || '#681B2C';
+                    const secondary = st.secondaryColor || '#C6A15B';
+
+                    return (
+                      <div
+                        key={st._id || st.slug}
+                        className="bg-white rounded-2xl border border-stone-200 hover:border-purple-300 shadow-sm hover:shadow-lg transition flex flex-col justify-between overflow-hidden"
+                      >
+                        {/* Top Color Accent Strip */}
+                        <div
+                          className="h-2 w-full"
+                          style={{
+                            background: `linear-gradient(to right, ${primary}, ${secondary})`,
+                          }}
+                        />
+
+                        <div className="p-5 space-y-4 flex-1">
+                          {/* Header: Store Name & Badges */}
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="flex items-center gap-3">
+                              <div
+                                className="w-11 h-11 rounded-2xl flex items-center justify-center font-serif font-black text-white text-base shadow-sm shrink-0"
+                                style={{ backgroundColor: primary }}
+                              >
+                                {st.logo ? (
+                                  <img
+                                    src={st.logo}
+                                    alt={st.name}
+                                    className="w-full h-full object-cover rounded-2xl"
+                                  />
+                                ) : (
+                                  st.name.charAt(0).toUpperCase()
+                                )}
+                              </div>
+                              <div>
+                                <h3 className="font-serif text-base font-bold text-stone-900 leading-tight">
+                                  {st.name}
+                                </h3>
+                                <div className="flex items-center gap-1.5 mt-0.5">
+                                  <span className="text-[10px] text-stone-500 font-mono">
+                                    /store/{st.slug}
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleCopyStoreLink(st.slug)}
+                                    className="p-0.5 text-stone-400 hover:text-purple-700 transition cursor-pointer"
+                                    title="Copy Store URL"
+                                  >
+                                    <Copy className="w-3 h-3" />
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Default / Boutique Badge */}
+                            {st.isDefault ? (
+                              <span className="px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-300 text-[10px] font-black uppercase tracking-wider shrink-0">
+                                Flagship
+                              </span>
+                            ) : (
+                              <span className="px-2.5 py-1 rounded-full bg-stone-100 text-stone-700 border border-stone-200 text-[10px] font-bold shrink-0">
+                                Boutique
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Tagline */}
+                          <p className="text-xs text-stone-600 line-clamp-2 leading-relaxed">
+                            {st.tagline || 'Exclusive Heritage & Designer Collections'}
+                          </p>
+
+                          {/* Store Properties Pills */}
+                          <div className="flex flex-wrap items-center gap-2 pt-1">
+                            {/* Industry Pill */}
+                            <span
+                              className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border ${
+                                isJewel
+                                  ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                                  : isHair
+                                  ? 'bg-pink-50 text-pink-800 border-pink-300'
+                                  : isGeneral
+                                  ? 'bg-slate-100 text-slate-800 border-slate-300'
+                                  : 'bg-amber-50 text-amber-800 border-amber-300'
+                              }`}
+                            >
+                              {isJewel
+                                ? '💎 Fine Jewellery'
+                                : isHair
+                                ? '💇 Hair Studio'
+                                : isGeneral
+                                ? '🛍️ General Retail'
+                                : '🥻 Saree Boutique'}
+                            </span>
+
+                            {/* Typography Style */}
+                            <span className="px-2.5 py-1 rounded-lg bg-stone-100 text-stone-700 border border-stone-200 text-[10px] font-bold capitalize">
+                              Font: {st.fontFamily || 'serif'}
+                            </span>
+
+                            {/* Color Swatches */}
+                            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-stone-50 border border-stone-200 text-[10px]">
+                              <span
+                                className="w-3.5 h-3.5 rounded-full border border-stone-300 shadow-xs"
+                                style={{ backgroundColor: primary }}
+                                title={`Primary Brand: ${primary}`}
+                              />
+                              <span
+                                className="w-3.5 h-3.5 rounded-full border border-stone-300 shadow-xs"
+                                style={{ backgroundColor: secondary }}
+                                title={`Accent/Gold: ${secondary}`}
+                              />
+                              <span className="text-[10px] text-stone-500 font-mono font-bold">Theme</span>
+                            </div>
+                          </div>
+
+                          {/* Custom Domain Bar */}
+                          <div className="p-2.5 rounded-xl bg-stone-50 border border-stone-200/80 space-y-1">
+                            <div className="flex items-center justify-between text-[11px]">
+                              <span className="text-stone-500 font-bold flex items-center gap-1">
+                                <Globe className="w-3.5 h-3.5 text-stone-400" />
+                                Custom Domain:
+                              </span>
+                              {st.customDomain ? (
+                                <span className="px-2 py-0.2 rounded-full bg-emerald-50 text-emerald-800 font-bold text-[9px] border border-emerald-200">
+                                  Mapped
+                                </span>
+                              ) : (
+                                <span className="text-[10px] text-stone-400 italic">Not set</span>
+                              )}
+                            </div>
+                            <p className="text-xs font-mono font-bold text-stone-800 truncate">
+                              {st.customDomain ? (
+                                <a
+                                  href={`https://${st.customDomain}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-purple-800 hover:underline inline-flex items-center gap-1"
+                                >
+                                  {st.customDomain} <ArrowUpRight className="w-3 h-3" />
+                                </a>
+                              ) : (
+                                <span className="text-stone-400">cname.vercel-dns.com</span>
+                              )}
+                            </p>
+                          </div>
+
+                          {/* Contact & Promo preview */}
+                          <div className="grid grid-cols-2 gap-2 text-[11px] pt-1 border-t border-stone-100">
+                            <div>
+                              <p className="text-[10px] text-stone-400 font-bold uppercase">WhatsApp Orders</p>
+                              <p className="font-semibold text-stone-700 truncate">{st.whatsapp || st.phone || 'Not set'}</p>
+                            </div>
+                            <div>
+                              <p className="text-[10px] text-stone-400 font-bold uppercase">Active Promo</p>
+                              <p className="font-semibold text-amber-800 truncate">
+                                {st.promoDiscount ? `${st.promoDiscount} (${st.promoCode})` : 'Standard Pricing'}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Card Bottom Actions */}
+                        <div className="p-3 bg-stone-50/80 border-t border-stone-100 flex items-center justify-between gap-2">
+                          <button
+                            type="button"
+                            onClick={() => handleOpenEditStore(st)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-900 hover:bg-purple-800 text-white text-[11px] font-bold shadow-xs transition active:scale-95 cursor-pointer"
+                            title="Open Storefront Customizer"
+                          >
+                            <Palette className="w-3.5 h-3.5 text-purple-200" />
+                            <span>Customize Storefront</span>
+                          </button>
+
+                          <div className="flex items-center gap-1">
+                            <a
+                              href={`/store/${st.slug}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-1.5 rounded-lg text-stone-600 hover:text-purple-700 hover:bg-purple-50 transition cursor-pointer"
+                              title="Open Live Store in New Tab"
+                            >
+                              <ExternalLink className="w-4 h-4" />
+                            </a>
+                            {!st.isDefault && (
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteStore(st)}
+                                className="p-1.5 rounded-lg text-stone-400 hover:text-rose-600 hover:bg-rose-50 transition cursor-pointer"
+                                title="Delete Store"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+
+              {stores.length === 0 && !loadingStores && (
+                <div className="p-12 text-center bg-white rounded-3xl border border-stone-200 shadow-sm">
+                  <Store className="w-12 h-12 text-stone-300 mx-auto mb-3" />
+                  <h3 className="font-serif text-lg font-bold text-stone-900">No stores found</h3>
+                  <p className="text-xs text-stone-500 mt-1 max-w-sm mx-auto">
+                    Click "+ Add New Store" to configure your first multi-tenant boutique or industry store.
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ===================================================== */}
+          {/* TAB 5: PROFILE                                       */}
           {/* ===================================================== */}
           {activeTab === 'profile' && (
             <div className="space-y-6 animate-fade-in max-w-5xl mx-auto">
@@ -1903,8 +2575,707 @@ const SuperAdminDashboard = () => {
       )}
 
       {/* ========================================================= */}
-      {/* MODAL: ADD / EDIT CLIENT                                  */}
+      {/* MODAL: STOREFRONT THEME & BRANDING CUSTOMIZER             */}
       {/* ========================================================= */}
+      {storeModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-md animate-fade-in overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-3xl w-full shadow-2xl border border-purple-300 relative my-auto flex flex-col max-h-[92vh] overflow-hidden">
+            {/* Modal Header */}
+            <div className="px-6 py-4 bg-gradient-to-r from-stone-900 via-purple-950 to-stone-900 text-white flex items-center justify-between shrink-0 border-b border-purple-500/30">
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold shadow-sm shrink-0 border border-white/20"
+                  style={{ backgroundColor: storeFormData.primaryColor || '#681B2C' }}
+                >
+                  <Palette className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-serif text-base sm:text-lg font-black text-white leading-tight">
+                    {editingStore ? 'Storefront Theme & Branding Customizer' : 'Create New Multi-Industry Storefront'}
+                  </h3>
+                  <p className="text-[11px] text-purple-200">
+                    {editingStore
+                      ? `Customizing: ${storeFormData.name || editingStore.name} (${storeFormData.slug})`
+                      : 'Configure industry type, custom domain, brand colors, fonts, and banners'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {editingStore && (
+                  <a
+                    href={`/store/${editingStore.slug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold border border-white/20 transition cursor-pointer"
+                    title="Preview Live Store"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5 text-amber-300" />
+                    <span>View Store</span>
+                  </a>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setStoreModalOpen(false)}
+                  className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-stone-300 hover:text-white transition cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Sub-Tab Navigation Bar */}
+            <div className="flex items-center gap-1 px-6 py-2 bg-stone-100 border-b border-stone-200 overflow-x-auto no-scrollbar shrink-0">
+              {[
+                { id: 'identity', label: '🏷️ Identity & Domain' },
+                { id: 'theme', label: '🎨 Colors & Typography' },
+                { id: 'hero', label: '🖼️ Hero & Logo' },
+                { id: 'marketing', label: '💎 Badges & Offers' },
+                { id: 'contact', label: '📞 Contact & Socials' },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setStoreModalTab(tab.id)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer ${
+                    storeModalTab === tab.id
+                      ? 'bg-purple-900 text-white shadow-xs'
+                      : 'text-stone-600 hover:bg-stone-200/70'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Form Body - Scrollable */}
+            <form onSubmit={handleSaveStore} className="flex-1 overflow-y-auto p-6 space-y-5">
+              {/* ========================================================= */}
+              {/* TAB 1: IDENTITY & DOMAIN                                 */}
+              {/* ========================================================= */}
+              {storeModalTab === 'identity' && (
+                <div className="space-y-4 animate-fade-in">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-stone-700 mb-1">
+                        Store / Boutique Name *
+                      </label>
+                      <input
+                        type="text"
+                        value={storeFormData.name}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setStoreFormData((prev) => ({
+                            ...prev,
+                            name: val,
+                            slug: prev.slug || val.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-'),
+                          }));
+                        }}
+                        required
+                        placeholder="e.g. Kundan Heritage Jewellers or Crown Luxe Hair"
+                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-stone-700 mb-1">
+                        Store URL Slug *
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] text-stone-400 font-mono">
+                          /store/
+                        </span>
+                        <input
+                          type="text"
+                          value={storeFormData.slug}
+                          onChange={(e) =>
+                            setStoreFormData({
+                              ...storeFormData,
+                              slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''),
+                            })
+                          }
+                          required
+                          placeholder="kundan-heritage-jewellers"
+                          className="w-full pl-16 pr-3.5 py-2.5 text-xs font-mono rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Industry / Store Type Selector */}
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1.5">
+                      Store Industry Category *
+                    </label>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                      {[
+                        {
+                          id: 'saree',
+                          title: '🥻 Saree Boutique',
+                          desc: '3D Runway, Pure Silk Handlooms & AI Fitting Room',
+                        },
+                        {
+                          id: 'jewellery',
+                          title: '💎 Fine Jewellery',
+                          desc: '22K Hallmarked Gold, Polki & Solitaire Diamonds',
+                        },
+                        {
+                          id: 'hair',
+                          title: '💇 Hair & Salon',
+                          desc: '100% Remy Extensions, HD Wigs & Luxury Serums',
+                        },
+                        {
+                          id: 'general',
+                          title: '🛍️ General Retail',
+                          desc: 'Universal E-Commerce Catalog & Multi-Product',
+                        },
+                      ].map((type) => (
+                        <div
+                          key={type.id}
+                          onClick={() => setStoreFormData({ ...storeFormData, storeType: type.id })}
+                          className={`p-3 rounded-2xl border text-left cursor-pointer transition ${
+                            storeFormData.storeType === type.id
+                              ? 'border-purple-600 bg-purple-50/80 shadow-xs ring-2 ring-purple-600/20'
+                              : 'border-stone-200 bg-stone-50/50 hover:bg-stone-100/60'
+                          }`}
+                        >
+                          <p className="font-bold text-xs text-stone-900">{type.title}</p>
+                          <p className="text-[10px] text-stone-500 mt-0.5 leading-snug">{type.desc}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Custom Domain Input */}
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1">
+                      Independent Custom Domain (Optional)
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] text-stone-400 font-mono">
+                        https://
+                      </span>
+                      <input
+                        type="text"
+                        value={storeFormData.customDomain}
+                        onChange={(e) =>
+                          setStoreFormData({
+                            ...storeFormData,
+                            customDomain: e.target.value.toLowerCase().replace(/[^a-z0-9.-]/g, ''),
+                          })
+                        }
+                        placeholder="e.g. kashijewels.com or arunvastralay.com"
+                        className="w-full pl-16 pr-3.5 py-2.5 text-xs font-mono rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                      />
+                    </div>
+                    {/* DNS Hint Box */}
+                    <div className="mt-2 p-3 rounded-xl bg-purple-50 border border-purple-200 text-[11px] text-purple-900 space-y-1">
+                      <div className="flex items-center gap-1.5 font-bold">
+                        <Globe className="w-3.5 h-3.5 text-purple-700" />
+                        <span>Zero-Code Custom Domain DNS Setup:</span>
+                      </div>
+                      <p className="text-purple-800 leading-relaxed">
+                        To connect this domain, add a <span className="font-mono font-bold">CNAME</span> record on your DNS provider (GoDaddy, Cloudflare, etc.) pointing to{' '}
+                        <span className="font-mono font-bold text-purple-950 bg-white px-1.5 py-0.5 rounded border border-purple-300">
+                          cname.vercel-dns.com
+                        </span>
+                        . Once pointed, any visitor opening that domain will see only this store!
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Tagline */}
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1">
+                      Tagline / Brand Philosophy
+                    </label>
+                    <input
+                      type="text"
+                      value={storeFormData.tagline}
+                      onChange={(e) => setStoreFormData({ ...storeFormData, tagline: e.target.value })}
+                      placeholder="e.g. 22K Hallmarked Gold, Polki & Solitaire Diamond Masterpieces"
+                      className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                    />
+                  </div>
+
+                  {/* Status & Default */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                    <div>
+                      <label className="block text-xs font-bold text-stone-700 mb-1">
+                        Store Operating Status
+                      </label>
+                      <select
+                        value={storeFormData.status}
+                        onChange={(e) => setStoreFormData({ ...storeFormData, status: e.target.value })}
+                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 bg-white font-medium focus:outline-none"
+                      >
+                        <option value="active">Active (Store Open & Accepting Orders)</option>
+                        <option value="inactive">Inactive (Temporarily Suspended)</option>
+                      </select>
+                    </div>
+
+                    <div className="flex items-center gap-3 pt-6">
+                      <input
+                        type="checkbox"
+                        id="isDefaultStore"
+                        checked={storeFormData.isDefault}
+                        onChange={(e) => setStoreFormData({ ...storeFormData, isDefault: e.target.checked })}
+                        className="w-4 h-4 text-purple-600 rounded focus:ring-purple-500"
+                      />
+                      <label htmlFor="isDefaultStore" className="text-xs font-bold text-stone-700 cursor-pointer">
+                        Set as Default Flagship Store (Root Domain /)
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ========================================================= */}
+              {/* TAB 2: BRAND COLORS & TYPOGRAPHY                         */}
+              {/* ========================================================= */}
+              {storeModalTab === 'theme' && (
+                <div className="space-y-5 animate-fade-in">
+                  {/* Preset Theme Buttons */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="text-xs font-black uppercase tracking-wider text-stone-700 flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-gold" />
+                        <span>Instant Luxury Theme Presets (1-Click Apply)</span>
+                      </label>
+                      <span className="text-[10px] text-stone-400">Click to apply palette</span>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                      {THEME_PRESETS.map((preset) => (
+                        <button
+                          key={preset.name}
+                          type="button"
+                          onClick={() => applyPreset(preset)}
+                          className="p-2.5 rounded-xl border border-stone-200 hover:border-gold bg-stone-50 hover:bg-amber-50/40 text-left transition cursor-pointer flex flex-col justify-between"
+                        >
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="font-bold text-xs text-stone-900 truncate">
+                              {preset.name}
+                            </span>
+                            <div className="flex items-center gap-1 shrink-0">
+                              <span
+                                className="w-3.5 h-3.5 rounded-full border border-stone-300 shadow-xs"
+                                style={{ backgroundColor: preset.primary }}
+                              />
+                              <span
+                                className="w-3.5 h-3.5 rounded-full border border-stone-300 shadow-xs"
+                                style={{ backgroundColor: preset.gold }}
+                              />
+                            </div>
+                          </div>
+                          <p className="text-[10px] text-stone-500 leading-tight">{preset.desc}</p>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Manual Color Pickers */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 rounded-2xl bg-stone-50 border border-stone-200">
+                    {/* 1. Primary Brand Color */}
+                    <div>
+                      <label className="block text-xs font-bold text-stone-700 mb-1.5">
+                        Primary Brand Color
+                      </label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="color"
+                          value={storeFormData.primaryColor || '#681B2C'}
+                          onChange={(e) => setStoreFormData({ ...storeFormData, primaryColor: e.target.value })}
+                          className="w-10 h-10 rounded-xl cursor-pointer border border-stone-300 p-0.5 bg-white"
+                        />
+                        <input
+                          type="text"
+                          value={storeFormData.primaryColor || '#681B2C'}
+                          onChange={(e) => setStoreFormData({ ...storeFormData, primaryColor: e.target.value })}
+                          className="w-full px-3 py-2 text-xs font-mono font-bold uppercase rounded-xl border border-stone-200 bg-white"
+                        />
+                      </div>
+                      <p className="text-[10px] text-stone-400 mt-1">Header, CTA buttons & brand identity</p>
+                    </div>
+
+                    {/* 2. Secondary / Gold Accent */}
+                    <div>
+                      <label className="block text-xs font-bold text-stone-700 mb-1.5">
+                        Gold / Highlight Accent
+                      </label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="color"
+                          value={storeFormData.secondaryColor || '#C6A15B'}
+                          onChange={(e) => setStoreFormData({ ...storeFormData, secondaryColor: e.target.value })}
+                          className="w-10 h-10 rounded-xl cursor-pointer border border-stone-300 p-0.5 bg-white"
+                        />
+                        <input
+                          type="text"
+                          value={storeFormData.secondaryColor || '#C6A15B'}
+                          onChange={(e) => setStoreFormData({ ...storeFormData, secondaryColor: e.target.value })}
+                          className="w-full px-3 py-2 text-xs font-mono font-bold uppercase rounded-xl border border-stone-200 bg-white"
+                        />
+                      </div>
+                      <p className="text-[10px] text-stone-400 mt-1">Badges, prices & golden borders</p>
+                    </div>
+
+                    {/* 3. Typography Family */}
+                    <div>
+                      <label className="block text-xs font-bold text-stone-700 mb-1.5">
+                        Brand Typography Font
+                      </label>
+                      <select
+                        value={storeFormData.fontFamily || 'serif'}
+                        onChange={(e) => setStoreFormData({ ...storeFormData, fontFamily: e.target.value })}
+                        className="w-full px-3 py-2 text-xs rounded-xl border border-stone-200 bg-white font-medium focus:outline-none mt-1"
+                      >
+                        <option value="serif">Royal Serif (Playfair / Cinzel)</option>
+                        <option value="sans">Modern Sans (Montserrat / Inter)</option>
+                        <option value="luxury">Haute Couture (Cormorant Garamond)</option>
+                      </select>
+                      <p className="text-[10px] text-stone-400 mt-1">Applied to headlines & luxury banners</p>
+                    </div>
+                  </div>
+
+                  {/* Real-Time Live Preview Mockup Box */}
+                  <div>
+                    <label className="block text-xs font-black uppercase tracking-wider text-stone-700 mb-2">
+                      Real-Time Storefront Live Preview
+                    </label>
+                    <div className="rounded-2xl border border-stone-300 overflow-hidden shadow-sm">
+                      {/* Top Bar Preview */}
+                      <div
+                        className="py-1 px-4 text-center text-[10px] font-bold text-white flex items-center justify-center gap-1.5"
+                        style={{ backgroundColor: storeFormData.secondaryColor || '#C6A15B' }}
+                      >
+                        <Sparkles className="w-3 h-3 text-white" />
+                        <span>
+                          {storeFormData.promoDiscount || 'Special Festive Promotion'} • Use Code: {storeFormData.promoCode || 'SAVE20'}
+                        </span>
+                      </div>
+
+                      {/* Header Preview */}
+                      <div
+                        className="p-4 text-white flex items-center justify-between"
+                        style={{ backgroundColor: storeFormData.primaryColor || '#681B2C' }}
+                      >
+                        <div className="flex items-center gap-2">
+                          <div
+                            className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm shadow-xs"
+                            style={{
+                              backgroundColor: storeFormData.secondaryColor || '#C6A15B',
+                              color: storeFormData.primaryColor || '#681B2C',
+                            }}
+                          >
+                            {storeFormData.name ? storeFormData.name.charAt(0).toUpperCase() : 'S'}
+                          </div>
+                          <span
+                            className={`text-base font-bold tracking-wide ${
+                              storeFormData.fontFamily === 'sans'
+                                ? 'font-sans'
+                                : storeFormData.fontFamily === 'luxury'
+                                ? 'font-serif italic'
+                                : 'font-serif'
+                            }`}
+                          >
+                            {storeFormData.name || 'Your Storefront Name'}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-2 text-xs">
+                          <span className="hidden sm:inline text-stone-200 text-[11px]">Collection</span>
+                          <span className="hidden sm:inline text-stone-200 text-[11px]">About</span>
+                          <span
+                            className="px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider shadow-sm"
+                            style={{
+                              backgroundColor: storeFormData.secondaryColor || '#C6A15B',
+                              color: '#1a1a1a',
+                            }}
+                          >
+                            Shop Now
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Mini Hero Mockup */}
+                      <div className="p-6 bg-stone-900 text-white flex flex-col items-center justify-center text-center space-y-2">
+                        <span
+                          className="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider border border-white/20"
+                          style={{ color: storeFormData.secondaryColor || '#C6A15B' }}
+                        >
+                          {storeFormData.trustBadge || '100% Certified Authentic Quality'}
+                        </span>
+                        <h4
+                          className={`text-lg sm:text-xl font-black text-white ${
+                            storeFormData.fontFamily === 'sans' ? 'font-sans' : 'font-serif'
+                          }`}
+                        >
+                          {storeFormData.heroHeading || 'Exquisite Handcrafted Masterpieces'}
+                        </h4>
+                        <p className="text-[11px] text-stone-300 max-w-md">
+                          {storeFormData.heroSubheading || storeFormData.tagline || 'Direct to your doorstep with Cash on Delivery.'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ========================================================= */}
+              {/* TAB 3: HERO & LOGO MEDIA                                 */}
+              {/* ========================================================= */}
+              {storeModalTab === 'hero' && (
+                <div className="space-y-4 animate-fade-in">
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1">
+                      Store Logo Image URL
+                    </label>
+                    <input
+                      type="url"
+                      value={storeFormData.logo}
+                      onChange={(e) => setStoreFormData({ ...storeFormData, logo: e.target.value })}
+                      placeholder="https://example.com/logo.png"
+                      className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                    />
+                    {storeFormData.logo && (
+                      <div className="mt-2 w-16 h-16 rounded-xl border border-stone-200 overflow-hidden bg-stone-50 p-1">
+                        <img src={storeFormData.logo} alt="Logo Preview" className="w-full h-full object-contain" />
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1">
+                      Custom Hero Banner Image URL (Full-Width High-Res)
+                    </label>
+                    <input
+                      type="url"
+                      value={storeFormData.heroBannerUrl}
+                      onChange={(e) => setStoreFormData({ ...storeFormData, heroBannerUrl: e.target.value })}
+                      placeholder="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1920&q=85"
+                      className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                    />
+                    {storeFormData.heroBannerUrl && (
+                      <div className="mt-2 h-36 rounded-2xl border border-stone-200 overflow-hidden">
+                        <img src={storeFormData.heroBannerUrl} alt="Hero Banner Preview" className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                    <p className="text-[10px] text-stone-400 mt-1">
+                      If provided, this image will take center stage on your store's homepage hero banner.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-stone-700 mb-1">
+                        Hero Main Headline
+                      </label>
+                      <input
+                        type="text"
+                        value={storeFormData.heroHeading}
+                        onChange={(e) => setStoreFormData({ ...storeFormData, heroHeading: e.target.value })}
+                        placeholder="e.g. Sacred 22K Gold & Polki Jewellery"
+                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-stone-700 mb-1">
+                        Hero Subtitle / Description
+                      </label>
+                      <input
+                        type="text"
+                        value={storeFormData.heroSubheading}
+                        onChange={(e) => setStoreFormData({ ...storeFormData, heroSubheading: e.target.value })}
+                        placeholder="e.g. Authentic 22K hallmarked bridal chokers & solitaires."
+                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ========================================================= */}
+              {/* TAB 4: MARKETING & BADGES                                 */}
+              {/* ========================================================= */}
+              {storeModalTab === 'marketing' && (
+                <div className="space-y-4 animate-fade-in">
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1">
+                      Trust Badge / Certification Highlight
+                    </label>
+                    <input
+                      type="text"
+                      value={storeFormData.trustBadge}
+                      onChange={(e) => setStoreFormData({ ...storeFormData, trustBadge: e.target.value })}
+                      placeholder="e.g. 100% BIS Hallmarked • Certified Gold & Diamonds • Insured Shipping"
+                      className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                    />
+                    <p className="text-[10px] text-stone-400 mt-1">
+                      Displayed on announcement bars, hero banners, and checkout pages.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-stone-700 mb-1">
+                        Promo Discount Text
+                      </label>
+                      <input
+                        type="text"
+                        value={storeFormData.promoDiscount}
+                        onChange={(e) => setStoreFormData({ ...storeFormData, promoDiscount: e.target.value })}
+                        placeholder="e.g. Flat 30% Off Bridal or Flat 20% Off Making"
+                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-stone-700 mb-1">
+                        Promo Coupon Code
+                      </label>
+                      <input
+                        type="text"
+                        value={storeFormData.promoCode}
+                        onChange={(e) =>
+                          setStoreFormData({
+                            ...storeFormData,
+                            promoCode: e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''),
+                          })
+                        }
+                        placeholder="e.g. JEWELS20 or SUBHLAGAN30"
+                        className="w-full px-3.5 py-2.5 text-xs font-mono font-bold uppercase rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ========================================================= */}
+              {/* TAB 5: CONTACT & SOCIALS                                 */}
+              {/* ========================================================= */}
+              {storeModalTab === 'contact' && (
+                <div className="space-y-4 animate-fade-in">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-stone-700 mb-1">
+                        WhatsApp Number (Used for 1-Click Orders) *
+                      </label>
+                      <input
+                        type="text"
+                        value={storeFormData.whatsapp}
+                        onChange={(e) => setStoreFormData({ ...storeFormData, whatsapp: e.target.value })}
+                        placeholder="+91 81475 40362"
+                        required
+                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-stone-700 mb-1">
+                        Customer Care Phone Number
+                      </label>
+                      <input
+                        type="text"
+                        value={storeFormData.phone}
+                        onChange={(e) => setStoreFormData({ ...storeFormData, phone: e.target.value })}
+                        placeholder="+91 98765 43210"
+                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-stone-700 mb-1">
+                        Store Owner Name
+                      </label>
+                      <input
+                        type="text"
+                        value={storeFormData.ownerName}
+                        onChange={(e) => setStoreFormData({ ...storeFormData, ownerName: e.target.value })}
+                        placeholder="e.g. Rameshwar Soni"
+                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-stone-700 mb-1">
+                        Store Owner / Care Email
+                      </label>
+                      <input
+                        type="email"
+                        value={storeFormData.ownerEmail}
+                        onChange={(e) => setStoreFormData({ ...storeFormData, ownerEmail: e.target.value })}
+                        placeholder="contact@kashijewels.com"
+                        className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1">
+                      Physical Store Address
+                    </label>
+                    <input
+                      type="text"
+                      value={storeFormData.address}
+                      onChange={(e) => setStoreFormData({ ...storeFormData, address: e.target.value })}
+                      placeholder="e.g. Thatheri Bazaar, Chowk, Varanasi, Uttar Pradesh 221001"
+                      className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1">
+                      Instagram Handle / Profile Link
+                    </label>
+                    <input
+                      type="text"
+                      value={storeFormData.instagramHandle}
+                      onChange={(e) => setStoreFormData({ ...storeFormData, instagramHandle: e.target.value })}
+                      placeholder="@kashijewels or https://instagram.com/kashijewels"
+                      className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-purple-600/20 bg-stone-50/50"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Modal Footer Controls */}
+              <div className="flex items-center justify-between pt-4 border-t border-stone-200 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setStoreModalOpen(false)}
+                  className="px-4 py-2.5 text-xs font-bold text-stone-600 hover:bg-stone-100 rounded-xl transition cursor-pointer"
+                >
+                  Cancel
+                </button>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="submit"
+                    disabled={savingStore}
+                    className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-purple-800 via-indigo-900 to-purple-950 hover:brightness-110 text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-md transition disabled:opacity-50 cursor-pointer"
+                  >
+                    {savingStore ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin text-purple-200" />
+                        <span>Saving Changes...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Check className="w-4 h-4 text-emerald-400" />
+                        <span>{editingStore ? 'Save Storefront Changes' : 'Create Storefront'}</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
       {clientModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fade-in">
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-gold/30 relative">

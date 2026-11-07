@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
+import { useStore } from '../../context/StoreContext.jsx';
 
 // Reliable fallback imagery for every category to avoid broken images
 const categoryFallbacks = {
@@ -18,15 +19,40 @@ const categoryFallbacks = {
   'wedding-sarees': 'https://images.unsplash.com/photo-1610030469668-8e9f641aaf27?auto=format&fit=crop&w=400&q=80',
 };
 
+const jewelleryFallbacks = [
+  { slug: 'bridal-chokers', name: 'Bridal Chokers', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=400&q=80' },
+  { slug: 'gold-bangles', name: 'Gold Bangles & Kadas', image: 'https://images.unsplash.com/photo-1611591475837-775677dffad3?auto=format&fit=crop&w=400&q=80' },
+  { slug: 'temple-jewellery', name: 'Temple Jewellery', image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=400&q=80' },
+  { slug: 'diamond-solitaires', name: 'Diamond Rings', image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=400&q=80' },
+  { slug: 'polki-earrings', name: 'Polki & Jhumkas', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=400&q=80' },
+  { slug: 'royal-haars', name: 'Royal Layered Haars', image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=400&q=80' },
+];
+
+const hairFallbacks = [
+  { slug: 'clip-in-extensions', name: 'Clip-In Extensions', image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=400&q=80' },
+  { slug: 'hd-lace-wigs', name: 'HD Lace Wigs', image: 'https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&w=400&q=80' },
+  { slug: 'hair-serums', name: 'Argan Hair Serums', image: 'https://images.unsplash.com/photo-1608248597359-0a60ff9e03d9?auto=format&fit=crop&w=400&q=80' },
+  { slug: 'styling-tools', name: 'Salon Styling Tools', image: 'https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&w=400&q=80' },
+  { slug: 'tape-ins', name: 'Seamless Tape-Ins', image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=400&q=80' },
+  { slug: 'virgin-ponytails', name: 'Remy Ponytails', image: 'https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&w=400&q=80' },
+];
+
 const CategoryGrid = ({ categories = [] }) => {
   const scrollRef = useRef(null);
+  const { store, isBoutiqueStore, isJewelleryStore, isHairStore } = useStore();
 
-  // If no categories from API, provide defaults
-  const displayList = categories.length > 0 ? categories : Object.keys(categoryFallbacks).map((slug) => ({
-    slug,
-    name: slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
-    image: categoryFallbacks[slug],
-  }));
+  // If no categories from API, provide defaults based on storeType
+  const defaultList = isJewelleryStore
+    ? jewelleryFallbacks
+    : isHairStore
+    ? hairFallbacks
+    : Object.keys(categoryFallbacks).map((slug) => ({
+        slug,
+        name: slug.split('-').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+        image: categoryFallbacks[slug],
+      }));
+
+  const displayList = categories.length > 0 ? categories : defaultList;
 
   // Duplicate items for continuous seamless loop
   const loopItems = [...displayList, ...displayList];
@@ -38,6 +64,22 @@ const CategoryGrid = ({ categories = [] }) => {
     }
   };
 
+  const sectionSub = isJewelleryStore
+    ? 'Royal Adornments'
+    : isHairStore
+    ? 'Salon Luxury'
+    : 'Curated Weaves';
+
+  const sectionTitle = isJewelleryStore
+    ? 'Shop By Jewellery Categories'
+    : isHairStore
+    ? 'Shop By Hair & Beauty Categories'
+    : 'Shop By Saree Categories';
+
+  const getCategoryLink = (slug) => {
+    return isBoutiqueStore ? `/store/${store.slug}/shop?category=${slug}` : `/shop?category=${slug}`;
+  };
+
   return (
     <section className="py-10 bg-cream/50 overflow-hidden select-none">
       <div className="max-w-[1550px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -45,10 +87,10 @@ const CategoryGrid = ({ categories = [] }) => {
         <div className="flex flex-col sm:flex-row items-center justify-between mb-6">
           <div className="text-center sm:text-left">
             <span className="text-gold-dark text-[11px] uppercase tracking-[0.25em] font-bold">
-              Curated Weaves
+              {sectionSub}
             </span>
             <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary mt-0.5">
-              Shop By Saree Categories
+              {sectionTitle}
             </h2>
             <div className="w-12 h-0.5 bg-gold mt-1.5 mx-auto sm:mx-0"></div>
           </div>
@@ -93,7 +135,7 @@ const CategoryGrid = ({ categories = [] }) => {
                 return (
                   <Link
                     key={`${cat._id || cat.slug}-${index}`}
-                    to={`/shop?category=${cat.slug}`}
+                    to={getCategoryLink(cat.slug)}
                     className="w-40 sm:w-44 flex-shrink-0 group flex flex-col items-center p-3 rounded-2xl bg-white border border-stone-200/80 hover:border-gold shadow-sm hover:shadow-luxury-hover transition-all duration-300 transform hover:-translate-y-1 text-center"
                   >
                     {/* Category Circle Image with Gold Accent Border */}

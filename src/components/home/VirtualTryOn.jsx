@@ -1,9 +1,16 @@
 import React from 'react';
 import { Shirt } from 'lucide-react';
 import { useTryOn } from '../../context/TryOnContext.jsx';
+import { useStore } from '../../context/StoreContext.jsx';
 
 const VirtualTryOn = () => {
   const { isOpen, toggleTryOn } = useTryOn();
+  const { isSareeStore } = useStore();
+
+  // Only render the Saree Fitting Room on saree boutiques
+  if (!isSareeStore) {
+    return null;
+  }
 
   return (
     <>

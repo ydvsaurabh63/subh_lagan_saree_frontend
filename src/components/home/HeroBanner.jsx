@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { useCart } from '../../context/CartContext.jsx';
 import { useTryOn } from '../../context/TryOnContext.jsx';
+import { useStore } from '../../context/StoreContext.jsx';
 import { productApi } from '../../services/api.js';
 import { formatPrice } from '../../utils/formatters.js';
 import toast from 'react-hot-toast';
@@ -415,6 +416,7 @@ const sareeLooks = [
 ];
 
 const HeroBanner = () => {
+  const { store, isBoutiqueStore, isJewelleryStore, isHairStore, isSareeStore } = useStore();
   const [currentRotation, setCurrentRotation] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartX, setDragStartX] = useState(0);
@@ -822,6 +824,118 @@ const HeroBanner = () => {
         : 'transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.75s ease-out',
     };
   };
+
+  // If store is non-saree (jewellery, hair, general) or has a custom uploaded hero banner, render adapted hero
+  if (store?.heroBannerUrl || !isSareeStore) {
+    const bgImage =
+      store?.heroBannerUrl ||
+      (isJewelleryStore
+        ? 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1920&q=85'
+        : isHairStore
+        ? 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1920&q=85'
+        : 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1920&q=85');
+
+    const heading =
+      store?.heroHeading ||
+      (isJewelleryStore
+        ? 'Sacred 22K Gold & Polki Jewellery'
+        : isHairStore
+        ? 'Flawless Virgin Hair Extensions & Studio Care'
+        : store?.name || 'Exclusive Luxury Collection');
+
+    const subheading =
+      store?.heroSubheading ||
+      store?.tagline ||
+      (isJewelleryStore
+        ? 'Authentic 22K hallmarked bridal chokers, bangles & diamond solitaires.'
+        : isHairStore
+        ? 'Seamless clip-ins, lace front wigs & organic hair repair serums.'
+        : 'Curated premium quality direct to your doorstep.');
+
+    const shopUrl = isBoutiqueStore ? `/store/${store.slug}/shop` : '/shop';
+    const cleanWhatsapp = (store?.whatsapp || '+918147540362').replace(/[^0-9]/g, '');
+
+    return (
+      <div className="relative isolate overflow-hidden bg-stone-950 text-white select-none border-b border-gold/30">
+        {/* Background Image with Cinematic Gradient Overlay */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src={bgImage}
+            alt={heading}
+            className="w-full h-full object-cover object-center opacity-40 scale-105 transition-transform duration-1000 ease-out"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-stone-950 via-stone-950/80 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-transparent to-black/60"></div>
+        </div>
+
+        {/* Hero Content Container */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28">
+          <div className="max-w-2xl space-y-6">
+            {/* Trust Pill / Promo Badge */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-gold/50 shadow-lg">
+              <Sparkles className="w-4 h-4 text-gold animate-pulse" />
+              <span className="text-[11px] sm:text-xs font-bold text-amber-200 tracking-wider uppercase font-sans">
+                {store?.trustBadge ||
+                  (isJewelleryStore
+                    ? '100% BIS Hallmarked • Certified Gold & Diamonds'
+                    : isHairStore
+                    ? '100% Virgin Remy Hair • Salon Grade Quality'
+                    : 'Premium Curated Quality')}
+              </span>
+            </div>
+
+            {/* Main Headline */}
+            <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.15] drop-shadow-md">
+              {heading}
+            </h1>
+
+            {/* Subheading */}
+            <p className="text-sm sm:text-base lg:text-lg text-stone-300 font-medium leading-relaxed max-w-xl">
+              {subheading}
+            </p>
+
+            {/* CTAs */}
+            <div className="pt-2 flex flex-wrap items-center gap-3.5">
+              <Link
+                to={shopUrl}
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-600 via-amber-700 to-amber-800 hover:from-amber-700 hover:to-amber-900 text-white font-bold text-xs sm:text-sm tracking-wide shadow-xl shadow-amber-900/30 transition transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+              >
+                <ShoppingBag className="w-4 h-4" />
+                <span>Explore Full Collection</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+
+              <a
+                href={`https://wa.me/${cleanWhatsapp}?text=Hello%20${encodeURIComponent(store?.name || 'Store')},%20I%20am%20interested%20in%20your%20products.`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white font-bold text-xs sm:text-sm transition transform hover:-translate-y-0.5 cursor-pointer"
+              >
+                <span>WhatsApp Order</span>
+                <ArrowRight className="w-4 h-4 text-emerald-400" />
+              </a>
+            </div>
+
+            {/* Trust Highlights */}
+            <div className="pt-6 grid grid-cols-3 gap-4 border-t border-white/10 max-w-lg">
+              <div className="space-y-0.5">
+                <p className="text-gold font-bold text-xs sm:text-sm">Express Shipping</p>
+                <p className="text-[10px] sm:text-[11px] text-stone-400">Insured Delivery</p>
+              </div>
+              <div className="space-y-0.5">
+                <p className="text-gold font-bold text-xs sm:text-sm">COD Available</p>
+                <p className="text-[10px] sm:text-[11px] text-stone-400">Pay on Delivery</p>
+              </div>
+              <div className="space-y-0.5">
+                <p className="text-gold font-bold text-xs sm:text-sm">100% Certified</p>
+                <p className="text-[10px] sm:text-[11px] text-stone-400">Authentic Guarantee</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative isolate bg-[#F8F7F4] border-b border-stone-200 overflow-hidden select-none">

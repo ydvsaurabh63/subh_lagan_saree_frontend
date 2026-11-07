@@ -8,19 +8,19 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#681B2C', // Royal Maroon
-          light: '#83273B',
-          dark: '#42101E',   // Deep Burgundy
+          DEFAULT: 'var(--color-primary, #681B2C)', // Dynamic Primary Brand Color
+          light: 'var(--color-primary-light, #83273B)',
+          dark: 'var(--color-primary-dark, #42101E)',
         },
         secondary: {
-          DEFAULT: '#42101E', // Deep Burgundy
+          DEFAULT: 'var(--color-secondary, #42101E)',
           light: '#5E172B',
           dark: '#2B0A13',
         },
         gold: {
-          DEFAULT: '#C6A15B', // Royal Gold
-          light: '#E2C78E',
-          dark: '#9E7E3C',
+          DEFAULT: 'var(--color-gold, #C6A15B)', // Dynamic Accent/Gold Color
+          light: 'var(--color-gold-light, #E2C78E)',
+          dark: 'var(--color-gold-dark, #9E7E3C)',
           muted: '#DFD1B7',
         },
         cream: {

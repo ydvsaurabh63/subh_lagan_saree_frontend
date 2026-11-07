@@ -9,15 +9,24 @@ const AnnouncementBar = () => {
   const announcements = isBoutiqueStore
     ? [
         { icon: Store, text: `Welcome to ${store.name}` },
-        { icon: Sparkles, text: `${store.tagline || 'Exclusive Heritage Silks & Sarees'}` },
+        ...(store.trustBadge ? [{ icon: ShieldCheck, text: store.trustBadge }] : []),
+        ...(store.promoDiscount
+          ? [
+              {
+                icon: Sparkles,
+                text: `${store.promoDiscount}${store.promoCode ? ` • Use Code: ${store.promoCode}` : ''}`,
+              },
+            ]
+          : []),
+        { icon: Sparkles, text: `${store.tagline || 'Curated Luxury Collection'}` },
         { icon: ShieldCheck, text: `Direct WhatsApp Orders: ${store.whatsapp || '+91 81475 40362'}` },
-        { icon: Truck, text: 'Cash on Delivery (COD) Available • Silk Mark Certified' },
+        { icon: Truck, text: 'Fast Express Delivery • Cash on Delivery (COD) Available' },
       ]
     : [
         { icon: Sparkles, text: 'Festive & Wedding Showcase 2026' },
         { icon: Truck, text: 'Free Delivery on Orders Above ₹1,999' },
         { icon: ShieldCheck, text: 'Cash on Delivery (COD) Available' },
-        { icon: HeartHandshake, text: '100% Silk Mark Certified' },
+        { icon: HeartHandshake, text: '100% Silk Mark Certified Heritage' },
       ];
 
   useEffect(() => {

@@ -29,7 +29,7 @@ const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const { totalQuantity } = useCart();
   const { wishlist } = useWishlist();
-  const { store, isBoutiqueStore } = useStore();
+  const { store, isBoutiqueStore, isJewelleryStore, isHairStore, isSareeStore } = useStore();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -57,18 +57,9 @@ const Navbar = () => {
     }
   };
 
-  const navLinks = isBoutiqueStore
-    ? [
-        { name: 'Home', path: `/store/${store.slug}` },
-        { name: 'All Sarees', path: `/store/${store.slug}/shop` },
-        { name: 'Banarasi', path: `/store/${store.slug}/shop?category=banarasi-sarees` },
-        { name: 'Kanjivaram', path: `/store/${store.slug}/shop?category=kanjivaram-sarees` },
-        { name: 'Bridal Couture', path: `/store/${store.slug}/shop?isBridal=true` },
-        { name: 'Pure Silk', path: `/store/${store.slug}/shop?fabric=Pure+Katan+Silk` },
-        { name: 'About Us', path: `/store/${store.slug}/about` },
-        { name: 'Contact', path: `/store/${store.slug}/contact` },
-      ]
-    : [
+  const getNavLinks = () => {
+    if (!isBoutiqueStore) {
+      return [
         { name: 'Home', path: '/' },
         { name: 'All Sarees', path: '/shop' },
         { name: 'Banarasi', path: '/shop?category=banarasi-sarees' },
@@ -78,6 +69,48 @@ const Navbar = () => {
         { name: 'About Us', path: '/about' },
         { name: 'Contact', path: '/contact' },
       ];
+    }
+
+    if (isJewelleryStore) {
+      return [
+        { name: 'Home', path: `/store/${store.slug}` },
+        { name: 'All Jewellery', path: `/store/${store.slug}/shop` },
+        { name: 'Necklaces', path: `/store/${store.slug}/shop?category=necklaces` },
+        { name: 'Bangles & Kadas', path: `/store/${store.slug}/shop?category=bangles` },
+        { name: 'Rings', path: `/store/${store.slug}/shop?category=rings` },
+        { name: 'Earrings', path: `/store/${store.slug}/shop?category=earrings` },
+        { name: 'Bridal Sets', path: `/store/${store.slug}/shop?isBridal=true` },
+        { name: 'About Us', path: `/store/${store.slug}/about` },
+        { name: 'Contact', path: `/store/${store.slug}/contact` },
+      ];
+    }
+
+    if (isHairStore) {
+      return [
+        { name: 'Home', path: `/store/${store.slug}` },
+        { name: 'All Hair Care', path: `/store/${store.slug}/shop` },
+        { name: 'Extensions', path: `/store/${store.slug}/shop?category=extensions` },
+        { name: 'Wigs & Toppers', path: `/store/${store.slug}/shop?category=wigs` },
+        { name: 'Serums & Oils', path: `/store/${store.slug}/shop?category=serums` },
+        { name: 'Styling Tools', path: `/store/${store.slug}/shop?category=tools` },
+        { name: 'About Us', path: `/store/${store.slug}/about` },
+        { name: 'Contact', path: `/store/${store.slug}/contact` },
+      ];
+    }
+
+    return [
+      { name: 'Home', path: `/store/${store.slug}` },
+      { name: 'All Sarees', path: `/store/${store.slug}/shop` },
+      { name: 'Banarasi', path: `/store/${store.slug}/shop?category=banarasi-sarees` },
+      { name: 'Kanjivaram', path: `/store/${store.slug}/shop?category=kanjivaram-sarees` },
+      { name: 'Bridal Couture', path: `/store/${store.slug}/shop?isBridal=true` },
+      { name: 'Pure Silk', path: `/store/${store.slug}/shop?fabric=Pure+Katan+Silk` },
+      { name: 'About Us', path: `/store/${store.slug}/about` },
+      { name: 'Contact', path: `/store/${store.slug}/contact` },
+    ];
+  };
+
+  const navLinks = getNavLinks();
 
   const isLinkActive = (path) => {
     if (path === '/' || path === `/store/${store?.slug}`) {

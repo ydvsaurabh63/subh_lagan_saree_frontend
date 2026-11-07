@@ -169,5 +169,15 @@ export const uploadApi = {
     }),
 };
 
+// Store Customization & Multi-Industry Storefront APIs
+export const storeApi = {
+  getStores: () => api.get('/stores'),
+  getStoreBySlug: (slug) => api.get(`/stores/by-slug/${slug}`),
+  getStoreByDomain: (domain) => api.get(`/stores/by-domain/${domain}`),
+  createStore: (data) => api.post('/stores', data),
+  updateStore: (id, data) => api.put(`/stores/${id}`, data),
+  deleteStore: (id) => api.delete(`/stores/${id}`),
+};
+
 export default api;
 

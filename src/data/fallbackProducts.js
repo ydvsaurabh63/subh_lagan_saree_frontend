@@ -361,6 +361,188 @@ export const veerajBrandFallbackSarees = [
   },
 ];
 
+export const kundanHeritageFallbackJewellery = [
+  {
+    _id: 'khj-fb-1',
+    name: 'Royal Rajputana Kundan & Polki Bridal Choker Set',
+    slug: 'royal-rajputana-kundan-polki-choker-set',
+    sku: 'KHJ-CHK-01',
+    price: 45999,
+    discountPrice: 38999,
+    fabric: '22K Gold Foil Kundan',
+    color: 'Emerald & Gold',
+    material: '22K Gold Foil Kundan, Polki & Emerald',
+    storeType: 'jewellery',
+    storeSlug: 'kundan-heritage-jewellers',
+    images: [
+      'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=800&q=80',
+    ],
+    ratings: 4.9,
+    reviewsCount: 41,
+    isBestSeller: true,
+    isBridal: true,
+    isNewArrival: true,
+  },
+  {
+    _id: 'khj-fb-2',
+    name: 'Kashi 22K Hallmarked Floral Gold Kada Pair',
+    slug: 'kashi-22k-hallmarked-floral-gold-kada-pair',
+    sku: 'KHJ-KAD-02',
+    price: 58500,
+    discountPrice: 49999,
+    fabric: '22K Hallmarked Gold',
+    color: 'Antique Gold',
+    material: '22K Gold Filigree & Ruby Gemstones',
+    storeType: 'jewellery',
+    storeSlug: 'kundan-heritage-jewellers',
+    images: [
+      'https://images.unsplash.com/photo-1611591475837-775677dffad3?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80',
+    ],
+    ratings: 5.0,
+    reviewsCount: 33,
+    isBestSeller: true,
+    isBridal: true,
+    isNewArrival: false,
+  },
+  {
+    _id: 'khj-fb-3',
+    name: 'Nawabi Nizam Basra Pearl & Emerald 5-Strand Haar',
+    slug: 'nawabi-nizam-basra-pearl-emerald-haar',
+    sku: 'KHJ-HAR-03',
+    price: 28500,
+    discountPrice: 24000,
+    fabric: 'Basra Pearls & Carved Emerald',
+    color: 'Pearl White & Green',
+    material: 'Basra Pearls & Carved Emerald',
+    storeType: 'jewellery',
+    storeSlug: 'kundan-heritage-jewellers',
+    images: [
+      'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80',
+    ],
+    ratings: 4.8,
+    reviewsCount: 19,
+    isBestSeller: false,
+    isBridal: true,
+    isNewArrival: true,
+  },
+  {
+    _id: 'khj-fb-4',
+    name: 'Solitaire Diamond Cut 18K Rose Gold Ring',
+    slug: 'solitaire-diamond-cut-18k-rose-gold-ring',
+    sku: 'KHJ-RNG-04',
+    price: 19999,
+    discountPrice: 16499,
+    fabric: '18K Rose Gold',
+    color: 'Rose Gold',
+    material: '18K Rose Gold & Certified Solitaire',
+    storeType: 'jewellery',
+    storeSlug: 'kundan-heritage-jewellers',
+    images: [
+      'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80',
+    ],
+    ratings: 4.9,
+    reviewsCount: 28,
+    isBestSeller: true,
+    isBridal: false,
+    isNewArrival: true,
+  },
+];
+
+export const crownLuxeFallbackHair = [
+  {
+    _id: 'clh-fb-1',
+    name: '100% Virgin Remy 7-Piece Clip-in Hair Extensions (24 Inch)',
+    slug: 'crown-luxe-virgin-remy-clip-in-extensions-24in',
+    sku: 'CLH-CLP-01',
+    price: 14999,
+    discountPrice: 11999,
+    fabric: '100% Remy Hair',
+    color: 'Natural Black',
+    material: '100% Virgin Remy Human Hair',
+    storeType: 'hair',
+    storeSlug: 'crown-luxe-hair',
+    images: [
+      'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&w=800&q=80',
+    ],
+    ratings: 4.9,
+    reviewsCount: 46,
+    isBestSeller: true,
+    isBridal: true,
+    isNewArrival: true,
+  },
+  {
+    _id: 'clh-fb-2',
+    name: 'HD Invisible Seamless Lace Front Human Hair Wig (22 Inch)',
+    slug: 'crown-luxe-hd-lace-front-wig-22in',
+    sku: 'CLH-WIG-02',
+    price: 26999,
+    discountPrice: 21999,
+    fabric: 'Swiss HD Lace',
+    color: 'Jet Black / Soft Brown',
+    material: '100% Raw Virgin Hair & Swiss HD Lace',
+    storeType: 'hair',
+    storeSlug: 'crown-luxe-hair',
+    images: [
+      'https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80',
+    ],
+    ratings: 5.0,
+    reviewsCount: 39,
+    isBestSeller: true,
+    isBridal: true,
+    isNewArrival: true,
+  },
+  {
+    _id: 'clh-fb-3',
+    name: 'Luxe Moroccan Organic Cold-Pressed Argan Repair Serum (100ml)',
+    slug: 'crown-luxe-moroccan-argan-repair-serum',
+    sku: 'CLH-SRM-03',
+    price: 1899,
+    discountPrice: 1499,
+    fabric: 'Organic Serum',
+    color: 'Amber Gold',
+    material: 'Pure Cold-Pressed Moroccan Argan Oil',
+    storeType: 'hair',
+    storeSlug: 'crown-luxe-hair',
+    images: [
+      'https://images.unsplash.com/photo-1608248597359-0a60ff9e03d9?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80',
+    ],
+    ratings: 4.8,
+    reviewsCount: 65,
+    isBestSeller: true,
+    isBridal: false,
+    isNewArrival: false,
+  },
+  {
+    _id: 'clh-fb-4',
+    name: 'Silk Press Nano-Titanium Pro Hair Styling Wand & Curler',
+    slug: 'crown-luxe-nano-titanium-pro-styling-wand',
+    sku: 'CLH-WND-04',
+    price: 4999,
+    discountPrice: 3899,
+    fabric: 'Nano Titanium Ceramic',
+    color: 'Rose Gold & Matte Black',
+    material: 'Nano Titanium Ceramic with Ionic Generator',
+    storeType: 'hair',
+    storeSlug: 'crown-luxe-hair',
+    images: [
+      'https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80',
+    ],
+    ratings: 4.7,
+    reviewsCount: 22,
+    isBestSeller: false,
+    isBridal: false,
+    isNewArrival: true,
+  },
+];
+
 export const getFallbackSareesForStore = (storeSlug = 'subh-lagan') => {
   const slug = (storeSlug || 'subh-lagan').toLowerCase();
   if (slug === 'arun-vastralay') {
@@ -368,6 +550,12 @@ export const getFallbackSareesForStore = (storeSlug = 'subh-lagan') => {
   }
   if (slug === 'veeraj-brand-seller') {
     return veerajBrandFallbackSarees;
+  }
+  if (slug === 'kundan-heritage-jewellers' || slug === 'kashijewels.com') {
+    return kundanHeritageFallbackJewellery;
+  }
+  if (slug === 'crown-luxe-hair' || slug === 'luxehair.com') {
+    return crownLuxeFallbackHair;
   }
   return subhLaganFallbackSarees;
 };
