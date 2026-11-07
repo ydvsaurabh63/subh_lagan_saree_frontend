@@ -1261,19 +1261,8 @@ const HeroBanner = () => {
 
               {/* Content Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-7 items-center">
-                {/* Left Column: Model Cutout Image (Large & Prominent matching green circle) */}
+                {/* Left Column: Model Cutout Image */}
                 <div className="sm:col-span-6 h-[340px] xs:h-[380px] sm:h-[490px] rounded-xl sm:rounded-2xl bg-gradient-to-b from-[#FAF8F5] via-[#F4EFEA] to-[#EFEAE2] border border-stone-200/80 overflow-hidden relative flex items-center justify-center pt-2 px-1 pb-0 shadow-inner group/img">
-                  {/* Try It On Icon Button */}
-                  <button
-                    type="button"
-                    onClick={() => handleTryItOn(quickViewLook)}
-                    className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-10 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-700 hover:to-amber-600 text-white flex items-center justify-center shadow-md hover:shadow-lg active:scale-90 hover:scale-105 transition cursor-pointer"
-                    title="Try It On in AI Fitting Room"
-                    aria-label="Try It On"
-                  >
-                    <Shirt className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.2] text-white" />
-                  </button>
-
                   <img
                     src={quickViewLook.modelImage.replace('.png', '-crop.png')}
                     alt={quickViewLook.lookTitle}
@@ -1288,13 +1277,45 @@ const HeroBanner = () => {
 
                 {/* Right Column: Clean Details */}
                 <div className="sm:col-span-6 space-y-3 sm:space-y-4">
-                  <div>
-                    <h3 className="font-serif text-lg sm:text-2xl font-black text-stone-950 leading-tight sm:leading-snug tracking-tight">
-                      {quickViewLook.lookTitle}
-                    </h3>
-                    <p className="text-[11px] sm:text-xs text-stone-500 font-medium mt-0.5 line-clamp-1">
-                      {quickViewLook.items?.[0]?.detail || quickViewLook.tagline || 'Pure Silk Saree • Handwoven Zari'}
-                    </p>
+                  {/* Title Row with Quantity Selector (- & +) where user highlighted */}
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-serif text-lg sm:text-2xl font-black text-stone-950 leading-tight sm:leading-snug tracking-tight">
+                        {quickViewLook.lookTitle}
+                      </h3>
+                      <p className="text-[11px] sm:text-xs text-stone-500 font-medium mt-0.5 line-clamp-1">
+                        {quickViewLook.items?.[0]?.detail || quickViewLook.tagline || 'Pure Silk Saree • Handwoven Zari'}
+                      </p>
+                    </div>
+
+                    {/* Quantity Controller (- & +) */}
+                    <div className="shrink-0 flex items-center bg-primary text-white rounded-xl p-1 shadow-xs border border-primary/20">
+                      <button
+                        type="button"
+                        onClick={() => handleDecrementModalQty(quickViewLook)}
+                        className="w-7 h-7 sm:w-7.5 sm:h-7.5 rounded-lg bg-black/20 hover:bg-black/35 text-white flex items-center justify-center transition active:scale-90 cursor-pointer"
+                        aria-label="Decrease quantity"
+                        title="Decrease"
+                      >
+                        <Minus className="w-3.5 h-3.5 stroke-[2.5]" />
+                      </button>
+
+                      <span className="font-sans font-black text-xs sm:text-sm text-white select-none px-2 min-w-[22px] text-center">
+                        {getLookCartQuantity(quickViewLook) > 0
+                          ? getLookCartQuantity(quickViewLook)
+                          : modalQty}
+                      </span>
+
+                      <button
+                        type="button"
+                        onClick={() => handleIncrementModalQty(quickViewLook)}
+                        className="w-7 h-7 sm:w-7.5 sm:h-7.5 rounded-lg bg-black/20 hover:bg-black/35 text-white flex items-center justify-center transition active:scale-90 cursor-pointer"
+                        aria-label="Increase quantity"
+                        title="Increase"
+                      >
+                        <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+                      </button>
+                    </div>
                   </div>
 
                   {/* Clean Price Card with Savings */}
@@ -1325,38 +1346,20 @@ const HeroBanner = () => {
                     );
                   })()}
 
-                  {/* Action Buttons: Quantity Controller (- & +) and Order Now */}
+                  {/* Action Buttons: Virtual Trial & Order Now */}
                   <div className="pt-1 sm:pt-2">
                     <div className="grid grid-cols-2 gap-2">
-                      {/* Quantity Controller: - & + */}
-                      <div className="w-full py-1.5 sm:py-2 px-2 bg-primary text-white rounded-xl shadow-md flex items-center justify-between border border-primary/20">
-                        <button
-                          type="button"
-                          onClick={() => handleDecrementModalQty(quickViewLook)}
-                          className="w-8 h-8 rounded-lg bg-black/20 hover:bg-black/35 text-white flex items-center justify-center transition active:scale-90 cursor-pointer"
-                          aria-label="Decrease quantity"
-                          title="Decrease"
-                        >
-                          <Minus className="w-4 h-4 stroke-[2.5]" />
-                        </button>
+                      {/* Virtual Trial Button (Replaced bottom - + button) */}
+                      <button
+                        type="button"
+                        onClick={() => handleTryItOn(quickViewLook)}
+                        className="w-full py-2.5 sm:py-3 px-2 bg-stone-900 hover:bg-black text-white border border-amber-500/50 hover:border-amber-400 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center justify-center space-x-1.5 cursor-pointer active:scale-98"
+                      >
+                        <Shirt className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 stroke-[2.2]" />
+                        <span>Virtual Trial</span>
+                      </button>
 
-                        <span className="font-sans font-black text-sm sm:text-base text-white select-none px-2">
-                          {getLookCartQuantity(quickViewLook) > 0
-                            ? getLookCartQuantity(quickViewLook)
-                            : modalQty}
-                        </span>
-
-                        <button
-                          type="button"
-                          onClick={() => handleIncrementModalQty(quickViewLook)}
-                          className="w-8 h-8 rounded-lg bg-black/20 hover:bg-black/35 text-white flex items-center justify-center transition active:scale-90 cursor-pointer"
-                          aria-label="Increase quantity"
-                          title="Increase"
-                        >
-                          <Plus className="w-4 h-4 stroke-[2.5]" />
-                        </button>
-                      </div>
-
+                      {/* Order Now Button */}
                       <button
                         type="button"
                         onClick={() => handleOrderNow(quickViewLook, modalQty)}
