@@ -1,0 +1,63 @@
+{
+  "name": "Subh Lagan Sarees | Royal Heritage Handloom",
+  "short_name": "Subh Lagan",
+  "description": "Authentic Banarasi, Kanjivaram & Pure Silk Handloom Sarees with 3D AI Virtual Fitting Room",
+  "start_url": "/",
+  "id": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#FAF7F2",
+  "theme_color": "#681B2C",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/logo-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["shopping", "lifestyle"],
+  "shortcuts": [
+    {
+      "name": "Bridal Sarees",
+      "short_name": "Bridal",
+      "description": "Explore Luxury Bridal & Wedding Sarees",
+      "url": "/shop?occasion=Bridal",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "3D Virtual Try-On",
+      "short_name": "Virtual Trial",
+      "description": "Try any saree on 3D models or upload photo",
+      "url": "/shop",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Shopping Bag",
+      "short_name": "Bag",
+      "description": "View items in your bag",
+      "url": "/cart",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+    }
+  ]
+}
+

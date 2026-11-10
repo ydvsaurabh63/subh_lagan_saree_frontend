@@ -13,6 +13,8 @@ import Navbar from './components/common/Navbar.jsx';
 import Footer from './components/common/Footer.jsx';
 import FittingRoomPanel from './components/tryon/FittingRoomPanel.jsx';
 import WhatsAppButton from './components/common/WhatsAppButton.jsx';
+import MobileBottomNav from './components/common/MobileBottomNav.jsx';
+import PWAInstallPrompt from './components/common/PWAInstallPrompt.jsx';
 import ProtectedRoute from './components/common/ProtectedRoute.jsx';
 import AdminRoute from './components/common/AdminRoute.jsx';
 import SuperAdminRoute from './components/common/SuperAdminRoute.jsx';
@@ -76,7 +78,7 @@ function AppShell() {
     <div className={`min-h-screen flex flex-col ${isDashboardRoute ? 'bg-[#FDFBF7]' : 'bg-cream/30 text-brandText selection:bg-gold/30 selection:text-primary'}`}>
       {!isDashboardRoute && <AnnouncementBar />}
       {!isDashboardRoute && <Navbar />}
-      <main className="flex-1">
+      <main className={`flex-1 ${!isDashboardRoute ? 'pb-16 lg:pb-0' : ''}`}>
         <Routes>
           {/* SuperAdmin Master Portal (4 Tabs: Overview, Manage Admin, Manage Client, Profile) */}
           <Route
@@ -242,6 +244,8 @@ function AppShell() {
       </main>
       {!isDashboardRoute && <FittingRoomPanel />}
       {!isDashboardRoute && <WhatsAppButton />}
+      {!isDashboardRoute && <MobileBottomNav />}
+      {!isDashboardRoute && <PWAInstallPrompt />}
       {!isDashboardRoute && <Footer />}
     </div>
   );
@@ -249,7 +253,7 @@ function AppShell() {
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <AuthProvider>
         <CartProvider>
           <WishlistProvider>

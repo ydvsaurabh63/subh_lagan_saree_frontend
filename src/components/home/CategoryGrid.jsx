@@ -3,20 +3,24 @@ import { Link } from 'react-router-dom';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import { useStore } from '../../context/StoreContext.jsx';
 
-// Reliable fallback imagery for every category to avoid broken images
+// Reliable fallback imagery for the 11 curated categories
 const categoryFallbacks = {
+  'banarasi': 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80',
+  'kanjivaram': 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=400&q=80',
+  'bridal-couture': 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80',
+  'pure-silk': 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=400&q=80',
+  'try-the-look': 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=400&q=80',
+  'shop-by-occasion': 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80',
+  'best-sellers': 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80',
+  'featured-brands': 'https://images.unsplash.com/photo-1610030469668-8e9f641aaf27?auto=format&fit=crop&w=400&q=80',
+  'new-arrival': 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=400&q=80',
+  'shop-by-fabric': 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80',
+  'trending': 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80',
+  // legacy aliases
   'banarasi-sarees': 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80',
   'bridal-sarees': 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80',
-  'chiffon-sarees': 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=400&q=80',
-  'cotton-sarees': 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=400&q=80',
-  'designer-sarees': 'https://images.unsplash.com/photo-1618901185975-d59f7091bcfe?auto=format&fit=crop&w=400&q=80',
-  'georgette-sarees': 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=400&q=80',
   'kanjivaram-sarees': 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=400&q=80',
-  'organza-sarees': 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=400&q=80',
-  'party-wear-sarees': 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=400&q=80',
-  'printed-sarees': 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=400&q=80',
   'silk-sarees': 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=400&q=80',
-  'wedding-sarees': 'https://images.unsplash.com/photo-1610030469668-8e9f641aaf27?auto=format&fit=crop&w=400&q=80',
 };
 
 const jewelleryFallbacks = [
@@ -52,7 +56,11 @@ const CategoryGrid = ({ categories = [] }) => {
         image: categoryFallbacks[slug],
       }));
 
-  const displayList = categories.length > 0 ? categories : defaultList;
+  const rawList = categories.length > 0 ? categories : defaultList;
+  const displayList = rawList.map((cat) => {
+    const customImage = store?.homeBanners?.[cat.slug]?.image || store?.homeBanners?.[cat.id]?.image;
+    return customImage ? { ...cat, image: customImage } : cat;
+  });
 
   // Duplicate items for continuous seamless loop
   const loopItems = [...displayList, ...displayList];
@@ -81,7 +89,7 @@ const CategoryGrid = ({ categories = [] }) => {
   };
 
   return (
-    <section className="py-10 bg-cream/50 overflow-hidden select-none">
+    <section className="py-10 bg-[#FAF7F2] overflow-hidden select-none">
       <div className="max-w-[1550px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row items-center justify-between mb-6">

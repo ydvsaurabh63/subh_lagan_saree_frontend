@@ -7,15 +7,13 @@ import toast from 'react-hot-toast';
 import {
   Plus,
   Search,
-  Filter,
   Edit2,
   Trash2,
-  X,
-  Image as ImageIcon,
-  Check,
-  AlertTriangle,
   Sparkles,
   ExternalLink,
+  PackagePlus,
+  Layers,
+  RotateCcw,
   Upload,
   Loader2,
 } from 'lucide-react';
@@ -29,40 +27,29 @@ const AdminProducts = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [stockFilter, setStockFilter] = useState('all');
 
-  // Modal State
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // Navigation tab: 'add' (Add New Product form) | 'inventory' (Catalog list)
+  const [activeTab, setActiveTab] = useState('add');
   const [editingProduct, setEditingProduct] = useState(null);
   const [saving, setSaving] = useState(false);
 
-  // Form State
+  // Form State (Cleaned to essentials: Title, Category, Price, Discount Price)
   const initialForm = {
     name: '',
-    sku: '',
     category: '',
     price: '',
     discountPrice: '',
-    fabric: 'Pure Katan Silk',
-    color: 'Royal Maroon',
-    sareeLength: '5.5 Meters',
-    blouseDetails: '0.8 Meters Unstitched Silk Blouse Piece',
-    occasion: 'Bridal',
-    stock: 10,
-    images: ['https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=80'],
-    description: '',
-    isFeatured: false,
-    isBestSeller: false,
-    isNewArrival: true,
-    isBridal: false,
   };
   const [formData, setFormData] = useState(initialForm);
-  const [imageInput, setImageInput] = useState('');
+
+  // Single Gallery Photo Upload State
+  const [imageUrl, setImageUrl] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
   const fileInputRef = useRef(null);
 
   const fetchCategories = async () => {
     try {
       const res = await categoryApi.getCategories();
-      if (res.success) {
+      if (res.success && res.categories) {
         setCategories(res.categories);
         if (!formData.category && res.categories.length > 0) {
           setFormData((prev) => ({ ...prev, category: res.categories[0]._id }));
@@ -112,55 +99,37 @@ const AdminProducts = () => {
     return () => clearTimeout(timer);
   }, [search, selectedCategory, stockFilter]);
 
-  const handleOpenAddModal = () => {
+  const handleOpenAdd = () => {
     setEditingProduct(null);
     setFormData({
       ...initialForm,
       category: categories[0]?._id || '',
     });
-    setImageInput('');
-    setIsModalOpen(true);
+    setImageUrl('');
+    setActiveTab('add');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleOpenEditModal = (prod) => {
+  const handleOpenEdit = (prod) => {
     setEditingProduct(prod);
     setFormData({
       name: prod.name || '',
-      sku: prod.sku || '',
       category: prod.category?._id || prod.category || '',
       price: prod.price || '',
       discountPrice: prod.discountPrice || '',
-      fabric: prod.fabric || 'Pure Silk',
-      color: prod.color || 'Maroon',
-      sareeLength: prod.sareeLength || '5.5 Meters',
-      blouseDetails: prod.blouseDetails || '0.8 Meters Unstitched Silk Blouse',
-      occasion: prod.occasion || 'Wedding',
-      stock: prod.stock !== undefined ? prod.stock : 10,
-      images: prod.images && prod.images.length > 0 ? prod.images : ['https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=80'],
-      description: prod.description || '',
-      isFeatured: Boolean(prod.isFeatured),
-      isBestSeller: Boolean(prod.isBestSeller),
-      isNewArrival: Boolean(prod.isNewArrival),
-      isBridal: Boolean(prod.isBridal),
     });
-    setImageInput('');
-    setIsModalOpen(true);
+    setImageUrl(prod.images?.[0] || '');
+    setActiveTab('add');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleAddImageUrl = () => {
-    if (!imageInput.trim()) return;
-    setFormData((prev) => ({
-      ...prev,
-      images: [...prev.images, imageInput.trim()],
-    }));
-    setImageInput('');
-  };
-
-  const handleRemoveImage = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, idx) => idx !== index),
-    }));
+  const handleCancelEdit = () => {
+    setEditingProduct(null);
+    setFormData({
+      ...initialForm,
+      category: categories[0]?._id || '',
+    });
+    setImageUrl('');
   };
 
   const handleFileUpload = async (e) => {
@@ -172,14 +141,11 @@ const AdminProducts = () => {
       fd.append('image', file);
       const res = await uploadApi.uploadImage(fd);
       if (res && res.url) {
-        setFormData((prev) => ({
-          ...prev,
-          images: [...prev.images, res.url],
-        }));
-        toast.success('Image uploaded to Cloudinary successfully!');
+        setImageUrl(res.url);
+        toast.success('Gallery photo uploaded successfully!');
       }
     } catch (err) {
-      toast.error('Image upload failed: ' + (err.message || 'Error'));
+      toast.error('Upload failed: ' + (err.message || 'Error'));
     } finally {
       setUploadingImage(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -195,24 +161,67 @@ const AdminProducts = () => {
 
     try {
       setSaving(true);
+      const chosenCat = categories.find(c => c._id === formData.category || c.slug === formData.category);
+      const catSlug = chosenCat?.slug || '';
+
+      const categoryFallbacks = {
+        'banarasi': 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=80',
+        'kanjivaram': 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1000&q=80',
+        'bridal-couture': 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=80',
+        'pure-silk': 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=1000&q=80',
+        'try-the-look': '/models/model-1.png',
+        'shop-by-occasion': 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=80',
+        'best-sellers': 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=80',
+        'featured-brands': 'https://images.unsplash.com/photo-1610030469668-8e9f641aaf27?auto=format&fit=crop&w=1000&q=80',
+        'new-arrival': 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1000&q=80',
+        'shop-by-fabric': 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=80',
+        'trending': 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=80',
+      };
+      const fallbackImg = chosenCat?.image || categoryFallbacks[catSlug] || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=80';
+      const finalImages = imageUrl ? [imageUrl] : (editingProduct?.images?.length ? editingProduct.images : [fallbackImg]);
+
+      const payload = {
+        name: formData.name,
+        category: formData.category,
+        price: Number(formData.price),
+        discountPrice: formData.discountPrice ? Number(formData.discountPrice) : undefined,
+        sku: editingProduct?.sku || `SLS-${Date.now().toString(36).toUpperCase()}`,
+        stock: editingProduct?.stock !== undefined ? editingProduct.stock : 10,
+        fabric: editingProduct?.fabric || 'Pure Silk',
+        description: editingProduct?.description || `${formData.name} - Handcrafted luxury saree collection`,
+        images: finalImages,
+        isBestSeller: catSlug === 'best-sellers',
+        isNewArrival: catSlug === 'new-arrival',
+        isBridal: catSlug === 'bridal-couture',
+        isFeatured: catSlug === 'trending' || catSlug === 'try-the-look',
+        storeSlug: user?.storeName ? user.storeName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-') : 'subh-lagan',
+        storeName: user?.storeName || 'Subh Lagan Sarees',
+      };
+
       if (editingProduct) {
-        const res = await adminApi.updateProduct(editingProduct._id, formData);
+        const res = await adminApi.updateProduct(editingProduct._id, payload);
         if (res.success) {
           toast.success('Saree product updated successfully');
-          setIsModalOpen(false);
+          setEditingProduct(null);
+          setFormData({
+            ...initialForm,
+            category: categories[0]?._id || '',
+          });
+          setImageUrl('');
           fetchProducts();
+          setActiveTab('inventory');
         }
       } else {
-        const payload = {
-          ...formData,
-          storeSlug: user?.storeName ? user.storeName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-') : 'subh-lagan',
-          storeName: user?.storeName || 'Subh Lagan Sarees',
-        };
         const res = await adminApi.createProduct(payload);
         if (res.success) {
-          toast.success('New saree added to boutique catalog');
-          setIsModalOpen(false);
+          toast.success('New saree product published successfully');
+          setFormData({
+            ...initialForm,
+            category: categories[0]?._id || '',
+          });
+          setImageUrl('');
           fetchProducts();
+          setActiveTab('inventory');
         }
       }
     } catch (err) {
@@ -223,7 +232,7 @@ const AdminProducts = () => {
   };
 
   const handleDelete = async (id, name) => {
-    if (!window.confirm(`Are you sure you want to remove "${name}" from the store catalog?`)) {
+    if (!window.confirm(`Are you sure you want to remove "${name}" from the catalog?`)) {
       return;
     }
     try {
@@ -238,231 +247,77 @@ const AdminProducts = () => {
   };
 
   return (
-    <AdminLayout title="Saree Inventory & Catalog">
+    <AdminLayout title="Add Product">
       <div className="space-y-6">
-        {/* Header Actions */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-xl border border-stone-200/80 shadow-sm">
-          <div className="flex-1 flex flex-wrap items-center gap-3">
-            {/* Search Input */}
-            <div className="relative flex-1 min-w-[220px]">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
-              <input
-                type="text"
-                placeholder="Search by name, SKU, fabric..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 text-xs border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
-              />
-            </div>
-
-            {/* Category Dropdown */}
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="py-2 px-3 text-xs border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary bg-white"
+        {/* Top View Selector Tabs */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-b border-stone-200/80 pb-3">
+          <div className="inline-flex p-1 bg-stone-100 rounded-xl border border-stone-200 shrink-0">
+            <button
+              type="button"
+              onClick={() => setActiveTab('add')}
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-extrabold uppercase tracking-wider transition-all ${
+                activeTab === 'add'
+                  ? 'bg-primary text-white shadow-md'
+                  : 'text-stone-600 hover:text-stone-900'
+              }`}
             >
-              <option value="all">All Categories</option>
-              {categories.map((cat) => (
-                <option key={cat._id} value={cat.slug}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
+              <PackagePlus className="w-4 h-4 text-gold" />
+              <span>{editingProduct ? 'Edit Saree Product' : 'Add New Product'}</span>
+            </button>
 
-            {/* Stock Filter */}
-            <select
-              value={stockFilter}
-              onChange={(e) => setStockFilter(e.target.value)}
-              className="py-2 px-3 text-xs border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary bg-white"
+            <button
+              type="button"
+              onClick={() => setActiveTab('inventory')}
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-extrabold uppercase tracking-wider transition-all ${
+                activeTab === 'inventory'
+                  ? 'bg-primary text-white shadow-md'
+                  : 'text-stone-600 hover:text-stone-900'
+              }`}
             >
-              <option value="all">All Stock Status</option>
-              <option value="low">Low Stock (≤ 5)</option>
-              <option value="out">Out of Stock (0)</option>
-            </select>
+              <Layers className="w-4 h-4 text-gold" />
+              <span>All Products ({products.length})</span>
+            </button>
           </div>
 
-          <button
-            onClick={handleOpenAddModal}
-            className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-secondary text-white font-extrabold px-4 py-2.5 rounded-lg text-xs tracking-wider uppercase transition-all shadow-md shrink-0"
-          >
-            <Plus className="w-4 h-4 text-white stroke-[3]" />
-            Add New Saree
-          </button>
-        </div>
-
-        {/* Product Table */}
-        <div className="bg-white rounded-xl border border-stone-200/90 shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-stone-50 text-stone-700 uppercase tracking-wider font-extrabold border-b border-stone-200">
-                <tr>
-                  <th className="py-3.5 px-4 font-extrabold">Saree & SKU</th>
-                  <th className="py-3.5 px-4 font-extrabold">Category & Fabric</th>
-                  <th className="py-3.5 px-4 font-extrabold">Price / Discount</th>
-                  <th className="py-3.5 px-4 font-extrabold">Stock Status</th>
-                  <th className="py-3.5 px-4 font-extrabold">Highlights</th>
-                  <th className="py-3.5 px-4 text-right font-extrabold">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-stone-100 font-medium">
-                {loading ? (
-                  <tr>
-                    <td colSpan="6" className="py-12 text-center text-stone-400 font-bold">
-                      <div className="w-6 h-6 border-2 border-gold border-t-transparent rounded-full animate-spin mx-auto mb-2" />
-                      Loading saree inventory...
-                    </td>
-                  </tr>
-                ) : products.length > 0 ? (
-                  products.map((prod) => (
-                    <tr key={prod._id} className="hover:bg-stone-50/80 transition-colors">
-                      {/* Saree & SKU */}
-                      <td className="py-3.5 px-4">
-                        <div className="flex items-center gap-3">
-                          <img
-                            src={prod.images?.[0] || 'https://via.placeholder.com/60'}
-                            alt={prod.name}
-                            className="w-12 h-14 object-cover rounded shadow-sm border border-stone-200 shrink-0"
-                          />
-                          <div>
-                            <p className="font-extrabold text-stone-950 text-sm max-w-[220px] truncate leading-tight">
-                              {prod.name}
-                            </p>
-                            <p className="text-[11px] font-mono font-bold text-stone-500 mt-0.5">
-                              {prod.sku}
-                            </p>
-                            <a
-                              href={`/product/${prod.slug || prod._id}`}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="text-[11px] font-bold text-primary hover:text-gold inline-flex items-center gap-0.5 mt-0.5"
-                            >
-                              Live View <ExternalLink className="w-3 h-3" />
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-
-                      {/* Category & Fabric */}
-                      <td className="py-3.5 px-4">
-                        <span className="font-bold text-stone-900 text-xs">
-                          {prod.category?.name || 'Unassigned'}
-                        </span>
-                        <p className="text-[11px] text-stone-600 font-semibold mt-0.5">
-                          {prod.fabric} • {prod.color}
-                        </p>
-                      </td>
-
-                      {/* Price / Discount */}
-                      <td className="py-3.5 px-4">
-                        <div className="font-extrabold text-sm text-primary">
-                          {formatPrice(prod.discountPrice || prod.price)}
-                        </div>
-                        {prod.discountPrice && prod.discountPrice < prod.price && (
-                          <div className="text-[11px] font-bold text-stone-400 line-through">
-                            {formatPrice(prod.price)}
-                          </div>
-                        )}
-                      </td>
-
-                      {/* Stock */}
-                      <td className="py-3.5 px-4">
-                        <span
-                          className={`inline-block px-2.5 py-1 rounded text-xs font-extrabold ${
-                            prod.stock <= 0
-                              ? 'bg-rose-100 text-rose-800 border border-rose-300'
-                              : prod.stock <= 5
-                              ? 'bg-amber-100 text-amber-900 border border-amber-300'
-                              : 'bg-emerald-50 text-emerald-800 border border-emerald-300'
-                          }`}
-                        >
-                          {prod.stock <= 0 ? 'Out of Stock' : `${prod.stock} in stock`}
-                        </span>
-                      </td>
-
-                      {/* Highlights */}
-                      <td className="py-3.5 px-4">
-                        <div className="flex flex-wrap gap-1 max-w-[160px]">
-                          {prod.isBridal && (
-                            <span className="px-2 py-0.5 rounded bg-primary text-white text-[10px] font-extrabold uppercase">
-                              Bridal
-                            </span>
-                          )}
-                          {prod.isBestSeller && (
-                            <span className="px-2 py-0.5 rounded bg-amber-600 text-white text-[10px] font-extrabold uppercase">
-                              Best Seller
-                            </span>
-                          )}
-                          {prod.isFeatured && (
-                            <span className="px-2 py-0.5 rounded bg-gold text-primary text-[10px] font-extrabold uppercase">
-                              Featured
-                            </span>
-                          )}
-                          {prod.isNewArrival && (
-                            <span className="px-2 py-0.5 rounded bg-blue-700 text-white text-[10px] font-extrabold uppercase">
-                              New
-                            </span>
-                          )}
-                        </div>
-                      </td>
-
-                      {/* Actions */}
-                      <td className="py-3.5 px-4 text-right">
-                        <div className="inline-flex items-center gap-1">
-                          <button
-                            onClick={() => handleOpenEditModal(prod)}
-                            title="Edit Saree Details"
-                            className="p-1.5 text-stone-600 hover:text-primary hover:bg-stone-100 rounded transition-colors"
-                          >
-                            <Edit2 className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(prod._id, prod.name)}
-                            title="Remove from Catalog"
-                            className="p-1.5 text-stone-400 hover:text-rose-600 hover:bg-rose-50 rounded transition-colors"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="6" className="py-12 text-center text-stone-400">
-                      No sarees match your current search and filters.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+          <div className="text-left sm:text-right">
+            <span className="text-[11px] font-bold text-stone-500 uppercase tracking-widest">
+              Live Categories: <strong className="text-primary">{categories.length} Ready</strong>
+            </span>
           </div>
         </div>
-      </div>
 
-      {/* Add / Edit Saree Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl w-full max-w-3xl shadow-2xl overflow-hidden border border-gold/30 my-8">
-            {/* Modal Header */}
-            <div className="p-5 bg-gradient-to-r from-primary to-secondary text-white flex items-center justify-between">
+        {/* TAB 1: ADD / EDIT PRODUCT FORM */}
+        {activeTab === 'add' && (
+          <div className="bg-white rounded-2xl border border-stone-200/90 shadow-sm overflow-hidden">
+            {/* Header Banner */}
+            <div className="bg-gradient-to-r from-[#2B0A13] via-[#3E101D] to-[#2B0A13] text-white p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h3 className="font-serif text-lg font-bold text-white">
-                  {editingProduct ? 'Edit Saree Details' : 'Add New Saree to Boutique'}
-                </h3>
-                <p className="text-[11px] text-white/80">
-                  Update product descriptions, high-resolution photography, and live inventory
+                <div className="inline-flex items-center gap-1.5 bg-gold/20 text-gold text-[10px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-full mb-1 border border-gold/30">
+                  <Sparkles className="w-3 h-3 text-gold" />
+                  Product Form
+                </div>
+                <h2 className="font-serif text-xl sm:text-2xl font-bold text-cream">
+                  {editingProduct ? `Edit Saree: ${editingProduct.name}` : 'Add New Saree Product'}
+                </h2>
+                <p className="text-xs text-stone-300 mt-0.5">
+                  Enter saree title, choose category, set pricing, and upload photo from gallery.
                 </p>
               </div>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-white/80 hover:text-white p-1 rounded-lg"
-              >
-                <X className="w-5 h-5" />
-              </button>
+
+              {editingProduct && (
+                <button
+                  type="button"
+                  onClick={handleCancelEdit}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 text-cream rounded-lg text-xs font-bold border border-white/20 transition self-start sm:self-auto"
+                >
+                  <RotateCcw className="w-3.5 h-3.5 text-gold" />
+                  Cancel Edit (Add New Instead)
+                </button>
+              )}
             </div>
 
-            {/* Modal Form */}
-            <form onSubmit={handleSubmit} className="p-6 space-y-5 text-xs max-h-[75vh] overflow-y-auto">
+            {/* Direct Form */}
+            <form onSubmit={handleSubmit} className="p-5 sm:p-7 space-y-5 text-xs">
               {/* Row 1: Name & Category */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -475,19 +330,19 @@ const AdminProducts = () => {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="e.g. Royal Crimson Banarasi Katan Silk Saree"
-                    className="w-full p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
+                    className="w-full p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm font-medium"
                   />
                 </div>
 
                 <div>
                   <label className="block font-semibold text-stone-700 mb-1">
-                    Category *
+                    Category * (11 Dynamic Showcase Sections)
                   </label>
                   <select
                     required
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary bg-white"
+                    className="w-full p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary bg-white text-sm font-medium"
                   >
                     <option value="" disabled>
                       Select Category
@@ -501,8 +356,8 @@ const AdminProducts = () => {
                 </div>
               </div>
 
-              {/* Row 2: Price, Discount Price, Stock, SKU */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {/* Row 2: Price & Selling Price */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block font-semibold text-stone-700 mb-1">
                     MRP Price (₹) *
@@ -514,7 +369,7 @@ const AdminProducts = () => {
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                     placeholder="24999"
-                    className="w-full p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
+                    className="w-full p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm font-medium"
                   />
                 </div>
 
@@ -528,259 +383,312 @@ const AdminProducts = () => {
                     value={formData.discountPrice}
                     onChange={(e) => setFormData({ ...formData, discountPrice: e.target.value })}
                     placeholder="19999"
-                    className="w-full p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-semibold text-stone-700 mb-1">
-                    Stock Quantity *
-                  </label>
-                  <input
-                    type="number"
-                    required
-                    min="0"
-                    value={formData.stock}
-                    onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                    className="w-full p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-semibold text-stone-700 mb-1">
-                    SKU Code
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.sku}
-                    onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
-                    placeholder="Auto-generated if blank"
-                    className="w-full p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
+                    className="w-full p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary text-sm font-medium"
                   />
                 </div>
               </div>
 
-              {/* Row 3: Fabric, Color, Occasion, Length */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <div>
-                  <label className="block font-semibold text-stone-700 mb-1">Fabric</label>
-                  <input
-                    type="text"
-                    value={formData.fabric}
-                    onChange={(e) => setFormData({ ...formData, fabric: e.target.value })}
-                    placeholder="Pure Katan Silk"
-                    className="w-full p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-semibold text-stone-700 mb-1">Color</label>
-                  <input
-                    type="text"
-                    value={formData.color}
-                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-                    placeholder="Royal Maroon"
-                    className="w-full p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-semibold text-stone-700 mb-1">Occasion</label>
-                  <select
-                    value={formData.occasion}
-                    onChange={(e) => setFormData({ ...formData, occasion: e.target.value })}
-                    className="w-full p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary bg-white"
-                  >
-                    <option value="Bridal">Bridal</option>
-                    <option value="Wedding">Wedding</option>
-                    <option value="Festive">Festive</option>
-                    <option value="Party Wear">Party Wear</option>
-                    <option value="Casual">Casual</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block font-semibold text-stone-700 mb-1">Length</label>
-                  <input
-                    type="text"
-                    value={formData.sareeLength}
-                    onChange={(e) => setFormData({ ...formData, sareeLength: e.target.value })}
-                    placeholder="5.5 Meters"
-                    className="w-full p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
-                  />
-                </div>
-              </div>
-
-              {/* Row 4: Blouse Details */}
-              <div>
-                <label className="block font-semibold text-stone-700 mb-1">
-                  Blouse Piece Details
+              {/* Row 3: Upload Photo from Gallery */}
+              <div className="bg-stone-50/80 p-4 rounded-xl border border-stone-200">
+                <label className="block font-semibold text-stone-800 mb-1.5">
+                  Saree Photo (Gallery Upload)
                 </label>
                 <input
-                  type="text"
-                  value={formData.blouseDetails}
-                  onChange={(e) => setFormData({ ...formData, blouseDetails: e.target.value })}
-                  placeholder="0.8 Meters Unstitched Brocade Silk Blouse Piece with Zari Border"
-                  className="w-full p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileUpload}
+                  accept="image/*"
+                  className="hidden"
                 />
-              </div>
 
-              {/* Row 5: Product Images (Cloudinary Direct File Upload & URL list) */}
-              <div>
-                <label className="block font-semibold text-stone-700 mb-1">
-                  Product Photography (Cloudinary Upload / Image URLs)
-                </label>
-
-                {/* Upload from Device or Paste URL */}
-                <div className="flex flex-col sm:flex-row gap-2 mb-3">
-                  <div className="flex-1 flex gap-2">
-                    <input
-                      type="url"
-                      placeholder="Paste image URL (https://...)"
-                      value={imageInput}
-                      onChange={(e) => setImageInput(e.target.value)}
-                      className="flex-1 p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
+                {imageUrl ? (
+                  <div className="flex items-center gap-4 p-2.5 bg-white rounded-xl border border-stone-200 shadow-sm max-w-md">
+                    <img
+                      src={imageUrl}
+                      alt="Uploaded saree"
+                      className="w-16 h-20 object-cover rounded-lg border border-stone-200 shadow-sm"
                     />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-stone-900 text-xs">✓ Photo Uploaded from Gallery</p>
+                      <p className="text-[11px] text-emerald-600 font-medium">Ready for website showcase</p>
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={uploadingImage}
+                        className="text-[11px] text-primary hover:underline font-bold mt-1 inline-block"
+                      >
+                        Change Photo
+                      </button>
+                    </div>
                     <button
                       type="button"
-                      onClick={handleAddImageUrl}
-                      className="px-4 py-2 bg-stone-800 text-white rounded-lg hover:bg-stone-900 font-semibold shrink-0"
+                      onClick={() => setImageUrl('')}
+                      className="p-2 text-stone-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition"
+                      title="Remove Photo"
                     >
-                      Add URL
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
-
-                  <div className="shrink-0 flex items-center">
-                    <input
-                      type="file"
-                      ref={fileInputRef}
-                      onChange={handleFileUpload}
-                      accept="image/*"
-                      className="hidden"
-                    />
+                ) : (
+                  <div className="flex flex-wrap items-center gap-3">
                     <button
                       type="button"
                       disabled={uploadingImage}
                       onClick={() => fileInputRef.current?.click()}
-                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-primary to-secondary text-white rounded-lg hover:brightness-110 font-bold transition shadow-sm disabled:opacity-50"
+                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary hover:bg-secondary text-white font-bold text-xs rounded-xl shadow-sm transition active:scale-95 disabled:opacity-50"
                     >
                       {uploadingImage ? (
                         <>
                           <Loader2 className="w-4 h-4 animate-spin text-gold" />
-                          Uploading...
+                          <span>Uploading from Gallery...</span>
                         </>
                       ) : (
                         <>
                           <Upload className="w-4 h-4 text-gold" />
-                          Upload from Device
+                          <span>📷 Upload Photo from Gallery</span>
                         </>
                       )}
                     </button>
+                    <span className="text-[11px] text-stone-500">
+                      Tap to choose photo from mobile gallery or device files
+                    </span>
                   </div>
-                </div>
-
-                {/* Previews */}
-                <div className="flex flex-wrap gap-3">
-                  {formData.images.map((url, idx) => (
-                    <div
-                      key={idx}
-                      className="relative group w-20 h-24 rounded-lg overflow-hidden border border-stone-200 shadow-sm"
-                    >
-                      <img src={url} alt="preview" className="w-full h-full object-cover" />
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveImage(idx)}
-                        className="absolute top-1 right-1 bg-rose-600 text-white rounded-full p-1 opacity-80 hover:opacity-100 shadow transition-opacity"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
+                )}
               </div>
 
-              {/* Row 6: Description */}
-              <div>
-                <label className="block font-semibold text-stone-700 mb-1">
-                  Artisanal Story & Description
-                </label>
-                <textarea
-                  rows="3"
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="Describe the zari craftsmanship, weave history, and pallu detailing..."
-                  className="w-full p-2.5 border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-              </div>
-
-              {/* Row 7: Badges Checkboxes */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-stone-50 p-3 rounded-xl border border-stone-200">
-                <label className="flex items-center gap-2 cursor-pointer font-medium text-stone-700">
-                  <input
-                    type="checkbox"
-                    checked={formData.isBridal}
-                    onChange={(e) => setFormData({ ...formData, isBridal: e.target.checked })}
-                    className="w-4 h-4 text-primary rounded"
-                  />
-                  <span>Bridal Couture</span>
-                </label>
-
-                <label className="flex items-center gap-2 cursor-pointer font-medium text-stone-700">
-                  <input
-                    type="checkbox"
-                    checked={formData.isBestSeller}
-                    onChange={(e) => setFormData({ ...formData, isBestSeller: e.target.checked })}
-                    className="w-4 h-4 text-primary rounded"
-                  />
-                  <span>Best Seller</span>
-                </label>
-
-                <label className="flex items-center gap-2 cursor-pointer font-medium text-stone-700">
-                  <input
-                    type="checkbox"
-                    checked={formData.isFeatured}
-                    onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
-                    className="w-4 h-4 text-primary rounded"
-                  />
-                  <span>Featured Saree</span>
-                </label>
-
-                <label className="flex items-center gap-2 cursor-pointer font-medium text-stone-700">
-                  <input
-                    type="checkbox"
-                    checked={formData.isNewArrival}
-                    onChange={(e) => setFormData({ ...formData, isNewArrival: e.target.checked })}
-                    className="w-4 h-4 text-primary rounded"
-                  />
-                  <span>New Arrival</span>
-                </label>
-              </div>
-
-              {/* Modal Footer */}
+              {/* Actions */}
               <div className="flex items-center justify-end gap-3 pt-3 border-t border-stone-200">
                 <button
                   type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 border border-stone-300 text-stone-700 rounded-lg hover:bg-stone-50 font-medium"
+                  onClick={() => {
+                    setEditingProduct(null);
+                    setFormData({
+                      name: '',
+                      category: categories[0]?._id || '',
+                      price: '',
+                      discountPrice: '',
+                    });
+                    setImageUrl('');
+                  }}
+                  className="px-4 py-2.5 border border-stone-300 text-stone-700 rounded-lg hover:bg-stone-50 font-medium"
                 >
-                  Cancel
+                  Clear Form
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-6 py-2 bg-primary hover:bg-secondary text-white rounded-lg font-bold shadow-md flex items-center gap-2"
+                  className="px-6 py-2.5 bg-primary hover:bg-secondary text-white rounded-lg font-bold shadow-md flex items-center gap-2 text-xs uppercase tracking-wider transition-all"
                 >
                   {saving && <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />}
-                  {editingProduct ? 'Save Changes' : 'Publish Saree to Boutique'}
+                  {editingProduct ? 'Save Product Changes' : '✨ Publish Saree Product'}
                 </button>
               </div>
             </form>
           </div>
-        </div>
-      )}
+        )}
+
+        {/* TAB 2: INVENTORY & CATALOG LIST */}
+        {activeTab === 'inventory' && (
+          <div className="space-y-4">
+            {/* Header Actions */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-xl border border-stone-200/80 shadow-sm">
+              <div className="flex-1 flex flex-wrap items-center gap-3">
+                {/* Search Input */}
+                <div className="relative flex-1 min-w-[220px]">
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+                  <input
+                    type="text"
+                    placeholder="Search by name, SKU..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="w-full pl-9 pr-4 py-2 text-xs border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+
+                {/* Category Dropdown */}
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="py-2 px-3 text-xs border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary bg-white"
+                >
+                  <option value="all">All Categories</option>
+                  {categories.map((cat) => (
+                    <option key={cat._id} value={cat.slug}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+
+                {/* Stock Filter */}
+                <select
+                  value={stockFilter}
+                  onChange={(e) => setStockFilter(e.target.value)}
+                  className="py-2 px-3 text-xs border border-stone-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary bg-white"
+                >
+                  <option value="all">All Stock Status</option>
+                  <option value="low">Low Stock (≤ 5)</option>
+                  <option value="out">Out of Stock (0)</option>
+                </select>
+              </div>
+
+              <button
+                onClick={handleOpenAdd}
+                className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-secondary text-white font-extrabold px-4 py-2.5 rounded-lg text-xs tracking-wider uppercase transition-all shadow-md shrink-0"
+              >
+                <Plus className="w-4 h-4 text-white stroke-[3]" />
+                Add New Saree
+              </button>
+            </div>
+
+            {/* Product Table */}
+            <div className="bg-white rounded-xl border border-stone-200/90 shadow-sm overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-stone-50 text-stone-700 uppercase tracking-wider font-extrabold border-b border-stone-200">
+                    <tr>
+                      <th className="py-3.5 px-4 font-extrabold">Saree & SKU</th>
+                      <th className="py-3.5 px-4 font-extrabold">Category</th>
+                      <th className="py-3.5 px-4 font-extrabold">Price / Discount</th>
+                      <th className="py-3.5 px-4 font-extrabold">Stock Status</th>
+                      <th className="py-3.5 px-4 font-extrabold">Highlights</th>
+                      <th className="py-3.5 px-4 text-right font-extrabold">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-stone-100 font-medium">
+                    {loading ? (
+                      <tr>
+                        <td colSpan="6" className="py-12 text-center text-stone-400 font-bold">
+                          <div className="w-6 h-6 border-2 border-gold border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                          Loading saree inventory...
+                        </td>
+                      </tr>
+                    ) : products.length > 0 ? (
+                      products.map((prod) => (
+                        <tr key={prod._id} className="hover:bg-stone-50/80 transition-colors">
+                          {/* Saree & SKU */}
+                          <td className="py-3.5 px-4">
+                            <div className="flex items-center gap-3">
+                              <img
+                                src={prod.images?.[0] || 'https://via.placeholder.com/60'}
+                                alt={prod.name}
+                                className="w-12 h-14 object-cover rounded shadow-sm border border-stone-200 shrink-0"
+                              />
+                              <div>
+                                <p className="font-extrabold text-stone-950 text-sm max-w-[220px] truncate leading-tight">
+                                  {prod.name}
+                                </p>
+                                <p className="text-[11px] font-mono font-bold text-stone-500 mt-0.5">
+                                  {prod.sku}
+                                </p>
+                                <a
+                                  href={`/product/${prod.slug || prod._id}`}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="text-[11px] font-bold text-primary hover:text-gold inline-flex items-center gap-0.5 mt-0.5"
+                                >
+                                  Live View <ExternalLink className="w-3 h-3" />
+                                </a>
+                              </div>
+                            </div>
+                          </td>
+
+                          {/* Category */}
+                          <td className="py-3.5 px-4">
+                            <span className="font-bold text-stone-900 text-xs">
+                              {prod.category?.name || 'Saree'}
+                            </span>
+                          </td>
+
+                          {/* Price */}
+                          <td className="py-3.5 px-4">
+                            <p className="font-extrabold text-stone-950 text-xs">
+                              {formatPrice(prod.discountPrice || prod.price)}
+                            </p>
+                            {prod.discountPrice && (
+                              <p className="text-[10px] text-stone-400 line-through">
+                                {formatPrice(prod.price)}
+                              </p>
+                            )}
+                          </td>
+
+                          {/* Stock */}
+                          <td className="py-3.5 px-4">
+                            <span
+                              className={`inline-block px-2.5 py-1 rounded text-xs font-extrabold ${
+                                prod.stock <= 0
+                                  ? 'bg-rose-100 text-rose-800 border border-rose-300'
+                                  : prod.stock <= 5
+                                  ? 'bg-amber-100 text-amber-900 border border-amber-300'
+                                  : 'bg-emerald-50 text-emerald-800 border border-emerald-300'
+                              }`}
+                            >
+                              {prod.stock <= 0 ? 'Out of Stock' : `${prod.stock} in stock`}
+                            </span>
+                          </td>
+
+                          {/* Highlights */}
+                          <td className="py-3.5 px-4">
+                            <div className="flex flex-wrap gap-1 max-w-[160px]">
+                              {prod.isBridal && (
+                                <span className="px-2 py-0.5 rounded bg-primary text-white text-[10px] font-extrabold uppercase">
+                                  Bridal
+                                </span>
+                              )}
+                              {prod.isBestSeller && (
+                                <span className="px-2 py-0.5 rounded bg-amber-600 text-white text-[10px] font-extrabold uppercase">
+                                  Best Seller
+                                </span>
+                              )}
+                              {prod.isFeatured && (
+                                <span className="px-2 py-0.5 rounded bg-gold text-primary text-[10px] font-extrabold uppercase">
+                                  Featured
+                                </span>
+                              )}
+                              {prod.isNewArrival && (
+                                <span className="px-2 py-0.5 rounded bg-blue-700 text-white text-[10px] font-extrabold uppercase">
+                                  New
+                                </span>
+                              )}
+                            </div>
+                          </td>
+
+                          {/* Actions */}
+                          <td className="py-3.5 px-4 text-right">
+                            <div className="inline-flex items-center gap-1">
+                              <button
+                                onClick={() => handleOpenEdit(prod)}
+                                title="Edit Saree Details"
+                                className="p-1.5 text-stone-600 hover:text-primary hover:bg-stone-100 rounded transition-colors"
+                              >
+                                <Edit2 className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(prod._id, prod.name)}
+                                title="Remove from Catalog"
+                                className="p-1.5 text-stone-400 hover:text-rose-600 hover:bg-rose-50 rounded transition-colors"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="6" className="py-12 text-center text-stone-400">
+                          No sarees match your current search and filters.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </AdminLayout>
   );
 };
 
 export default AdminProducts;
-

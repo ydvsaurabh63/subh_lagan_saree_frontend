@@ -40,18 +40,28 @@ const Shop = () => {
   useEffect(() => {
     const fetchMetadata = async () => {
       try {
+        const storeParam = store?.slug || 'subh-lagan';
         const [catRes, filterRes] = await Promise.all([
           categoryApi.getCategories(),
-          productApi.getFilters(),
+          productApi.getFilters({ store: storeParam }),
         ]);
-        if (catRes.success) setCategories(catRes.categories || []);
+        if (catRes.success) {
+          const rawCats = catRes.categories || [];
+          // Filter out categories irrelevant to this store type
+          const filtered = rawCats.filter((c) => {
+            if (store?.storeType === 'jewellery') return c.slug === 'jewellery';
+            if (store?.storeType === 'hair') return c.slug === 'hair-care-extensions';
+            return c.slug !== 'jewellery' && c.slug !== 'hair-care-extensions';
+          });
+          setCategories(filtered);
+        }
         if (filterRes.success) setFilterOptions(filterRes);
       } catch (err) {
         console.error('Error fetching filter facets:', err);
       }
     };
     fetchMetadata();
-  }, []);
+  }, [store?.slug, store?.storeType]);
 
   // Fetch Products function
   const fetchProducts = useCallback(async () => {

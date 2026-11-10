@@ -72,12 +72,19 @@ const FittingRoomPanel = () => {
 
   return (
     <>
+      {/* Semi-transparent backdrop overlay to dim background and close on outside tap */}
+      <div
+        className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-[105] transition-opacity duration-300"
+        onClick={closeTryOn}
+        aria-hidden="true"
+      />
+
       {/* 
-        CARD SIZE: REDUCED BY 5% WIDTH & 10% HEIGHT
+        FITTING ROOM CARD: HORIZONTALLY CENTERED & POSITIONED BELOW HEADER
       */}
       <aside
         aria-label="Fitting Room"
-        className="fixed left-3 sm:left-6 top-6 sm:top-14 z-50 w-[310px] sm:w-[360px] max-w-[calc(100vw-24px)] max-h-[92vh] overflow-y-auto bg-[#141416] border border-stone-800 rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.92)] text-white transition-all duration-300 animate-fade-in p-3.5 sm:p-4 space-y-3 select-none"
+        className="fixed left-1/2 -translate-x-1/2 top-[96px] sm:top-[112px] lg:top-[124px] z-[110] w-[320px] sm:w-[370px] max-w-[calc(100vw-28px)] max-h-[calc(100vh-125px)] overflow-y-auto bg-[#141416] border border-stone-800 rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.95)] text-white transition-all duration-300 animate-fade-in p-3.5 sm:p-4 space-y-3 select-none"
       >
         {/* Hidden File Input */}
         <input
@@ -115,16 +122,16 @@ const FittingRoomPanel = () => {
 
         {/* 
           STATE 1: NO PHOTO UPLOADED YET 
-          HIGHLIGHTED "UPLOAD GALLERY" BOX (5% NARROWER, 10% SHORTER)
+          HIGHLIGHTED "UPLOAD GALLERY" BOX
         */}
         {!customUserPhoto ? (
           <div className="space-y-3">
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="w-full aspect-[4/5] max-h-[415px] rounded-2xl border-2 border-dashed border-[#D97706] bg-gradient-to-b from-[#D97706]/15 via-[#D97706]/5 to-transparent hover:bg-[#D97706]/20 transition-all duration-300 flex flex-col items-center justify-center p-5 text-center cursor-pointer group shadow-[0_0_35px_rgba(217,119,6,0.2)] hover:shadow-[0_0_50px_rgba(217,119,6,0.35)] active:scale-98"
+              className="w-full aspect-[4/5] max-h-[350px] sm:max-h-[390px] rounded-2xl border-2 border-dashed border-[#D97706] bg-gradient-to-b from-[#D97706]/15 via-[#D97706]/5 to-transparent hover:bg-[#D97706]/20 transition-all duration-300 flex flex-col items-center justify-center p-4 sm:p-5 text-center cursor-pointer group shadow-[0_0_35px_rgba(217,119,6,0.2)] hover:shadow-[0_0_50px_rgba(217,119,6,0.35)] active:scale-98"
             >
-              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#D97706] text-white flex items-center justify-center mb-3.5 shadow-lg group-hover:scale-110 transition-transform">
-                <ImagePlus className="w-7 h-7 sm:w-8 sm:h-8" />
+              <div className="w-13 h-13 sm:w-16 sm:h-16 rounded-full bg-[#D97706] text-white flex items-center justify-center mb-3 shadow-lg group-hover:scale-110 transition-transform">
+                <ImagePlus className="w-6 h-6 sm:w-8 sm:h-8" />
               </div>
 
               <h4 className="font-serif text-base sm:text-lg font-bold text-white tracking-wide">
@@ -135,7 +142,7 @@ const FittingRoomPanel = () => {
               </p>
 
               {selectedProduct && (
-                <div className="mt-4 px-3 py-1 rounded-full bg-black/60 border border-white/10 text-[11px] text-stone-200 truncate max-w-[240px]">
+                <div className="mt-3.5 px-3 py-1 rounded-full bg-black/60 border border-white/10 text-[11px] text-stone-200 truncate max-w-[240px]">
                   Saree: <span className="text-[#F59E0B] font-bold">{selectedProduct.name}</span>
                 </div>
               )}
@@ -143,11 +150,11 @@ const FittingRoomPanel = () => {
           </div>
         ) : (
           /* 
-            STATE 2: PHOTO UPLOADED FROM GALLERY (5% NARROWER, 10% SHORTER)
+            STATE 2: PHOTO UPLOADED FROM GALLERY
           */
           <div className="space-y-3 animate-fade-in">
             {/* Main Portrait Photo Frame */}
-            <div className="relative w-full aspect-[4/5] max-h-[415px] rounded-2xl overflow-hidden bg-stone-900 border border-stone-800 flex items-center justify-center shadow-inner">
+            <div className="relative w-full aspect-[4/5] max-h-[350px] sm:max-h-[390px] rounded-2xl overflow-hidden bg-stone-900 border border-stone-800 flex items-center justify-center shadow-inner">
               <img
                 src={selectedProduct?.drapedPreview || customUserPhoto}
                 alt="Your Photo"

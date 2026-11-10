@@ -18,7 +18,7 @@ const InstagramGallery = () => {
     : '@SubhLaganSarees';
 
   return (
-    <section className="py-12 bg-cream/40">
+    <section className="py-12 bg-[#FAF7F2] border-t border-stone-200/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-xl mx-auto mb-8">
           <div className="flex items-center justify-center space-x-2 text-primary font-bold text-xs uppercase tracking-widest mb-1">

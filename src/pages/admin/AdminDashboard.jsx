@@ -99,11 +99,11 @@ const AdminDashboard = () => {
           </div>
           <div className="flex items-center gap-2">
             <Link
-              to="/admin/store"
+              to="/admin/products"
               className="inline-flex items-center gap-1.5 bg-primary hover:bg-secondary text-white font-bold px-3 py-1.5 rounded-lg text-xs uppercase tracking-wider transition shadow-sm"
             >
               <Plus className="w-3.5 h-3.5 text-gold" />
-              <span>Add Saree</span>
+              <span>Add Product</span>
             </Link>
             <Link
               to="/admin/sales"

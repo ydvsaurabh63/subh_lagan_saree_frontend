@@ -26,7 +26,7 @@ const pillars = [
 
 const WhyChooseUs = () => {
   return (
-    <section className="py-10 bg-white border-y border-stone-200">
+    <section className="py-10 bg-[#FAF7F2] border-y border-stone-200/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-xl mx-auto mb-6">
           <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary">
@@ -41,7 +41,7 @@ const WhyChooseUs = () => {
             return (
               <div
                 key={idx}
-                className="p-5 rounded-2xl bg-cream/50 border border-stone-200/80 hover:border-gold shadow-sm hover:shadow-luxury-hover transition-all text-center flex flex-col items-center group"
+                className="p-5 rounded-2xl bg-white border border-stone-200/80 hover:border-gold shadow-xs hover:shadow-luxury-hover transition-all text-center flex flex-col items-center group"
               >
                 <div className="w-12 h-12 rounded-full bg-primary/10 group-hover:bg-primary group-hover:text-white border border-primary/20 flex items-center justify-center text-primary mb-3 transition-colors shadow-sm">
                   <Icon className="w-6 h-6 transition-colors" />

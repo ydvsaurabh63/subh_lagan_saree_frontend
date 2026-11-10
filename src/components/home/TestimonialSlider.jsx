@@ -34,7 +34,7 @@ const TestimonialSlider = () => {
   const t = testimonials[current];
 
   return (
-    <section className="py-12 bg-cream/60">
+    <section className="py-12 bg-[#FAF7F2] border-t border-stone-200/60">
       <div className="max-w-2xl mx-auto px-4 text-center">
         <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary">
           Customer Reviews

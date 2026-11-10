@@ -238,9 +238,6 @@ export const StoreProvider = ({ children }) => {
 
   const loadStoreBySlug = async (slug) => {
     const cleanSlug = (slug || 'subh-lagan').toLowerCase().trim();
-    if (cleanSlug === 'subh-lagan' || cleanSlug === 'default') {
-      return resetToDefaultStore();
-    }
 
     // Handle domain: lookup
     let isDomainLookup = cleanSlug.startsWith('domain:');
@@ -252,11 +249,10 @@ export const StoreProvider = ({ children }) => {
       : getStoreBySlug(cleanSlug);
 
     if (localMatch) {
-      setStore(localMatch);
+      setStore((prev) => ({ ...localMatch, ...(prev?.homeBanners ? { homeBanners: prev.homeBanners } : {}) }));
       if (typeof window !== 'undefined') {
         localStorage.setItem('active_store_slug', localMatch.slug);
         localStorage.setItem('sls_store_slug', localMatch.slug);
-        localStorage.setItem('active_store_data', JSON.stringify(localMatch));
       }
     }
 
@@ -290,11 +286,7 @@ export const StoreProvider = ({ children }) => {
   // Re-synchronize store strictly whenever the route / URL changes
   useEffect(() => {
     const currentSlug = detectSlugFromLocation(location.pathname, location.search);
-    if (currentSlug === 'subh-lagan') {
-      resetToDefaultStore();
-    } else {
-      loadStoreBySlug(currentSlug);
-    }
+    loadStoreBySlug(currentSlug);
   }, [location.pathname, location.search]);
 
   // Dynamic document title based on active store
@@ -324,6 +316,8 @@ export const StoreProvider = ({ children }) => {
         loadingStore,
         loadStoreBySlug,
         resetToDefaultStore,
+        setStore,
+        refreshStore: () => loadStoreBySlug(store?.slug || 'subh-lagan'),
         allClientStores: CLIENT_STORES,
       }}
     >

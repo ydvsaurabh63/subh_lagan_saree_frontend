@@ -71,7 +71,7 @@ export const productApi = {
   getProducts: (params) => api.get('/products', { params }),
   getProduct: (identifier) => api.get(`/products/${identifier}`),
   getRelated: (id) => api.get(`/products/${id}/related`),
-  getFilters: () => api.get('/products/filters/options'),
+  getFilters: (params) => api.get('/products/filters/options', { params }),
 };
 
 // Cart
@@ -157,16 +157,78 @@ export const managementApi = {
   impersonateUser: (id) => api.post(`/management/impersonate/${id}`),
 };
 
-// Upload API (Cloudinary via backend)
+// Cloudinary Direct Config for high-speed client gallery uploads
+const CLOUDINARY_CONFIG = {
+  cloudName: 'dpa4crgv5',
+  apiKey: '224249444435518',
+  apiSecret: 'FLe2tz1IrHNqTYx9KJ0sfOrtWGc',
+  folder: 'subh_lagan_sarees',
+};
+
+async function sha1Hex(str) {
+  if (typeof window !== 'undefined' && window.crypto && window.crypto.subtle) {
+    const enc = new TextEncoder();
+    const hash = await window.crypto.subtle.digest('SHA-1', enc.encode(str));
+    return Array.from(new Uint8Array(hash))
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
+  }
+  return '';
+}
+
+// Upload API (Direct high-speed Cloudinary upload with backend fallback)
 export const uploadApi = {
-  uploadImage: (formData) =>
-    api.post('/upload', formData, {
+  uploadImage: async (formData) => {
+    // 1. Direct high-speed Cloudinary upload (bypasses server timeouts / 500 errors)
+    try {
+      const file = formData.get('image') || formData.get('file');
+      if (file) {
+        const timestamp = Math.floor(Date.now() / 1000);
+        const folder = CLOUDINARY_CONFIG.folder;
+        const stringToSign = `folder=${folder}&timestamp=${timestamp}${CLOUDINARY_CONFIG.apiSecret}`;
+        const signature = await sha1Hex(stringToSign);
+
+        const cloudFormData = new FormData();
+        cloudFormData.append('file', file);
+        cloudFormData.append('api_key', CLOUDINARY_CONFIG.apiKey);
+        cloudFormData.append('timestamp', timestamp);
+        cloudFormData.append('folder', folder);
+        cloudFormData.append('signature', signature);
+
+        const res = await fetch(
+          `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/image/upload`,
+          {
+            method: 'POST',
+            body: cloudFormData,
+          }
+        );
+
+        if (res.ok) {
+          const data = await res.json();
+          return {
+            success: true,
+            url: data.secure_url,
+            public_id: data.public_id,
+            format: data.format,
+            bytes: data.bytes,
+          };
+        }
+      }
+    } catch (directErr) {
+      console.warn('Direct Cloudinary upload failed, falling back to backend:', directErr);
+    }
+
+    // 2. Fallback to backend /upload
+    return api.post('/upload', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
-    }),
-  uploadMultiple: (formData) =>
-    api.post('/upload/multiple', formData, {
+    });
+  },
+
+  uploadMultiple: async (formData) => {
+    return api.post('/upload/multiple', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
-    }),
+    });
+  },
 };
 
 // Store Customization & Multi-Industry Storefront APIs

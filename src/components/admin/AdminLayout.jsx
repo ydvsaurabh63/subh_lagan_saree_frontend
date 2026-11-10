@@ -3,7 +3,7 @@ import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
 import {
   LayoutDashboard,
-  Store,
+  PackagePlus,
   Shirt,
   Wand2,
   Coins,
@@ -17,6 +17,7 @@ import {
   ShieldCheck,
   Sparkles,
   ArrowLeft,
+  Store,
 } from 'lucide-react';
 
 const AdminLayout = ({ children, title = 'Store Client Panel' }) => {
@@ -44,7 +45,7 @@ const AdminLayout = ({ children, title = 'Store Client Panel' }) => {
     : '/';
 
   // Section 1: Main Tabs requested by user
-  // Overview, Store, Trials, Playground, Credits, Sales
+  // Overview, Add Product, Trials, Playground, Credits, Sales
   const mainNavItems = [
     {
       to: '/admin',
@@ -53,9 +54,9 @@ const AdminLayout = ({ children, title = 'Store Client Panel' }) => {
       icon: LayoutDashboard,
     },
     {
-      to: '/admin/store',
-      label: 'Store',
-      icon: Store,
+      to: '/admin/products',
+      label: 'Add Product',
+      icon: PackagePlus,
     },
     {
       to: '/admin/trials',
@@ -181,13 +182,14 @@ const AdminLayout = ({ children, title = 'Store Client Panel' }) => {
                       to={item.to}
                       end={item.end}
                       onClick={() => setSidebarOpen(false)}
-                      className={({ isActive }) =>
-                        `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-bold tracking-wide transition-all ${
-                          isActive
+                      className={({ isActive }) => {
+                        const active = isActive || (item.to === '/admin/products' && (window.location.pathname === '/admin/store' || window.location.pathname === '/admin/products'));
+                        return `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-bold tracking-wide transition-all ${
+                          active
                             ? 'bg-gold text-primary font-extrabold shadow-md shadow-gold/20 translate-x-1'
                             : 'text-cream/90 hover:bg-white/10 hover:text-white'
-                        }`
-                      }
+                        }`;
+                      }}
                     >
                       <Icon className="w-4 h-4 shrink-0" />
                       <span>{item.label}</span>

@@ -61,10 +61,14 @@ const Register = () => {
 
         <div className="bg-white rounded-3xl p-8 border border-gold/40 shadow-luxury space-y-6 mt-4">
           <div className="text-center">
-            <div className="w-12 h-12 mx-auto rounded-full bg-primary flex items-center justify-center text-gold border-2 border-gold font-serif font-bold text-lg mb-3">
-              SL
-            </div>
-            <span className="text-gold-dark text-[10px] uppercase tracking-[0.25em] font-semibold">
+            <Link to="/" className="inline-block mb-3 group" title="Subh Lagan Sarees">
+              <img
+                src="/logo.png"
+                alt="Subh Lagan Sarees"
+                className="h-16 sm:h-20 w-auto mx-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
+              />
+            </Link>
+            <span className="text-gold-dark text-[10px] uppercase tracking-[0.25em] font-semibold block">
               Join Subh Lagan Sarees
             </span>
             <h1 className="font-serif text-2xl font-bold text-primary mt-1">

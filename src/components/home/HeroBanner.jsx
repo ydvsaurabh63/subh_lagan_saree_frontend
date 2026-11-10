@@ -467,12 +467,52 @@ const HeroBanner = () => {
 
   const [looks, setLooks] = useState(sareeLooks);
 
-  // Match curated looks with live DB products by slug if available
+  // Match curated looks with live DB products by slug if available (incorporates custom uploaded Try-The-Look products & images)
   useEffect(() => {
-    productApi.getProducts({ limit: 50 }).then((res) => {
-      if (res.success && Array.isArray(res.products)) {
-        const syncedLooks = sareeLooks.map((curatedLook) => {
-          const match = res.products.find((p) => p.slug === curatedLook.sareeSlug);
+    const customTryLookImage = store?.homeBanners?.tryTheLookImage || store?.homeBanners?.tryTheLook?.[0]?.image;
+    let baseLooks = customTryLookImage
+      ? sareeLooks.map((l, i) => (i === 0 ? { ...l, modelImage: customTryLookImage } : l))
+      : sareeLooks;
+
+    // Fetch products specifically tagged with "try-the-look" category or general products
+    Promise.all([
+      productApi.getProducts({ category: 'try-the-look', limit: 10 }).catch(() => ({ success: false })),
+      productApi.getProducts({ limit: 50 }).catch(() => ({ success: false })),
+    ]).then(([tryRes, generalRes]) => {
+      // If client added sarees under "Try the look", turn them into interactive 3D turntable looks
+      if (tryRes.success && Array.isArray(tryRes.products) && tryRes.products.length > 0) {
+        const customLooks = tryRes.products.map((prod, idx) => ({
+          id: prod._id,
+          lookNumber: String(idx + 1).padStart(2, '0'),
+          lookTitle: prod.name,
+          tagline: `${prod.fabric || 'Pure Silk'} • ${prod.occasion || 'Bridal Heritage'}`,
+          modelImage: prod.images?.[0] || baseLooks[idx % baseLooks.length].modelImage,
+          sareeSlug: prod.slug,
+          items: [
+            {
+              id: prod._id,
+              type: 'Saree',
+              name: prod.name,
+              detail: `${prod.fabric || 'Handloom Silk'} • Authentic Weave`,
+              price: prod.discountPrice || prod.price,
+              originalPrice: prod.price,
+              image: prod.images?.[0] || baseLooks[0].items[0].image,
+              isMain: true,
+            },
+            baseLooks[0].items[1],
+            baseLooks[0].items[2],
+          ],
+        }));
+
+        // Merge custom looks first, followed by remaining default looks
+        const remainingBase = baseLooks.slice(customLooks.length);
+        setLooks([...customLooks, ...remainingBase]);
+        return;
+      }
+
+      if (generalRes.success && Array.isArray(generalRes.products)) {
+        const syncedLooks = baseLooks.map((curatedLook) => {
+          const match = generalRes.products.find((p) => p.slug === curatedLook.sareeSlug);
           if (!match) return curatedLook;
           return {
             ...curatedLook,
@@ -490,9 +530,13 @@ const HeroBanner = () => {
           };
         });
         setLooks(syncedLooks);
+      } else {
+        setLooks(baseLooks);
       }
-    }).catch(() => {});
-  }, []);
+    }).catch(() => {
+      setLooks(baseLooks);
+    });
+  }, [store?.homeBanners?.tryTheLookImage, store?.homeBanners?.tryTheLook]);
 
   const count = looks.length;
   // Active look index derived from 3D turntable rotation angle
@@ -938,19 +982,19 @@ const HeroBanner = () => {
   }
 
   return (
-    <div className="relative isolate bg-[#F8F7F4] border-b border-stone-200 overflow-hidden select-none">
+    <div className="relative isolate bg-[#FAF7F2] border-b border-stone-200 overflow-hidden select-none">
       <div className="max-w-[1550px] mx-auto px-4 sm:px-6 lg:px-8 pt-1 sm:pt-2 pb-6 lg:pb-8">
         
         {/* ========================================================= */}
         {/* SECTION 1: FULL-WIDTH 3D VIRTUAL SAREE RUNWAY            */}
         {/* ========================================================= */}
         <div className="w-full flex flex-col justify-between">
-          {/* Header Row: Left-Aligned Title */}
-          <div className="space-y-0.5 relative z-10 text-left -mt-0.5 sm:-mt-1">
-            <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-black text-stone-950 tracking-tight leading-tight">
+          {/* Header Row: Left-Aligned Title (Refined Compact Typography) */}
+          <div className="space-y-0 relative z-10 text-left -mt-0.5 sm:-mt-1">
+            <h1 className="font-serif text-sm sm:text-base lg:text-lg font-bold text-stone-900 tracking-tight leading-tight">
               Try the Look.
             </h1>
-            <p className="text-[11px] sm:text-xs text-stone-600 font-bold tracking-wide">
+            <p className="text-[10px] sm:text-[11px] text-stone-500 font-medium tracking-wide">
               Powered by TryoAI
             </p>
           </div>

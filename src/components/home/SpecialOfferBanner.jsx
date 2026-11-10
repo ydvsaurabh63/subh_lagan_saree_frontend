@@ -24,7 +24,7 @@ const SpecialOfferBanner = () => {
     ? `/store/${store.slug}/shop`
     : '/shop';
   return (
-    <section className="py-4 bg-cream">
+    <section className="py-4 bg-[#FAF7F2]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative rounded-2xl overflow-hidden bg-primary shadow-lg border border-gold/40">
           <div className="grid grid-cols-1 md:grid-cols-12 items-center lg:h-52 overflow-hidden">
