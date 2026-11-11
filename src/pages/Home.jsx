@@ -311,7 +311,7 @@ const Home = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#20040E]/95 via-[#20040E]/40 to-transparent"></div>
                 <div className="relative z-10 text-white w-full">
-                  <h3 className="font-serif text-xl sm:text-2xl font-bold text-white drop-shadow-md group-hover:text-gold-light transition-colors">
+                  <h3 className="font-serif text-sm sm:text-base font-bold text-white drop-shadow-md group-hover:text-gold-light transition-colors tracking-wide leading-snug">
                     {occ.title}
                   </h3>
                 </div>
@@ -451,7 +451,7 @@ const Home = () => {
                   <span className="inline-block px-2 py-0.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-[10px] font-bold uppercase tracking-wider mb-1.5">
                     {f.badge}
                   </span>
-                  <h3 className="font-serif text-xl font-bold text-white drop-shadow-md">
+                  <h3 className="font-serif text-sm sm:text-base font-bold text-white drop-shadow-md">
                     {f.name}
                   </h3>
                   <p className="text-xs text-white/85 font-medium mt-1">
