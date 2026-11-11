@@ -25,7 +25,6 @@ import toast from 'react-hot-toast';
 const sareeLooks = [
   {
     id: 1,
-    categorySlug: 'banarasi',
     lookNumber: '01',
     lookTitle: 'Royal Crimson Banarasi',
     tagline: 'Bridal Heritage • Handwoven Katan Silk',
@@ -65,7 +64,6 @@ const sareeLooks = [
   },
   {
     id: 2,
-    categorySlug: 'kanjivaram',
     lookNumber: '02',
     lookTitle: 'Maharani Emerald Temple',
     tagline: 'Temple Korvai • Pure Kanchipuram Weave',
@@ -105,7 +103,6 @@ const sareeLooks = [
   },
   {
     id: 3,
-    categorySlug: 'bridal-couture',
     lookNumber: '03',
     lookTitle: 'Heirloom Red Zardozi Bridal',
     tagline: 'Couture Bridal • Velvet & Zardozi Handwork',
@@ -145,7 +142,6 @@ const sareeLooks = [
   },
   {
     id: 4,
-    categorySlug: 'pure-silk',
     lookNumber: '04',
     lookTitle: 'Gulabi Rani Paithani',
     tagline: 'Maharashtrian Heritage • Peacock Pallu',
@@ -185,7 +181,6 @@ const sareeLooks = [
   },
   {
     id: 5,
-    categorySlug: 'trending',
     lookNumber: '05',
     lookTitle: 'Royal Sapphire Brocade',
     tagline: 'Varanasi Zari Heritage • Pure Silk Brocade',
@@ -225,7 +220,6 @@ const sareeLooks = [
   },
   {
     id: 6,
-    categorySlug: 'shop-by-fabric',
     lookNumber: '06',
     lookTitle: 'Sunshine Yellow Haldi Silk',
     tagline: 'Festive Haldi • Pure Chanderi Silk Zari',
@@ -265,7 +259,6 @@ const sareeLooks = [
   },
   {
     id: 7,
-    categorySlug: 'best-sellers',
     lookNumber: '07',
     lookTitle: 'Royal Plum Purple Kanjivaram',
     tagline: 'South Indian Royalty • Pure Korvai Silk',
@@ -305,7 +298,6 @@ const sareeLooks = [
   },
   {
     id: 8,
-    categorySlug: 'shop-by-occasion',
     lookNumber: '08',
     lookTitle: 'Pastel Peach Floral Organza',
     tagline: 'Contemporary Soiree • Scallop Resham Weave',
@@ -345,7 +337,6 @@ const sareeLooks = [
   },
   {
     id: 9,
-    categorySlug: 'new-arrival',
     lookNumber: '09',
     lookTitle: 'Midnight Black Banarasi Silk',
     tagline: 'Cocktail Royale • Antique Shikargah Zari',
@@ -385,7 +376,6 @@ const sareeLooks = [
   },
   {
     id: 10,
-    categorySlug: 'featured-brands',
     lookNumber: '10',
     lookTitle: 'Peacock Teal Heritage Silk',
     tagline: 'Auspicious Muhurtham • Pure Mulberry Zari',
@@ -477,94 +467,25 @@ const HeroBanner = () => {
 
   const [looks, setLooks] = useState(sareeLooks);
 
-  // Dynamic Category & Lookbook Synchronization with live DB products and client dashboard uploads
+  // Match curated looks with live DB products by slug if available (incorporates custom uploaded Try-The-Look products & images)
   useEffect(() => {
-    const activeSlug = store?.slug || 'subh-lagan';
-    const banners = store?.homeBanners || {};
-
-    const customTryLookImage = banners?.tryTheLookImage || banners?.tryTheLook?.[0]?.image;
+    const customTryLookImage = store?.homeBanners?.tryTheLookImage || store?.homeBanners?.tryTheLook?.[0]?.image;
     let baseLooks = customTryLookImage
       ? sareeLooks.map((l, i) => (i === 0 ? { ...l, modelImage: customTryLookImage } : l))
       : sareeLooks;
 
+    // Fetch products specifically tagged with "try-the-look" category or general products
     Promise.all([
-      productApi.getProducts({ store: activeSlug, category: 'try-the-look', limit: 10 }).catch(() => ({ success: false })),
-      productApi.getProducts({ store: activeSlug, limit: 100 }).catch(() => ({ success: false })),
+      productApi.getProducts({ category: 'try-the-look', limit: 10 }).catch(() => ({ success: false })),
+      productApi.getProducts({ limit: 50 }).catch(() => ({ success: false })),
     ]).then(([tryRes, generalRes]) => {
-      const allProds = (generalRes.success && Array.isArray(generalRes.products)) ? generalRes.products : [];
-      const tryProds = (tryRes.success && Array.isArray(tryRes.products)) ? tryRes.products : [];
-
-      // Helper to extract clean category slug from a product document
-      const getProductCatSlug = (prod) => {
-        if (!prod) return '';
-        if (prod.category?.slug) return prod.category.slug;
-        const catStr = (typeof prod.category === 'string' ? prod.category : prod.category?.name || '').toLowerCase();
-        if (catStr.includes('banarasi')) return 'banarasi';
-        if (catStr.includes('kanjivaram')) return 'kanjivaram';
-        if (catStr.includes('bridal')) return 'bridal-couture';
-        if (catStr.includes('pure silk') || (catStr.includes('silk') && !catStr.includes('banarasi') && !catStr.includes('kanjivaram'))) return 'pure-silk';
-        if (catStr.includes('try')) return 'try-the-look';
-        if (catStr.includes('occasion')) return 'shop-by-occasion';
-        if (catStr.includes('best')) return 'best-sellers';
-        if (catStr.includes('brand')) return 'featured-brands';
-        if (catStr.includes('new')) return 'new-arrival';
-        if (catStr.includes('fabric')) return 'shop-by-fabric';
-        if (catStr.includes('trend')) return 'trending';
-        return '';
-      };
-
-      // Index latest uploaded products by category slug
-      const prodByCategory = {};
-      allProds.forEach((p) => {
-        const slug = getProductCatSlug(p);
-        if (slug && !prodByCategory[slug]) {
-          prodByCategory[slug] = p;
-        }
-      });
-
-      // Synchronize each curated category look with live uploaded product card imagery & pricing
-      const syncedLooks = baseLooks.map((curatedLook) => {
-        const catSlug = curatedLook.categorySlug;
-        const catProduct = (catSlug && prodByCategory[catSlug]) || allProds.find((p) => p.slug === curatedLook.sareeSlug);
-        const bannerImage = banners[catSlug]?.image || (catSlug === 'try-the-look' ? banners.tryTheLookImage : null);
-
-        if (!catProduct && !bannerImage) {
-          return curatedLook;
-        }
-
-        const newImage = catProduct?.images?.[0] || bannerImage || curatedLook.items[0].image;
-
-        return {
-          ...curatedLook,
-          id: catProduct?._id || curatedLook.id,
-          lookTitle: catProduct?.name || curatedLook.lookTitle,
-          tagline: catProduct?.fabric ? `${catProduct.fabric} • Handcrafted Masterpiece` : curatedLook.tagline,
-          modelImage: newImage,
-          sareeSlug: catProduct?.slug || curatedLook.sareeSlug,
-          items: [
-            {
-              ...curatedLook.items[0],
-              id: catProduct?._id || curatedLook.items[0].id,
-              name: catProduct?.name || curatedLook.items[0].name,
-              detail: catProduct?.fabric ? `${catProduct.fabric} • Authentic Weave` : curatedLook.items[0].detail,
-              price: catProduct?.discountPrice || catProduct?.price || curatedLook.items[0].price,
-              originalPrice: catProduct?.price || curatedLook.items[0].originalPrice,
-              image: newImage,
-            },
-            curatedLook.items[1],
-            curatedLook.items[2],
-          ],
-        };
-      });
-
-      // If client added dedicated products under "Try the look", prepend them to the 3D turntable looks
-      if (tryProds.length > 0) {
-        const customLooks = tryProds.map((prod, idx) => ({
+      // If client added sarees under "Try the look", turn them into interactive 3D turntable looks
+      if (tryRes.success && Array.isArray(tryRes.products) && tryRes.products.length > 0) {
+        const customLooks = tryRes.products.map((prod, idx) => ({
           id: prod._id,
-          categorySlug: 'try-the-look',
           lookNumber: String(idx + 1).padStart(2, '0'),
           lookTitle: prod.name,
-          tagline: `${prod.fabric || 'Pure Silk'} • 3D Virtual Trial`,
+          tagline: `${prod.fabric || 'Pure Silk'} • ${prod.occasion || 'Bridal Heritage'}`,
           modelImage: prod.images?.[0] || baseLooks[idx % baseLooks.length].modelImage,
           sareeSlug: prod.slug,
           items: [
@@ -583,14 +504,39 @@ const HeroBanner = () => {
           ],
         }));
 
-        setLooks([...customLooks, ...syncedLooks]);
-      } else {
+        // Merge custom looks first, followed by remaining default looks
+        const remainingBase = baseLooks.slice(customLooks.length);
+        setLooks([...customLooks, ...remainingBase]);
+        return;
+      }
+
+      if (generalRes.success && Array.isArray(generalRes.products)) {
+        const syncedLooks = baseLooks.map((curatedLook) => {
+          const match = generalRes.products.find((p) => p.slug === curatedLook.sareeSlug);
+          if (!match) return curatedLook;
+          return {
+            ...curatedLook,
+            id: match._id,
+            items: [
+              {
+                ...curatedLook.items[0],
+                id: match._id,
+                price: match.discountPrice || match.price,
+                originalPrice: match.price,
+              },
+              curatedLook.items[1],
+              curatedLook.items[2],
+            ],
+          };
+        });
         setLooks(syncedLooks);
+      } else {
+        setLooks(baseLooks);
       }
     }).catch(() => {
       setLooks(baseLooks);
     });
-  }, [store?.slug, store?.homeBanners]);
+  }, [store?.homeBanners?.tryTheLookImage, store?.homeBanners?.tryTheLook]);
 
   const count = looks.length;
   // Active look index derived from 3D turntable rotation angle
