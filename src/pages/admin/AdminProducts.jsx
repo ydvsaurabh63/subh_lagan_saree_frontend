@@ -194,13 +194,20 @@ const AdminProducts = () => {
         isNewArrival: catSlug === 'new-arrival',
         isBridal: catSlug === 'bridal-couture',
         isFeatured: catSlug === 'trending' || catSlug === 'try-the-look',
-        storeSlug: user?.storeName ? user.storeName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-') : 'subh-lagan',
-        storeName: user?.storeName || 'Subh Lagan Sarees',
+        storeSlug: (!user?.storeName || user.storeName.toLowerCase().includes('subh lagan') || user.email?.includes('subhlagan') || user.role === 'admin' || user.role === 'superadmin')
+          ? 'subh-lagan'
+          : (user.storeSlug || user.storeName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-')),
+        storeName: (!user?.storeName || user.storeName.toLowerCase().includes('subh lagan') || user.email?.includes('subhlagan'))
+          ? 'Subh Lagan Sarees'
+          : (user.storeName || 'Subh Lagan Sarees'),
       };
 
       if (editingProduct) {
         const res = await adminApi.updateProduct(editingProduct._id, payload);
         if (res.success) {
+          if (formData.category && imageUrl) {
+            adminApi.updateCategory(formData.category, { image: imageUrl }).catch(() => {});
+          }
           toast.success('Saree product updated successfully');
           setEditingProduct(null);
           setFormData({
@@ -214,6 +221,9 @@ const AdminProducts = () => {
       } else {
         const res = await adminApi.createProduct(payload);
         if (res.success) {
+          if (formData.category && imageUrl) {
+            adminApi.updateCategory(formData.category, { image: imageUrl }).catch(() => {});
+          }
           toast.success('New saree product published successfully');
           setFormData({
             ...initialForm,

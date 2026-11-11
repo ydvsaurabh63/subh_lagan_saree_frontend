@@ -212,13 +212,26 @@ const Home = () => {
           productApi.getProducts({ store: activeSlug, category: 'shop-by-fabric', limit: 4 }).catch(() => ({ success: false })),
         ]);
 
-        if (catRes.success) setCategories(catRes.categories || []);
-
         const fallback = getFallbackSareesForStore(activeSlug);
 
         const allProds = (allRes.success && allRes.products && allRes.products.length > 0)
           ? allRes.products
           : fallback;
+
+        // Enrich categories with live uploaded product images from database
+        if (catRes.success && Array.isArray(catRes.categories)) {
+          const enriched = catRes.categories.map((cat) => {
+            const prodMatch = allProds.find((p) => {
+              const pCatId = p.category?._id || p.category;
+              return (pCatId && pCatId.toString() === cat._id?.toString()) || p.category?.slug === cat.slug;
+            });
+            return {
+              ...cat,
+              image: prodMatch?.images?.[0] || cat.image,
+            };
+          });
+          setCategories(enriched);
+        }
 
         // Helper to combine products tagged by category or boolean flag
         const combine = (catList, flagList, fallbackSlice) => {

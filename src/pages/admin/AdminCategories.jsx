@@ -21,8 +21,8 @@ import {
 
 const DYNAMIC_CATEGORIES_CONFIG = [
   {
-    id: 'banarasi-sarees',
-    slug: 'banarasi-sarees',
+    id: 'banarasi',
+    slug: 'banarasi',
     name: 'Banarasi',
     categoryType: 'collection',
     sectionTitle: 'Banarasi Silk Sarees',
@@ -30,11 +30,11 @@ const DYNAMIC_CATEGORIES_CONFIG = [
     location: 'Home Category Carousel, Navbar & Shop Filter',
     defaultImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80',
     description: 'Pure Katan Silk & Royal Kadhwa Handloom Sarees',
-    link: '/shop?category=banarasi-sarees',
+    link: '/shop?category=banarasi',
   },
   {
-    id: 'kanjivaram-sarees',
-    slug: 'kanjivaram-sarees',
+    id: 'kanjivaram',
+    slug: 'kanjivaram',
     name: 'Kanjivaram',
     categoryType: 'collection',
     sectionTitle: 'Kanjivaram Silk Sarees',
@@ -42,11 +42,11 @@ const DYNAMIC_CATEGORIES_CONFIG = [
     location: 'Home Category Carousel, Navbar & Shop Filter',
     defaultImage: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=800&q=80',
     description: 'Gold Zari Temple Korvai Kanchipuram Silk Sarees',
-    link: '/shop?category=kanjivaram-sarees',
+    link: '/shop?category=kanjivaram',
   },
   {
-    id: 'bridal-sarees',
-    slug: 'bridal-sarees',
+    id: 'bridal-couture',
+    slug: 'bridal-couture',
     name: 'Bridal Couture',
     categoryType: 'collection',
     sectionTitle: 'Bridal Couture (Bridel culture)',
@@ -54,11 +54,11 @@ const DYNAMIC_CATEGORIES_CONFIG = [
     location: 'Home Category Carousel, Navbar & Shop Filter',
     defaultImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80',
     description: 'Handcrafted Velvet Border, Zardozi & Wedding Heritage',
-    link: '/shop?isBridal=true',
+    link: '/shop?category=bridal-couture',
   },
   {
-    id: 'silk-sarees',
-    slug: 'silk-sarees',
+    id: 'pure-silk',
+    slug: 'pure-silk',
     name: 'Pure Silk',
     categoryType: 'collection',
     sectionTitle: 'Pure Silk Sarees',
@@ -66,7 +66,7 @@ const DYNAMIC_CATEGORIES_CONFIG = [
     location: 'Home Category Carousel, Navbar & Shop Filter',
     defaultImage: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=800&q=80',
     description: '100% Silk Mark Certified Handloom Silk Sarees',
-    link: '/shop?category=silk-sarees',
+    link: '/shop?category=pure-silk',
   },
   {
     id: 'try-the-look',
@@ -337,14 +337,14 @@ const AdminCategories = () => {
       } else if (item.id === 'trending') {
         currentBanners.trendingImage = newUrl;
       } else {
-        // Saree Collection: Banarasi, Kanjivaram, Bridal Couture, Pure Silk
+        // Saree Collection: Banarasi, Kanjivaram, Bridal Couture, Pure Silk, etc.
+        currentBanners[item.slug] = { image: newUrl, title: item.name };
         currentBanners[item.id] = { image: newUrl, title: item.name };
 
         // Also update the database Category collection if matched
-        const dbCat = categories.find((c) => c.slug === item.slug || c.name.toLowerCase().includes(item.name.toLowerCase()));
+        const dbCat = categories.find((c) => c.slug === item.slug || c.slug === item.id || c.name.toLowerCase() === item.name.toLowerCase());
         if (dbCat && dbCat._id) {
           await adminApi.updateCategory(dbCat._id, {
-            name: dbCat.name,
             image: newUrl,
             status: 'active',
           });
