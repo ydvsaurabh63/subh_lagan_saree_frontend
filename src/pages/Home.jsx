@@ -11,10 +11,40 @@ import TestimonialSlider from '../components/home/TestimonialSlider.jsx';
 import AboutBrandSection from '../components/home/AboutBrandSection.jsx';
 import InstagramGallery from '../components/home/InstagramGallery.jsx';
 import NewsletterSection from '../components/home/NewsletterSection.jsx';
-import ProductGrid from '../components/product/ProductGrid.jsx';
 import { Sparkles, ArrowRight, HeartHandshake, Award, Store, ShieldCheck } from 'lucide-react';
 import { getFallbackSareesForStore } from '../data/fallbackProducts.js';
 import { useStore } from '../context/StoreContext.jsx';
+import { formatPrice } from '../utils/formatters.js';
+
+// Unified Luxury Showcase Card (Matches Featured Brands reference)
+const ShowcaseCard = ({ link, image, title, subtitle, exploreText = 'Explore Saree' }) => (
+  <Link
+    to={link}
+    className="group relative h-80 sm:h-96 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5 bg-stone-900"
+  >
+    <img
+      src={image}
+      alt={title}
+      className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-108 transition-transform duration-700"
+      loading="lazy"
+    />
+    <div className="absolute inset-0 bg-gradient-to-t from-[#1A030A] via-[#1A030A]/40 to-black/30"></div>
+
+    <div className="relative z-10 text-white w-full">
+      <h3 className="font-serif text-lg sm:text-xl font-bold text-white drop-shadow-md group-hover:text-gold-light transition line-clamp-1">
+        {title}
+      </h3>
+      {subtitle && (
+        <p className="text-xs text-white/80 font-medium mt-1 line-clamp-1">
+          {subtitle}
+        </p>
+      )}
+      <span className="inline-flex items-center text-xs text-gold font-bold mt-2.5 group-hover:translate-x-1 transition-transform">
+        {exploreText} <ArrowRight className="w-3.5 h-3.5 ml-1" />
+      </span>
+    </div>
+  </Link>
+);
 
 const Home = () => {
   const { store, isBoutiqueStore } = useStore();
@@ -36,24 +66,28 @@ const Home = () => {
   const defaultOccasions = [
     {
       title: 'Wedding & Bridal',
+      subtitle: 'Bridal Heritage & Master Zari',
       occasionTag: 'Bridal',
       link: '/shop?occasion=Bridal',
       image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80',
     },
     {
       title: 'Festive Celebrations',
+      subtitle: 'Rich Colors & Temple Motifs',
       occasionTag: 'Festive',
       link: '/shop?occasion=Festive',
       image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=800&q=80',
     },
     {
       title: 'Party & Reception',
+      subtitle: 'Contemporary Sheer & Shimmer',
       occasionTag: 'Party Wear',
       link: '/shop?occasion=Party%20Wear',
       image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=800&q=80',
     },
     {
       title: 'Traditional & Puja',
+      subtitle: 'Auspicious Weaves & Pure Silks',
       occasionTag: 'Traditional',
       link: '/shop?occasion=Traditional',
       image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=800&q=80',
@@ -66,6 +100,7 @@ const Home = () => {
     return {
       ...def,
       title: custom?.title || prodMatch?.name || def.title,
+      subtitle: custom?.subtitle || (prodMatch?.fabric ? `${prodMatch.fabric} Couture` : def.subtitle),
       image: prodMatch?.images?.[0] || custom?.image || custom?.imageUrl || def.image,
       link: prodMatch ? `/product/${prodMatch.slug}` : custom?.link || def.link,
     };
@@ -287,35 +322,31 @@ const Home = () => {
       <CategoryGrid categories={categories} />
 
       {/* 3. Shop By Occasion */}
-      <section className="pt-2 sm:pt-4 pb-10 bg-[#FAF7F2]">
+      <section className="py-12 bg-[#FAF7F2] border-t border-stone-200/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Section Header */}
-          <div className="text-center mb-5 sm:mb-6">
+          <div className="flex items-center justify-between mb-8">
             <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary">
               Shop By Occasion
             </h2>
-            <div className="w-14 h-0.5 bg-gold mx-auto mt-2"></div>
+            <Link
+              to={getStoreLink('/shop')}
+              className="inline-flex items-center space-x-1 text-xs font-bold uppercase tracking-wider text-primary hover:text-gold-dark transition"
+            >
+              <span>View All</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {dynamicOccasions.map((occ, idx) => (
-              <Link
+              <ShowcaseCard
                 key={idx}
-                to={getStoreLink(occ.link)}
-                className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5"
-              >
-                <img
-                  src={occ.image}
-                  alt={occ.title}
-                  className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-108 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#20040E]/95 via-[#20040E]/40 to-transparent"></div>
-                <div className="relative z-10 text-white w-full">
-                  <h3 className="font-serif text-sm sm:text-base font-bold text-white drop-shadow-md group-hover:text-gold-light transition-colors tracking-wide leading-snug">
-                    {occ.title}
-                  </h3>
-                </div>
-              </Link>
+                link={getStoreLink(occ.link)}
+                image={occ.image}
+                title={occ.title}
+                subtitle={occ.subtitle}
+                exploreText="Explore Occasion"
+              />
             ))}
           </div>
         </div>
@@ -336,7 +367,25 @@ const Home = () => {
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
-          <ProductGrid products={bestSellers} loading={loading} />
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {loading ? (
+              [...Array(4)].map((_, i) => (
+                <div key={i} className="h-80 sm:h-96 rounded-2xl bg-stone-200/70 animate-pulse border border-stone-200" />
+              ))
+            ) : (
+              bestSellers.slice(0, 4).map((p, idx) => (
+                <ShowcaseCard
+                  key={p._id || idx}
+                  link={getStoreLink(`/product/${p.slug}`)}
+                  image={p.images?.[0] || p.image}
+                  title={p.name}
+                  subtitle={p.fabric ? `${p.fabric} • ${formatPrice(p.discountPrice || p.price)}` : formatPrice(p.discountPrice || p.price)}
+                  exploreText="Explore Saree"
+                />
+              ))
+            )}
+          </div>
         </div>
       </section>
 
@@ -361,30 +410,14 @@ const Home = () => {
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {dynamicBrands.map((b, idx) => (
-              <Link
+              <ShowcaseCard
                 key={idx}
-                to={getStoreLink(b.link)}
-                className="group relative h-80 sm:h-96 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5 bg-stone-900"
-              >
-                <img
-                  src={b.image}
-                  alt={b.name}
-                  className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-108 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1A030A] via-[#1A030A]/40 to-black/30"></div>
-
-                <div className="relative z-10 text-white w-full">
-                  <h3 className="font-serif text-lg sm:text-xl font-bold text-white drop-shadow-md group-hover:text-gold-light transition">
-                    {b.name}
-                  </h3>
-                  <p className="text-xs text-white/80 font-medium mt-1">
-                    {b.subtitle}
-                  </p>
-                  <span className="inline-flex items-center text-xs text-gold font-bold mt-2.5 group-hover:translate-x-1 transition-transform">
-                    Explore Brand <ArrowRight className="w-3.5 h-3.5 ml-1" />
-                  </span>
-                </div>
-              </Link>
+                link={getStoreLink(b.link)}
+                image={b.image}
+                title={b.name}
+                subtitle={b.subtitle}
+                exploreText="Explore Brand"
+              />
             ))}
           </div>
         </div>
@@ -405,7 +438,25 @@ const Home = () => {
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
-          <ProductGrid products={newArrivals} loading={loading} />
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {loading ? (
+              [...Array(4)].map((_, i) => (
+                <div key={i} className="h-80 sm:h-96 rounded-2xl bg-stone-200/70 animate-pulse border border-stone-200" />
+              ))
+            ) : (
+              newArrivals.slice(0, 4).map((p, idx) => (
+                <ShowcaseCard
+                  key={p._id || idx}
+                  link={getStoreLink(`/product/${p.slug}`)}
+                  image={p.images?.[0] || p.image}
+                  title={p.name}
+                  subtitle={p.fabric ? `${p.fabric} • ${formatPrice(p.discountPrice || p.price)}` : formatPrice(p.discountPrice || p.price)}
+                  exploreText="Explore Saree"
+                />
+              ))
+            )}
+          </div>
         </div>
       </section>
 
@@ -425,28 +476,16 @@ const Home = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {dynamicFabrics.map((f, idx) => (
-              <Link
+              <ShowcaseCard
                 key={idx}
-                to={getStoreLink(f.link)}
-                className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5"
-              >
-                <img
-                  src={f.image}
-                  alt={f.name}
-                  className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-108 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#20040E]/95 via-[#20040E]/40 to-transparent"></div>
-                <div className="relative z-10 text-white w-full">
-                  <h3 className="font-serif text-sm sm:text-base font-bold text-white drop-shadow-md">
-                    {f.name}
-                  </h3>
-                  <span className="inline-flex items-center text-xs text-gold font-bold mt-2.5 group-hover:text-gold-light group-hover:translate-x-1 transition-all">
-                    Explore Fabric <ArrowRight className="w-3.5 h-3.5 ml-1" />
-                  </span>
-                </div>
-              </Link>
+                link={getStoreLink(f.link)}
+                image={f.image}
+                title={f.name}
+                subtitle={f.desc}
+                exploreText="Explore Fabric"
+              />
             ))}
           </div>
         </div>
@@ -467,7 +506,25 @@ const Home = () => {
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
-          <ProductGrid products={trending} loading={loading} />
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {loading ? (
+              [...Array(4)].map((_, i) => (
+                <div key={i} className="h-80 sm:h-96 rounded-2xl bg-stone-200/70 animate-pulse border border-stone-200" />
+              ))
+            ) : (
+              trending.slice(0, 4).map((p, idx) => (
+                <ShowcaseCard
+                  key={p._id || idx}
+                  link={getStoreLink(`/product/${p.slug}`)}
+                  image={p.images?.[0] || p.image}
+                  title={p.name}
+                  subtitle={p.fabric ? `${p.fabric} • ${formatPrice(p.discountPrice || p.price)}` : formatPrice(p.discountPrice || p.price)}
+                  exploreText="Explore Saree"
+                />
+              ))
+            )}
+          </div>
         </div>
       </section>
 
