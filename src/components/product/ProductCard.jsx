@@ -124,12 +124,12 @@ const ProductCard = ({ product }) => {
 
         {/* Price & Action Buttons */}
         <div className="pt-2 border-t border-stone-200/90 flex items-center justify-between">
-          <div className="flex items-baseline space-x-1.5">
-            <span className="text-sm font-black text-primary font-sans tracking-tight">
+          <div className="flex flex-col justify-center">
+            <span className="text-sm font-black text-primary font-sans tracking-tight leading-tight">
               {formatPrice(product.discountPrice || product.price)}
             </span>
             {product.discountPrice && (
-              <span className="text-[11px] font-bold text-stone-400 line-through">
+              <span className="text-[10px] font-bold text-stone-400 line-through leading-none">
                 {formatPrice(product.price)}
               </span>
             )}
