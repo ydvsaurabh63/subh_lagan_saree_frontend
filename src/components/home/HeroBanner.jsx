@@ -17,7 +17,6 @@ import {
 import { useCart } from '../../context/CartContext.jsx';
 import { useTryOn } from '../../context/TryOnContext.jsx';
 import { useStore } from '../../context/StoreContext.jsx';
-import { productApi } from '../../services/api.js';
 import { formatPrice } from '../../utils/formatters.js';
 import toast from 'react-hot-toast';
 
@@ -29,6 +28,7 @@ const sareeLooks = [
     lookTitle: 'Royal Crimson Banarasi',
     tagline: 'Bridal Heritage • Handwoven Katan Silk',
     modelImage: '/models/model-1.png',
+    cropImage: '/models/model-1-crop.png',
     sareeSlug: 'royal-crimson-banarasi-katan-silk-saree',
     items: [
       {
@@ -38,7 +38,7 @@ const sareeLooks = [
         detail: 'Pure Katan Silk • Gold Zari Kadhwa Weave',
         price: 19999,
         originalPrice: 24999,
-        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-1-crop.png',
         isMain: true,
       },
       {
@@ -48,7 +48,7 @@ const sareeLooks = [
         detail: '0.8M Unstitched Pure Brocade Included',
         price: 0,
         originalPrice: 2499,
-        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-1-crop.png',
         isIncluded: true,
       },
       {
@@ -58,7 +58,7 @@ const sareeLooks = [
         detail: 'Antique Gold Zardosi Embroidery',
         price: 1499,
         originalPrice: 1999,
-        image: 'https://images.unsplash.com/photo-1610030469668-8e9f641aaf27?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-1-crop.png',
       },
     ],
   },
@@ -68,6 +68,7 @@ const sareeLooks = [
     lookTitle: 'Maharani Emerald Temple',
     tagline: 'Temple Korvai • Pure Kanchipuram Weave',
     modelImage: '/models/model-2.png',
+    cropImage: '/models/model-2-crop.png',
     sareeSlug: 'maharani-emerald-gold-kanjivaram-silk-saree',
     items: [
       {
@@ -77,7 +78,7 @@ const sareeLooks = [
         detail: 'Pure Mulberry Silk • 2-Ply Golden Zari',
         price: 27499,
         originalPrice: 32999,
-        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-2-crop.png',
         isMain: true,
       },
       {
@@ -87,7 +88,7 @@ const sareeLooks = [
         detail: '0.8M Unstitched with Zari Sleeves',
         price: 0,
         originalPrice: 2999,
-        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-2-crop.png',
         isIncluded: true,
       },
       {
@@ -97,7 +98,7 @@ const sareeLooks = [
         detail: 'Traditional Peacock Gold Motif',
         price: 1999,
         originalPrice: 2499,
-        image: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-2-crop.png',
       },
     ],
   },
@@ -107,6 +108,7 @@ const sareeLooks = [
     lookTitle: 'Heirloom Red Zardozi Bridal',
     tagline: 'Couture Bridal • Velvet & Zardozi Handwork',
     modelImage: '/models/model-3.png',
+    cropImage: '/models/model-3-crop.png',
     sareeSlug: 'heirloom-red-zardozi-bridal-saree',
     items: [
       {
@@ -116,7 +118,7 @@ const sareeLooks = [
         detail: 'Raw Silk & Velvet Border • Dabka Handwork',
         price: 38999,
         originalPrice: 45000,
-        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-3-crop.png',
         isMain: true,
       },
       {
@@ -126,7 +128,7 @@ const sareeLooks = [
         detail: '1.0M Pure Raw Silk Fabric Included',
         price: 0,
         originalPrice: 4999,
-        image: 'https://images.unsplash.com/photo-1610030469668-8e9f641aaf27?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-3-crop.png',
         isIncluded: true,
       },
       {
@@ -136,7 +138,7 @@ const sareeLooks = [
         detail: 'Bridal Organza with Scallop Border',
         price: 3499,
         originalPrice: 4499,
-        image: 'https://images.unsplash.com/photo-1610030469668-8e9f641aaf27?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-3-crop.png',
       },
     ],
   },
@@ -146,6 +148,7 @@ const sareeLooks = [
     lookTitle: 'Gulabi Rani Paithani',
     tagline: 'Maharashtrian Heritage • Peacock Pallu',
     modelImage: '/models/model-4.png',
+    cropImage: '/models/model-4-crop.png',
     sareeSlug: 'gulabi-rani-pure-paithani-silk-saree',
     items: [
       {
@@ -155,7 +158,7 @@ const sareeLooks = [
         detail: 'Mulberry Silk • Obverse-Reverse Zari Pallu',
         price: 14999,
         originalPrice: 18499,
-        image: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-4-crop.png',
         isMain: true,
       },
       {
@@ -165,7 +168,7 @@ const sareeLooks = [
         detail: '0.8M Unstitched Matching Included',
         price: 0,
         originalPrice: 1999,
-        image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-4-crop.png',
         isIncluded: true,
       },
       {
@@ -175,7 +178,7 @@ const sareeLooks = [
         detail: 'Pearl & Golden Thread Beads',
         price: 999,
         originalPrice: 1499,
-        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-4-crop.png',
       },
     ],
   },
@@ -185,6 +188,7 @@ const sareeLooks = [
     lookTitle: 'Royal Sapphire Brocade',
     tagline: 'Varanasi Zari Heritage • Pure Silk Brocade',
     modelImage: '/models/model-5.png',
+    cropImage: '/models/model-5-crop.png',
     sareeSlug: 'royal-crimson-banarasi-katan-silk-saree',
     items: [
       {
@@ -194,7 +198,7 @@ const sareeLooks = [
         detail: 'Pure Mulberry Silk • Antique Gold Zari Brocade',
         price: 21999,
         originalPrice: 26999,
-        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-5-crop.png',
         isMain: true,
       },
       {
@@ -204,7 +208,7 @@ const sareeLooks = [
         detail: '0.8M Unstitched Pure Brocade Included',
         price: 0,
         originalPrice: 2499,
-        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-5-crop.png',
         isIncluded: true,
       },
       {
@@ -214,7 +218,7 @@ const sareeLooks = [
         detail: 'Antique Gold Beaded Accents',
         price: 899,
         originalPrice: 1299,
-        image: 'https://images.unsplash.com/photo-1610030469668-8e9f641aaf27?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-5-crop.png',
       },
     ],
   },
@@ -224,6 +228,7 @@ const sareeLooks = [
     lookTitle: 'Sunshine Yellow Haldi Silk',
     tagline: 'Festive Haldi • Pure Chanderi Silk Zari',
     modelImage: '/models/model-6.png',
+    cropImage: '/models/model-6-crop.png',
     sareeSlug: 'mustard-gold-handloom-chanderi-saree',
     items: [
       {
@@ -233,7 +238,7 @@ const sareeLooks = [
         detail: 'Lightweight Chanderi Silk • Antique Zari Border',
         price: 12499,
         originalPrice: 15999,
-        image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-6-crop.png',
         isMain: true,
       },
       {
@@ -243,7 +248,7 @@ const sareeLooks = [
         detail: '0.8M Matching Handloom Fabric Included',
         price: 0,
         originalPrice: 1899,
-        image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-6-crop.png',
         isIncluded: true,
       },
       {
@@ -253,7 +258,7 @@ const sareeLooks = [
         detail: 'Handcrafted Haldi Festive Accent Belt',
         price: 1199,
         originalPrice: 1699,
-        image: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-6-crop.png',
       },
     ],
   },
@@ -263,6 +268,7 @@ const sareeLooks = [
     lookTitle: 'Royal Plum Purple Kanjivaram',
     tagline: 'South Indian Royalty • Pure Korvai Silk',
     modelImage: '/models/model-7.png',
+    cropImage: '/models/model-7-crop.png',
     sareeSlug: 'maharani-emerald-gold-kanjivaram-silk-saree',
     items: [
       {
@@ -272,7 +278,7 @@ const sareeLooks = [
         detail: 'Pure Mulberry Silk • Magenta & Gold Heavy Pallu',
         price: 24999,
         originalPrice: 29999,
-        image: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-7-crop.png',
         isMain: true,
       },
       {
@@ -282,7 +288,7 @@ const sareeLooks = [
         detail: '0.8M Pure Silk with Broad Zari Border',
         price: 0,
         originalPrice: 2799,
-        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-7-crop.png',
         isIncluded: true,
       },
       {
@@ -292,7 +298,7 @@ const sareeLooks = [
         detail: 'South Indian Handcrafted Filigree Work',
         price: 2199,
         originalPrice: 2899,
-        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-7-crop.png',
       },
     ],
   },
@@ -302,6 +308,7 @@ const sareeLooks = [
     lookTitle: 'Pastel Peach Floral Organza',
     tagline: 'Contemporary Soiree • Scallop Resham Weave',
     modelImage: '/models/model-8.png',
+    cropImage: '/models/model-8-crop.png',
     sareeSlug: 'blush-rose-french-organza-saree',
     items: [
       {
@@ -311,7 +318,7 @@ const sareeLooks = [
         detail: 'Sheer Silk Organza • Hand Embroidered Scallop Border',
         price: 16999,
         originalPrice: 21000,
-        image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-8-crop.png',
         isMain: true,
       },
       {
@@ -321,7 +328,7 @@ const sareeLooks = [
         detail: '0.8M Pastel Raw Silk with Pearl Work',
         price: 0,
         originalPrice: 2299,
-        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-8-crop.png',
         isIncluded: true,
       },
       {
@@ -331,7 +338,7 @@ const sareeLooks = [
         detail: 'Ivory Raw Silk with Hand-Sewn Pearls',
         price: 1599,
         originalPrice: 2199,
-        image: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-8-crop.png',
       },
     ],
   },
@@ -341,6 +348,7 @@ const sareeLooks = [
     lookTitle: 'Midnight Black Banarasi Silk',
     tagline: 'Cocktail Royale • Antique Shikargah Zari',
     modelImage: '/models/model-9.png',
+    cropImage: '/models/model-9-crop.png',
     sareeSlug: 'midnight-navy-sequin-georgette-saree',
     items: [
       {
@@ -350,7 +358,7 @@ const sareeLooks = [
         detail: 'Pure Katan Silk • Antique Gold Floral Boota Weave',
         price: 22499,
         originalPrice: 27500,
-        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-9-crop.png',
         isMain: true,
       },
       {
@@ -360,7 +368,7 @@ const sareeLooks = [
         detail: '0.8M Heavy Metallic Tissue Included',
         price: 0,
         originalPrice: 2999,
-        image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-9-crop.png',
         isIncluded: true,
       },
       {
@@ -370,7 +378,7 @@ const sareeLooks = [
         detail: 'Black Velvet with Zardozi Embroidery',
         price: 1799,
         originalPrice: 2399,
-        image: 'https://images.unsplash.com/photo-1610030469668-8e9f641aaf27?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-9-crop.png',
       },
     ],
   },
@@ -380,6 +388,7 @@ const sareeLooks = [
     lookTitle: 'Peacock Teal Heritage Silk',
     tagline: 'Auspicious Muhurtham • Pure Mulberry Zari',
     modelImage: '/models/model-10.png',
+    cropImage: '/models/model-10-crop.png',
     sareeSlug: 'royal-crimson-banarasi-katan-silk-saree',
     items: [
       {
@@ -389,7 +398,7 @@ const sareeLooks = [
         detail: 'Pure Silk • Intricate Woven Peacock Pallu & Border',
         price: 23999,
         originalPrice: 28999,
-        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-10-crop.png',
         isMain: true,
       },
       {
@@ -399,7 +408,7 @@ const sareeLooks = [
         detail: '0.8M Unstitched Handloom Silk Included',
         price: 0,
         originalPrice: 2599,
-        image: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-10-crop.png',
         isIncluded: true,
       },
       {
@@ -409,7 +418,7 @@ const sareeLooks = [
         detail: 'Antique Gold Thread & Beaded Accents',
         price: 999,
         originalPrice: 1499,
-        image: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=300&q=80',
+        image: '/models/model-10-crop.png',
       },
     ],
   },
@@ -465,78 +474,8 @@ const HeroBanner = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const [looks, setLooks] = useState(sareeLooks);
-
-  // Match curated looks with live DB products by slug if available (incorporates custom uploaded Try-The-Look products & images)
-  useEffect(() => {
-    const customTryLookImage = store?.homeBanners?.tryTheLookImage || store?.homeBanners?.tryTheLook?.[0]?.image;
-    let baseLooks = customTryLookImage
-      ? sareeLooks.map((l, i) => (i === 0 ? { ...l, modelImage: customTryLookImage } : l))
-      : sareeLooks;
-
-    // Fetch products specifically tagged with "try-the-look" category or general products
-    Promise.all([
-      productApi.getProducts({ category: 'try-the-look', limit: 10 }).catch(() => ({ success: false })),
-      productApi.getProducts({ limit: 50 }).catch(() => ({ success: false })),
-    ]).then(([tryRes, generalRes]) => {
-      // If client added sarees under "Try the look", turn them into interactive 3D turntable looks
-      if (tryRes.success && Array.isArray(tryRes.products) && tryRes.products.length > 0) {
-        const customLooks = tryRes.products.map((prod, idx) => ({
-          id: prod._id,
-          lookNumber: String(idx + 1).padStart(2, '0'),
-          lookTitle: prod.name,
-          tagline: `${prod.fabric || 'Pure Silk'} • ${prod.occasion || 'Bridal Heritage'}`,
-          modelImage: prod.images?.[0] || baseLooks[idx % baseLooks.length].modelImage,
-          sareeSlug: prod.slug,
-          items: [
-            {
-              id: prod._id,
-              type: 'Saree',
-              name: prod.name,
-              detail: `${prod.fabric || 'Handloom Silk'} • Authentic Weave`,
-              price: prod.discountPrice || prod.price,
-              originalPrice: prod.price,
-              image: prod.images?.[0] || baseLooks[0].items[0].image,
-              isMain: true,
-            },
-            baseLooks[0].items[1],
-            baseLooks[0].items[2],
-          ],
-        }));
-
-        // Merge custom looks first, followed by remaining default looks
-        const remainingBase = baseLooks.slice(customLooks.length);
-        setLooks([...customLooks, ...remainingBase]);
-        return;
-      }
-
-      if (generalRes.success && Array.isArray(generalRes.products)) {
-        const syncedLooks = baseLooks.map((curatedLook) => {
-          const match = generalRes.products.find((p) => p.slug === curatedLook.sareeSlug);
-          if (!match) return curatedLook;
-          return {
-            ...curatedLook,
-            id: match._id,
-            items: [
-              {
-                ...curatedLook.items[0],
-                id: match._id,
-                price: match.discountPrice || match.price,
-                originalPrice: match.price,
-              },
-              curatedLook.items[1],
-              curatedLook.items[2],
-            ],
-          };
-        });
-        setLooks(syncedLooks);
-      } else {
-        setLooks(baseLooks);
-      }
-    }).catch(() => {
-      setLooks(baseLooks);
-    });
-  }, [store?.homeBanners?.tryTheLookImage, store?.homeBanners?.tryTheLook]);
+  // 10 authentic curated royal sarees (strictly fixed, no custom override from anywhere)
+  const looks = sareeLooks;
 
   const count = looks.length;
   // Active look index derived from 3D turntable rotation angle
@@ -1119,25 +1058,25 @@ const HeroBanner = () => {
             </div>
 
             {/* ========================================================= */}
-            {/* FLOATING RUNWAY SAREE PILL (Bottom-Left Saree Name & Cart) */}
+            {/* FLOATING RUNWAY SAREE PILL (Centered Saree Name & Cart)  */}
             {/* ========================================================= */}
             <div
-              className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 z-20 bg-white/95 backdrop-blur-md border border-gold/50 rounded-2xl p-2 sm:p-2.5 shadow-luxury flex items-center gap-2 sm:gap-2.5 max-w-[285px] xs:max-w-[315px] sm:max-w-xs transition-all duration-300 cursor-default"
+              className="absolute bottom-2.5 sm:bottom-4 left-1/2 -translate-x-1/2 z-20 bg-white/95 backdrop-blur-md border border-gold/50 rounded-2xl p-2 sm:p-2.5 shadow-luxury flex items-center gap-2 sm:gap-2.5 w-[94%] max-w-[340px] xs:max-w-[365px] sm:max-w-[390px] transition-all duration-300 cursor-default"
               onMouseDown={(e) => e.stopPropagation()}
               onTouchStart={(e) => e.stopPropagation()}
               onMouseMove={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Saree Thumbnail (Mini preview) */}
+              {/* Saree Thumbnail (Exact model/saree preview - no custom unsplash) */}
               <Link
                 to={currentLook.sareeSlug ? `/product/${currentLook.sareeSlug}` : '#'}
                 className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl overflow-hidden bg-stone-100 flex-shrink-0 border border-gold/30 shadow-xs block group/thumb"
                 title={mainSaree.name || currentLook.lookTitle}
               >
                 <img
-                  src={mainSaree.image || currentLook.modelImage}
-                  alt={currentLook.lookTitle}
+                  src={currentLook.cropImage || `/models/model-${currentLook.id}-crop.png`}
+                  alt={mainSaree.name || currentLook.lookTitle}
                   className="w-full h-full object-cover object-top group-hover/thumb:scale-105 transition-transform"
                 />
               </Link>
