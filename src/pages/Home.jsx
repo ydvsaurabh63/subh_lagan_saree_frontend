@@ -439,15 +439,9 @@ const Home = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#20040E]/95 via-[#20040E]/40 to-transparent"></div>
                 <div className="relative z-10 text-white w-full">
-                  <span className="inline-block px-2 py-0.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-[10px] font-bold uppercase tracking-wider mb-1.5">
-                    {f.badge}
-                  </span>
                   <h3 className="font-serif text-sm sm:text-base font-bold text-white drop-shadow-md">
                     {f.name}
                   </h3>
-                  <p className="text-xs text-white/85 font-medium mt-1">
-                    {f.desc}
-                  </p>
                   <span className="inline-flex items-center text-xs text-gold font-bold mt-2.5 group-hover:text-gold-light group-hover:translate-x-1 transition-all">
                     Explore Fabric <ArrowRight className="w-3.5 h-3.5 ml-1" />
                   </span>
