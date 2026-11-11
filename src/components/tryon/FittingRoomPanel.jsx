@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   X,
   RotateCcw,
@@ -25,6 +25,18 @@ const FittingRoomPanel = () => {
 
   const { addToCart } = useCart();
   const fileInputRef = useRef(null);
+
+  // Lock body scroll while full-page Fitting Room is active
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -71,145 +83,151 @@ const FittingRoomPanel = () => {
   };
 
   return (
-    <>
-      {/* Semi-transparent backdrop overlay to dim background and close on outside tap */}
-      <div
-        className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-[105] transition-opacity duration-300"
-        onClick={closeTryOn}
-        aria-hidden="true"
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Fitting Room"
+      className="fixed inset-0 z-[9999] w-full h-full min-h-screen bg-[#121214] text-white flex flex-col overflow-y-auto select-none animate-fadeIn"
+    >
+      {/* Hidden File Input */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleGalleryUpload}
+        accept="image/*"
+        className="hidden"
       />
 
-      {/* 
-        FITTING ROOM CARD: HORIZONTALLY CENTERED & POSITIONED BELOW HEADER
-      */}
-      <aside
-        aria-label="Fitting Room"
-        className="fixed left-1/2 -translate-x-1/2 top-[96px] sm:top-[112px] lg:top-[124px] z-[110] w-[320px] sm:w-[370px] max-w-[calc(100vw-28px)] max-h-[calc(100vh-125px)] overflow-y-auto bg-[#141416] border border-stone-800 rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.95)] text-white transition-all duration-300 animate-fade-in p-3.5 sm:p-4 space-y-3 select-none"
-      >
-        {/* Hidden File Input */}
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleGalleryUpload}
-          accept="image/*"
-          className="hidden"
-        />
-
-        {/* Header (Exact Match to Screenshot) */}
-        <div className="flex items-center justify-between pb-2 border-b border-stone-800/90">
-          <h3 className="font-serif text-lg sm:text-xl font-bold text-white tracking-tight">
+      {/* Full-Page Sticky Header */}
+      <header className="sticky top-0 z-30 w-full bg-[#141416]/95 backdrop-blur-md border-b border-stone-800/90 px-4 sm:px-6 py-3.5 sm:py-4 flex items-center justify-between shadow-md">
+        <div className="flex items-center space-x-2.5">
+          <h3 className="font-serif text-xl sm:text-2xl font-bold text-white tracking-tight">
             Fitting room
           </h3>
-          <div className="flex items-center space-x-1">
-            {customUserPhoto && (
-              <button
-                onClick={handleStartOver}
-                className="p-1.5 rounded-full text-stone-400 hover:text-white hover:bg-stone-800 transition"
-                title="Reset"
-              >
-                <RotateCcw className="w-4 h-4" />
-              </button>
-            )}
-            <button
-              onClick={closeTryOn}
-              className="p-1.5 rounded-full text-stone-400 hover:text-white hover:bg-stone-800 transition"
-              title="Close"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
+          <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-500 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full">
+            Virtual Trial
+          </span>
         </div>
 
+        <div className="flex items-center space-x-2">
+          {customUserPhoto && (
+            <button
+              onClick={handleStartOver}
+              className="p-2 rounded-full text-stone-400 hover:text-white hover:bg-stone-800 transition active:scale-95 cursor-pointer"
+              title="Reset"
+            >
+              <RotateCcw className="w-5 h-5" />
+            </button>
+          )}
+          <button
+            onClick={closeTryOn}
+            className="p-2 rounded-full text-stone-400 hover:text-white hover:bg-stone-800 transition active:scale-95 cursor-pointer"
+            title="Close"
+            aria-label="Close"
+          >
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+      </header>
+
+      {/* Full-Page Content View */}
+      <main className="flex-1 w-full max-w-xl mx-auto px-4 py-4 sm:py-6 flex flex-col justify-center">
         {/* 
           STATE 1: NO PHOTO UPLOADED YET 
-          HIGHLIGHTED "UPLOAD GALLERY" BOX
+          LARGE FULL-PAGE "UPLOAD GALLERY" BOX
         */}
         {!customUserPhoto ? (
-          <div className="space-y-3">
+          <div className="w-full flex-1 flex flex-col items-center justify-center space-y-4 my-auto">
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="w-full aspect-[4/5] max-h-[350px] sm:max-h-[390px] rounded-2xl border-2 border-dashed border-[#D97706] bg-gradient-to-b from-[#D97706]/15 via-[#D97706]/5 to-transparent hover:bg-[#D97706]/20 transition-all duration-300 flex flex-col items-center justify-center p-4 sm:p-5 text-center cursor-pointer group shadow-[0_0_35px_rgba(217,119,6,0.2)] hover:shadow-[0_0_50px_rgba(217,119,6,0.35)] active:scale-98"
+              className="w-full aspect-[3/4] max-w-md max-h-[58vh] sm:max-h-[64vh] rounded-3xl border-2 border-dashed border-[#D97706] bg-gradient-to-b from-[#D97706]/15 via-[#D97706]/5 to-transparent hover:bg-[#D97706]/20 transition-all duration-300 flex flex-col items-center justify-center p-6 text-center cursor-pointer group shadow-[0_0_40px_rgba(217,119,6,0.25)] hover:shadow-[0_0_60px_rgba(217,119,6,0.4)] active:scale-98"
             >
-              <div className="w-13 h-13 sm:w-16 sm:h-16 rounded-full bg-[#D97706] text-white flex items-center justify-center mb-3 shadow-lg group-hover:scale-110 transition-transform">
-                <ImagePlus className="w-6 h-6 sm:w-8 sm:h-8" />
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#D97706] text-white flex items-center justify-center mb-4 shadow-xl group-hover:scale-110 transition-transform">
+                <ImagePlus className="w-8 h-8 sm:w-10 sm:h-10" />
               </div>
 
-              <h4 className="font-serif text-base sm:text-lg font-bold text-white tracking-wide">
+              <h4 className="font-serif text-xl sm:text-2xl font-bold text-white tracking-wide">
                 Upload Gallery
               </h4>
-              <p className="text-xs sm:text-sm text-[#F59E0B] font-semibold mt-1">
+              <p className="text-sm sm:text-base text-[#F59E0B] font-semibold mt-1.5">
                 Tap to upload your photo
               </p>
 
               {selectedProduct && (
-                <div className="mt-3.5 px-3 py-1 rounded-full bg-black/60 border border-white/10 text-[11px] text-stone-200 truncate max-w-[240px]">
+                <div className="mt-4 px-4 py-1.5 rounded-full bg-black/60 border border-white/10 text-xs text-stone-200 truncate max-w-[280px]">
                   Saree: <span className="text-[#F59E0B] font-bold">{selectedProduct.name}</span>
                 </div>
               )}
             </div>
+
+            <p className="text-xs text-stone-400 text-center max-w-sm">
+              Upload a full-length or portrait photo to instantly try on authentic royal sarees.
+            </p>
           </div>
         ) : (
           /* 
-            STATE 2: PHOTO UPLOADED FROM GALLERY
+            STATE 2: PHOTO UPLOADED FROM GALLERY (FULL-PAGE PORTRAIT)
           */
-          <div className="space-y-3 animate-fade-in">
-            {/* Main Portrait Photo Frame */}
-            <div className="relative w-full aspect-[4/5] max-h-[350px] sm:max-h-[390px] rounded-2xl overflow-hidden bg-stone-900 border border-stone-800 flex items-center justify-center shadow-inner">
+          <div className="w-full flex-1 flex flex-col justify-between space-y-4 my-auto animate-fadeIn">
+            {/* Main Full-Size Portrait Photo Frame */}
+            <div className="relative w-full aspect-[3/4] max-w-md max-h-[60vh] sm:max-h-[65vh] mx-auto rounded-3xl overflow-hidden bg-stone-900 border border-stone-800 flex items-center justify-center shadow-2xl">
               <img
                 src={selectedProduct?.drapedPreview || customUserPhoto}
                 alt="Your Photo"
-                className="w-full h-full object-cover object-top"
+                className="w-full h-full object-contain sm:object-cover object-top"
               />
 
               {/* Top-Left Badge */}
-              <div className="absolute top-2.5 left-2.5 z-10 px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md text-[11px] font-bold text-white border border-white/10 shadow-sm">
+              <div className="absolute top-3 left-3 z-10 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md text-xs font-bold text-white border border-white/10 shadow-sm">
                 Your Photo
               </div>
 
               {/* Processing Overlay */}
               {isProcessing && (
-                <div className="absolute inset-0 z-20 bg-black/75 backdrop-blur-sm flex flex-col items-center justify-center p-3 text-center text-white space-y-2 animate-fade-in">
-                  <div className="w-8 h-8 rounded-full border-2 border-[#D97706] border-t-transparent animate-spin"></div>
-                  <p className="text-xs font-serif font-bold text-stone-100">Fitting Saree...</p>
+                <div className="absolute inset-0 z-20 bg-black/75 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center text-white space-y-2.5 animate-fadeIn">
+                  <div className="w-10 h-10 rounded-full border-3 border-[#D97706] border-t-transparent animate-spin"></div>
+                  <p className="text-sm font-serif font-bold text-stone-100">Fitting Saree...</p>
                 </div>
               )}
             </div>
 
-            {/* Change Photo Button */}
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="w-full py-2.5 px-4 rounded-xl bg-[#222226] hover:bg-[#2c2c32] text-white text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 border border-stone-700/60 transition active:scale-98 shadow-sm"
-            >
-              <Camera className="w-4 h-4 text-[#F59E0B]" />
-              <span>Change Photo</span>
-            </button>
+            {/* Bottom Actions */}
+            <div className="w-full max-w-md mx-auto space-y-3 pt-2">
+              {/* Change Photo Button */}
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="w-full py-3 px-4 rounded-xl bg-[#222226] hover:bg-[#2c2c32] text-white text-sm font-bold flex items-center justify-center space-x-2 border border-stone-700/60 transition active:scale-98 shadow-sm cursor-pointer"
+              >
+                <Camera className="w-4 h-4 text-[#F59E0B]" />
+                <span>Change Photo</span>
+              </button>
 
-            {/* Selected Saree & Add to Bag (When product is selected) */}
-            {selectedProduct && (
-              <div className="space-y-2 pt-1 border-t border-stone-800/80">
-                <div className="flex items-center justify-between text-xs px-1">
-                  <span className="font-serif font-bold text-stone-200 truncate max-w-[200px]">
-                    {selectedProduct.name}
-                  </span>
-                  <span className="font-bold text-[#F59E0B]">
-                    {formatPrice(selectedProduct.price)}
-                  </span>
+              {/* Selected Saree & Add to Bag */}
+              {selectedProduct && (
+                <div className="space-y-2.5 p-3.5 rounded-2xl bg-stone-900/90 border border-stone-800">
+                  <div className="flex items-center justify-between text-xs sm:text-sm px-1">
+                    <span className="font-serif font-bold text-stone-200 truncate max-w-[240px]">
+                      {selectedProduct.name}
+                    </span>
+                    <span className="font-bold text-[#F59E0B]">
+                      {formatPrice(selectedProduct.price)}
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={handleAddToCart}
+                    className="w-full py-3 px-4 rounded-xl bg-[#D97706] hover:bg-[#B45309] text-white text-xs sm:text-sm font-black uppercase tracking-wider flex items-center justify-center space-x-2 shadow-lg transition active:scale-98 cursor-pointer"
+                  >
+                    <ShoppingBag className="w-4 h-4" />
+                    <span>Add to bag</span>
+                  </button>
                 </div>
-
-                <button
-                  onClick={handleAddToCart}
-                  className="w-full py-2.5 px-4 rounded-xl bg-[#D97706] hover:bg-[#B45309] text-white text-xs font-black uppercase tracking-wider flex items-center justify-center space-x-2 shadow-lg transition active:scale-98"
-                >
-                  <ShoppingBag className="w-4 h-4" />
-                  <span>Add to bag</span>
-                </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         )}
-
-      </aside>
-    </>
+      </main>
+    </div>
   );
 };
 
