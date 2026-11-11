@@ -15,7 +15,6 @@ import { Sparkles, ArrowRight, HeartHandshake, Award, Store, ShieldCheck } from 
 import { getFallbackSareesForStore } from '../data/fallbackProducts.js';
 import { useStore } from '../context/StoreContext.jsx';
 import { formatPrice } from '../utils/formatters.js';
-import ArunVastralayHome from './stores/ArunVastralayHome.jsx';
 
 // Unified Luxury Showcase Card (Matches Featured Brands reference)
 const ShowcaseCard = ({ link, image, title, subtitle, exploreText = 'Explore Saree' }) => (
@@ -49,12 +48,6 @@ const ShowcaseCard = ({ link, image, title, subtitle, exploreText = 'Explore Sar
 
 const Home = () => {
   const { store, isBoutiqueStore } = useStore();
-
-  // If Arun Vastralay is active, render its dedicated custom visual landing page
-  if (store?.slug === 'arun-vastralay') {
-    return <ArunVastralayHome />;
-  }
-
   const currentStoreSlug = store?.slug || 'subh-lagan';
   const initialFallback = getFallbackSareesForStore(currentStoreSlug);
 
