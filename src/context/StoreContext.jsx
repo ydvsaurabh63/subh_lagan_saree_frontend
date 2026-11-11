@@ -65,8 +65,9 @@ export const CLIENT_STORES = [
     address: 'Main Chowk Market, Godowlia, Varanasi, Uttar Pradesh 221001',
     badge: 'Verified Boutique Partner',
     trustBadge: '100% Varanasi Handloom Mark Certified',
-    primaryColor: '#831843', // Deep Rose Wine
-    secondaryColor: '#D97706', // Antique Gold
+    primaryColor: '#125454', // Exact Deep Teal / Emerald Pine Green
+    secondaryColor: '#D4AF37', // Warm Gold Accent
+    accentColor: '#0A3434',
     fontFamily: 'serif',
     themePreset: 'heritage',
     promoCode: 'ARUNVAST30',
