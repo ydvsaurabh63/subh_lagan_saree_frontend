@@ -364,7 +364,7 @@ const Home = () => {
               <Link
                 key={idx}
                 to={getStoreLink(b.link)}
-                className="group relative h-80 sm:h-96 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex flex-col justify-between p-5 bg-stone-900"
+                className="group relative h-80 sm:h-96 rounded-2xl overflow-hidden shadow-sm border border-gold/30 hover:border-gold hover:shadow-luxury transition-all duration-500 flex items-end p-5 bg-stone-900"
               >
                 <img
                   src={b.image}
@@ -373,16 +373,7 @@ const Home = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1A030A] via-[#1A030A]/40 to-black/30"></div>
 
-                <div className="relative z-10 flex justify-between items-start">
-                  <span className="px-2.5 py-1 rounded-full bg-black/60 border border-gold/40 text-gold text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm">
-                    {b.badge}
-                  </span>
-                </div>
-
                 <div className="relative z-10 text-white w-full">
-                  <div className="w-9 h-9 rounded-xl bg-gold/20 border border-gold/40 flex items-center justify-center text-gold mb-2 backdrop-blur-sm group-hover:bg-gold group-hover:text-stone-950 transition-colors">
-                    <Sparkles className="w-4 h-4" />
-                  </div>
                   <h3 className="font-serif text-lg sm:text-xl font-bold text-white drop-shadow-md group-hover:text-gold-light transition">
                     {b.name}
                   </h3>
