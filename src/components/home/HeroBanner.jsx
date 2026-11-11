@@ -542,6 +542,12 @@ const HeroBanner = () => {
   // Active look index derived from 3D turntable rotation angle
   const activeLookIndex = ((Math.round(-currentRotation / 36) % count) + count) % count;
   const currentLook = looks[activeLookIndex] || sareeLooks[0];
+  const mainSaree = currentLook?.items?.find((it) => it.isMain) || currentLook?.items?.[0] || {};
+  const currentSareePrice = mainSaree.price || 19999;
+  const currentSareeOrigPrice = mainSaree.originalPrice || 24999;
+  const currentDiscountPercent = currentSareeOrigPrice > currentSareePrice
+    ? Math.round(((currentSareeOrigPrice - currentSareePrice) / currentSareeOrigPrice) * 100)
+    : 0;
 
   // Slow clockwise 3D rotation (~4.5 deg/sec => 80s for 1 complete revolution)
   useEffect(() => {
@@ -1110,6 +1116,116 @@ const HeroBanner = () => {
                   </div>
                 );
               })}
+            </div>
+
+            {/* ========================================================= */}
+            {/* FLOATING RUNWAY SAREE PILL (Bottom-Left Saree Name & Cart) */}
+            {/* ========================================================= */}
+            <div
+              className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 z-20 bg-white/95 backdrop-blur-md border border-gold/50 rounded-2xl p-2 sm:p-2.5 shadow-luxury flex items-center gap-2 sm:gap-2.5 max-w-[285px] xs:max-w-[315px] sm:max-w-xs transition-all duration-300 cursor-default"
+              onMouseDown={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
+              onMouseMove={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Saree Thumbnail (Mini preview) */}
+              <Link
+                to={currentLook.sareeSlug ? `/product/${currentLook.sareeSlug}` : '#'}
+                className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl overflow-hidden bg-stone-100 flex-shrink-0 border border-gold/30 shadow-xs block group/thumb"
+                title={mainSaree.name || currentLook.lookTitle}
+              >
+                <img
+                  src={mainSaree.image || currentLook.modelImage}
+                  alt={currentLook.lookTitle}
+                  className="w-full h-full object-cover object-top group-hover/thumb:scale-105 transition-transform"
+                />
+              </Link>
+
+              {/* Saree Name & Price / Offer (Limited Clean Text) */}
+              <div className="flex-1 min-w-0 pr-1">
+                <Link
+                  to={currentLook.sareeSlug ? `/product/${currentLook.sareeSlug}` : '#'}
+                  className="block font-serif text-[11px] sm:text-xs font-bold text-stone-900 hover:text-primary transition-colors truncate leading-tight"
+                  title={mainSaree.name || currentLook.lookTitle}
+                >
+                  {mainSaree.name || currentLook.lookTitle}
+                </Link>
+
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <span className="font-sans font-black text-xs sm:text-sm text-primary">
+                    {formatPrice(currentSareePrice)}
+                  </span>
+                  {currentSareeOrigPrice > currentSareePrice && (
+                    <span className="text-[10px] text-stone-400 font-bold line-through">
+                      {formatPrice(currentSareeOrigPrice)}
+                    </span>
+                  )}
+                  {currentDiscountPercent > 0 && (
+                    <span className="text-[9px] font-black text-emerald-700 bg-emerald-50 px-1 py-0.2 rounded border border-emerald-200">
+                      {currentDiscountPercent}% Off
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* - + ( Cart ) Controller */}
+              <div className="flex items-center gap-1 flex-shrink-0">
+                <div className="flex items-center bg-stone-100 border border-stone-200/80 rounded-lg p-0.5">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDecrementModalQty(currentLook);
+                    }}
+                    className="w-5 h-5 rounded flex items-center justify-center hover:bg-stone-200 text-stone-700 transition active:scale-90 cursor-pointer"
+                    aria-label="Decrease"
+                    title="Decrease quantity"
+                  >
+                    <Minus className="w-2.5 h-2.5 stroke-[2.5]" />
+                  </button>
+
+                  <span className="font-sans font-bold text-[11px] px-1 min-w-[14px] text-center select-none text-stone-900">
+                    {getLookCartQuantity(currentLook) > 0 ? getLookCartQuantity(currentLook) : 1}
+                  </span>
+
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleIncrementModalQty(currentLook);
+                    }}
+                    className="w-5 h-5 rounded flex items-center justify-center hover:bg-stone-200 text-stone-700 transition active:scale-90 cursor-pointer"
+                    aria-label="Increase"
+                    title="Increase quantity"
+                  >
+                    <Plus className="w-2.5 h-2.5 stroke-[2.5]" />
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const inCart = getLookCartQuantity(currentLook);
+                    if (inCart > 0) {
+                      toast.success(`Already in Bag (${inCart})!`, { id: 'runway-bag' });
+                    } else {
+                      handleAddFullLook(currentLook, 1);
+                      toast.success(`${mainSaree.name || currentLook.lookTitle} added to Bag!`, { id: 'runway-bag' });
+                    }
+                  }}
+                  className={`px-2 py-1 rounded-lg text-[10px] sm:text-[11px] font-extrabold flex items-center gap-0.5 shadow-xs transition active:scale-95 cursor-pointer ${
+                    getLookCartQuantity(currentLook) > 0
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-primary hover:bg-primary-light text-white'
+                  }`}
+                  title={getLookCartQuantity(currentLook) > 0 ? 'Item In Bag' : 'Add to Bag'}
+                >
+                  <ShoppingBag className="w-3 h-3" />
+                  <span>{getLookCartQuantity(currentLook) > 0 ? 'Added' : 'Cart'}</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
