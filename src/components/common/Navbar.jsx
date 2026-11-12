@@ -272,18 +272,64 @@ const Navbar = () => {
                 )}
               </button>
 
-              {/* Luxury Dark Dropdown Card */}
+              {/* Luxury Dark Customer Dropdown Card (Flipkart / My Mahira style) */}
               {userMenuOpen && (
-                <div className="absolute right-0 top-full mt-2.5 z-50 w-56 sm:w-60 bg-[#0B1510] border border-[#A68A56]/60 rounded-xs shadow-[0_25px_60px_rgba(0,0,0,0.85)] p-5 sm:p-6 text-white animate-in fade-in slide-in-from-top-2 duration-150 select-none">
-                  {/* Top Brand / Account Title */}
-                  <div className="font-serif text-[11px] font-bold text-[#D4AF37] tracking-[0.25em] uppercase mb-4">
-                    {isAuthenticated
-                      ? (user?.name?.split(' ')[0] ? `MY ${user.name.split(' ')[0].toUpperCase()}` : 'MY ACCOUNT')
-                      : (store?.boutiqueName ? `MY ${store.boutiqueName.split(' ')[0].toUpperCase()}` : 'MY SUBH LAGAN')}
+                <div className="absolute right-0 top-full mt-2.5 z-50 w-64 bg-[#0B1510] border border-[#A68A56]/60 rounded-xs shadow-[0_25px_60px_rgba(0,0,0,0.85)] p-5 text-white animate-in fade-in slide-in-from-top-2 duration-150 select-none">
+                  {/* Top Customer Header */}
+                  <div className="pb-3 border-b border-[#8F774B]/35">
+                    <p className="font-serif text-[11px] font-bold text-[#D4AF37] tracking-[0.2em] uppercase">
+                      {isAuthenticated
+                        ? `HELLO, ${user?.name?.split(' ')[0]?.toUpperCase() || 'CUSTOMER'}`
+                        : (store?.boutiqueName ? `MY ${store.boutiqueName.split(' ')[0].toUpperCase()}` : 'MY SUBH LAGAN')}
+                    </p>
+                    <p className="text-[10px] text-stone-400 mt-0.5 truncate">
+                      {isAuthenticated ? (user?.email || 'Customer Account') : 'Sign in to access your orders & wishlist'}
+                    </p>
                   </div>
 
+                  {/* Sign In & Sign Up Options (Customer/Flipkart style) */}
+                  {!isAuthenticated && (
+                    <div className="py-3.5 space-y-2.5 border-b border-[#8F774B]/35">
+                      {/* Boxed Gold LOGIN Button */}
+                      <Link
+                        to="/login"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="block w-full py-2.5 px-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-[#D4AF37] border border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0B1510] transition-all duration-200 shadow-xs"
+                      >
+                        SIGN IN / LOGIN
+                      </Link>
+
+                      {/* Google One-Click Login Button */}
+                      <button
+                        type="button"
+                        onClick={handleGoogleSignIn}
+                        className="w-full py-2 px-3 bg-white hover:bg-stone-100 text-stone-800 text-xs font-bold rounded-xs flex items-center justify-center gap-2 shadow-xs transition active:scale-98 cursor-pointer"
+                      >
+                        <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24">
+                          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                        </svg>
+                        <span>Sign in with Google</span>
+                      </button>
+
+                      {/* New Customer? Sign Up */}
+                      <div className="text-center pt-0.5 text-xs">
+                        <span className="text-stone-400">New customer? </span>
+                        <Link
+                          to="/register"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="font-bold text-[#D4AF37] hover:underline uppercase tracking-wider text-[11px]"
+                        >
+                          Sign Up
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Menu Links */}
-                  <div className="space-y-3 text-stone-200 text-sm font-sans">
+                  <div className="py-3 space-y-2.5 text-stone-200 text-sm font-sans">
                     <Link
                       to={isAuthenticated ? "/profile" : "/login"}
                       onClick={() => setUserMenuOpen(false)}
@@ -307,67 +353,21 @@ const Navbar = () => {
                     >
                       Wishlist
                     </Link>
-
-                    {isAuthenticated && ['admin', 'superadmin', 'client'].includes(user?.role) && (
-                      <Link
-                        to={user?.role === 'superadmin' ? '/superadmin' : user?.role === 'admin' ? '/admin-portal' : '/admin'}
-                        onClick={() => setUserMenuOpen(false)}
-                        className="block text-[#D4AF37] hover:underline font-semibold text-xs pt-1 border-t border-stone-800"
-                      >
-                        Admin Portal →
-                      </Link>
-                    )}
                   </div>
 
-                  {/* Thin Divider Line */}
-                  <div className="my-4 border-t border-[#8F774B]/35" />
-
-                  {/* Auth Actions (Login / Sign Up or Logout) */}
-                  {!isAuthenticated ? (
-                    <div className="space-y-3.5">
-                      {/* Boxed Gold LOGIN Button (Exact match to screenshot) */}
-                      <Link
-                        to="/login"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="block w-full py-2.5 px-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-[#D4AF37] border border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0B1510] transition-all duration-200 shadow-xs"
-                      >
-                        LOGIN
-                      </Link>
-
-                      {/* Clean SIGN UP Link */}
-                      <Link
-                        to="/register"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="block text-center text-xs font-semibold uppercase tracking-[0.2em] text-stone-300 hover:text-white transition-colors"
-                      >
-                        SIGN UP
-                      </Link>
-
-                      {/* Google Sign-In Option */}
+                  {/* Logged in state: LOGOUT button */}
+                  {isAuthenticated && (
+                    <div className="pt-3 border-t border-[#8F774B]/35">
                       <button
-                        type="button"
-                        onClick={handleGoogleSignIn}
-                        className="w-full pt-2 border-t border-stone-800/80 flex items-center justify-center gap-2 text-[11px] font-medium text-stone-300 hover:text-white transition cursor-pointer"
+                        onClick={() => {
+                          logout();
+                          setUserMenuOpen(false);
+                        }}
+                        className="block w-full py-2.5 px-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-[#D4AF37] border border-[#D4AF37] hover:bg-rose-900/40 hover:border-rose-400 hover:text-rose-200 transition-all duration-200 cursor-pointer"
                       >
-                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24">
-                          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                        </svg>
-                        <span>Google Sign In</span>
+                        LOGOUT
                       </button>
                     </div>
-                  ) : (
-                    <button
-                      onClick={() => {
-                        logout();
-                        setUserMenuOpen(false);
-                      }}
-                      className="block w-full py-2.5 px-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-[#D4AF37] border border-[#D4AF37] hover:bg-rose-900/40 hover:border-rose-400 hover:text-rose-200 transition-all duration-200 cursor-pointer"
-                    >
-                      LOGOUT
-                    </button>
                   )}
                 </div>
               )}
