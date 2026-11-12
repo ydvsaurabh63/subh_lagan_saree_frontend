@@ -79,65 +79,62 @@ const FittingRoomPanel = () => {
     slug: sareeLooks[0]?.sareeSlug || '',
   };
 
-  // Fast client-side image compression so large phone camera photos upload instantly without freeze
-  const compressImage = (file) => {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          const maxDim = 1200;
-          let width = img.width;
-          let height = img.height;
-          if (width > maxDim || height > maxDim) {
-            if (width > height) {
-              height = Math.round((height * maxDim) / width);
-              width = maxDim;
-            } else {
-              width = Math.round((width * maxDim) / height);
-              height = maxDim;
-            }
-          }
-          const canvas = document.createElement('canvas');
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-          resolve(canvas.toDataURL('image/jpeg', 0.85));
-        };
-        img.onerror = () => resolve(e.target.result);
-        img.src = e.target.result;
-      };
-      reader.onerror = () => resolve(null);
-      reader.readAsDataURL(file);
-    });
-  };
-
   // Handle Photo Upload directly from Gallery / Files
-  const handleGalleryUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleGalleryUpload = (e) => {
+    e.stopPropagation();
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    const file = files[0];
 
-    if (!file.type.startsWith('image/')) {
+    // Reset input value so selecting the same file later still fires onChange
+    const inputElement = e.target;
+
+    // Check if valid image by type or extension (supports Android content URIs & iOS HEIC)
+    const isImage =
+      (file.type && file.type.startsWith('image/')) ||
+      /\.(jpe?g|png|webp|gif|bmp|heic|heif|jfif|svg)$/i.test(file.name || '') ||
+      !file.type; // Some mobile galleries pass empty MIME type
+
+    if (!isImage) {
       toast.error('Please select an image file from your gallery');
+      if (inputElement) inputElement.value = '';
       return;
     }
 
-    toast.loading('Uploading photo from gallery...', { id: 'tryon-upload' });
+    // 1. Instant display with Object URL (0ms, synchronous, zero memory overhead)
     try {
-      const compressedDataUrl = await compressImage(file);
-      if (compressedDataUrl) {
-        setCustomUserPhoto(compressedDataUrl);
-        setIsDraped(false);
-        toast.success('Photo uploaded! Tap "Generate" to drape saree ✨', {
-          id: 'tryon-upload',
-          duration: 3500,
-        });
-      } else {
-        toast.error('Could not load image. Please try another photo.', { id: 'tryon-upload' });
-      }
+      const instantUrl = URL.createObjectURL(file);
+      setCustomUserPhoto(instantUrl);
+      setIsDraped(false);
+      toast.success('Photo loaded! Tap "Generate" to drape saree ✨', {
+        id: 'tryon-upload',
+        duration: 3500,
+      });
     } catch (err) {
-      toast.error('Failed to load image. Please try again.', { id: 'tryon-upload' });
+      console.warn('URL.createObjectURL failed, falling back to FileReader:', err);
+    }
+
+    // 2. Also read via FileReader so the image persists as base64 data URL
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result;
+      if (result) {
+        setCustomUserPhoto(result);
+        setIsDraped(false);
+      }
+    };
+    reader.onerror = (err) => {
+      console.warn('FileReader error:', err);
+    };
+
+    try {
+      reader.readAsDataURL(file);
+    } catch (readErr) {
+      console.warn('readAsDataURL threw:', readErr);
+    }
+
+    if (inputElement) {
+      inputElement.value = '';
     }
   };
 
@@ -213,24 +210,21 @@ const FittingRoomPanel = () => {
       onClick={closeTryOn}
       className="fixed inset-0 z-[9999] w-full h-full min-h-screen bg-[#121214] md:bg-black/80 md:backdrop-blur-md text-white flex flex-col md:items-center md:justify-center md:p-4 lg:p-6 overflow-y-auto select-none animate-fadeIn"
     >
-      {/* Native Accessible File Input (Hidden via sr-only so it never blocks mobile touch) */}
-      <input
-        id="fitting-room-file-input"
-        type="file"
-        ref={fileInputRef}
-        onChange={handleGalleryUpload}
-        onClick={(e) => {
-          e.target.value = null;
-        }}
-        accept="image/*,image/jpeg,image/png,image/webp,image/jpg"
-        className="sr-only"
-      />
-
       {/* Modal Card / Content Box: Full-page on mobile, Centered Luxury Modal on Laptop */}
       <div
         onClick={(e) => e.stopPropagation()}
         className="w-full h-full min-h-screen md:min-h-0 md:h-auto md:max-h-[92vh] md:max-w-md lg:max-w-lg bg-[#121214] md:bg-[#141416] md:border md:border-stone-800/90 md:rounded-3xl md:shadow-[0_25px_80px_rgba(0,0,0,0.95)] flex flex-col overflow-y-auto"
       >
+        {/* Native Hidden File Input (Inside modal card with stopPropagation so it never triggers closeTryOn) */}
+        <input
+          id="fitting-room-file-input"
+          type="file"
+          ref={fileInputRef}
+          onChange={handleGalleryUpload}
+          onClick={(e) => e.stopPropagation()}
+          accept="image/*"
+          className="sr-only"
+        />
         {/* Full-Page Sticky Header on Mobile, Modal Header on Laptop */}
         <header className="sticky top-0 z-30 w-full bg-[#141416]/95 backdrop-blur-md border-b border-stone-800/90 px-4 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between shadow-md md:rounded-t-3xl">
           <div className="flex items-center space-x-2.5">
@@ -276,7 +270,7 @@ const FittingRoomPanel = () => {
               /* UPPER UPLOAD BOX (Native <label> triggers gallery on all mobile devices) */
               <label
                 htmlFor="fitting-room-file-input"
-                className="w-full aspect-[3/4] max-w-md mx-auto max-h-[58vh] sm:max-h-[64vh] md:max-h-[360px] lg:max-h-[400px] rounded-3xl border-2 border-dashed border-[#D97706] bg-gradient-to-b from-[#D97706]/15 via-[#D97706]/5 to-transparent hover:bg-[#D97706]/20 transition-all duration-300 p-6 text-center cursor-pointer group shadow-[0_0_40px_rgba(217,119,6,0.25)] hover:shadow-[0_0_60px_rgba(217,119,6,0.4)] active:scale-99 flex flex-col items-center justify-center space-y-4 block"
+                className="w-full aspect-[3/4] max-w-md mx-auto max-h-[58vh] sm:max-h-[64vh] md:max-h-[360px] lg:max-h-[400px] rounded-3xl border-2 border-dashed border-[#D97706] bg-gradient-to-b from-[#D97706]/15 via-[#D97706]/5 to-transparent hover:bg-[#D97706]/20 transition-all duration-300 p-6 text-center cursor-pointer group shadow-[0_0_40px_rgba(217,119,6,0.25)] hover:shadow-[0_0_60px_rgba(217,119,6,0.4)] active:scale-98 flex flex-col items-center justify-center space-y-4"
               >
                 {/* Circular Icon */}
                 <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#D97706] text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
@@ -294,11 +288,14 @@ const FittingRoomPanel = () => {
               </label>
             ) : (
               /* UPPER PHOTO PREVIEW FRAME (Displays the user's uploaded photo immediately!) */
-              <div className="relative w-full aspect-[3/4] max-w-md mx-auto max-h-[58vh] sm:max-h-[64vh] md:max-h-[360px] lg:max-h-[400px] rounded-3xl overflow-hidden bg-stone-900 border border-stone-800 flex items-center justify-center shadow-2xl group">
+              <div className="relative w-full aspect-[3/4] max-w-md mx-auto max-h-[58vh] sm:max-h-[64vh] md:max-h-[360px] lg:max-h-[400px] rounded-3xl overflow-hidden bg-stone-900 border border-stone-800 shadow-2xl group">
                 <img
                   src={isDraped ? (activeProduct?.drapedPreview || customUserPhoto) : customUserPhoto}
                   alt="Try-On Preview"
-                  className="w-full h-full object-contain sm:object-cover object-top transition-all duration-300"
+                  onError={(e) => {
+                    console.error('Image load error in preview:', e);
+                  }}
+                  className="absolute inset-0 w-full h-full object-contain sm:object-cover object-top transition-all duration-300"
                 />
 
                 {/* Upper Left Badge */}
