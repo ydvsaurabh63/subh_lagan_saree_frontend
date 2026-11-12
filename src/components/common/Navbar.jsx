@@ -275,21 +275,9 @@ const Navbar = () => {
               {/* Luxury Dark Customer Dropdown Card (Flipkart / My Mahira style) */}
               {userMenuOpen && (
                 <div className="absolute right-0 top-full mt-2.5 z-50 w-64 bg-[#0B1510] border border-[#A68A56]/60 rounded-xs shadow-[0_25px_60px_rgba(0,0,0,0.85)] p-5 text-white animate-in fade-in slide-in-from-top-2 duration-150 select-none">
-                  {/* Top Customer Header */}
-                  <div className="pb-3 border-b border-[#8F774B]/35">
-                    <p className="font-serif text-[11px] font-bold text-[#D4AF37] tracking-[0.2em] uppercase">
-                      {isAuthenticated
-                        ? `HELLO, ${user?.name?.split(' ')[0]?.toUpperCase() || 'CUSTOMER'}`
-                        : (store?.boutiqueName ? `MY ${store.boutiqueName.split(' ')[0].toUpperCase()}` : 'MY SUBH LAGAN')}
-                    </p>
-                    <p className="text-[10px] text-stone-400 mt-0.5 truncate">
-                      {isAuthenticated ? (user?.email || 'Customer Account') : 'Sign in to access your orders & wishlist'}
-                    </p>
-                  </div>
-
                   {/* Sign In & Sign Up Options (Customer/Flipkart style) */}
                   {!isAuthenticated && (
-                    <div className="py-3.5 space-y-2.5 border-b border-[#8F774B]/35">
+                    <div className="pb-3.5 space-y-2.5 border-b border-[#8F774B]/35">
                       {/* Boxed Gold LOGIN Button */}
                       <Link
                         to="/login"
@@ -329,7 +317,7 @@ const Navbar = () => {
                   )}
 
                   {/* Menu Links */}
-                  <div className="py-3 space-y-2.5 text-stone-200 text-sm font-sans">
+                  <div className={`${!isAuthenticated ? 'pt-3' : ''} space-y-2.5 text-stone-200 text-sm font-sans`}>
                     <Link
                       to={isAuthenticated ? "/profile" : "/login"}
                       onClick={() => setUserMenuOpen(false)}
