@@ -23,12 +23,10 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   const searchInputRef = useRef(null);
-  const userDropdownRef = useRef(null);
 
-  const { user, isAuthenticated, logout, login } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
   const { totalQuantity } = useCart();
   const { wishlist } = useWishlist();
   const { store, isBoutiqueStore, isJewelleryStore, isHairStore, isSareeStore } = useStore();
@@ -39,41 +37,13 @@ const Navbar = () => {
   useEffect(() => {
     setMobileMenuOpen(false);
     setSearchOpen(false);
-    setUserMenuOpen(false);
   }, [location.pathname, location.search]);
-
-  // Click outside to close user dropdown
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target)) {
-        setUserMenuOpen(false);
-      }
-    };
-    if (userMenuOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('touchstart', handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside);
-    };
-  }, [userMenuOpen]);
 
   useEffect(() => {
     if (searchOpen && searchInputRef.current) {
       searchInputRef.current.focus();
     }
   }, [searchOpen]);
-
-  const handleGoogleSignIn = async () => {
-    setUserMenuOpen(false);
-    const result = await login('customer@subhlagansarees.com', 'password123');
-    if (result?.success) {
-      navigate('/profile');
-    } else {
-      navigate('/login');
-    }
-  };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -250,129 +220,18 @@ const Navbar = () => {
               {searchOpen ? <X className="w-4 h-4 sm:w-5 sm:h-5" /> : <Search className="w-4 h-4 sm:w-5 sm:h-5" />}
             </button>
 
-            {/* ========================================================= */}
-            {/* USER / PROFILE ACCOUNT DROPDOWN (Exact match to screenshot) */}
-            {/* ========================================================= */}
-            <div className="relative" ref={userDropdownRef}>
-              <button
-                type="button"
-                onClick={() => setUserMenuOpen((prev) => !prev)}
-                className={`p-1.5 sm:p-2 rounded-full transition cursor-pointer relative ${
-                  userMenuOpen
-                    ? 'bg-primary text-white'
-                    : 'text-stone-700 hover:text-primary hover:bg-cream'
-                }`}
-                title={isAuthenticated ? `Account (${user?.name})` : "Account & Login"}
-                aria-label="User Account"
-                aria-expanded={userMenuOpen}
-              >
-                <User className="w-4 h-4 sm:w-5 sm:h-5" />
-                {isAuthenticated && (
-                  <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-emerald-500 border border-white" />
-                )}
-              </button>
-
-              {/* Luxury Dark Customer Dropdown Card (Flipkart / My Mahira style) */}
-              {userMenuOpen && (
-                <div className="absolute right-0 top-full mt-2.5 z-50 w-64 bg-[#0B1510] border border-[#A68A56]/60 rounded-xs shadow-[0_25px_60px_rgba(0,0,0,0.85)] p-5 text-white animate-in fade-in slide-in-from-top-2 duration-150 select-none">
-                  {/* Sign In & Sign Up Options (Customer/Flipkart style) */}
-                  {!isAuthenticated && (
-                    <div className="pb-3.5 space-y-2.5 border-b border-[#8F774B]/35">
-                      {/* Boxed Gold LOGIN Button */}
-                      <Link
-                        to="/login"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="block w-full py-2.5 px-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-[#D4AF37] border border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0B1510] transition-all duration-200 shadow-xs"
-                      >
-                        SIGN IN / LOGIN
-                      </Link>
-
-                      {/* Google One-Click Login Button */}
-                      <button
-                        type="button"
-                        onClick={handleGoogleSignIn}
-                        className="w-full py-2 px-3 bg-white hover:bg-stone-100 text-stone-800 text-xs font-bold rounded-xs flex items-center justify-center gap-2 shadow-xs transition active:scale-98 cursor-pointer"
-                      >
-                        <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24">
-                          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                        </svg>
-                        <span>Sign in with Google</span>
-                      </button>
-
-                      {/* New Customer? Sign Up */}
-                      <div className="text-center pt-0.5 text-xs">
-                        <span className="text-stone-400">New customer? </span>
-                        <Link
-                          to="/register"
-                          onClick={() => setUserMenuOpen(false)}
-                          className="font-bold text-[#D4AF37] hover:underline uppercase tracking-wider text-[11px]"
-                        >
-                          Sign Up
-                        </Link>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Menu Links */}
-                  <div className={`${!isAuthenticated ? 'pt-3' : ''} space-y-2.5 text-stone-200 text-sm font-sans`}>
-                    <Link
-                      to={isAuthenticated ? "/profile" : "/login"}
-                      onClick={() => setUserMenuOpen(false)}
-                      className="block hover:text-[#D4AF37] hover:translate-x-1 transition-all duration-150 font-medium"
-                    >
-                      My Account
-                    </Link>
-
-                    <Link
-                      to={isAuthenticated ? "/profile?tab=orders" : "/login"}
-                      onClick={() => setUserMenuOpen(false)}
-                      className="block hover:text-[#D4AF37] hover:translate-x-1 transition-all duration-150 font-medium"
-                    >
-                      Orders
-                    </Link>
-
-                    <Link
-                      to="/wishlist"
-                      onClick={() => setUserMenuOpen(false)}
-                      className="block hover:text-[#D4AF37] hover:translate-x-1 transition-all duration-150 font-medium"
-                    >
-                      Wishlist
-                    </Link>
-
-                    <Link
-                      to="/cart"
-                      onClick={() => setUserMenuOpen(false)}
-                      className="flex items-center justify-between hover:text-[#D4AF37] hover:translate-x-1 transition-all duration-150 font-medium"
-                    >
-                      <span>Cart</span>
-                      {totalQuantity > 0 && (
-                        <span className="text-[10px] bg-primary text-white font-bold px-1.5 py-0.5 rounded-full">
-                          {totalQuantity}
-                        </span>
-                      )}
-                    </Link>
-                  </div>
-
-                  {/* Logged in state: LOGOUT button */}
-                  {isAuthenticated && (
-                    <div className="pt-3 border-t border-[#8F774B]/35">
-                      <button
-                        onClick={() => {
-                          logout();
-                          setUserMenuOpen(false);
-                        }}
-                        className="block w-full py-2.5 px-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-[#D4AF37] border border-[#D4AF37] hover:bg-rose-900/40 hover:border-rose-400 hover:text-rose-200 transition-all duration-200 cursor-pointer"
-                      >
-                        LOGOUT
-                      </button>
-                    </div>
-                  )}
-                </div>
+            {/* User Account Link (Direct to Profile or Sign In) */}
+            <Link
+              to={isAuthenticated ? "/profile" : "/login"}
+              className="p-1.5 sm:p-2 rounded-full transition cursor-pointer relative text-stone-700 hover:text-primary hover:bg-cream"
+              title={isAuthenticated ? `Account (${user?.name})` : "Sign In / Register"}
+              aria-label="User Account"
+            >
+              <User className="w-4 h-4 sm:w-5 sm:h-5" />
+              {isAuthenticated && (
+                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-emerald-500 border border-white" />
               )}
-            </div>
+            </Link>
 
             {/* Wishlist Link (Hidden on mobile/tablet because MobileBottomNav already has it) */}
             <Link
