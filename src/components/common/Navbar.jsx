@@ -44,7 +44,7 @@ const Navbar = () => {
     setUserMenuOpen(false);
   }, [location.pathname, location.search]);
 
-  // Click outside listener for logged-in user menu
+  // Click outside listener for user dropdown
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
@@ -53,8 +53,12 @@ const Navbar = () => {
     };
     if (userMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
     }
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
   }, [userMenuOpen]);
 
   useEffect(() => {
@@ -238,57 +242,115 @@ const Navbar = () => {
               {searchOpen ? <X className="w-4 h-4 sm:w-5 sm:h-5" /> : <Search className="w-4 h-4 sm:w-5 sm:h-5" />}
             </button>
 
-            {/* User Account / Login Button */}
-            {!isAuthenticated ? (
+            {/* ========================================================= */}
+            {/* USER / PROFILE ACCOUNT DROPDOWN (Luxury Dark Card)       */}
+            {/* ========================================================= */}
+            <div className="relative" ref={userMenuRef}>
               <button
                 type="button"
-                onClick={() => setLoginModalOpen(true)}
-                className="flex items-center gap-1.5 py-1.5 px-3 rounded-full border border-gold/70 bg-white hover:bg-gold/10 text-stone-900 hover:text-primary transition font-bold text-xs sm:text-sm shadow-xs cursor-pointer"
-                title="Login with Mobile OTP"
+                onClick={() => setUserMenuOpen((prev) => !prev)}
+                className={`p-1.5 sm:p-2 rounded-full transition cursor-pointer relative ${
+                  userMenuOpen
+                    ? 'bg-primary text-white'
+                    : 'text-stone-700 hover:text-primary hover:bg-cream'
+                }`}
+                title={isAuthenticated ? `Account (${user?.name})` : "Account & Login"}
+                aria-label="User Account"
+                aria-expanded={userMenuOpen}
               >
-                <User className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gold-dark" />
-                <span>Login</span>
-              </button>
-            ) : (
-              <div className="relative" ref={userMenuRef}>
-                <button
-                  type="button"
-                  onClick={() => setUserMenuOpen((prev) => !prev)}
-                  className="flex items-center gap-1.5 py-1 px-2.5 rounded-full hover:bg-cream text-stone-800 transition cursor-pointer border border-stone-200"
-                >
-                  <div className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center font-bold text-[11px]">
-                    {user?.name?.[0]?.toUpperCase() || 'U'}
-                  </div>
-                  <span className="hidden sm:inline text-xs font-bold max-w-[80px] truncate text-stone-800">
-                    {user?.name?.split(' ')[0] || 'Account'}
-                  </span>
-                </button>
-                {userMenuOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-stone-200 rounded-xl shadow-xl py-2 z-50 text-xs select-none">
-                    <div className="px-3 py-2 border-b border-stone-100">
-                      <p className="font-bold text-stone-800 truncate">{user?.name}</p>
-                      <p className="text-[10px] text-stone-400 font-mono">{user?.phone || user?.email}</p>
-                    </div>
-                    <Link
-                      to="/profile"
-                      onClick={() => setUserMenuOpen(false)}
-                      className="block px-3 py-2 hover:bg-cream font-medium text-stone-700"
-                    >
-                      My Profile & Orders
-                    </Link>
-                    <button
-                      onClick={() => {
-                        setUserMenuOpen(false);
-                        logout();
-                      }}
-                      className="w-full text-left px-3 py-2 hover:bg-rose-50 text-rose-600 font-semibold cursor-pointer"
-                    >
-                      Logout
-                    </button>
-                  </div>
+                <User className="w-4 h-4 sm:w-5 sm:h-5" />
+                {isAuthenticated && (
+                  <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-emerald-500 border border-white" />
                 )}
-              </div>
-            )}
+              </button>
+
+              {/* Luxury Dark Customer Dropdown Card */}
+              {userMenuOpen && (
+                <div className="absolute right-0 top-full mt-2.5 z-50 w-64 bg-[#0B1510] border border-[#A68A56]/60 rounded-xs shadow-[0_25px_60px_rgba(0,0,0,0.85)] p-5 text-white animate-in fade-in slide-in-from-top-2 duration-150 select-none">
+                  
+                  {/* UNATHENTICATED STATE: ONLY LOGIN BUTTON (Google & Sign Up REMOVED) */}
+                  {!isAuthenticated ? (
+                    <div className="pb-3.5 border-b border-[#8F774B]/35">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setUserMenuOpen(false);
+                          setLoginModalOpen(true);
+                        }}
+                        className="block w-full py-2.5 px-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-[#D4AF37] border border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0B1510] transition-all duration-200 shadow-xs cursor-pointer"
+                      >
+                        SIGN IN / LOGIN
+                      </button>
+                    </div>
+                  ) : (
+                    /* AUTHENTICATED STATE: USER GREETING */
+                    <div className="pb-3 border-b border-[#8F774B]/35">
+                      <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-wider">
+                        HELLO, {user?.name || 'VALUED CUSTOMER'}
+                      </p>
+                      <p className="text-xs text-stone-400 font-mono truncate">
+                        {user?.phone || user?.email}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Menu Links */}
+                  <div className="pt-3 space-y-2.5 text-stone-200 text-sm font-sans">
+                    <Link
+                      to={isAuthenticated ? "/profile" : "/login"}
+                      onClick={() => setUserMenuOpen(false)}
+                      className="block hover:text-[#D4AF37] hover:translate-x-1 transition-all duration-150 font-medium"
+                    >
+                      My Account
+                    </Link>
+
+                    <Link
+                      to={isAuthenticated ? "/profile?tab=orders" : "/login"}
+                      onClick={() => setUserMenuOpen(false)}
+                      className="block hover:text-[#D4AF37] hover:translate-x-1 transition-all duration-150 font-medium"
+                    >
+                      Orders
+                    </Link>
+
+                    <Link
+                      to="/wishlist"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="block hover:text-[#D4AF37] hover:translate-x-1 transition-all duration-150 font-medium"
+                    >
+                      Wishlist
+                    </Link>
+
+                    <Link
+                      to="/cart"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="flex items-center justify-between hover:text-[#D4AF37] hover:translate-x-1 transition-all duration-150 font-medium"
+                    >
+                      <span>Cart</span>
+                      {totalQuantity > 0 && (
+                        <span className="text-[10px] bg-primary text-white font-bold px-1.5 py-0.5 rounded-full">
+                          {totalQuantity}
+                        </span>
+                      )}
+                    </Link>
+                  </div>
+
+                  {/* Logged in state: LOGOUT button */}
+                  {isAuthenticated && (
+                    <div className="pt-3 border-t border-[#8F774B]/35">
+                      <button
+                        onClick={() => {
+                          logout();
+                          setUserMenuOpen(false);
+                        }}
+                        className="block w-full py-2.5 px-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-[#D4AF37] border border-[#D4AF37] hover:bg-rose-900/40 hover:border-rose-400 hover:text-rose-200 transition-all duration-200 cursor-pointer"
+                      >
+                        LOGOUT
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
 
             {/* Wishlist Link (Hidden on mobile/tablet because MobileBottomNav already has it) */}
             <Link

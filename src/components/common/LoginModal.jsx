@@ -280,3 +280,4 @@ const LoginModal = ({ isOpen, onClose }) => {
 };
 
 export default LoginModal;
+
