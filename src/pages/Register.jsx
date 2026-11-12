@@ -30,6 +30,12 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const cleanPhone = formData.phone.replace(/\D/g, '').slice(-10);
+    if (cleanPhone.length !== 10) {
+      toast.error('Please enter a valid 10-digit Indian mobile number');
+      return;
+    }
+
     if (formData.password.length < 6) {
       toast.error('Password must be at least 6 characters long');
       return;
@@ -42,14 +48,18 @@ const Register = () => {
 
     setLoading(true);
     const result = await register({
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
+      name: formData.name.trim(),
+      email: formData.email.trim(),
+      phone: cleanPhone,
       password: formData.password,
     });
     setLoading(false);
 
     if (result?.success) {
+      toast.success('Account created! You can now log in anytime with Mobile OTP.', {
+        duration: 4000,
+        icon: '📱',
+      });
       navigate(redirectPath, { replace: true });
     }
   };
@@ -113,18 +123,29 @@ const Register = () => {
             </div>
 
             <div>
-              <label className="font-medium text-stone-600 block mb-1">Mobile Number (Optional)</label>
-              <div className="relative">
+              <div className="flex justify-between items-center mb-1">
+                <label className="font-medium text-stone-700">Mobile Number *</label>
+                <span className="text-[10px] text-primary font-bold">Used for OTP Login</span>
+              </div>
+              <div className="relative flex rounded-lg overflow-hidden border border-stone-200 bg-stone-50 focus-within:border-gold focus-within:bg-white transition shadow-xs">
+                <div className="px-3 py-2.5 bg-stone-100/90 border-r border-stone-200 text-stone-700 text-xs font-bold flex items-center gap-1 select-none">
+                  <span>🇮🇳</span>
+                  <span>+91</span>
+                </div>
                 <input
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="+91 98765 43210"
-                  className="w-full pl-9 pr-3 py-2.5 bg-stone-50 border border-stone-200 rounded-lg focus:outline-none focus:border-gold focus:bg-white"
+                  placeholder="98765 43210"
+                  required
+                  maxLength={10}
+                  className="w-full px-3 py-2.5 bg-transparent text-xs font-medium focus:outline-none"
                 />
-                <Phone className="absolute left-3 top-3 w-4 h-4 text-stone-400" />
               </div>
+              <p className="text-[10px] text-stone-400 mt-1">
+                10-digit Indian mobile number for instant OTP verification upon login.
+              </p>
             </div>
 
             <div>
@@ -207,9 +228,9 @@ const Register = () => {
           </button>
 
           <div className="pt-2 text-center text-xs text-stone-600 border-t border-stone-100">
-            Already have an account?{' '}
+            Already registered?{' '}
             <Link to="/login" className="font-bold text-primary hover:text-gold-dark underline">
-              Sign In
+              Sign In with Mobile OTP
             </Link>
           </div>
         </div>

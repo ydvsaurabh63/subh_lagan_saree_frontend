@@ -52,6 +52,39 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Mobile OTP Request handler
+  const sendMobileOtp = async (phone) => {
+    try {
+      const res = await authApi.sendMobileOtp({ phone });
+      if (res.success) {
+        toast.success(res.message || 'OTP sent to mobile!', { icon: '📱' });
+        return { success: true, phone: res.phone, otp: res.otp, userName: res.userName };
+      }
+      return { success: false, message: res.message };
+    } catch (error) {
+      toast.error(error.message || 'Failed to send OTP');
+      return { success: false, message: error.message };
+    }
+  };
+
+  // Mobile OTP Login handler
+  const loginWithMobileOtp = async (phone, otp) => {
+    try {
+      const res = await authApi.verifyMobileOtp({ phone, otp });
+      if (res.success) {
+        localStorage.setItem('sls_token', res.token);
+        setToken(res.token);
+        setUser(res.user);
+        toast.success(`Welcome back, ${res.user.name}! ✨`);
+        return { success: true, user: res.user };
+      }
+      return { success: false, message: res.message };
+    } catch (error) {
+      toast.error(error.message || 'OTP verification failed');
+      return { success: false, message: error.message };
+    }
+  };
+
   // Register handler
   const register = async (userData) => {
     try {
@@ -153,6 +186,8 @@ export const AuthProvider = ({ children }) => {
         isAdmin: user?.role === 'admin',
         isImpersonating,
         login,
+        sendMobileOtp,
+        loginWithMobileOtp,
         register,
         logout,
         impersonateAsClient,
