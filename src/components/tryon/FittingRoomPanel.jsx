@@ -287,19 +287,31 @@ const FittingRoomPanel = () => {
                 </div>
               </label>
             ) : (
-              /* UPPER PHOTO PREVIEW FRAME (Displays the user's uploaded photo immediately!) */
-              <div className="relative w-full aspect-[3/4] max-w-md mx-auto max-h-[58vh] sm:max-h-[64vh] md:max-h-[360px] lg:max-h-[400px] rounded-3xl overflow-hidden bg-stone-900 border border-stone-800 shadow-2xl group">
+              /* UPPER PHOTO PREVIEW FRAME (Displays 100% full uncropped user photo) */
+              <div className="relative w-full aspect-[3/4] max-w-md mx-auto max-h-[62vh] sm:max-h-[68vh] md:max-h-[420px] rounded-3xl overflow-hidden bg-[#0A0A0C] border border-stone-800 shadow-2xl group flex items-center justify-center">
+                {/* Ambient Soft Blur Layer from same photo to fill background seamlessly */}
+                <img
+                  src={isDraped ? (activeProduct?.drapedPreview || customUserPhoto) : customUserPhoto}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-125 pointer-events-none select-none"
+                />
+
+                {/* Subtle vignette over ambient blur */}
+                <div className="absolute inset-0 bg-black/30 pointer-events-none select-none z-[5]" />
+
+                {/* 100% Full Uncropped Photo - No parts chopped off */}
                 <img
                   src={isDraped ? (activeProduct?.drapedPreview || customUserPhoto) : customUserPhoto}
                   alt="Try-On Preview"
                   onError={(e) => {
                     console.error('Image load error in preview:', e);
                   }}
-                  className="absolute inset-0 w-full h-full object-contain sm:object-cover object-top transition-all duration-300"
+                  className="relative z-10 w-full h-full object-contain object-center transition-all duration-300 drop-shadow-[0_10px_25px_rgba(0,0,0,0.6)]"
                 />
 
                 {/* Upper Left Badge */}
-                <div className="absolute top-3 left-3 z-10 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md text-xs font-bold text-white border border-white/10 shadow-sm flex items-center gap-1.5">
+                <div className="absolute top-3 left-3 z-20 px-3 py-1 rounded-full bg-black/85 backdrop-blur-md text-xs font-bold text-white border border-white/10 shadow-lg flex items-center gap-1.5">
                   <span className={`w-2 h-2 rounded-full ${isDraped ? 'bg-[#D97706] animate-pulse' : 'bg-emerald-500'}`} />
                   <span>{isDraped ? '✨ AI Draped' : 'Your Photo'}</span>
                 </div>
@@ -307,7 +319,7 @@ const FittingRoomPanel = () => {
                 {/* Upper Right "Change Photo" Button (Native label) */}
                 <label
                   htmlFor="fitting-room-file-input"
-                  className="absolute top-3 right-3 z-10 py-1.5 px-3 rounded-full bg-black/80 hover:bg-black text-xs font-bold text-[#F59E0B] border border-[#F59E0B]/40 shadow-sm flex items-center gap-1.5 transition active:scale-95 cursor-pointer backdrop-blur-md"
+                  className="absolute top-3 right-3 z-20 py-1.5 px-3 rounded-full bg-black/85 hover:bg-black text-xs font-bold text-[#F59E0B] border border-[#F59E0B]/50 shadow-lg flex items-center gap-1.5 transition active:scale-95 cursor-pointer backdrop-blur-md"
                   title="Change Photo"
                 >
                   <Camera className="w-4 h-4 text-[#F59E0B]" />
@@ -316,7 +328,7 @@ const FittingRoomPanel = () => {
 
                 {/* Processing Overlay when Generating */}
                 {isProcessing && (
-                  <div className="absolute inset-0 z-20 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center text-white space-y-2 animate-fadeIn">
+                  <div className="absolute inset-0 z-30 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center text-white space-y-2 animate-fadeIn">
                     <div className="w-10 h-10 rounded-full border-3 border-[#D97706] border-t-transparent animate-spin"></div>
                     <p className="text-xs sm:text-sm font-serif font-bold text-[#F59E0B]">
                       {processingStep || 'Draping Saree with AI...'}
