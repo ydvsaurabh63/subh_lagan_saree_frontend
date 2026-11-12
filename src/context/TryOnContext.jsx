@@ -130,6 +130,7 @@ export const TryOnProvider = ({ children }) => {
         closeTryOn: () => setIsOpen(false),
         toggleTryOn: () => setIsOpen((prev) => !prev),
         selectedProduct,
+        setSelectedProduct,
         tryOnProduct,
         clearSelectedProduct,
         handleStartOver,
@@ -138,7 +139,10 @@ export const TryOnProvider = ({ children }) => {
         customUserPhoto,
         setCustomUserPhoto,
         isProcessing,
+        setIsProcessing,
         processingStep,
+        setProcessingStep,
+        triggerAiDraping,
         getDrapedImage,
       }}
     >
