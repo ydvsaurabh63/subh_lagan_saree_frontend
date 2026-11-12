@@ -8,7 +8,7 @@ import {
   Camera,
   Sparkles,
 } from 'lucide-react';
-import { useTryOn, sampleAvatars } from '../../context/TryOnContext.jsx';
+import { useTryOn } from '../../context/TryOnContext.jsx';
 import { useCart } from '../../context/CartContext.jsx';
 import { formatPrice } from '../../utils/formatters.js';
 import { sareeLooks } from '../../data/curatedSarees.js';
@@ -220,35 +220,9 @@ const FittingRoomPanel = () => {
                 <ImagePlus className="w-8 h-8 sm:w-10 sm:h-10" />
               </div>
 
-              <div>
-                <h4 className="font-serif text-xl sm:text-2xl font-bold text-white tracking-wide">
-                  Upload Photo
-                </h4>
-                <p className="text-xs sm:text-sm text-[#F59E0B] font-semibold mt-1">
-                  Tap to choose from Gallery
-                </p>
-              </div>
-
-              {/* Minimal Quick Sample Models */}
-              <div
-                onClick={(e) => e.stopPropagation()}
-                className="pt-2 flex items-center justify-center gap-1.5 flex-wrap"
-              >
-                <span className="text-[10px] sm:text-xs text-stone-400">Or try:</span>
-                {sampleAvatars.slice(1, 4).map((av) => (
-                  <button
-                    key={av.id}
-                    type="button"
-                    onClick={() => {
-                      setCustomUserPhoto(av.image);
-                      toast.success(`Loaded model ${av.name}!`, { icon: '✨' });
-                    }}
-                    className="text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full bg-stone-800 hover:bg-[#D97706] text-stone-200 hover:text-white border border-stone-700 transition cursor-pointer"
-                  >
-                    {av.name.split(' ')[0]}
-                  </button>
-                ))}
-              </div>
+              <h4 className="font-serif text-xl sm:text-2xl font-bold text-white tracking-wide">
+                Upload Photo
+              </h4>
             </div>
           ) : (
             /* UPPER PHOTO PREVIEW FRAME (When Photo is Uploaded) */
