@@ -353,6 +353,19 @@ const Navbar = () => {
                     >
                       Wishlist
                     </Link>
+
+                    <Link
+                      to="/cart"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="flex items-center justify-between hover:text-[#D4AF37] hover:translate-x-1 transition-all duration-150 font-medium"
+                    >
+                      <span>Cart</span>
+                      {totalQuantity > 0 && (
+                        <span className="text-[10px] bg-primary text-white font-bold px-1.5 py-0.5 rounded-full">
+                          {totalQuantity}
+                        </span>
+                      )}
+                    </Link>
                   </div>
 
                   {/* Logged in state: LOGOUT button */}
@@ -373,10 +386,10 @@ const Navbar = () => {
               )}
             </div>
 
-            {/* Wishlist Link */}
+            {/* Wishlist Link (Hidden on mobile/tablet because MobileBottomNav already has it) */}
             <Link
               to="/wishlist"
-              className="relative p-2 rounded-full hover:bg-cream text-stone-700 hover:text-primary transition"
+              className="hidden lg:flex relative p-2 rounded-full hover:bg-cream text-stone-700 hover:text-primary transition items-center justify-center"
               title="Saved Wishlist"
             >
               <Heart className="w-4 h-4" />
@@ -387,10 +400,10 @@ const Navbar = () => {
               )}
             </Link>
 
-            {/* Shopping Cart Link */}
+            {/* Shopping Cart Link (Hidden on mobile/tablet because MobileBottomNav already has it) */}
             <Link
               to="/cart"
-              className="relative p-2 rounded-full bg-primary/5 hover:bg-primary/10 text-primary transition"
+              className="hidden lg:flex relative p-2 rounded-full bg-primary/5 hover:bg-primary/10 text-primary transition items-center justify-center"
               title="Shopping Cart"
             >
               <ShoppingBag className="w-4 h-4 text-primary" />
