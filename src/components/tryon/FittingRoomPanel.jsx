@@ -263,38 +263,35 @@ const FittingRoomPanel = () => {
         
         {/* ========================================================= */}
         {/* UPPER SIDE: UPLOAD PHOTO OPTION / PREVIEW FRAME            */}
-        {/* ("upper side upload img ka option de do")                 */}
+        {/* (Taller Height & Minimal Text)                             */}
         {/* ========================================================= */}
         <section aria-label="Upload User Photo" className="w-full">
           {!customUserPhoto ? (
-            /* UPPER UPLOAD BOX (When No Photo Uploaded) */
+            /* UPPER UPLOAD BOX (Taller height, Minimal clean text) */
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="w-full rounded-2xl border-2 border-dashed border-[#D97706] bg-gradient-to-b from-[#D97706]/15 via-[#D97706]/5 to-transparent hover:bg-[#D97706]/20 transition-all duration-300 p-4 sm:p-5 text-center cursor-pointer group shadow-[0_0_30px_rgba(217,119,6,0.2)] hover:shadow-[0_0_45px_rgba(217,119,6,0.35)] active:scale-99 flex flex-col items-center justify-center space-y-2.5"
+              className="w-full min-h-[280px] sm:min-h-[340px] h-[280px] sm:h-[340px] rounded-3xl border-2 border-dashed border-[#D97706] bg-gradient-to-b from-[#D97706]/15 via-[#D97706]/5 to-transparent hover:bg-[#D97706]/20 transition-all duration-300 p-6 text-center cursor-pointer group shadow-[0_0_35px_rgba(217,119,6,0.22)] hover:shadow-[0_0_55px_rgba(217,119,6,0.38)] active:scale-99 flex flex-col items-center justify-center space-y-3.5"
             >
               {/* Circular Icon */}
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#D97706] text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                <ImagePlus className="w-6 h-6 sm:w-7 sm:h-7" />
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#D97706] text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+                <ImagePlus className="w-8 h-8 sm:w-10 sm:h-10" />
               </div>
 
               <div>
-                <h4 className="font-serif text-base sm:text-lg font-bold text-white tracking-wide">
-                  Upload Gallery / Photo
+                <h4 className="font-serif text-lg sm:text-2xl font-bold text-white tracking-wide">
+                  Upload Photo
                 </h4>
-                <p className="text-xs sm:text-sm text-[#F59E0B] font-semibold mt-0.5">
-                  Tap to upload your photo (Upper Side)
-                </p>
-                <p className="text-[10px] sm:text-[11px] text-stone-400 mt-1 max-w-xs mx-auto">
-                  Upload a full-length or portrait photo to see this saree draped on you.
+                <p className="text-xs sm:text-sm text-[#F59E0B] font-semibold mt-1">
+                  Tap to choose from Gallery
                 </p>
               </div>
 
-              {/* Quick Sample Models Pill Selector */}
+              {/* Minimal Quick Sample Models */}
               <div
                 onClick={(e) => e.stopPropagation()}
-                className="pt-1 flex items-center justify-center gap-1.5 flex-wrap"
+                className="pt-2 flex items-center justify-center gap-1.5 flex-wrap"
               >
-                <span className="text-[10px] text-stone-400">Or try with:</span>
+                <span className="text-[10px] sm:text-xs text-stone-400">Or try:</span>
                 {sampleAvatars.slice(1, 4).map((av) => (
                   <button
                     key={av.id}
@@ -303,7 +300,7 @@ const FittingRoomPanel = () => {
                       setCustomUserPhoto(av.image);
                       toast.success(`Loaded model ${av.name}!`, { icon: '✨' });
                     }}
-                    className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-800 hover:bg-[#D97706] text-stone-200 hover:text-white border border-stone-700 transition cursor-pointer"
+                    className="text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full bg-stone-800 hover:bg-[#D97706] text-stone-200 hover:text-white border border-stone-700 transition cursor-pointer"
                   >
                     {av.name.split(' ')[0]}
                   </button>
@@ -312,7 +309,7 @@ const FittingRoomPanel = () => {
             </div>
           ) : (
             /* UPPER PHOTO PREVIEW FRAME (When Photo is Uploaded) */
-            <div className="relative w-full aspect-[4/3] xs:aspect-[16/10] sm:aspect-[16/9] max-h-[260px] sm:max-h-[300px] rounded-2xl overflow-hidden bg-stone-900 border border-stone-800 flex items-center justify-center shadow-2xl group">
+            <div className="relative w-full min-h-[280px] sm:min-h-[340px] h-[280px] sm:h-[340px] rounded-3xl overflow-hidden bg-stone-900 border border-stone-800 flex items-center justify-center shadow-2xl group">
               <img
                 src={activeProduct?.drapedPreview || customUserPhoto}
                 alt="Try-On Preview"
@@ -320,7 +317,7 @@ const FittingRoomPanel = () => {
               />
 
               {/* Upper Left Badge */}
-              <div className="absolute top-2.5 left-2.5 z-10 px-2.5 py-0.5 rounded-full bg-black/80 backdrop-blur-md text-[11px] font-bold text-white border border-white/10 shadow-sm flex items-center gap-1.5">
+              <div className="absolute top-3 left-3 z-10 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md text-xs font-bold text-white border border-white/10 shadow-sm flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 <span>Your Photo</span>
               </div>
@@ -329,10 +326,10 @@ const FittingRoomPanel = () => {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="absolute top-2.5 right-2.5 z-10 py-1 px-2.5 rounded-full bg-black/80 hover:bg-black text-[11px] font-bold text-[#F59E0B] border border-[#F59E0B]/40 shadow-sm flex items-center gap-1.5 transition active:scale-95 cursor-pointer backdrop-blur-md"
+                className="absolute top-3 right-3 z-10 py-1.5 px-3 rounded-full bg-black/80 hover:bg-black text-xs font-bold text-[#F59E0B] border border-[#F59E0B]/40 shadow-sm flex items-center gap-1.5 transition active:scale-95 cursor-pointer backdrop-blur-md"
                 title="Change Photo"
               >
-                <Camera className="w-3.5 h-3.5 text-[#F59E0B]" />
+                <Camera className="w-4 h-4 text-[#F59E0B]" />
                 <span>Change Photo</span>
               </button>
 
