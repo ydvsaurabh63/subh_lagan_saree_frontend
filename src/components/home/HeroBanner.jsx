@@ -757,8 +757,8 @@ const HeroBanner = () => {
 
   const turntableScaleY = isMobile ? 0.22 : isTablet ? 0.22 : 0.20;
   const turntableHeight = Math.round(turntableWidth * turntableScaleY);
-  const turntableBottomOffset = isMobile ? 65 : isTablet ? 155 : 185;
-  const modelBottomOffset = isMobile ? 60 : isTablet ? 150 : 180;
+  const turntableBottomOffset = isMobile ? 80 : isTablet ? 155 : 185;
+  const modelBottomOffset = isMobile ? 75 : isTablet ? 150 : 180;
 
   // 3D Circular Orbit calculations: all 10 models rotate in a real 3D circle
   const getModelStyle = (idx) => {
@@ -946,7 +946,7 @@ const HeroBanner = () => {
 
           {/* Runway Stage with Floor Ambient Shadow and Circular Turntable */}
           <div
-            className="relative -mt-2 mb-2 sm:-mt-3 sm:mb-4 flex items-center justify-center min-h-[500px] sm:min-h-[540px] lg:min-h-[620px] cursor-grab active:cursor-grabbing select-none"
+            className="relative -mt-2 mb-24 sm:-mt-3 sm:mb-4 flex items-center justify-center min-h-[500px] sm:min-h-[540px] lg:min-h-[620px] cursor-grab active:cursor-grabbing select-none"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => {
               setIsHovered(false);
@@ -1061,7 +1061,7 @@ const HeroBanner = () => {
             {/* FLOATING RUNWAY SAREE CARD (3x Height, Center-Aligned)    */}
             {/* ========================================================= */}
             <div
-              className="absolute bottom-2.5 sm:bottom-4 left-1/2 -translate-x-1/2 z-20 bg-white/95 backdrop-blur-md border border-gold/50 rounded-2xl sm:rounded-3xl p-2.5 sm:p-3 shadow-luxury flex items-stretch gap-2.5 sm:gap-3.5 w-[94%] max-w-[340px] xs:max-w-[370px] sm:max-w-[405px] h-[140px] sm:h-[150px] transition-all duration-300 cursor-default select-none"
+              className="absolute -bottom-[75px] sm:bottom-4 left-1/2 -translate-x-1/2 z-20 bg-white/95 backdrop-blur-md border border-gold/50 rounded-2xl sm:rounded-3xl p-2.5 sm:p-3 shadow-luxury flex items-stretch gap-2.5 sm:gap-3.5 w-[94%] max-w-[340px] xs:max-w-[370px] sm:max-w-[405px] h-[140px] sm:h-[150px] transition-all duration-300 cursor-default select-none"
               onMouseDown={(e) => e.stopPropagation()}
               onTouchStart={(e) => e.stopPropagation()}
               onMouseMove={(e) => e.stopPropagation()}
