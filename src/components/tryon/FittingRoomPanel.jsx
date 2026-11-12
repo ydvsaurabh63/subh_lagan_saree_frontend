@@ -7,11 +7,6 @@ import {
   ImagePlus,
   Camera,
   Sparkles,
-  Upload,
-  Check,
-  Plus,
-  Shirt,
-  Sparkle,
 } from 'lucide-react';
 import { useTryOn, sampleAvatars } from '../../context/TryOnContext.jsx';
 import { useCart } from '../../context/CartContext.jsx';
@@ -38,7 +33,6 @@ const FittingRoomPanel = () => {
   const navigate = useNavigate();
 
   const fileInputRef = useRef(null);
-  const clothFileInputRef = useRef(null);
 
   // Initialize selected product if none was pre-selected
   useEffect(() => {
@@ -99,50 +93,6 @@ const FittingRoomPanel = () => {
       };
       reader.readAsDataURL(file);
     }
-  };
-
-  // Handle Custom Cloth Upload
-  const handleCustomClothUpload = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (!file.type.startsWith('image/')) {
-        toast.error('Please upload a valid image file');
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const customCloth = {
-          _id: `custom-cloth-${Date.now()}`,
-          name: file.name.replace(/\.[^/.]+$/, '').slice(0, 32) || 'Custom Uploaded Cloth',
-          fabric: 'Custom Handloom Fabric',
-          price: 21999,
-          originalPrice: 26999,
-          image: event.target.result,
-          drapedPreview: event.target.result,
-          slug: '',
-          isCustomUpload: true,
-        };
-        setSelectedProduct(customCloth);
-        toast.success('Custom saree / cloth uploaded!', { icon: '👗' });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  // Select Saree from Curated 10 Looks
-  const handleSelectCuratedSaree = (look) => {
-    const mainSaree = look.items?.find((it) => it.isMain) || look.items?.[0];
-    const newProduct = {
-      _id: mainSaree?.id || `look-${look.id}`,
-      name: mainSaree?.name || look.lookTitle,
-      fabric: look.tagline?.split('•')[0]?.trim() || 'Pure Handloom Silk',
-      price: mainSaree?.price || 19999,
-      originalPrice: mainSaree?.originalPrice || 24999,
-      image: mainSaree?.image || look.cropImage,
-      drapedPreview: look.modelImage,
-      slug: look.sareeSlug || '',
-    };
-    setSelectedProduct(newProduct);
   };
 
   // 1. "Generate" Action: Runs AI Simulation Draping
@@ -210,18 +160,11 @@ const FittingRoomPanel = () => {
       aria-label="Fitting Room"
       className="fixed inset-0 z-[9999] w-full h-full min-h-screen bg-[#121214] text-white flex flex-col overflow-y-auto select-none animate-fadeIn"
     >
-      {/* Hidden File Inputs */}
+      {/* Hidden File Input */}
       <input
         type="file"
         ref={fileInputRef}
         onChange={handleGalleryUpload}
-        accept="image/*"
-        className="hidden"
-      />
-      <input
-        type="file"
-        ref={clothFileInputRef}
-        onChange={handleCustomClothUpload}
         accept="image/*"
         className="hidden"
       />
@@ -267,10 +210,10 @@ const FittingRoomPanel = () => {
         {/* ========================================================= */}
         <section aria-label="Upload User Photo" className="w-full">
           {!customUserPhoto ? (
-            /* UPPER UPLOAD BOX (Taller height, Minimal clean text) */
+            /* UPPER UPLOAD BOX (Grand Tall Height, Minimal Clean Text) */
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="w-full min-h-[280px] sm:min-h-[340px] h-[280px] sm:h-[340px] rounded-3xl border-2 border-dashed border-[#D97706] bg-gradient-to-b from-[#D97706]/15 via-[#D97706]/5 to-transparent hover:bg-[#D97706]/20 transition-all duration-300 p-6 text-center cursor-pointer group shadow-[0_0_35px_rgba(217,119,6,0.22)] hover:shadow-[0_0_55px_rgba(217,119,6,0.38)] active:scale-99 flex flex-col items-center justify-center space-y-3.5"
+              className="w-full aspect-[3/4] max-w-md mx-auto max-h-[58vh] sm:max-h-[64vh] rounded-3xl border-2 border-dashed border-[#D97706] bg-gradient-to-b from-[#D97706]/15 via-[#D97706]/5 to-transparent hover:bg-[#D97706]/20 transition-all duration-300 p-6 text-center cursor-pointer group shadow-[0_0_40px_rgba(217,119,6,0.25)] hover:shadow-[0_0_60px_rgba(217,119,6,0.4)] active:scale-99 flex flex-col items-center justify-center space-y-4"
             >
               {/* Circular Icon */}
               <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#D97706] text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
@@ -278,7 +221,7 @@ const FittingRoomPanel = () => {
               </div>
 
               <div>
-                <h4 className="font-serif text-lg sm:text-2xl font-bold text-white tracking-wide">
+                <h4 className="font-serif text-xl sm:text-2xl font-bold text-white tracking-wide">
                   Upload Photo
                 </h4>
                 <p className="text-xs sm:text-sm text-[#F59E0B] font-semibold mt-1">
@@ -309,7 +252,7 @@ const FittingRoomPanel = () => {
             </div>
           ) : (
             /* UPPER PHOTO PREVIEW FRAME (When Photo is Uploaded) */
-            <div className="relative w-full min-h-[280px] sm:min-h-[340px] h-[280px] sm:h-[340px] rounded-3xl overflow-hidden bg-stone-900 border border-stone-800 flex items-center justify-center shadow-2xl group">
+            <div className="relative w-full aspect-[3/4] max-w-md mx-auto max-h-[58vh] sm:max-h-[64vh] rounded-3xl overflow-hidden bg-stone-900 border border-stone-800 flex items-center justify-center shadow-2xl group">
               <img
                 src={activeProduct?.drapedPreview || customUserPhoto}
                 alt="Try-On Preview"
@@ -344,108 +287,6 @@ const FittingRoomPanel = () => {
               )}
             </div>
           )}
-        </section>
-
-        {/* ========================================================= */}
-        {/* MIDDLE SECTION: "ADD CLOTH" / SELECT SAREE                */}
-        {/* ("Add cloth" option & catalog selector)                   */}
-        {/* ========================================================= */}
-        <section aria-label="Add Cloth" className="w-full space-y-2.5">
-          {/* Section Header */}
-          <div className="flex items-center justify-between px-1">
-            <div className="flex items-center space-x-1.5">
-              <Shirt className="w-4 h-4 text-[#F59E0B]" />
-              <h4 className="font-serif text-sm font-bold text-white tracking-wide">
-                Add Cloth / Select Saree
-              </h4>
-            </div>
-
-            {/* "+ Upload Cloth" Button */}
-            <button
-              type="button"
-              onClick={() => clothFileInputRef.current?.click()}
-              className="text-[11px] font-bold text-[#F59E0B] hover:text-amber-400 flex items-center gap-1 bg-[#D97706]/10 hover:bg-[#D97706]/20 border border-[#D97706]/30 px-2.5 py-1 rounded-lg transition active:scale-95 cursor-pointer"
-              title="Upload your own custom saree or cloth"
-            >
-              <Upload className="w-3 h-3" />
-              <span>+ Upload Cloth</span>
-            </button>
-          </div>
-
-          {/* Active Selected Cloth Card */}
-          <div className="p-2.5 sm:p-3 rounded-2xl bg-stone-900/90 border border-[#D97706]/40 flex items-center gap-3 shadow-md">
-            {/* Saree Crop Thumbnail */}
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden bg-stone-800 flex-shrink-0 border border-stone-700 shadow-xs relative">
-              <img
-                src={activeProduct.image || activeProduct.drapedPreview}
-                alt={activeProduct.name}
-                className="w-full h-full object-cover object-top"
-              />
-              <span className="absolute bottom-0.5 right-0.5 bg-black/80 text-[8px] font-bold px-1 rounded text-[#F59E0B]">
-                Active
-              </span>
-            </div>
-
-            {/* Details */}
-            <div className="flex-1 min-w-0 text-left">
-              <h5 className="font-serif text-xs sm:text-sm font-bold text-stone-100 truncate leading-snug">
-                {activeProduct.name}
-              </h5>
-              <p className="text-[10px] text-stone-400 truncate mt-0.5">
-                {activeProduct.fabric || 'Pure Handloom Silk'}
-              </p>
-              <div className="flex items-baseline space-x-2 mt-1">
-                <span className="text-xs sm:text-sm font-black text-[#F59E0B]">
-                  {formatPrice(activeProduct.price)}
-                </span>
-                {activeProduct.originalPrice && activeProduct.originalPrice > activeProduct.price && (
-                  <span className="text-[10px] text-stone-500 line-through">
-                    {formatPrice(activeProduct.originalPrice)}
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Quick 10 Curated Sarees Carousel (One-Tap Cloth Switching) */}
-          <div className="space-y-1">
-            <p className="text-[10px] text-stone-400 font-semibold px-1 uppercase tracking-wider">
-              Choose from 10 Authentic Sarees:
-            </p>
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none snap-x">
-              {sareeLooks.map((look) => {
-                const mainSaree = look.items?.find((it) => it.isMain) || look.items?.[0];
-                const isSelected = activeProduct._id === (mainSaree?.id || `look-${look.id}`);
-
-                return (
-                  <button
-                    key={look.id}
-                    type="button"
-                    onClick={() => handleSelectCuratedSaree(look)}
-                    className={`flex-shrink-0 snap-start flex items-center gap-2 p-1.5 rounded-xl border transition active:scale-95 cursor-pointer text-left ${
-                      isSelected
-                        ? 'bg-[#D97706]/20 border-[#D97706] ring-1 ring-[#D97706] shadow-sm'
-                        : 'bg-stone-900/60 border-stone-800 hover:border-stone-700 hover:bg-stone-800/60'
-                    }`}
-                  >
-                    <img
-                      src={look.cropImage || mainSaree?.image}
-                      alt={look.lookTitle}
-                      className="w-8 h-8 rounded-lg object-cover object-top border border-stone-700"
-                    />
-                    <div className="pr-1.5">
-                      <p className="text-[10px] font-bold text-stone-200 truncate max-w-[90px]">
-                        {look.lookTitle}
-                      </p>
-                      <p className="text-[9px] font-black text-[#F59E0B]">
-                        {formatPrice(mainSaree?.price || 19999)}
-                      </p>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
         </section>
 
         {/* ========================================================= */}
