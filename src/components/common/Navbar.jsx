@@ -279,7 +279,7 @@ const Navbar = () => {
                         }}
                         className="block w-full py-2.5 px-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-[#D4AF37] border border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0B1510] transition-all duration-200 shadow-xs cursor-pointer"
                       >
-                        SIGN IN / LOGIN
+                        LOGIN
                       </button>
                     </div>
                   ) : (
