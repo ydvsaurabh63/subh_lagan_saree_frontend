@@ -45,6 +45,7 @@ import ReturnPolicy from './pages/ReturnPolicy.jsx';
 import PrivacyPolicy from './pages/PrivacyPolicy.jsx';
 import TermsConditions from './pages/TermsConditions.jsx';
 import NotFound from './pages/NotFound.jsx';
+import AnshuJewellersLanding from './pages/AnshuJewellersLanding.jsx';
 
 // Admin Dashboard Pages
 import AdminDashboard from './pages/admin/AdminDashboard.jsx';
@@ -69,6 +70,25 @@ function ScrollToTop() {
 
 function AppShell() {
   const location = useLocation();
+
+  // Multi-Domain Tenant Isolation:
+  // Detect if current domain is Anshu Jewellers (e.g. anshujewellers.com) OR route /anshu-jewellers
+  const rawHostname = typeof window !== 'undefined' ? window.location.hostname.replace(/^www\./, '').toLowerCase() : '';
+  const searchParams = new URLSearchParams(location.search);
+  const domainOverride = (searchParams.get('domain') || searchParams.get('store') || '').toLowerCase();
+  const isAnshuJewellersDomain =
+    rawHostname.includes('anshu') ||
+    rawHostname.includes('uday') ||
+    domainOverride.includes('anshu');
+  const isAnshuJewellersRoute =
+    location.pathname === '/anshu-jewellers' || location.pathname.startsWith('/anshu-jewellers/');
+  const isAnshuJewellers = isAnshuJewellersDomain || isAnshuJewellersRoute;
+
+  // 100% ISOLATED JEWELLERY LANDING PAGE: Zero Subh Lagan elements (No Navbar, No Footer, No Saree Try-On)
+  if (isAnshuJewellers) {
+    return <AnshuJewellersLanding />;
+  }
+
   const isSuperAdminRoute = location.pathname.startsWith('/superadmin');
   const isAdminPortalRoute = location.pathname.startsWith('/admin-portal');
   const isClientAdminRoute = location.pathname.startsWith('/admin') || location.pathname.startsWith('/client');
@@ -99,6 +119,9 @@ function AppShell() {
               </AdminPortalRoute>
             }
           />
+
+          {/* Isolated Landing Pages */}
+          <Route path="/anshu-jewellers" element={<AnshuJewellersLanding />} />
 
           {/* Customer Facing Routes */}
           <Route path="/" element={<Home />} />
