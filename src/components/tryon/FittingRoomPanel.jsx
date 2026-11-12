@@ -20,7 +20,7 @@ const FittingRoomPanel = () => {
     closeTryOn,
     selectedProduct,
     setSelectedProduct,
-    handleStartOver,
+    handleStartOver: contextStartOver,
     customUserPhoto,
     setCustomUserPhoto,
     isProcessing,
@@ -33,6 +33,7 @@ const FittingRoomPanel = () => {
   const navigate = useNavigate();
 
   const fileInputRef = useRef(null);
+  const [isDraped, setIsDraped] = useState(false);
 
   // Initialize selected product if none was pre-selected
   useEffect(() => {
@@ -78,27 +79,77 @@ const FittingRoomPanel = () => {
     slug: sareeLooks[0]?.sareeSlug || '',
   };
 
-  // Handle Photo Upload directly from Gallery / Files
-  const handleGalleryUpload = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (!file.type.startsWith('image/')) {
-        toast.error('Please upload a valid image file');
-        return;
-      }
+  // Fast client-side image compression so large phone camera photos upload instantly without freeze
+  const compressImage = (file) => {
+    return new Promise((resolve) => {
       const reader = new FileReader();
-      reader.onload = (event) => {
-        setCustomUserPhoto(event.target.result);
-        toast.success('Photo uploaded from gallery!', { icon: '📸' });
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const maxDim = 1200;
+          let width = img.width;
+          let height = img.height;
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', 0.85));
+        };
+        img.onerror = () => resolve(e.target.result);
+        img.src = e.target.result;
       };
+      reader.onerror = () => resolve(null);
       reader.readAsDataURL(file);
+    });
+  };
+
+  // Handle Photo Upload directly from Gallery / Files
+  const handleGalleryUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file from your gallery');
+      return;
     }
+
+    toast.loading('Uploading photo from gallery...', { id: 'tryon-upload' });
+    try {
+      const compressedDataUrl = await compressImage(file);
+      if (compressedDataUrl) {
+        setCustomUserPhoto(compressedDataUrl);
+        setIsDraped(false);
+        toast.success('Photo uploaded! Tap "Generate" to drape saree ✨', {
+          id: 'tryon-upload',
+          duration: 3500,
+        });
+      } else {
+        toast.error('Could not load image. Please try another photo.', { id: 'tryon-upload' });
+      }
+    } catch (err) {
+      toast.error('Failed to load image. Please try again.', { id: 'tryon-upload' });
+    }
+  };
+
+  const handleStartOver = () => {
+    setIsDraped(false);
+    contextStartOver();
   };
 
   // 1. "Generate" Action: Runs AI Simulation Draping
   const handleGenerate = () => {
     if (!customUserPhoto) {
-      toast('Please upload your photo at the top first to generate try-on!', {
+      toast('Please upload your photo first to generate trial!', {
         icon: '📸',
       });
       fileInputRef.current?.click();
@@ -118,6 +169,7 @@ const FittingRoomPanel = () => {
 
     setTimeout(() => {
       setIsProcessing(false);
+      setIsDraped(true);
       toast.success(`Draped "${activeProduct.name}" successfully! ✨`, {
         id: 'generate-success',
         duration: 3000,
@@ -128,7 +180,7 @@ const FittingRoomPanel = () => {
   // 2. "Buy" Action: Adds to Cart and Navigates to Checkout
   const handleBuy = () => {
     if (!activeProduct) {
-      toast.error('Please select a cloth / saree to buy');
+      toast.error('Please select a saree to buy');
       return;
     }
 
@@ -161,13 +213,17 @@ const FittingRoomPanel = () => {
       onClick={closeTryOn}
       className="fixed inset-0 z-[9999] w-full h-full min-h-screen bg-[#121214] md:bg-black/80 md:backdrop-blur-md text-white flex flex-col md:items-center md:justify-center md:p-4 lg:p-6 overflow-y-auto select-none animate-fadeIn"
     >
-      {/* Hidden File Input */}
+      {/* Native Accessible File Input (Hidden via sr-only so it never blocks mobile touch) */}
       <input
+        id="fitting-room-file-input"
         type="file"
         ref={fileInputRef}
         onChange={handleGalleryUpload}
-        accept="image/*"
-        className="hidden"
+        onClick={(e) => {
+          e.target.value = null;
+        }}
+        accept="image/*,image/jpeg,image/png,image/webp,image/jpg"
+        className="sr-only"
       />
 
       {/* Modal Card / Content Box: Full-page on mobile, Centered Luxury Modal on Laptop */}
@@ -189,6 +245,7 @@ const FittingRoomPanel = () => {
           <div className="flex items-center space-x-2">
             {customUserPhoto && (
               <button
+                type="button"
                 onClick={handleStartOver}
                 className="p-1.5 sm:p-2 rounded-full text-stone-400 hover:text-white hover:bg-stone-800 transition active:scale-95 cursor-pointer"
                 title="Reset All"
@@ -197,6 +254,7 @@ const FittingRoomPanel = () => {
               </button>
             )}
             <button
+              type="button"
               onClick={closeTryOn}
               className="p-1.5 sm:p-2 rounded-full text-stone-400 hover:text-white hover:bg-stone-800 transition active:scale-95 cursor-pointer"
               title="Close"
@@ -207,7 +265,7 @@ const FittingRoomPanel = () => {
           </div>
         </header>
 
-        {/* Main Content: Justify-between on Mobile, Compact & Flush on Laptop (No Empty Gap) */}
+        {/* Main Content */}
         <main className="flex-1 md:flex-initial w-full max-w-xl mx-auto px-4 py-3 sm:py-4 md:p-5 flex flex-col justify-between md:justify-start space-y-4">
           
           {/* ========================================================= */}
@@ -215,49 +273,53 @@ const FittingRoomPanel = () => {
           {/* ========================================================= */}
           <section aria-label="Upload User Photo" className="w-full">
             {!customUserPhoto ? (
-              /* UPPER UPLOAD BOX */
-              <div
-                onClick={() => fileInputRef.current?.click()}
-                className="w-full aspect-[3/4] max-w-md mx-auto max-h-[58vh] sm:max-h-[64vh] md:max-h-[360px] lg:max-h-[400px] rounded-3xl border-2 border-dashed border-[#D97706] bg-gradient-to-b from-[#D97706]/15 via-[#D97706]/5 to-transparent hover:bg-[#D97706]/20 transition-all duration-300 p-6 text-center cursor-pointer group shadow-[0_0_40px_rgba(217,119,6,0.25)] hover:shadow-[0_0_60px_rgba(217,119,6,0.4)] active:scale-99 flex flex-col items-center justify-center space-y-4"
+              /* UPPER UPLOAD BOX (Native <label> triggers gallery on all mobile devices) */
+              <label
+                htmlFor="fitting-room-file-input"
+                className="w-full aspect-[3/4] max-w-md mx-auto max-h-[58vh] sm:max-h-[64vh] md:max-h-[360px] lg:max-h-[400px] rounded-3xl border-2 border-dashed border-[#D97706] bg-gradient-to-b from-[#D97706]/15 via-[#D97706]/5 to-transparent hover:bg-[#D97706]/20 transition-all duration-300 p-6 text-center cursor-pointer group shadow-[0_0_40px_rgba(217,119,6,0.25)] hover:shadow-[0_0_60px_rgba(217,119,6,0.4)] active:scale-99 flex flex-col items-center justify-center space-y-4 block"
               >
                 {/* Circular Icon */}
                 <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#D97706] text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
                   <ImagePlus className="w-8 h-8 sm:w-10 sm:h-10" />
                 </div>
 
-                <h4 className="font-serif text-xl sm:text-2xl font-bold text-white tracking-wide">
-                  Upload Photo
-                </h4>
-              </div>
+                <div>
+                  <h4 className="font-serif text-xl sm:text-2xl font-bold text-white tracking-wide">
+                    Upload Photo
+                  </h4>
+                  <p className="text-xs text-amber-200/80 font-medium mt-1">
+                    Tap to choose from Gallery
+                  </p>
+                </div>
+              </label>
             ) : (
-              /* UPPER PHOTO PREVIEW FRAME (When Photo is Uploaded) */
+              /* UPPER PHOTO PREVIEW FRAME (Displays the user's uploaded photo immediately!) */
               <div className="relative w-full aspect-[3/4] max-w-md mx-auto max-h-[58vh] sm:max-h-[64vh] md:max-h-[360px] lg:max-h-[400px] rounded-3xl overflow-hidden bg-stone-900 border border-stone-800 flex items-center justify-center shadow-2xl group">
                 <img
-                  src={activeProduct?.drapedPreview || customUserPhoto}
+                  src={isDraped ? (activeProduct?.drapedPreview || customUserPhoto) : customUserPhoto}
                   alt="Try-On Preview"
                   className="w-full h-full object-contain sm:object-cover object-top transition-all duration-300"
                 />
 
                 {/* Upper Left Badge */}
                 <div className="absolute top-3 left-3 z-10 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md text-xs font-bold text-white border border-white/10 shadow-sm flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>Your Photo</span>
+                  <span className={`w-2 h-2 rounded-full ${isDraped ? 'bg-[#D97706] animate-pulse' : 'bg-emerald-500'}`} />
+                  <span>{isDraped ? '✨ AI Draped' : 'Your Photo'}</span>
                 </div>
 
-                {/* Upper Right "Change Photo" Button */}
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
+                {/* Upper Right "Change Photo" Button (Native label) */}
+                <label
+                  htmlFor="fitting-room-file-input"
                   className="absolute top-3 right-3 z-10 py-1.5 px-3 rounded-full bg-black/80 hover:bg-black text-xs font-bold text-[#F59E0B] border border-[#F59E0B]/40 shadow-sm flex items-center gap-1.5 transition active:scale-95 cursor-pointer backdrop-blur-md"
                   title="Change Photo"
                 >
                   <Camera className="w-4 h-4 text-[#F59E0B]" />
                   <span>Change Photo</span>
-                </button>
+                </label>
 
                 {/* Processing Overlay when Generating */}
                 {isProcessing && (
-                  <div className="absolute inset-0 z-20 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center text-white space-y-2 animate-fadeIn">
+                  <div className="absolute inset-0 z-20 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center text-white space-y-2 animate-fadeIn">
                     <div className="w-10 h-10 rounded-full border-3 border-[#D97706] border-t-transparent animate-spin"></div>
                     <p className="text-xs sm:text-sm font-serif font-bold text-[#F59E0B]">
                       {processingStep || 'Draping Saree with AI...'}
@@ -272,22 +334,38 @@ const FittingRoomPanel = () => {
           {/* BOTTOM ACTION ROW: "GENERATE" & "BUY"                     */}
           {/* ========================================================= */}
           <section aria-label="Trial Actions" className="w-full pt-2 md:pt-3 border-t border-stone-800/80">
-            {/* Big Circle of Selected Product directly above Generate Button (No text, only image) */}
-            <div className="mb-3 px-1 flex items-center">
-              <div className="relative flex-shrink-0" title={activeProduct?.name}>
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full p-1 bg-gradient-to-tr from-[#D97706] via-amber-400 to-[#D97706] shadow-[0_0_22px_rgba(217,119,6,0.5)]">
-                  <div className="w-full h-full rounded-full overflow-hidden bg-stone-900 border-2 border-stone-800">
-                    <img
-                      src={activeProduct?.image || activeProduct?.drapedPreview}
-                      alt={activeProduct?.name || 'Selected Saree'}
-                      className="w-full h-full object-cover object-top"
-                    />
+            {/* Circle of Selected Saree directly above Generate Button */}
+            <div className="mb-3 px-1 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="relative flex-shrink-0" title={activeProduct?.name}>
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full p-0.5 bg-gradient-to-tr from-[#D97706] via-amber-400 to-[#D97706] shadow-[0_0_18px_rgba(217,119,6,0.45)]">
+                    <div className="w-full h-full rounded-full overflow-hidden bg-stone-900 border border-stone-800">
+                      <img
+                        src={activeProduct?.image || activeProduct?.drapedPreview}
+                        alt={activeProduct?.name || 'Selected Saree'}
+                        className="w-full h-full object-cover object-top"
+                      />
+                    </div>
                   </div>
+                  <span className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-[#D97706] text-white flex items-center justify-center text-[9px] font-black shadow border border-[#121214]">
+                    ✓
+                  </span>
                 </div>
-                <span className="absolute bottom-0 right-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#D97706] text-white flex items-center justify-center text-[10px] sm:text-xs font-black shadow-md border-2 border-[#121214]">
-                  ✓
-                </span>
+                <div className="min-w-0">
+                  <p className="text-xs font-serif font-bold text-white truncate max-w-[200px] sm:max-w-xs">
+                    {activeProduct?.name}
+                  </p>
+                  <p className="text-[10px] text-amber-400 font-bold">
+                    {formatPrice(activeProduct.price)}
+                  </p>
+                </div>
               </div>
+
+              {!isDraped && customUserPhoto && (
+                <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-400 bg-emerald-950/60 border border-emerald-500/40 px-2 py-1 rounded-full animate-pulse">
+                  Ready to Drape
+                </span>
+              )}
             </div>
 
             <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
@@ -301,7 +379,7 @@ const FittingRoomPanel = () => {
                 title="Generate AI Virtual Trial"
               >
                 <Sparkles className="w-4 h-4 flex-shrink-0 animate-pulse text-amber-200" />
-                <span>{isProcessing ? 'Generating...' : 'Generate'}</span>
+                <span>{isProcessing ? 'Draping...' : isDraped ? 'Re-Drape' : 'Generate'}</span>
               </button>
 
               {/* 2. BUY BUTTON */}
