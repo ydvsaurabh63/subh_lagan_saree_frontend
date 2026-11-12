@@ -159,7 +159,7 @@ const FittingRoomPanel = () => {
       aria-modal="true"
       aria-label="Fitting Room"
       onClick={closeTryOn}
-      className="fixed inset-0 z-[9999] w-full h-[100dvh] max-h-[100dvh] bg-[#121214] md:bg-black/80 md:backdrop-blur-md text-white flex flex-col md:items-center md:justify-center md:p-3 lg:p-4 overflow-hidden select-none animate-fadeIn"
+      className="fixed inset-0 z-[9999] w-full h-full min-h-screen bg-[#121214] md:bg-black/80 md:backdrop-blur-md text-white flex flex-col md:items-center md:justify-center md:p-4 lg:p-6 overflow-y-auto select-none animate-fadeIn"
     >
       {/* Hidden File Input */}
       <input
@@ -170,68 +170,68 @@ const FittingRoomPanel = () => {
         className="hidden"
       />
 
-      {/* Modal Card / Content Box: Single Screen, Zero Scrollbar */}
+      {/* Modal Card / Content Box: Full-page on mobile, Centered Luxury Modal on Laptop */}
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full h-full md:h-auto md:max-h-[94vh] md:max-w-md lg:max-w-lg bg-[#121214] md:bg-[#141416] md:border md:border-stone-800/90 md:rounded-3xl md:shadow-[0_25px_80px_rgba(0,0,0,0.95)] flex flex-col overflow-hidden"
+        className="w-full h-full min-h-screen md:min-h-0 md:h-auto md:max-h-[92vh] md:max-w-md lg:max-w-lg bg-[#121214] md:bg-[#141416] md:border md:border-stone-800/90 md:rounded-3xl md:shadow-[0_25px_80px_rgba(0,0,0,0.95)] flex flex-col overflow-y-auto"
       >
-        {/* Full-Page / Modal Header */}
-        <header className="flex-shrink-0 z-30 w-full bg-[#141416]/95 backdrop-blur-md border-b border-stone-800/90 px-4 py-2.5 sm:py-3 flex items-center justify-between shadow-md md:rounded-t-3xl">
-          <div className="flex items-center space-x-2">
-            <h3 className="font-serif text-base sm:text-lg font-bold text-white tracking-tight">
+        {/* Full-Page Sticky Header on Mobile, Modal Header on Laptop */}
+        <header className="sticky top-0 z-30 w-full bg-[#141416]/95 backdrop-blur-md border-b border-stone-800/90 px-4 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between shadow-md md:rounded-t-3xl">
+          <div className="flex items-center space-x-2.5">
+            <h3 className="font-serif text-lg sm:text-xl font-bold text-white tracking-tight">
               Fitting room
             </h3>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#F59E0B] bg-[#D97706]/15 border border-[#D97706]/30 px-2 py-0.5 rounded-full">
+            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#F59E0B] bg-[#D97706]/15 border border-[#D97706]/30 px-2 py-0.5 rounded-full">
               Virtual Trial
             </span>
           </div>
 
-          <div className="flex items-center space-x-1.5">
+          <div className="flex items-center space-x-2">
             {customUserPhoto && (
               <button
                 onClick={handleStartOver}
-                className="p-1.5 rounded-full text-stone-400 hover:text-white hover:bg-stone-800 transition active:scale-95 cursor-pointer"
+                className="p-1.5 sm:p-2 rounded-full text-stone-400 hover:text-white hover:bg-stone-800 transition active:scale-95 cursor-pointer"
                 title="Reset All"
               >
-                <RotateCcw className="w-4 h-4" />
+                <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             )}
             <button
               onClick={closeTryOn}
-              className="p-1.5 rounded-full text-stone-400 hover:text-white hover:bg-stone-800 transition active:scale-95 cursor-pointer"
+              className="p-1.5 sm:p-2 rounded-full text-stone-400 hover:text-white hover:bg-stone-800 transition active:scale-95 cursor-pointer"
               title="Close"
               aria-label="Close"
             >
-              <X className="w-5 h-5" />
+              <X className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
           </div>
         </header>
 
-        {/* Main Content: Single screen, flex-1 min-h-0, overflow-hidden (Never scrolls) */}
-        <main className="flex-1 min-h-0 w-full max-w-xl mx-auto px-4 py-2 sm:py-3 flex flex-col justify-between overflow-hidden">
+        {/* Main Content: Justify-between on Mobile, Compact & Flush on Laptop (No Empty Gap) */}
+        <main className="flex-1 md:flex-initial w-full max-w-xl mx-auto px-4 py-3 sm:py-4 md:p-5 flex flex-col justify-between md:justify-start space-y-4">
           
           {/* ========================================================= */}
           {/* UPPER SIDE: UPLOAD PHOTO OPTION / PREVIEW FRAME            */}
           {/* ========================================================= */}
-          <section aria-label="Upload User Photo" className="flex-1 min-h-0 w-full flex items-center justify-center py-1">
+          <section aria-label="Upload User Photo" className="w-full">
             {!customUserPhoto ? (
-              /* UPPER UPLOAD BOX (Auto-adapts to available screen height) */
+              /* UPPER UPLOAD BOX */
               <div
                 onClick={() => fileInputRef.current?.click()}
-                className="w-full h-full max-h-[48vh] md:max-h-[300px] lg:max-h-[340px] aspect-[4/3] sm:aspect-[3/4] max-w-sm mx-auto rounded-2xl sm:rounded-3xl border-2 border-dashed border-[#D97706] bg-gradient-to-b from-[#D97706]/15 via-[#D97706]/5 to-transparent hover:bg-[#D97706]/20 transition-all duration-300 p-4 text-center cursor-pointer group shadow-[0_0_30px_rgba(217,119,6,0.25)] hover:shadow-[0_0_50px_rgba(217,119,6,0.4)] active:scale-99 flex flex-col items-center justify-center space-y-2.5 sm:space-y-3"
+                className="w-full aspect-[3/4] max-w-md mx-auto max-h-[58vh] sm:max-h-[64vh] md:max-h-[360px] lg:max-h-[400px] rounded-3xl border-2 border-dashed border-[#D97706] bg-gradient-to-b from-[#D97706]/15 via-[#D97706]/5 to-transparent hover:bg-[#D97706]/20 transition-all duration-300 p-6 text-center cursor-pointer group shadow-[0_0_40px_rgba(217,119,6,0.25)] hover:shadow-[0_0_60px_rgba(217,119,6,0.4)] active:scale-99 flex flex-col items-center justify-center space-y-4"
               >
                 {/* Circular Icon */}
-                <div className="w-13 h-13 sm:w-16 sm:h-16 rounded-full bg-[#D97706] text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                  <ImagePlus className="w-6 h-6 sm:w-8 sm:h-8" />
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#D97706] text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+                  <ImagePlus className="w-8 h-8 sm:w-10 sm:h-10" />
                 </div>
 
-                <h4 className="font-serif text-lg sm:text-xl font-bold text-white tracking-wide">
+                <h4 className="font-serif text-xl sm:text-2xl font-bold text-white tracking-wide">
                   Upload Photo
                 </h4>
               </div>
             ) : (
               /* UPPER PHOTO PREVIEW FRAME (When Photo is Uploaded) */
-              <div className="relative w-full h-full max-h-[48vh] md:max-h-[300px] lg:max-h-[340px] aspect-[4/3] sm:aspect-[3/4] max-w-sm mx-auto rounded-2xl sm:rounded-3xl overflow-hidden bg-stone-900 border border-stone-800 flex items-center justify-center shadow-2xl group">
+              <div className="relative w-full aspect-[3/4] max-w-md mx-auto max-h-[58vh] sm:max-h-[64vh] md:max-h-[360px] lg:max-h-[400px] rounded-3xl overflow-hidden bg-stone-900 border border-stone-800 flex items-center justify-center shadow-2xl group">
                 <img
                   src={activeProduct?.drapedPreview || customUserPhoto}
                   alt="Try-On Preview"
@@ -239,8 +239,8 @@ const FittingRoomPanel = () => {
                 />
 
                 {/* Upper Left Badge */}
-                <div className="absolute top-2.5 left-2.5 z-10 px-2.5 py-0.5 rounded-full bg-black/80 backdrop-blur-md text-[11px] font-bold text-white border border-white/10 shadow-sm flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <div className="absolute top-3 left-3 z-10 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md text-xs font-bold text-white border border-white/10 shadow-sm flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   <span>Your Photo</span>
                 </div>
 
@@ -248,18 +248,18 @@ const FittingRoomPanel = () => {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="absolute top-2.5 right-2.5 z-10 py-1 px-2.5 rounded-full bg-black/80 hover:bg-black text-[11px] font-bold text-[#F59E0B] border border-[#F59E0B]/40 shadow-sm flex items-center gap-1.5 transition active:scale-95 cursor-pointer backdrop-blur-md"
+                  className="absolute top-3 right-3 z-10 py-1.5 px-3 rounded-full bg-black/80 hover:bg-black text-xs font-bold text-[#F59E0B] border border-[#F59E0B]/40 shadow-sm flex items-center gap-1.5 transition active:scale-95 cursor-pointer backdrop-blur-md"
                   title="Change Photo"
                 >
-                  <Camera className="w-3.5 h-3.5 text-[#F59E0B]" />
+                  <Camera className="w-4 h-4 text-[#F59E0B]" />
                   <span>Change Photo</span>
                 </button>
 
                 {/* Processing Overlay when Generating */}
                 {isProcessing && (
-                  <div className="absolute inset-0 z-20 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center p-3 text-center text-white space-y-2 animate-fadeIn">
-                    <div className="w-8 h-8 rounded-full border-2 border-[#D97706] border-t-transparent animate-spin"></div>
-                    <p className="text-xs font-serif font-bold text-[#F59E0B]">
+                  <div className="absolute inset-0 z-20 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center text-white space-y-2 animate-fadeIn">
+                    <div className="w-10 h-10 rounded-full border-3 border-[#D97706] border-t-transparent animate-spin"></div>
+                    <p className="text-xs sm:text-sm font-serif font-bold text-[#F59E0B]">
                       {processingStep || 'Draping Saree with AI...'}
                     </p>
                   </div>
@@ -271,11 +271,11 @@ const FittingRoomPanel = () => {
           {/* ========================================================= */}
           {/* BOTTOM ACTION ROW: "GENERATE" & "BUY"                     */}
           {/* ========================================================= */}
-          <section aria-label="Trial Actions" className="flex-shrink-0 w-full pt-2 border-t border-stone-800/80">
+          <section aria-label="Trial Actions" className="w-full pt-2 md:pt-3 border-t border-stone-800/80">
             {/* Big Circle of Selected Product directly above Generate Button (No text, only image) */}
-            <div className="mb-2 px-1 flex items-center">
+            <div className="mb-3 px-1 flex items-center">
               <div className="relative flex-shrink-0" title={activeProduct?.name}>
-                <div className="w-13 h-13 sm:w-15 sm:h-15 rounded-full p-1 bg-gradient-to-tr from-[#D97706] via-amber-400 to-[#D97706] shadow-[0_0_18px_rgba(217,119,6,0.5)]">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full p-1 bg-gradient-to-tr from-[#D97706] via-amber-400 to-[#D97706] shadow-[0_0_22px_rgba(217,119,6,0.5)]">
                   <div className="w-full h-full rounded-full overflow-hidden bg-stone-900 border-2 border-stone-800">
                     <img
                       src={activeProduct?.image || activeProduct?.drapedPreview}
@@ -284,23 +284,23 @@ const FittingRoomPanel = () => {
                     />
                   </div>
                 </div>
-                <span className="absolute bottom-0 right-0 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#D97706] text-white flex items-center justify-center text-[9px] sm:text-[10px] font-black shadow-md border-2 border-[#121214]">
+                <span className="absolute bottom-0 right-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#D97706] text-white flex items-center justify-center text-[10px] sm:text-xs font-black shadow-md border-2 border-[#121214]">
                   ✓
                 </span>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
               
               {/* 1. GENERATE BUTTON */}
               <button
                 type="button"
                 onClick={handleGenerate}
                 disabled={isProcessing}
-                className="w-full py-2.5 sm:py-3 px-3 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white text-xs sm:text-sm font-black uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md shadow-amber-600/30 transition transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
+                className="w-full py-3 px-3 rounded-xl bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white text-xs sm:text-sm font-black uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-lg shadow-amber-600/30 transition transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
                 title="Generate AI Virtual Trial"
               >
-                <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 animate-pulse text-amber-200" />
+                <Sparkles className="w-4 h-4 flex-shrink-0 animate-pulse text-amber-200" />
                 <span>{isProcessing ? 'Generating...' : 'Generate'}</span>
               </button>
 
@@ -308,10 +308,10 @@ const FittingRoomPanel = () => {
               <button
                 type="button"
                 onClick={handleBuy}
-                className="w-full py-2.5 sm:py-3 px-3 rounded-xl bg-[#681B2C] hover:bg-[#852338] text-white text-xs sm:text-sm font-black uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md shadow-black/40 border border-[#D4AF37]/50 transition transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                className="w-full py-3 px-3 rounded-xl bg-[#681B2C] hover:bg-[#852338] text-white text-xs sm:text-sm font-black uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-lg shadow-black/40 border border-[#D4AF37]/50 transition transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
                 title={`Buy ${activeProduct.name}`}
               >
-                <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 text-[#D4AF37]" />
+                <ShoppingBag className="w-4 h-4 flex-shrink-0 text-[#D4AF37]" />
                 <span className="truncate">Buy • {formatPrice(activeProduct.price)}</span>
               </button>
 
