@@ -291,9 +291,38 @@ const FittingRoomPanel = () => {
 
         {/* ========================================================= */}
         {/* BOTTOM ACTION ROW: "GENERATE" & "BUY"                     */}
-        {/* ("Add cloth, Generate, Buy")                              */}
         {/* ========================================================= */}
         <section aria-label="Trial Actions" className="w-full pt-2 border-t border-stone-800/80">
+          {/* Small Circle of Selected Product directly above Generate Button */}
+          <div className="flex items-center gap-2.5 mb-2.5 px-1">
+            <div className="relative flex-shrink-0" title={activeProduct?.name}>
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full p-0.5 bg-gradient-to-tr from-[#D97706] via-amber-400 to-[#D97706] shadow-[0_0_18px_rgba(217,119,6,0.4)]">
+                <div className="w-full h-full rounded-full overflow-hidden bg-stone-900 border border-stone-800">
+                  <img
+                    src={activeProduct?.image || activeProduct?.drapedPreview}
+                    alt={activeProduct?.name || 'Selected Saree'}
+                    className="w-full h-full object-cover object-top"
+                  />
+                </div>
+              </div>
+              <span className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#D97706] text-white flex items-center justify-center text-[9px] font-black shadow-sm">
+                ✓
+              </span>
+            </div>
+
+            <div className="min-w-0 text-left">
+              <span className="text-[9px] sm:text-[10px] font-bold text-[#F59E0B] uppercase tracking-wider block">
+                Selected Saree
+              </span>
+              <p className="font-serif text-xs sm:text-sm font-bold text-stone-100 truncate max-w-[210px] sm:max-w-[280px] leading-tight">
+                {activeProduct?.name}
+              </p>
+              <p className="text-[10px] sm:text-[11px] font-black text-[#F59E0B] mt-0.5">
+                {formatPrice(activeProduct?.price)}
+              </p>
+            </div>
+          </div>
+
           <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
             
             {/* 1. GENERATE BUTTON */}
