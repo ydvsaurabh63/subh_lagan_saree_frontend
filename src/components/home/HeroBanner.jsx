@@ -544,7 +544,7 @@ const HeroBanner = () => {
 
           {/* Runway Stage with Floor Ambient Shadow and Circular Turntable */}
           <div
-            className="relative -mt-1 sm:-mt-3 mb-6 xs:mb-8 sm:mb-4 flex items-center justify-center min-h-[460px] xs:min-h-[480px] sm:min-h-[540px] lg:min-h-[620px] cursor-grab active:cursor-grabbing select-none"
+            className="relative -mt-1 sm:-mt-3 mb-10 xs:mb-12 sm:mb-4 flex items-center justify-center min-h-[460px] xs:min-h-[480px] sm:min-h-[540px] lg:min-h-[620px] cursor-grab active:cursor-grabbing select-none"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => {
               setIsHovered(false);
@@ -659,7 +659,7 @@ const HeroBanner = () => {
             {/* FLOATING RUNWAY SAREE CARD (Shifted Down & Left-Docked on Mobile) */}
             {/* ========================================================= */}
             <div
-              className="absolute -bottom-4 xs:-bottom-6 sm:bottom-4 left-2 xs:left-3 sm:left-1/2 translate-x-0 sm:-translate-x-1/2 z-20 bg-white/95 backdrop-blur-md border border-gold/50 rounded-2xl sm:rounded-3xl p-2 xs:p-2.5 sm:p-3 shadow-luxury flex items-stretch gap-2 xs:gap-2.5 sm:gap-3.5 w-[calc(100%-76px)] xs:w-[calc(100%-84px)] sm:w-auto max-w-[280px] xs:max-w-[310px] sm:max-w-[405px] h-[126px] xs:h-[135px] sm:h-[150px] transition-all duration-300 cursor-default select-none"
+              className="absolute -bottom-8 xs:-bottom-10 sm:bottom-4 left-2 xs:left-3 sm:left-1/2 translate-x-0 sm:-translate-x-1/2 z-20 bg-white/95 backdrop-blur-md border border-gold/50 rounded-2xl sm:rounded-3xl p-2 xs:p-2.5 sm:p-3 shadow-luxury flex items-stretch gap-2 xs:gap-2.5 sm:gap-3.5 w-[calc(100%-76px)] xs:w-[calc(100%-84px)] sm:w-auto max-w-[280px] xs:max-w-[310px] sm:max-w-[405px] h-[126px] xs:h-[135px] sm:h-[150px] transition-all duration-300 cursor-default select-none"
               onMouseDown={(e) => e.stopPropagation()}
               onTouchStart={(e) => e.stopPropagation()}
               onMouseMove={(e) => e.stopPropagation()}
