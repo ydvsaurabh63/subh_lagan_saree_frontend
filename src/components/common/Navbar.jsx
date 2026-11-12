@@ -18,13 +18,17 @@ import { useAuth } from '../../context/AuthContext.jsx';
 import { useCart } from '../../context/CartContext.jsx';
 import { useWishlist } from '../../context/WishlistContext.jsx';
 import { useStore } from '../../context/StoreContext.jsx';
+import LoginModal from './LoginModal.jsx';
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   const searchInputRef = useRef(null);
+  const userMenuRef = useRef(null);
 
   const { user, isAuthenticated, logout } = useAuth();
   const { totalQuantity } = useCart();
@@ -37,7 +41,21 @@ const Navbar = () => {
   useEffect(() => {
     setMobileMenuOpen(false);
     setSearchOpen(false);
+    setUserMenuOpen(false);
   }, [location.pathname, location.search]);
+
+  // Click outside listener for logged-in user menu
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
+        setUserMenuOpen(false);
+      }
+    };
+    if (userMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [userMenuOpen]);
 
   useEffect(() => {
     if (searchOpen && searchInputRef.current) {
@@ -220,18 +238,57 @@ const Navbar = () => {
               {searchOpen ? <X className="w-4 h-4 sm:w-5 sm:h-5" /> : <Search className="w-4 h-4 sm:w-5 sm:h-5" />}
             </button>
 
-            {/* User Account Link (Direct to Profile or Sign In) */}
-            <Link
-              to={isAuthenticated ? "/profile" : "/login"}
-              className="p-1.5 sm:p-2 rounded-full transition cursor-pointer relative text-stone-700 hover:text-primary hover:bg-cream"
-              title={isAuthenticated ? `Account (${user?.name})` : "Sign In / Register"}
-              aria-label="User Account"
-            >
-              <User className="w-4 h-4 sm:w-5 sm:h-5" />
-              {isAuthenticated && (
-                <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-emerald-500 border border-white" />
-              )}
-            </Link>
+            {/* User Account / Login Button */}
+            {!isAuthenticated ? (
+              <button
+                type="button"
+                onClick={() => setLoginModalOpen(true)}
+                className="flex items-center gap-1.5 py-1.5 px-3 rounded-full border border-gold/70 bg-white hover:bg-gold/10 text-stone-900 hover:text-primary transition font-bold text-xs sm:text-sm shadow-xs cursor-pointer"
+                title="Login with Mobile OTP"
+              >
+                <User className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gold-dark" />
+                <span>Login</span>
+              </button>
+            ) : (
+              <div className="relative" ref={userMenuRef}>
+                <button
+                  type="button"
+                  onClick={() => setUserMenuOpen((prev) => !prev)}
+                  className="flex items-center gap-1.5 py-1 px-2.5 rounded-full hover:bg-cream text-stone-800 transition cursor-pointer border border-stone-200"
+                >
+                  <div className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center font-bold text-[11px]">
+                    {user?.name?.[0]?.toUpperCase() || 'U'}
+                  </div>
+                  <span className="hidden sm:inline text-xs font-bold max-w-[80px] truncate text-stone-800">
+                    {user?.name?.split(' ')[0] || 'Account'}
+                  </span>
+                </button>
+                {userMenuOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-stone-200 rounded-xl shadow-xl py-2 z-50 text-xs select-none">
+                    <div className="px-3 py-2 border-b border-stone-100">
+                      <p className="font-bold text-stone-800 truncate">{user?.name}</p>
+                      <p className="text-[10px] text-stone-400 font-mono">{user?.phone || user?.email}</p>
+                    </div>
+                    <Link
+                      to="/profile"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="block px-3 py-2 hover:bg-cream font-medium text-stone-700"
+                    >
+                      My Profile & Orders
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setUserMenuOpen(false);
+                        logout();
+                      }}
+                      className="w-full text-left px-3 py-2 hover:bg-rose-50 text-rose-600 font-semibold cursor-pointer"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Wishlist Link (Hidden on mobile/tablet because MobileBottomNav already has it) */}
             <Link
@@ -359,27 +416,27 @@ const Navbar = () => {
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-2 pt-1">
-                  <Link
-                    to="/login"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-center py-2 text-xs font-semibold uppercase tracking-wider text-primary border border-primary rounded-md hover:bg-cream"
+                <div className="pt-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      setLoginModalOpen(true);
+                    }}
+                    className="w-full text-center py-2.5 text-xs font-bold uppercase tracking-wider text-white bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 rounded-lg shadow-sm hover:from-amber-700 hover:to-amber-600 cursor-pointer flex items-center justify-center gap-1.5"
                   >
-                    Sign In
-                  </Link>
-                  <Link
-                    to="/register"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-center py-2 text-xs font-semibold uppercase tracking-wider text-white bg-primary rounded-md hover:bg-primary-light"
-                  >
-                    Register
-                  </Link>
+                    <User className="w-4 h-4" />
+                    <span>Login with Mobile OTP</span>
+                  </button>
                 </div>
               )}
             </div>
           </div>
         </div>
       )}
+
+      {/* Mobile OTP Login Modal */}
+      <LoginModal isOpen={loginModalOpen} onClose={() => setLoginModalOpen(false)} />
     </header>
   );
 };
