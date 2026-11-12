@@ -656,10 +656,10 @@ const HeroBanner = () => {
             </div>
 
             {/* ========================================================= */}
-            {/* FLOATING RUNWAY SAREE CARD (3x Height, Center-Aligned)    */}
+            {/* FLOATING RUNWAY SAREE CARD (Docked to Left Corner on Mobile) */}
             {/* ========================================================= */}
             <div
-              className="absolute -bottom-[75px] sm:bottom-4 left-1/2 -translate-x-1/2 z-20 bg-white/95 backdrop-blur-md border border-gold/50 rounded-2xl sm:rounded-3xl p-2.5 sm:p-3 shadow-luxury flex items-stretch gap-2.5 sm:gap-3.5 w-[94%] max-w-[340px] xs:max-w-[370px] sm:max-w-[405px] h-[140px] sm:h-[150px] transition-all duration-300 cursor-default select-none"
+              className="absolute -bottom-[75px] sm:bottom-4 left-2.5 xs:left-3.5 sm:left-1/2 translate-x-0 sm:-translate-x-1/2 z-20 bg-white/95 backdrop-blur-md border border-gold/50 rounded-2xl sm:rounded-3xl p-2 xs:p-2.5 sm:p-3 shadow-luxury flex items-stretch gap-2 xs:gap-2.5 sm:gap-3.5 w-[calc(100%-80px)] xs:w-[calc(100%-88px)] sm:w-auto max-w-[280px] xs:max-w-[310px] sm:max-w-[405px] h-[135px] xs:h-[140px] sm:h-[150px] transition-all duration-300 cursor-default select-none"
               onMouseDown={(e) => e.stopPropagation()}
               onTouchStart={(e) => e.stopPropagation()}
               onMouseMove={(e) => e.stopPropagation()}
@@ -669,7 +669,7 @@ const HeroBanner = () => {
               {/* Saree Thumbnail (Tall vertical portrait preview of actual saree model - 3x height) */}
               <Link
                 to={currentLook.sareeSlug ? `/product/${currentLook.sareeSlug}` : '#'}
-                className="w-24 sm:w-28 h-full rounded-xl sm:rounded-2xl overflow-hidden bg-stone-100 flex-shrink-0 border border-gold/35 shadow-xs block group/thumb relative"
+                className="w-20 xs:w-24 sm:w-28 h-full rounded-xl sm:rounded-2xl overflow-hidden bg-stone-100 flex-shrink-0 border border-gold/35 shadow-xs block group/thumb relative"
                 title={mainSaree.name || currentLook.lookTitle}
               >
                 <img
@@ -700,24 +700,24 @@ const HeroBanner = () => {
                 </div>
 
                 {/* Price & Offer Badge */}
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="font-sans font-black text-sm sm:text-base text-primary">
+                <div className="flex items-center gap-1 xs:gap-1.5 flex-wrap">
+                  <span className="font-sans font-black text-xs xs:text-sm sm:text-base text-primary">
                     {formatPrice(currentSareePrice)}
                   </span>
                   {currentSareeOrigPrice > currentSareePrice && (
-                    <span className="text-[10px] sm:text-[11px] text-stone-400 font-bold line-through">
+                    <span className="text-[9px] xs:text-[10px] sm:text-[11px] text-stone-400 font-bold line-through">
                       {formatPrice(currentSareeOrigPrice)}
                     </span>
                   )}
                   {currentDiscountPercent > 0 && (
-                    <span className="text-[9px] font-black text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                    <span className="text-[8px] xs:text-[9px] font-black text-emerald-700 bg-emerald-50 px-1 xs:px-1.5 py-0.5 rounded border border-emerald-200">
                       {currentDiscountPercent}% Off
                     </span>
                   )}
                 </div>
 
                 {/* Interactive Controller Row (- Qty + and Add to Cart Button) */}
-                <div className="flex items-center gap-1.5 pt-1 border-t border-stone-100">
+                <div className="flex items-center gap-1 xs:gap-1.5 pt-0.5 xs:pt-1 border-t border-stone-100">
                   <div className="flex items-center bg-stone-100 border border-stone-200/80 rounded-lg p-0.5">
                     <button
                       type="button"
@@ -725,14 +725,14 @@ const HeroBanner = () => {
                         e.stopPropagation();
                         handleDecrementModalQty(currentLook);
                       }}
-                      className="w-6 h-6 rounded flex items-center justify-center hover:bg-stone-200 text-stone-700 transition active:scale-90 cursor-pointer"
+                      className="w-5 h-5 xs:w-6 xs:h-6 rounded flex items-center justify-center hover:bg-stone-200 text-stone-700 transition active:scale-90 cursor-pointer"
                       aria-label="Decrease"
                       title="Decrease quantity"
                     >
                       <Minus className="w-2.5 h-2.5 stroke-[2.5]" />
                     </button>
 
-                    <span className="font-sans font-bold text-xs px-1.5 min-w-[16px] text-center select-none text-stone-900">
+                    <span className="font-sans font-bold text-[11px] xs:text-xs px-1 min-w-[14px] text-center select-none text-stone-900">
                       {getLookCartQuantity(currentLook) > 0 ? getLookCartQuantity(currentLook) : 1}
                     </span>
 
@@ -742,7 +742,7 @@ const HeroBanner = () => {
                         e.stopPropagation();
                         handleIncrementModalQty(currentLook);
                       }}
-                      className="w-6 h-6 rounded flex items-center justify-center hover:bg-stone-200 text-stone-700 transition active:scale-90 cursor-pointer"
+                      className="w-5 h-5 xs:w-6 xs:h-6 rounded flex items-center justify-center hover:bg-stone-200 text-stone-700 transition active:scale-90 cursor-pointer"
                       aria-label="Increase"
                       title="Increase quantity"
                     >
@@ -762,14 +762,14 @@ const HeroBanner = () => {
                         toast.success(`${mainSaree.name || currentLook.lookTitle} added to Bag!`, { id: 'runway-bag' });
                       }
                     }}
-                    className={`flex-1 py-1.5 px-2 rounded-lg text-[11px] sm:text-xs font-black flex items-center justify-center gap-1 shadow-xs transition active:scale-95 cursor-pointer truncate ${
+                    className={`flex-1 py-1 xs:py-1.5 px-1.5 xs:px-2 rounded-lg text-[10px] xs:text-[11px] sm:text-xs font-black flex items-center justify-center gap-1 shadow-xs transition active:scale-95 cursor-pointer truncate ${
                       getLookCartQuantity(currentLook) > 0
                         ? 'bg-emerald-600 text-white'
                         : 'bg-primary hover:bg-primary-light text-white'
                     }`}
                     title={getLookCartQuantity(currentLook) > 0 ? 'Item In Bag' : 'Add to Bag'}
                   >
-                    <ShoppingBag className="w-3.5 h-3.5 flex-shrink-0" />
+                    <ShoppingBag className="w-3 h-3 xs:w-3.5 xs:h-3.5 flex-shrink-0" />
                     <span>{getLookCartQuantity(currentLook) > 0 ? 'Added' : 'Cart'}</span>
                   </button>
                 </div>
