@@ -77,6 +77,7 @@ function AppShell() {
   const searchParams = new URLSearchParams(location.search);
   const domainOverride = (searchParams.get('domain') || searchParams.get('store') || '').toLowerCase();
   const isAnshuJewellersDomain =
+    rawHostname === 'anshu-jewellers-by-uday-jee.vercel.app' ||
     rawHostname.includes('anshu') ||
     rawHostname.includes('uday') ||
     domainOverride.includes('anshu');
