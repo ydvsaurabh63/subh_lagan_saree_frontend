@@ -52,6 +52,24 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Google OAuth Login handler
+  const loginWithGoogle = async (googleData) => {
+    try {
+      const res = await authApi.googleLogin(googleData);
+      if (res.success) {
+        localStorage.setItem('sls_token', res.token);
+        setToken(res.token);
+        setUser(res.user);
+        toast.success(`Welcome back, ${res.user.name}! ✨`);
+        return { success: true, user: res.user };
+      }
+      return { success: false, message: res.message };
+    } catch (error) {
+      toast.error(error.message || 'Google login failed');
+      return { success: false, message: error.message };
+    }
+  };
+
   // Mobile OTP Request handler
   const sendMobileOtp = async (phone) => {
     try {
@@ -186,6 +204,7 @@ export const AuthProvider = ({ children }) => {
         isAdmin: user?.role === 'admin',
         isImpersonating,
         login,
+        loginWithGoogle,
         sendMobileOtp,
         loginWithMobileOtp,
         register,

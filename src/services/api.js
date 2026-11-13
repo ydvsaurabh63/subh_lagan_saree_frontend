@@ -43,6 +43,7 @@ api.interceptors.response.use(
 // Auth endpoints
 export const authApi = {
   login: (data) => api.post('/auth/login', data),
+  googleLogin: (data) => api.post('/auth/google', data),
   sendMobileOtp: (data) => api.post('/auth/send-mobile-otp', data),
   verifyMobileOtp: (data) => api.post('/auth/verify-mobile-otp', data),
   register: (data) => api.post('/auth/register', data),

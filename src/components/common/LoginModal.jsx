@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
+import { triggerGoogleAuth } from '../../utils/googleAuth.js';
 import { X, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const LoginModal = ({ isOpen, onClose }) => {
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   // Reset inputs when modal opens
   useEffect(() => {
@@ -63,42 +65,36 @@ const LoginModal = ({ isOpen, onClose }) => {
   };
 
   // 2. Google Login Handler
-  const handleGoogleLogin = () => {
-    // Check if Google Client ID is configured
-    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-
-    if (!googleClientId) {
-      toast(
-        (t) => (
-          <div className="space-y-1 text-xs">
-            <p className="font-bold text-stone-900">Google Login Setup:</p>
-            <p className="text-stone-600">
-              Google Client ID configure nahi hai. Aap abhi neeche <strong>Email & Password</strong> se direct sign in kar sakte hain!
-            </p>
-          </div>
-        ),
-        { icon: 'ℹ️', duration: 4500 }
-      );
-      return;
-    }
-
-    // If Google Client ID is configured, initialize Google OAuth flow
+  const handleGoogleLogin = async () => {
     try {
-      const client = window.google?.accounts?.oauth2?.initCodeClient({
-        client_id: googleClientId,
-        scope: 'email profile openid',
-        callback: async (response) => {
-          if (response.code) {
-            toast.loading('Signing in with Google...', { id: 'google-login' });
-            // Post code to backend /api/auth/google
-            toast.success('Signed in with Google!', { id: 'google-login' });
-            onClose();
-          }
-        },
-      });
-      client?.requestCode();
+      setGoogleLoading(true);
+      toast.loading('Opening Google Sign-In...', { id: 'google-login' });
+      const authResult = await triggerGoogleAuth();
+      toast.loading('Signing in...', { id: 'google-login' });
+      const res = await loginWithGoogle(authResult);
+      if (res?.success) {
+        toast.success(`Welcome, ${res.user?.name || 'Customer'}! ✨`, { id: 'google-login' });
+        onClose();
+        // Redirect based on role if admin/superadmin/client
+        const role = res.user?.role;
+        if (role === 'superadmin') {
+          navigate('/superadmin');
+        } else if (role === 'admin') {
+          navigate('/admin-portal');
+        } else if (role === 'client') {
+          navigate('/admin');
+        }
+      } else {
+        toast.error(res?.message || 'Google Sign-In failed', { id: 'google-login' });
+      }
     } catch (err) {
-      toast.error('Could not open Google sign in popup');
+      if (err.message && (err.message.includes('closed') || err.message.includes('popup_closed'))) {
+        toast.dismiss('google-login');
+      } else {
+        toast.error(err.message || 'Could not complete Google Sign-In', { id: 'google-login' });
+      }
+    } finally {
+      setGoogleLoading(false);
     }
   };
 
@@ -146,7 +142,8 @@ const LoginModal = ({ isOpen, onClose }) => {
           <button
             type="button"
             onClick={handleGoogleLogin}
-            className="w-full py-2.5 px-4 bg-white hover:bg-stone-50 border border-stone-300 hover:border-stone-400 text-stone-800 text-xs sm:text-sm font-semibold rounded-xl shadow-xs transition flex items-center justify-center gap-3 cursor-pointer active:scale-99"
+            disabled={googleLoading}
+            className="w-full py-2.5 px-4 bg-white hover:bg-stone-50 border border-stone-300 hover:border-stone-400 text-stone-800 text-xs sm:text-sm font-semibold rounded-xl shadow-xs transition flex items-center justify-center gap-3 cursor-pointer active:scale-99 disabled:opacity-60"
           >
             {/* Google Multi-Color SVG Logo */}
             <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24">
@@ -167,7 +164,7 @@ const LoginModal = ({ isOpen, onClose }) => {
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
               />
             </svg>
-            <span>Continue with Google</span>
+            <span>{googleLoading ? 'Connecting to Google...' : 'Continue with Google'}</span>
           </button>
         </div>
 
