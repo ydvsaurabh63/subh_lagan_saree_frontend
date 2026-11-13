@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
 import { AuthProvider } from './context/AuthContext.jsx';
@@ -101,6 +101,12 @@ function AppShell() {
       {!isDashboardRoute && <Navbar />}
       <main className={`flex-1 ${!isDashboardRoute ? 'pb-16 lg:pb-0' : ''}`}>
         <Routes>
+          {/* Dedicated Login Portals */}
+          <Route path="/superadmin/login" element={<Login portal="superadmin" />} />
+          <Route path="/admin/login" element={<Login portal="admin" />} />
+          <Route path="/client/login" element={<Login portal="client" />} />
+          <Route path="/client" element={<Navigate to="/admin" replace />} />
+
           {/* SuperAdmin Master Portal (4 Tabs: Overview, Manage Admin, Manage Client, Profile) */}
           <Route
             path="/superadmin"
@@ -137,7 +143,7 @@ function AppShell() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/wishlist" element={<Wishlist />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login portal="customer" />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
