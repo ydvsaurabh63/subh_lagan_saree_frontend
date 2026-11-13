@@ -7,6 +7,7 @@ import {
   ImagePlus,
   Camera,
   Sparkles,
+  Shirt,
 } from 'lucide-react';
 import { useTryOn } from '../../context/TryOnContext.jsx';
 import { useCart } from '../../context/CartContext.jsx';
@@ -34,6 +35,7 @@ const FittingRoomPanel = () => {
 
   const fileInputRef = useRef(null);
   const [isDraped, setIsDraped] = useState(false);
+  const [showSareePicker, setShowSareePicker] = useState(false);
 
   // Initialize selected product if none was pre-selected
   useEffect(() => {
@@ -135,6 +137,61 @@ const FittingRoomPanel = () => {
 
     if (inputElement) {
       inputElement.value = '';
+    }
+  };
+
+  // Select saree from curated list
+  const handleSelectSaree = (look) => {
+    const main = look.items?.find((it) => it.isMain) || look.items?.[0];
+    setSelectedProduct({
+      _id: main?.id || `look-${look.id}`,
+      name: main?.name || look.lookTitle,
+      fabric: look.tagline?.split('•')[0]?.trim() || 'Pure Katan Silk',
+      price: main?.price || 19999,
+      originalPrice: main?.originalPrice || 24999,
+      image: main?.image || look.cropImage,
+      drapedPreview: look.modelImage,
+      slug: look.sareeSlug || '',
+    });
+    setIsDraped(false);
+    setShowSareePicker(false);
+    toast.success(`Selected "${main?.name || look.lookTitle}"! ✨`);
+  };
+
+  // Upload a custom saree image from gallery
+  const handleCustomSareeUpload = (e) => {
+    e.stopPropagation();
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    const file = files[0];
+
+    const isImage =
+      (file.type && file.type.startsWith('image/')) ||
+      /\.(jpe?g|png|webp|gif|bmp|heic|heif|jfif|svg)$/i.test(file.name || '') ||
+      !file.type;
+
+    if (!isImage) {
+      toast.error('Please select an image file');
+      return;
+    }
+
+    try {
+      const objectUrl = URL.createObjectURL(file);
+      setSelectedProduct({
+        _id: 'custom-saree-' + Date.now(),
+        name: file.name ? file.name.replace(/\.[^/.]+$/, '') : 'Custom Saree',
+        fabric: 'Handcrafted Silk',
+        price: 19999,
+        originalPrice: 24999,
+        image: objectUrl,
+        drapedPreview: objectUrl,
+        slug: '',
+      });
+      setIsDraped(false);
+      setShowSareePicker(false);
+      toast.success('Saree image updated! Tap Generate to drape ✨');
+    } catch (err) {
+      console.warn('Error loading custom saree:', err);
     }
   };
 
@@ -343,32 +400,39 @@ const FittingRoomPanel = () => {
           {/* BOTTOM ACTION ROW: "GENERATE" & "BUY"                     */}
           {/* ========================================================= */}
           <section aria-label="Trial Actions" className="w-full pt-2 md:pt-3 border-t border-stone-800/80">
-            {/* Circle of Selected Saree directly above Generate Button */}
+            {/* Saree Image Only (Left) & Change Saree Button (Right) */}
             <div className="mb-3 px-1 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="relative flex-shrink-0" title={activeProduct?.name}>
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full p-0.5 bg-gradient-to-tr from-[#D97706] via-amber-400 to-[#D97706] shadow-[0_0_18px_rgba(217,119,6,0.45)]">
-                    <div className="w-full h-full rounded-full overflow-hidden bg-stone-900 border border-stone-800">
-                      <img
-                        src={activeProduct?.image || activeProduct?.drapedPreview}
-                        alt={activeProduct?.name || 'Selected Saree'}
-                        className="w-full h-full object-cover object-top"
-                      />
-                    </div>
+              {/* Only Saree Image (No text! Clickable to change too) */}
+              <button
+                type="button"
+                onClick={() => setShowSareePicker(true)}
+                className="relative flex-shrink-0 group focus:outline-none cursor-pointer"
+                title="Change Saree"
+              >
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full p-0.5 bg-gradient-to-tr from-[#D97706] via-amber-400 to-[#D97706] shadow-[0_0_18px_rgba(217,119,6,0.45)] group-hover:scale-105 transition-transform">
+                  <div className="w-full h-full rounded-full overflow-hidden bg-stone-900 border border-stone-800">
+                    <img
+                      src={activeProduct?.image || activeProduct?.drapedPreview}
+                      alt={activeProduct?.name || 'Selected Saree'}
+                      className="w-full h-full object-cover object-top"
+                    />
                   </div>
-                  <span className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-[#D97706] text-white flex items-center justify-center text-[9px] font-black shadow border border-[#121214]">
-                    ✓
-                  </span>
                 </div>
-                <div className="min-w-0">
-                  <p className="text-xs font-serif font-bold text-white truncate max-w-[200px] sm:max-w-xs">
-                    {activeProduct?.name}
-                  </p>
-                  <p className="text-[10px] text-amber-400 font-bold">
-                    {formatPrice(activeProduct.price)}
-                  </p>
-                </div>
-              </div>
+                <span className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-[#D97706] text-white flex items-center justify-center text-[9px] font-black shadow border border-[#121214]">
+                  ✓
+                </span>
+              </button>
+
+              {/* Change Saree Button */}
+              <button
+                type="button"
+                onClick={() => setShowSareePicker(true)}
+                className="py-1.5 px-3.5 rounded-full bg-stone-900/90 hover:bg-stone-800 text-xs font-bold text-amber-300 border border-amber-500/50 shadow-md flex items-center gap-1.5 transition active:scale-95 cursor-pointer backdrop-blur-sm"
+                title="Change Saree Design"
+              >
+                <Shirt className="w-3.5 h-3.5 text-amber-400" />
+                <span>Change Saree</span>
+              </button>
             </div>
 
             <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
@@ -401,6 +465,124 @@ const FittingRoomPanel = () => {
 
         </main>
       </div>
+
+      {/* ========================================================= */}
+      {/* SAREE PICKER MODAL: SELECT OR UPLOAD ANY SAREE DESIGN     */}
+      {/* ========================================================= */}
+      {showSareePicker && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-[10000] bg-black/85 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fadeIn"
+          onClick={() => setShowSareePicker(false)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-lg bg-[#141416] border border-stone-800 rounded-t-3xl sm:rounded-3xl max-h-[85vh] flex flex-col overflow-hidden shadow-[0_25px_80px_rgba(0,0,0,0.95)]"
+          >
+            {/* Modal Header */}
+            <div className="p-4 border-b border-stone-800/90 flex items-center justify-between bg-stone-900/60">
+              <div className="flex items-center gap-2">
+                <Shirt className="w-5 h-5 text-amber-400" />
+                <div>
+                  <h4 className="font-serif text-base sm:text-lg font-bold text-white leading-tight">
+                    Change Saree Design
+                  </h4>
+                  <p className="text-[11px] text-stone-400">
+                    Pick from collection or upload custom saree
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowSareePicker(false)}
+                className="p-1.5 rounded-full text-stone-400 hover:text-white hover:bg-stone-800 transition active:scale-95 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Scroll Content */}
+            <div className="p-4 overflow-y-auto space-y-3.5 max-h-[65vh]">
+              {/* Option 1: Upload Custom Saree from Gallery */}
+              <label
+                htmlFor="custom-saree-upload-input"
+                className="w-full p-3.5 rounded-2xl border-2 border-dashed border-amber-500/50 bg-amber-500/10 hover:bg-amber-500/20 transition flex items-center gap-3.5 cursor-pointer group active:scale-98"
+              >
+                <div className="w-12 h-12 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-lg flex-shrink-0 group-hover:scale-105 transition-transform">
+                  <ImagePlus className="w-6 h-6" />
+                </div>
+                <div className="min-w-0 text-left">
+                  <p className="text-xs sm:text-sm font-bold text-amber-300">
+                    Upload Saree Photo from Gallery
+                  </p>
+                  <p className="text-[10px] sm:text-xs text-amber-200/70 mt-0.5">
+                    Tap to upload any saree image to drape
+                  </p>
+                </div>
+              </label>
+              <input
+                id="custom-saree-upload-input"
+                type="file"
+                accept="image/*"
+                className="sr-only"
+                onChange={handleCustomSareeUpload}
+                onClick={(e) => e.stopPropagation()}
+              />
+
+              {/* Option 2: Curated Sarees List */}
+              <div className="pt-1">
+                <p className="text-[11px] uppercase tracking-wider font-bold text-stone-400 mb-2 px-1">
+                  Royal Curated Sarees ({sareeLooks.length})
+                </p>
+                <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
+                  {sareeLooks.map((look) => {
+                    const main = look.items?.find((it) => it.isMain) || look.items?.[0];
+                    const isSelected =
+                      activeProduct?._id === main?.id ||
+                      activeProduct?.name === main?.name ||
+                      activeProduct?.image === (main?.image || look.cropImage);
+
+                    return (
+                      <button
+                        key={look.id}
+                        type="button"
+                        onClick={() => handleSelectSaree(look)}
+                        className={`p-2 rounded-2xl border text-left flex items-center gap-2.5 transition active:scale-98 cursor-pointer ${
+                          isSelected
+                            ? 'bg-amber-500/15 border-amber-500 shadow-md ring-1 ring-amber-500'
+                            : 'bg-stone-900/80 border-stone-800 hover:border-stone-700'
+                        }`}
+                      >
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-stone-950 flex-shrink-0 border border-stone-800">
+                          <img
+                            src={main?.image || look.cropImage}
+                            alt={main?.name || look.lookTitle}
+                            className="w-full h-full object-cover object-top"
+                          />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-xs font-serif font-bold text-white truncate">
+                            {main?.name || look.lookTitle}
+                          </p>
+                          <p className="text-[10px] text-amber-400 font-bold mt-0.5">
+                            {formatPrice(main?.price || 19999)}
+                          </p>
+                          {isSelected && (
+                            <span className="text-[9px] font-bold text-emerald-400 flex items-center gap-0.5 mt-0.5">
+                              ✓ Selected
+                            </span>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
