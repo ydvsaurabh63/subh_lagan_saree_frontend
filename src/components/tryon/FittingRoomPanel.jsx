@@ -369,12 +369,6 @@ const FittingRoomPanel = () => {
                   </p>
                 </div>
               </div>
-
-              {!isDraped && customUserPhoto && (
-                <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-400 bg-emerald-950/60 border border-emerald-500/40 px-2 py-1 rounded-full animate-pulse">
-                  Ready to Drape
-                </span>
-              )}
             </div>
 
             <div className="grid grid-cols-2 gap-2.5 sm:gap-3">

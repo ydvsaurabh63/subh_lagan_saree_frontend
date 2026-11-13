@@ -99,7 +99,7 @@ const ProductCard = ({ product }) => {
       </Link>
 
       {/* Product Details (Compact & Visual) */}
-      <div className="p-3 flex flex-col flex-1 justify-between">
+      <div className="p-2.5 sm:p-3 flex flex-col flex-1 justify-between">
         <div>
           {/* Fabric Pill & Rating */}
           <div className="flex items-center justify-between text-[11px] mb-1">
@@ -123,32 +123,32 @@ const ProductCard = ({ product }) => {
         </div>
 
         {/* Price & Action Buttons */}
-        <div className="pt-2 border-t border-stone-200/90 flex items-center justify-between">
-          <div className="flex flex-col justify-center">
-            <span className="text-sm font-black text-primary font-sans tracking-tight leading-tight">
+        <div className="pt-2 border-t border-stone-200/90 flex items-center justify-between gap-1">
+          <div className="flex flex-col justify-center min-w-0 flex-shrink-0">
+            <span className="text-xs sm:text-sm font-black text-primary font-sans tracking-tight leading-tight">
               {formatPrice(product.discountPrice || product.price)}
             </span>
             {product.discountPrice && (
-              <span className="text-[10px] font-bold text-stone-400 line-through leading-none">
+              <span className="text-[9px] sm:text-[10px] font-bold text-stone-400 line-through leading-none">
                 {formatPrice(product.price)}
               </span>
             )}
           </div>
-          <div className="flex items-center space-x-1.5">
+          <div className="flex items-center space-x-1 sm:space-x-1.5 flex-shrink-0">
             <button
               onClick={handleOrderNow}
-              className="text-[10px] sm:text-[11px] px-2.5 py-1 bg-primary hover:bg-primary-light text-white rounded-md font-extrabold shadow-sm transition-all flex items-center space-x-1 active:scale-95"
+              className="text-[10px] sm:text-[11px] px-2 sm:px-2.5 py-1 bg-primary hover:bg-primary-light text-white rounded-md font-extrabold shadow-sm transition-all flex items-center space-x-0.5 sm:space-x-1 active:scale-95 flex-shrink-0 whitespace-nowrap"
               title="Order this saree now"
             >
-              <Zap className="w-3 h-3 text-gold-light fill-current" />
+              <Zap className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gold-light fill-current" />
               <span>Order</span>
             </button>
             <button
               onClick={handleAddToCart}
-              className="text-[10px] sm:text-[11px] px-2 py-1 bg-stone-100 hover:bg-primary/10 text-stone-800 hover:text-primary rounded-md font-extrabold border border-stone-200 transition-all flex items-center space-x-0.5 active:scale-95"
+              className="text-[10px] sm:text-[11px] px-1.5 sm:px-2 py-1 bg-stone-100 hover:bg-primary/10 text-stone-800 hover:text-primary rounded-md font-extrabold border border-stone-200 transition-all flex items-center space-x-0.5 active:scale-95 flex-shrink-0 whitespace-nowrap"
               title="Add to Cart"
             >
-              <Plus className="w-3 h-3" />
+              <Plus className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
               <span>Add</span>
             </button>
           </div>
