@@ -8,6 +8,7 @@ import {
   Menu,
   X,
   ChevronDown,
+  ChevronRight,
   LogOut,
   Package,
   UserCheck,
@@ -58,6 +59,15 @@ const Navbar = () => {
         toast.error(err.message || 'Could not complete Google Sign-In', { id: 'nav-google-login' });
       }
     }
+  };
+
+  const getUserInitials = (name) => {
+    if (!name) return 'SL';
+    const parts = name.trim().split(/\s+/);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
   };
 
   // Auto-close dropdowns and mobile menu on route change
@@ -287,28 +297,42 @@ const Navbar = () => {
                 )}
               </button>
 
-              {/* Luxury Dark Customer Dropdown Card */}
+              {/* Luxury Customer Account Dropdown Card */}
               {userMenuOpen && (
-                <div className="absolute right-0 top-full mt-2.5 z-50 w-64 bg-[#0B1510] border border-[#A68A56]/60 rounded-xs shadow-[0_25px_60px_rgba(0,0,0,0.85)] p-5 text-white animate-in fade-in slide-in-from-top-2 duration-150 select-none">
+                <div className="absolute right-0 top-full mt-2.5 z-50 w-72 sm:w-80 bg-gradient-to-b from-[#141C18] to-[#0A0F0D] border border-gold/30 rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.85)] p-4 text-white animate-in fade-in slide-in-from-top-2 duration-150 select-none overflow-hidden ring-1 ring-gold/15">
                   
-                  {/* UNAUTHENTICATED STATE: LOGIN + GOOGLE SIGN IN */}
+                  {/* Golden Top Accent Line */}
+                  <div className="absolute top-0 left-6 right-6 h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent rounded-full" />
+
+                  {/* ========================================= */}
+                  {/* UNAUTHENTICATED STATE                     */}
+                  {/* ========================================= */}
                   {!isAuthenticated ? (
-                    <div className="pb-3.5 border-b border-[#8F774B]/35 space-y-2">
+                    <div className="pb-3 border-b border-white/10 space-y-2.5">
+                      <div className="text-center pb-1">
+                        <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#D4AF37] block">
+                          Subh Lagan Sarees
+                        </span>
+                        <p className="text-xs text-stone-400 mt-0.5">
+                          Access your royal saree orders & wishlist
+                        </p>
+                      </div>
+
                       <button
                         type="button"
                         onClick={() => {
                           setUserMenuOpen(false);
                           setLoginModalOpen(true);
                         }}
-                        className="block w-full py-2.5 px-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-[#D4AF37] border border-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0B1510] transition-all duration-200 shadow-xs cursor-pointer"
+                        className="w-full py-2.5 px-4 text-center text-xs font-bold uppercase tracking-[0.15em] text-stone-950 bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#D4AF37] hover:brightness-105 rounded-xl transition-all shadow-md cursor-pointer active:scale-98"
                       >
-                        LOGIN
+                        Sign In
                       </button>
 
                       <button
                         type="button"
                         onClick={handleGoogleSignIn}
-                        className="w-full py-2 px-3 bg-white hover:bg-stone-100 text-stone-900 text-xs font-semibold rounded-xs shadow-xs transition flex items-center justify-center gap-2.5 cursor-pointer active:scale-98"
+                        className="w-full py-2 px-3 bg-white hover:bg-stone-50 text-stone-800 text-xs font-semibold rounded-xl shadow-xs transition flex items-center justify-center gap-2.5 cursor-pointer active:scale-98 border border-stone-200"
                       >
                         <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24">
                           <path
@@ -328,72 +352,177 @@ const Navbar = () => {
                             d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
                           />
                         </svg>
-                        <span>Sign in with Google</span>
+                        <span>Continue with Google</span>
                       </button>
                     </div>
                   ) : (
-                    /* AUTHENTICATED STATE: USER GREETING */
-                    <div className="pb-3 border-b border-[#8F774B]/35">
-                      <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-wider">
-                        HELLO, {user?.name || 'VALUED CUSTOMER'}
-                      </p>
-                      <p className="text-xs text-stone-400 font-mono truncate">
-                        {user?.phone || user?.email}
-                      </p>
+                    /* ========================================= */
+                    /* AUTHENTICATED STATE: LUXURY USER HEADER   */
+                    /* ========================================= */
+                    <div className="p-3 bg-white/[0.04] rounded-xl border border-white/10 mb-2 flex items-center gap-3">
+                      {/* Avatar */}
+                      <div className="relative flex-shrink-0">
+                        {user?.profileImage ? (
+                          <img
+                            src={user.profileImage}
+                            alt={user.name}
+                            className="w-11 h-11 rounded-full object-cover ring-2 ring-gold/60 shadow-md"
+                          />
+                        ) : (
+                          <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#8C6D23] text-stone-950 font-bold font-serif text-sm flex items-center justify-center ring-2 ring-gold/40 shadow-md">
+                            {getUserInitials(user?.name)}
+                          </div>
+                        )}
+                        <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-[#141C18]" />
+                      </div>
+
+                      {/* User Info */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[#D4AF37] bg-gold/10 px-1.5 py-0.5 rounded-sm">
+                            {user?.role === 'superadmin'
+                              ? 'SuperAdmin'
+                              : user?.role === 'admin'
+                              ? 'Admin'
+                              : user?.role === 'client'
+                              ? 'Store Partner'
+                              : 'Customer'}
+                          </span>
+                        </div>
+                        <p className="font-serif text-sm font-bold text-white truncate mt-0.5 capitalize">
+                          {user?.name || 'Customer'}
+                        </p>
+                        <p className="text-[11px] text-stone-400 font-mono truncate">
+                          {user?.phone ? `+91 ${user.phone}` : user?.email}
+                        </p>
+                      </div>
                     </div>
                   )}
 
-                  {/* Menu Links */}
-                  <div className="pt-3 space-y-2.5 text-stone-200 text-sm font-sans">
+                  {/* ========================================= */}
+                  {/* MENU LINKS LIST                           */}
+                  {/* ========================================= */}
+                  <div className="space-y-1 pt-1 text-sm font-sans">
+                    {/* Staff Portal Shortcuts */}
+                    {user?.role === 'superadmin' && (
+                      <Link
+                        to="/superadmin"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-purple-200 bg-purple-950/40 hover:bg-purple-900/50 border border-purple-500/30 transition-all group"
+                      >
+                        <span className="flex items-center gap-2.5">
+                          <ShieldCheck className="w-4 h-4 text-purple-400" />
+                          <span>SuperAdmin Portal</span>
+                        </span>
+                        <ChevronRight className="w-3.5 h-3.5 text-purple-400/60 group-hover:translate-x-0.5 transition-transform" />
+                      </Link>
+                    )}
+
+                    {['admin', 'superadmin'].includes(user?.role) && (
+                      <Link
+                        to="/admin-portal"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-amber-200 bg-amber-950/30 hover:bg-amber-900/40 border border-amber-500/20 transition-all group"
+                      >
+                        <span className="flex items-center gap-2.5">
+                          <Store className="w-4 h-4 text-amber-400" />
+                          <span>Admin Portal</span>
+                        </span>
+                        <ChevronRight className="w-3.5 h-3.5 text-amber-400/60 group-hover:translate-x-0.5 transition-transform" />
+                      </Link>
+                    )}
+
+                    {user?.role === 'client' && (
+                      <Link
+                        to="/admin"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-amber-200 bg-amber-950/30 hover:bg-amber-900/40 border border-amber-500/20 transition-all group"
+                      >
+                        <span className="flex items-center gap-2.5">
+                          <Store className="w-4 h-4 text-amber-400" />
+                          <span>Store Dashboard</span>
+                        </span>
+                        <ChevronRight className="w-3.5 h-3.5 text-amber-400/60 group-hover:translate-x-0.5 transition-transform" />
+                      </Link>
+                    )}
+
+                    {/* Standard User Links */}
                     <Link
                       to={isAuthenticated ? "/profile" : "/login"}
                       onClick={() => setUserMenuOpen(false)}
-                      className="block hover:text-[#D4AF37] hover:translate-x-1 transition-all duration-150 font-medium"
+                      className="flex items-center justify-between px-3 py-2 rounded-xl text-xs sm:text-[13px] text-stone-200 hover:text-white hover:bg-white/[0.06] transition-all group"
                     >
-                      My Account
+                      <span className="flex items-center gap-2.5 font-medium">
+                        <User className="w-4 h-4 text-[#D4AF37]/80 group-hover:text-[#D4AF37] transition-colors" />
+                        <span>My Account</span>
+                      </span>
+                      <ChevronRight className="w-3.5 h-3.5 text-stone-600 group-hover:text-stone-400 group-hover:translate-x-0.5 transition-all" />
                     </Link>
 
                     <Link
                       to={isAuthenticated ? "/profile?tab=orders" : "/login"}
                       onClick={() => setUserMenuOpen(false)}
-                      className="block hover:text-[#D4AF37] hover:translate-x-1 transition-all duration-150 font-medium"
+                      className="flex items-center justify-between px-3 py-2 rounded-xl text-xs sm:text-[13px] text-stone-200 hover:text-white hover:bg-white/[0.06] transition-all group"
                     >
-                      Orders
+                      <span className="flex items-center gap-2.5 font-medium">
+                        <Package className="w-4 h-4 text-[#D4AF37]/80 group-hover:text-[#D4AF37] transition-colors" />
+                        <span>Orders</span>
+                      </span>
+                      <ChevronRight className="w-3.5 h-3.5 text-stone-600 group-hover:text-stone-400 group-hover:translate-x-0.5 transition-all" />
                     </Link>
 
                     <Link
                       to="/wishlist"
                       onClick={() => setUserMenuOpen(false)}
-                      className="block hover:text-[#D4AF37] hover:translate-x-1 transition-all duration-150 font-medium"
+                      className="flex items-center justify-between px-3 py-2 rounded-xl text-xs sm:text-[13px] text-stone-200 hover:text-white hover:bg-white/[0.06] transition-all group"
                     >
-                      Wishlist
+                      <span className="flex items-center gap-2.5 font-medium">
+                        <Heart className="w-4 h-4 text-[#D4AF37]/80 group-hover:text-[#D4AF37] transition-colors" />
+                        <span>Wishlist</span>
+                      </span>
+                      {wishlist.length > 0 ? (
+                        <span className="text-[10px] bg-gold/20 text-[#D4AF37] border border-gold/40 font-bold px-2 py-0.5 rounded-full">
+                          {wishlist.length}
+                        </span>
+                      ) : (
+                        <ChevronRight className="w-3.5 h-3.5 text-stone-600 group-hover:text-stone-400 group-hover:translate-x-0.5 transition-all" />
+                      )}
                     </Link>
 
                     <Link
                       to="/cart"
                       onClick={() => setUserMenuOpen(false)}
-                      className="flex items-center justify-between hover:text-[#D4AF37] hover:translate-x-1 transition-all duration-150 font-medium"
+                      className="flex items-center justify-between px-3 py-2 rounded-xl text-xs sm:text-[13px] text-stone-200 hover:text-white hover:bg-white/[0.06] transition-all group"
                     >
-                      <span>Cart</span>
-                      {totalQuantity > 0 && (
-                        <span className="text-[10px] bg-primary text-white font-bold px-1.5 py-0.5 rounded-full">
+                      <span className="flex items-center gap-2.5 font-medium">
+                        <ShoppingBag className="w-4 h-4 text-[#D4AF37]/80 group-hover:text-[#D4AF37] transition-colors" />
+                        <span>Cart</span>
+                      </span>
+                      {totalQuantity > 0 ? (
+                        <span className="text-[10px] bg-primary text-white font-bold px-2 py-0.5 rounded-full shadow-xs">
                           {totalQuantity}
                         </span>
+                      ) : (
+                        <ChevronRight className="w-3.5 h-3.5 text-stone-600 group-hover:text-stone-400 group-hover:translate-x-0.5 transition-all" />
                       )}
                     </Link>
                   </div>
 
-                  {/* Logged in state: LOGOUT button */}
+                  {/* ========================================= */}
+                  {/* LOGOUT BUTTON (MODERN REFINED STYLING)   */}
+                  {/* ========================================= */}
                   {isAuthenticated && (
-                    <div className="pt-3 border-t border-[#8F774B]/35">
+                    <div className="pt-2.5 mt-2 border-t border-white/10">
                       <button
+                        type="button"
                         onClick={() => {
                           logout();
                           setUserMenuOpen(false);
                         }}
-                        className="block w-full py-2.5 px-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-[#D4AF37] border border-[#D4AF37] hover:bg-rose-900/40 hover:border-rose-400 hover:text-rose-200 transition-all duration-200 cursor-pointer"
+                        className="w-full py-2.5 px-4 rounded-xl text-xs font-bold uppercase tracking-wider text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 hover:border-rose-500/50 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-98"
                       >
-                        LOGOUT
+                        <LogOut className="w-3.5 h-3.5 text-rose-400" />
+                        <span>Logout</span>
                       </button>
                     </div>
                   )}
