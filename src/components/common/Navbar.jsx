@@ -309,7 +309,7 @@ const Navbar = () => {
                   {/* ========================================= */}
                   {!isAuthenticated ? (
                     <div className="pb-3 border-b border-white/10 space-y-2.5">
-                      <div className="text-center pb-1">
+                      <div className="text-center pb-0.5">
                         <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#D4AF37] block">
                           Subh Lagan Sarees
                         </span>
@@ -320,19 +320,8 @@ const Navbar = () => {
 
                       <button
                         type="button"
-                        onClick={() => {
-                          setUserMenuOpen(false);
-                          setLoginModalOpen(true);
-                        }}
-                        className="w-full py-2.5 px-4 text-center text-xs font-bold uppercase tracking-[0.15em] text-stone-950 bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#D4AF37] hover:brightness-105 rounded-xl transition-all shadow-md cursor-pointer active:scale-98"
-                      >
-                        Sign In
-                      </button>
-
-                      <button
-                        type="button"
                         onClick={handleGoogleSignIn}
-                        className="w-full py-2 px-3 bg-white hover:bg-stone-50 text-stone-800 text-xs font-semibold rounded-xl shadow-xs transition flex items-center justify-center gap-2.5 cursor-pointer active:scale-98 border border-stone-200"
+                        className="w-full py-2.5 px-4 bg-white hover:bg-stone-50 text-stone-900 text-xs sm:text-sm font-semibold rounded-xl shadow-xs transition flex items-center justify-center gap-2.5 cursor-pointer active:scale-98 border border-stone-200"
                       >
                         <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24">
                           <path
